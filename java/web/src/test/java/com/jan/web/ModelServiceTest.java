@@ -11,15 +11,15 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class BookServiceTest
+public class ModelServiceTest
 {
     @Autowired
-    private BookService bookService;
+    private ModelController modelController;
 
     @Test
     public void whenApplicationStarts_thenHibernateCreatesInitialRecords() {
-        List<Book> books = bookService.list();
+        List<Model> models = modelController.list();
 
-        Assertions.assertThat(books.size()).isEqualTo(3);
+        Assertions.assertThat(models.size()).isEqualTo(3);
     }
 }

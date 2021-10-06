@@ -1,3 +1,3 @@
-insert into book values(1, 'The Tartar Steppe');
-insert into book values(2, 'Poem Strip');
-insert into book values(3, 'Restless Nights: Selected Stories of Dino Buzzati');
+INSERT INTO model VALUES(1, 'Machine Learning Model #1');
+INSERT INTO model VALUES(2, 'Machine Learning Model #2');
+INSERT INTO model VALUES(3, 'Machine Learning Model #3');

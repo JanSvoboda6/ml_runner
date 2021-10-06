@@ -10,30 +10,30 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
-public class BookService {
-
-    private BookRepository bookRepository;
+@RequestMapping("/api/models")
+public class ModelController
+{
+    private final ModelRepository modelRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepository)
+    public ModelController(ModelRepository modelRepository)
     {
-        this.bookRepository = bookRepository;
+        this.modelRepository = modelRepository;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Book> getBooks() throws InterruptedException
+    public List<Model> getBooks() throws InterruptedException
     {
         Thread.sleep(2000);
-        return bookRepository.findAll();
+        return modelRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Book getBook(@PathVariable Long id) {
-        return bookRepository.findById(id).orElseThrow(RuntimeException::new);
+    public Model getBook(@PathVariable Long id) {
+        return modelRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    public List<Book> list() {
-        return bookRepository.findAll();
+    public List<Model> list() {
+        return modelRepository.findAll();
     }
 }
