@@ -22,8 +22,9 @@ public class BookService {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Book> getBooks()
+    public List<Book> getBooks() throws InterruptedException
     {
+        Thread.sleep(2000);
         return bookRepository.findAll();
     }
 
