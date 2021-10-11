@@ -22,14 +22,15 @@ public class ModelController
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Model> getBooks() throws InterruptedException
+    public List<Model> getModels() throws InterruptedException
     {
+        //TODO Jan: mimic server side delay
         Thread.sleep(2000);
         return modelRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Model getBook(@PathVariable Long id) {
+    public Model getModel(@PathVariable Long id) {
         return modelRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 

@@ -15,11 +15,6 @@ public class Model
     private Long id;
     private String name;
 
-    // standard constructors
-
-    // standard getters and setters
-
-
     public Long getId()
     {
         return id;
