@@ -1,11 +1,10 @@
 package com.jan.web.security;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestControllerTest
 {
-
     @Test
     public void whenUserTriesToAccessAdminContent_thenUnauthorizedResponseIsReturned()
     {

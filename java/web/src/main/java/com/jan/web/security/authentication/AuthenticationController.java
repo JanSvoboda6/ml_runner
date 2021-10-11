@@ -15,6 +15,7 @@ import com.jan.web.security.role.Role;
 import com.jan.web.security.role.RoleRepository;
 import com.jan.web.security.role.RoleType;
 import com.jan.web.security.user.User;
+import com.jan.web.security.user.UserCreator;
 import com.jan.web.security.user.UserDetailsImpl;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
@@ -42,6 +43,7 @@ public class AuthenticationController
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final JsonWebTokenUtility jsonWebTokenUtility;
+    private final UserCreator userCreator;
 
     @Autowired
     public AuthenticationController(
@@ -49,13 +51,15 @@ public class AuthenticationController
             UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder encoder,
-            JsonWebTokenUtility jsonWebTokenUtility)
+            JsonWebTokenUtility jsonWebTokenUtility,
+            UserCreator userCreator)
     {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
         this.jsonWebTokenUtility = jsonWebTokenUtility;
+        this.userCreator = userCreator;
     }
 
     @PostMapping("/signup")
@@ -75,37 +79,12 @@ public class AuthenticationController
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRole();
+        User user = userCreator.createUser(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null)
-        {
-            Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else
-        {
-            strRoles.forEach(role -> {
-                switch (role)
-                {
-                    //TODO Jan: Admin role shouldn't be granted by the frontend request
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                        break;
-
-                    default:
-                        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
+        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(userRole);
 
         user.setRoles(roles);
         userRepository.save(user);

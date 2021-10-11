@@ -1,11 +1,10 @@
 package com.jan.web.security.user;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class UserDetailsServiceImplTest
 {
-
     @Test
     public void whenUserIsFound_thenUserIsReturned()
     {
