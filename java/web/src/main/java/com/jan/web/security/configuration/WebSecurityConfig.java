@@ -68,6 +68,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         http.csrf().ignoringAntMatchers("/console/**");
         http.headers().frameOptions().sameOrigin();
 
+        http.authorizeRequests().antMatchers("/api/models/**").permitAll();
+        http.csrf().ignoringAntMatchers("/api/models/**");
+        
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
