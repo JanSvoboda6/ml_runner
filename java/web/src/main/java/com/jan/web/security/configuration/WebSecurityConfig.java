@@ -1,8 +1,9 @@
 package com.jan.web.security.configuration;
 
-import com.jan.web.security.authentication.AuthTokenFilter;
+import com.jan.web.security.authentication.AuthorizationTokenFilter;
 import com.jan.web.security.authentication.AuthenticationEntryPointJwt;
 import com.jan.web.security.user.UserDetailsServiceImpl;
+import com.jan.web.security.utility.JsonWebTokenUtility;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,19 +22,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
+    private final JsonWebTokenUtility jsonWebTokenUtility;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationEntryPointJwt unauthorizedHandler;
 
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthenticationEntryPointJwt unauthorizedHandler)
+    public WebSecurityConfig(JsonWebTokenUtility jsonWebTokenUtility,
+                             UserDetailsServiceImpl userDetailsService,
+                             AuthenticationEntryPointJwt unauthorizedHandler)
     {
+        this.jsonWebTokenUtility = jsonWebTokenUtility;
         this.userDetailsService = userDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter()
+    public AuthorizationTokenFilter authenticationJwtTokenFilter()
     {
-        return new AuthTokenFilter();
+        return new AuthorizationTokenFilter(jsonWebTokenUtility, userDetailsService);
     }
 
     @Override

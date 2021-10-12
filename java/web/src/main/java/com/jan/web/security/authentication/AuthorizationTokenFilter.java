@@ -18,15 +18,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-public class AuthTokenFilter extends OncePerRequestFilter
+public class AuthorizationTokenFilter extends OncePerRequestFilter
 {
-    @Autowired
-    private JsonWebTokenUtility jsonWebTokenUtility;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthorizationTokenFilter.class);
+    private final JsonWebTokenUtility jsonWebTokenUtility;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+    public AuthorizationTokenFilter(JsonWebTokenUtility jsonWebTokenUtility, UserDetailsService userDetailsService)
+    {
+        this.jsonWebTokenUtility = jsonWebTokenUtility;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

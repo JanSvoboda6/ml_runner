@@ -24,7 +24,7 @@ public class TestController
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public String userAccess(@RequestHeader(name="Authorization") String token)
     {
-        return "User Content. " + jsonWebTokenUtility.getUserNameFromJwtToken(token.substring(7));
+        return "User Content. " + jsonWebTokenUtility.getUserNameFromJwtToken(token.substring("Bearer ".length()));
     }
 
     @GetMapping("/admin")
