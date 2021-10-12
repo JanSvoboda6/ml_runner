@@ -2,15 +2,15 @@ package com.jan.web.security.authentication;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest
+@RunWith(SpringRunner.class)
 public class AuthTokenFilterTest
 {
 
     @Test
-    public void whenAuthorizationHeaderIsPresentAndJWTTokenIsPresent_thenJWTTokenisParsed()
+    public void whenAuthorizationHeaderIsPresentAndJWTTokenIsPresent_thenJWTTokenIsParsed()
     {
         Assertions.fail();
     }

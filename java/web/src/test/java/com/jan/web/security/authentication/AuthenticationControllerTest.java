@@ -1,13 +1,16 @@
 package com.jan.web.security.authentication;
 
+import com.jan.web.security.request.LoginRequest;
 import com.jan.web.security.request.SignupRequest;
 import com.jan.web.security.role.Role;
 import com.jan.web.security.role.RoleRepository;
 import com.jan.web.security.role.RoleType;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserCreator;
+import com.jan.web.security.user.UserDetailsImpl;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +19,13 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
@@ -130,25 +137,50 @@ public class AuthenticationControllerTest
     @Test
     public void whenUserTriesToSignIn_thenNewJWTTokenIsGenerated()
     {
-        Assertions.fail();
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
+        LoginRequest request = Mockito.mock(LoginRequest.class);
+        UserDetailsImpl userDetails = Mockito.mock(UserDetailsImpl.class);
+        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
+        authenticationController.authenticateUser(request);
+
+        Mockito.verify(jsonWebTokenUtility).generateJwtToken(authentication);
     }
 
     @Test
     public void whenUserTriesToSignIn_thenSecurityContextIsProperlySet()
     {
-        Assertions.fail();
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
+        LoginRequest request = Mockito.mock(LoginRequest.class);
+        UserDetailsImpl userDetails = Mockito.mock(UserDetailsImpl.class);
+        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
+
+        authenticationController.authenticateUser(request);
+        Assertions.assertEquals(authentication, SecurityContextHolder.getContext().getAuthentication());
     }
 
     @Test
-    public void whenUserTriesToSignIn_thenSetOfGrantedAuthoritiesIsUsed()
+    public void whenUserTriesToSignIn_thenSetOfGrantedAuthoritiesIsUsed() throws IOException
     {
-        Assertions.fail();
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
+        LoginRequest request = Mockito.mock(LoginRequest.class);
+        UserDetailsImpl userDetails = UserDetailsImpl.build(createArtificialUser());
+        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
+
+        ResponseEntity<?> response = authenticationController.authenticateUser(request);
+        String body = new ObjectMapper().writeValueAsString(response.getBody());
+
+        Assertions.assertTrue(body.contains(RoleType.ROLE_USER.name()));
     }
 
     @Test
     public void whenNotRegisteredUserTriesToSignIn_thenAuthenticationFails()
     {
-        Assertions.fail();
+        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenThrow(new BadCredentialsException("Bad Credentials Exception"));
+        LoginRequest request = Mockito.mock(LoginRequest.class);
+        Assertions.assertThrows(BadCredentialsException.class, () -> authenticationController.authenticateUser(request));
     }
 
     private SignupRequest createArtificialSignupRequest()
@@ -162,6 +194,8 @@ public class AuthenticationControllerTest
 
     private User createArtificialUser()
     {
-        return new User(USERNAME, EMAIL, PASSWORD);
+        User user = new User(USERNAME, EMAIL, PASSWORD);
+        user.setRoles(Set.of(new Role(RoleType.ROLE_USER)));
+        return user;
     }
 }
