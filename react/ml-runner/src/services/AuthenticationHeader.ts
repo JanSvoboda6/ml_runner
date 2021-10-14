@@ -1,6 +1,8 @@
+import { User } from "../types";
+
 export default function authHeader()
 {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user: User = JSON.parse(localStorage.getItem('user') || '{}');
 
     if (user && user.accessToken)
     {

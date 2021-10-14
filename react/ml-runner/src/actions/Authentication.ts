@@ -9,8 +9,9 @@ import
 } from "./ActionTypes";
 
 import AuthenticationService from "../services/AuthenticationService";
+import { User } from "../types";
 
-export const register = (username, email, password) => (dispatch) =>
+export const register = (username: string, email: string, password: string) => (dispatch: (arg: { type: string; payload?: string; }) => void) =>
 {
     return AuthenticationService.register(username, email, password).then(
         (response) =>
@@ -49,14 +50,14 @@ export const register = (username, email, password) => (dispatch) =>
     );
 };
 
-export const login = (username, password) => (dispatch) =>
+export const login = (username: string, password: string) => (dispatch: (arg: { type: string; payload?: User | string; }) => void) =>
 {
     return AuthenticationService.login(username, password).then(
-        (data) =>
+        (user) =>
         {
             dispatch({
                 type: LOGIN_SUCCESS,
-                payload: { user: data },
+                payload: user,
             });
 
             return Promise.resolve();
@@ -82,7 +83,7 @@ export const login = (username, password) => (dispatch) =>
     );
 };
 
-export const logout = () => (dispatch) =>
+export const logout = () => (dispatch: (arg: { type: string; }) => void) =>
 {
     AuthenticationService.logout();
 
