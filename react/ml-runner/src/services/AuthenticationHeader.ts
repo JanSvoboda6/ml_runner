@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { AuthorizationHeader, User } from "../types";
 
 export default function authHeader()
 {
@@ -6,7 +6,8 @@ export default function authHeader()
 
     if (user && user.accessToken)
     {
-        return { Authorization: 'Bearer ' + user.accessToken };
+        var authothorizationHeader: AuthorizationHeader = { Authorization: 'Bearer ' + user.accessToken };
+        return authothorizationHeader;
     } else
     {
         return {};

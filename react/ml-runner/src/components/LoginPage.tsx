@@ -1,30 +1,34 @@
 import React, { Component } from "react";
 import { Redirect } from 'react-router-dom';
 
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-import Popup from "../components/Popup";
+import Popup from "./Popup";
 
 import { connect } from "react-redux";
 import { login } from "../actions/Authentication";
 import logo from '../styles/logo_but_text.png'
 
-const required = (value) =>
+interface AppState
 {
-    if (!value)
-    {
-        return (
-            <div className="alert-text">
-                This field is required!
-            </div>
-        );
-    }
-};
+    dispatch: any,
+    history: any,
+    isLoggedIn: boolean,
+    message: string
+}
 
-class Login extends Component
+interface LoginState
 {
-    constructor(props)
+    username: string,
+    password: string,
+    loading: boolean,
+    isPopupClosed: boolean
+}
+
+class Login extends Component<AppState, LoginState>
+{
+    checkBtn: any;
+    form: any;
+
+    constructor(props: AppState)
     {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
@@ -40,29 +44,27 @@ class Login extends Component
         };
     }
 
-    onChangeUsername(e)
+    onChangeUsername(e: { target: { value: string; }; })
     {
         this.setState({
             username: e.target.value,
         });
     }
 
-    onChangePassword(e)
+    onChangePassword(e: { target: { value: string; }; })
     {
         this.setState({
             password: e.target.value,
         });
     }
 
-    handleLogin(e)
+    handleLogin(e: { preventDefault: () => void; })
     {
         e.preventDefault();
 
         this.setState({
             loading: true,
         });
-
-        this.form.validateAll();
 
         const { dispatch, history } = this.props;
 
@@ -88,7 +90,7 @@ class Login extends Component
         }
     }
 
-    closePopup(e)
+    closePopup(e: { preventDefault: () => void; })
     {
         e.preventDefault();
 
@@ -113,75 +115,73 @@ class Login extends Component
 
         return (
             <div className="login-page">
-                { showPopup == 't' && !isPopupClosed && (<Popup content="Thanks for registration.  Now you can login!" handleClose={ this.closePopup } />) }
-                <a classname="register-item logo-register"><img className='image-logo' src={ logo } alt="logo_but" /></a>
+                {showPopup == 't' && !isPopupClosed && (<Popup content="Thanks for registration.  Now you can login!" handleClose={this.closePopup} />)}
+                <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
                 <div className="login-page-content">
 
-                    <Form
-                        onSubmit={ this.handleLogin }
-                        ref={ (c) =>
+                    <form
+                        onSubmit={this.handleLogin}
+                        ref={(c) =>
                         {
                             this.form = c;
-                        } }
+                        }}
                     >
                         <div className="login-item">
                             <label htmlFor="username">Username</label>
-                            <Input
+                            <input
                                 type="text"
                                 className="input-text"
                                 name="username"
-                                value={ this.state.username }
-                                onChange={ this.onChangeUsername }
-                                validations={ [required] }
+                                value={this.state.username}
+                                onChange={this.onChangeUsername}
                             />
                         </div>
 
                         <div className="login-item">
                             <label htmlFor="password">Password</label>
-                            <Input
+                            <input
                                 type="password"
                                 className="input-text"
                                 name="password"
-                                value={ this.state.password }
-                                onChange={ this.onChangePassword }
-                                validations={ [required] }
+                                value={this.state.password}
+                                onChange={this.onChangePassword}
                             />
                         </div>
 
                         <div className="login-item">
                             <button
                                 className="submit-button"
-                                disabled={ this.state.loading }
+                                disabled={this.state.loading}
                             >
-                                { this.state.loading && (
+                                {this.state.loading && (
                                     <span className="spinner"></span>
-                                ) }
+                                )}
                                 <span>Login</span>
                             </button>
                         </div>
 
-                        { message && (
+                        {message && (
                             <div className="login-item">
                                 <div className="alert-text">
-                                    { message }
+                                    {message}
                                 </div>
                             </div>
-                        ) }
-                        <CheckButton
-                            style={ { display: "none" } }
-                            ref={ (c) =>
+                        )}
+                        <button
+                            style={{ display: "none" }}
+                            ref={(c) =>
                             {
                                 this.checkBtn = c;
-                            } }
+                            }}
                         />
-                    </Form>
+                    </form>
                 </div>
             </div>
         );
     }
 }
 
-function mapStateToProps(state)
+function mapStateToProps(state: { auth: { isLoggedIn: boolean; }; message: { message: string; }; })
 {
     const { isLoggedIn } = state.auth;
     const { message } = state.message;

@@ -4,3 +4,8 @@ export interface User
     password: string,
     accessToken: string
 }
+
+export interface AuthorizationHeader
+{
+    Authorization: string
+}

@@ -5,15 +5,21 @@ import ModelList from '../ModelList';
 import { logout } from "../actions/Authentication";
 import logo from '../styles/logo_but_text.png'
 
-class Board extends Component
+interface AppState
 {
-    constructor(props)
+    dispatch: any,
+    history: any
+}
+
+class Board extends Component<AppState>
+{
+    constructor(props: AppState)
     {
         super(props);
         this.handleLogout = this.handleLogout.bind(this);
     }
 
-    handleLogout(e)
+    handleLogout(e: { preventDefault: () => void; })
     {
         const { dispatch, history } = this.props;
         e.preventDefault();
@@ -29,11 +35,11 @@ class Board extends Component
                     @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
                 </style>
                 <div className="upper-navbar">
-                    <a classname="logo-container" href="/"><img className='image-logo' src={ logo } alt="logo_but" /></a>
+                    <a className="logo-container" href="/"><img className='logo' src={logo} alt="logo_but" /></a>
                     <li className="upper-navbar-item"><a href="projects">Projects</a></li>
                     <li className="upper-navbar-item"><a href="detais">Details</a></li>
                     <li className="upper-navbar-item"><a href="summary">Summary</a></li>
-                    <li className="upper-navbar-item-logout"><button onClick={ this.handleLogout }><a href="/logout">Logout</a></button></li>
+                    <li className="upper-navbar-item-logout"><button onClick={this.handleLogout}><a href="/logout">Logout</a></button></li>
                 </div>
                 <hr></hr>
                 <div className="main-body">
@@ -42,13 +48,6 @@ class Board extends Component
             </div>
         );
     }
-}
-
-function mapStateToProps(state)
-{
-    return {
-        state
-    };
 }
 
 export default connect(null, null)(Board)

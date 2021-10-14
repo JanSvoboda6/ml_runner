@@ -140,7 +140,7 @@ class Register extends Component
         return (
             <div>
                 <div className="register-page">
-                    <a classname="register-item logo-register"><img className='image-logo' src={ logo } alt="logo_but" /></a>
+                    <a classname="register-item logo-register"><img className='logo' src={ logo } alt="logo_but" /></a>
                     <Form
                         onSubmit={ this.handleRegister }
                         ref={ (c) =>
