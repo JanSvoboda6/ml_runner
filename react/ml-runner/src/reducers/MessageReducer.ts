@@ -1,8 +1,9 @@
 import { SET_MESSAGE, CLEAR_MESSAGE } from "../actions/ActionTypes";
+import { Action } from "../types";
 
 const initialState = {};
 
-export default function (state = initialState, action)
+export default function (state = initialState, action: Action)
 {
     const { type, payload } = action;
 

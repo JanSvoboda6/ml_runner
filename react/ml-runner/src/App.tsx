@@ -11,20 +11,24 @@ import Board from "./components/Board";
 import { logout } from "./actions/Authentication";
 import { clearMessage } from "./actions/Message";
 
-import { history } from './helpers/History';
+import { history } from "./helpers/History";
 
-class App extends Component
+import { User } from "./types";
+
+interface AppProps
 {
-  constructor(props)
+  dispatch: any,
+  user: User
+}
+
+class App extends Component<AppProps, User>
+{
+  constructor(props: AppProps)
   {
     super(props);
     this.logOut = this.logOut.bind(this);
 
-    this.state = {
-      currentUser: undefined,
-    };
-
-    history.listen((location) =>
+    history.listen(() =>
     {
       props.dispatch(clearMessage());
     });
@@ -36,11 +40,7 @@ class App extends Component
 
     if (user)
     {
-      this.setState({
-        currentUser: user,
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
-      });
+      this.setState(user);
     }
   }
 
@@ -51,20 +51,20 @@ class App extends Component
 
   render()
   {
-    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
+    const user = this.state;
 
     return (
       <div>
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
         </style>
-        <Router history={ history }>
-          <div className="navigation-page">
+        < Router history={history} >
+          <div className="navigation-page" >
             <Switch>
-              <Route exact path={ ["/", "/home"] } component={ Board } />
-              <Route exact path="/login" component={ Login } />
-              <Route exact path="/register" component={ Register } />
-              <Route exact path="/logout" component={ Login } />
+              <Route exact path={["/", "/home"]} component={Board} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/logout" component={Login} />
             </Switch>
           </div>
         </Router>
@@ -73,7 +73,7 @@ class App extends Component
   }
 }
 
-function mapStateToProps(state)
+function mapStateToProps(state: { auth: { user: User; }; })
 {
   const { user } = state.auth;
   return {

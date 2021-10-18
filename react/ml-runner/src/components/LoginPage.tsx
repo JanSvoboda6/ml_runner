@@ -6,29 +6,14 @@ import Popup from "./Popup";
 import { connect } from "react-redux";
 import { login } from "../actions/Authentication";
 import logo from '../styles/logo_but_text.png'
+import { AppState, LoginState } from '../types';
 
-interface AppState
-{
-    dispatch: any,
-    history: any,
-    isLoggedIn: boolean,
-    message: string
-}
-
-interface LoginState
-{
-    username: string,
-    password: string,
-    loading: boolean,
-    isPopupClosed: boolean
-}
 
 class Login extends Component<AppState, LoginState>
 {
-    checkBtn: any;
     form: any;
 
-    constructor(props: AppState)
+    constructor(props: AppState) //TODO Jan: It si possible to desctruct props {dispatch, history}
     {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
@@ -68,7 +53,8 @@ class Login extends Component<AppState, LoginState>
 
         const { dispatch, history } = this.props;
 
-        if (this.checkBtn.context._errors.length === 0)
+        var isValidationSuccesfull = true;
+        if (isValidationSuccesfull) //TODO Jan: implement proper validation
         {
             dispatch(login(this.state.username, this.state.password))
                 .then(() =>
@@ -149,13 +135,7 @@ class Login extends Component<AppState, LoginState>
                         </div>
 
                         <div className="login-item">
-                            <button
-                                className="submit-button"
-                                disabled={this.state.loading}
-                            >
-                                {this.state.loading && (
-                                    <span className="spinner"></span>
-                                )}
+                            <button className="submit-button" disabled={this.state.loading}>
                                 <span>Login</span>
                             </button>
                         </div>
@@ -167,13 +147,6 @@ class Login extends Component<AppState, LoginState>
                                 </div>
                             </div>
                         )}
-                        <button
-                            style={{ display: "none" }}
-                            ref={(c) =>
-                            {
-                                this.checkBtn = c;
-                            }}
-                        />
                     </form>
                 </div>
             </div>

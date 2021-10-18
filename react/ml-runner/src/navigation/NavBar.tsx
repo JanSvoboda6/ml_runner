@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Component } from 'react';
 
-class NavBar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {}
-    }
-
-    render() {
+class NavBar extends Component 
+{
+    render()
+    {
         return <div>
-            <ul class="navbar">
-                <li class="navbar-nav">
-                    <a href="#" class="nav-link">
+            <ul className="navbar">
+                <li className="navbar-nav">
+                    <a href="#" className="nav-link">
                         <svg
                             width="2rem"
                             height="2rem"
@@ -40,9 +38,9 @@ class NavBar extends Component {
                                 fill="white"
                             />
                         </svg>
-                        <span class="link-text">Projects</span>
+                        <span className="link-text">Projects</span>
                     </a>
-                    <a href="#" class="nav-link">
+                    <a href="#" className="nav-link">
                         <svg
                             width="2rem"
                             height="2rem"
@@ -66,9 +64,9 @@ class NavBar extends Component {
                                 fill="white"
                             />
                         </svg>
-                        <span class="link-text">Details</span>
+                        <span className="link-text">Details</span>
                     </a>
-                    <a href="#" class="nav-link">
+                    <a href="#" className="nav-link">
                         <svg
                             width="2rem"
                             height="2rem"
@@ -85,7 +83,7 @@ class NavBar extends Component {
                                 fill="white"
                             />
                         </svg>
-                        <span class="link-text">Summary</span>
+                        <span className="link-text">Summary</span>
                     </a>
                 </li>
             </ul>

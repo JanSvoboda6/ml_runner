@@ -7,13 +7,15 @@ import
     LOGOUT,
 } from "../actions/ActionTypes";
 
-const user = JSON.parse(localStorage.getItem("user"));
+import { Action } from "../types";
+
+const user = JSON.parse(localStorage.getItem('user') || '{}');
 
 const initialState = user
     ? { isLoggedIn: true, user }
     : { isLoggedIn: false, user: null };
 
-export default function (state = initialState, action)
+export default function (state = initialState, action: Action)
 {
     const { type, payload } = action;
 

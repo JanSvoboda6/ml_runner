@@ -4,13 +4,27 @@ import axios from "axios";
 import loadingIcon from './styles/loading_icon.svg'
 const API_URL = "http://localhost:8080/api";
 
-class ModelList extends Component
+
+interface ModelListState
 {
-  constructor(props)
+  errorMessage: string,
+  isLoaded: boolean,
+  models: Model[]
+}
+
+interface Model
+{
+  id: number,
+  name: string
+}
+
+class ModelList extends Component<any, ModelListState>
+{
+  constructor(props: any)
   {
     super(props);
     this.state = {
-      error: null,
+      errorMessage: "",
       isLoaded: false,
       models: []
     };
@@ -32,7 +46,7 @@ class ModelList extends Component
         {
           this.setState({
             isLoaded: true,
-            error
+            errorMessage: error.message
           });
         }
       )
@@ -40,22 +54,22 @@ class ModelList extends Component
 
   render()
   {
-    const { error, isLoaded, models: models } = this.state;
-    if (error)
+    const { errorMessage: errorMessage, isLoaded, models: models } = this.state;
+    if (errorMessage)
     {
-      return <div>Error: { error.message }</div>;
+      return <div>Error: {errorMessage}</div>;
     } else if (!isLoaded)
     {
-      return <div className="project-loading-message"><img className='loading-icon' src={ loadingIcon } alt="loading_icon" /></div>;
+      return <div className="project-loading-message"><img className='loading-icon' src={loadingIcon} alt="loading_icon" /></div>;
     } else
     {
       return (
         <ul className="project-list">
-          { models.map(model => (
-            <li key={ model.id } className="project-item">
-              { model.id } &nbsp;&nbsp; { model.name }
+          {models.map(model => (
+            <li key={model.id} className="project-item">
+              {model.id} &nbsp;&nbsp; {model.name}
             </li>
-          )) }
+          ))}
         </ul>
       );
     }
