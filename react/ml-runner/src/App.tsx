@@ -1,18 +1,11 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Router, Switch, Route, Link } from "react-router-dom";
-
 import "./App.css";
-
 import Login from "./components/LoginPage";
 import Register from "./components/RegisterPage";
 import Board from "./components/Board";
-
-import { logout } from "./actions/Authentication";
-import { clearMessage } from "./actions/Message";
-
+import { Logout as logout } from "./actions/Authentication";
 import { history } from "./helpers/History";
-
 import { User } from "./types";
 
 interface AppProps
@@ -27,11 +20,6 @@ class App extends Component<AppProps, User>
   {
     super(props);
     this.logOut = this.logOut.bind(this);
-
-    history.listen(() =>
-    {
-      props.dispatch(clearMessage());
-    });
   }
 
   componentDidMount()
@@ -46,7 +34,8 @@ class App extends Component<AppProps, User>
 
   logOut()
   {
-    this.props.dispatch(logout());
+    //this.props.dispatch(logout());
+    logout();
   }
 
   render()
@@ -72,13 +61,4 @@ class App extends Component<AppProps, User>
     );
   }
 }
-
-function mapStateToProps(state: { auth: { user: User; }; })
-{
-  const { user } = state.auth;
-  return {
-    user,
-  };
-}
-
-export default connect(mapStateToProps)(App);
+export default App;

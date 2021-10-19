@@ -31,7 +31,8 @@ export interface RegisterState
     username: string,
     email: string,
     password: string,
-    isRegistrationSuccessful: boolean
+    isRegistrationSuccessful: boolean,
+    message: string
 }
 
 export interface Action

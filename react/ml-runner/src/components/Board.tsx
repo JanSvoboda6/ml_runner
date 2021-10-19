@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import '../App.css';
 import ModelList from '../ModelList';
-import { logout } from "../actions/Authentication";
 import logo from '../styles/logo_but_text.png'
+import AuthenticationService from '../services/AuthenticationService';
+import { logout as logoutAction } from '../redux/UserSlice';
+import { ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 
 interface AppState
 {
@@ -21,9 +23,11 @@ class Board extends Component<AppState>
 
     handleLogout(e: { preventDefault: () => void; })
     {
-        const { dispatch, history } = this.props;
+        const { history } = this.props;
         e.preventDefault();
-        dispatch(logout());
+        AuthenticationService.logout();
+        logoutAction();
+
         history.push("/login");
         window.location.reload();
     }
@@ -50,4 +54,18 @@ class Board extends Component<AppState>
     }
 }
 
-export default connect(null, null)(Board)
+const mapDispatchToProps = (dispatch: (arg0: ActionCreatorWithoutPayload<string>) => void) =>
+{
+    return {
+        logoutAction: () => { dispatch(logoutAction); }
+    }
+}
+
+const mapStateToProps = (state: any) =>
+{
+    return {
+        stateValue: state
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board);

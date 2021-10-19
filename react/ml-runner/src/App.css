@@ -234,8 +234,7 @@ a{
 }
 
 .register-item{
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 0 auto;
   text-align: center;
   margin: 1vh;
 }
@@ -246,8 +245,6 @@ a{
   border-color: rgb(221, 216, 216);
   border-width: 3px;
   height: 1.5vh;
-  margin-left: auto;
-  margin-right: auto;
   border-style:solid;
   font-size: 17px;
 }

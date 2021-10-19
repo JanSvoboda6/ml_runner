@@ -36,7 +36,6 @@ class ModelList extends Component<any, ModelListState>
       .then(
         (res) =>
         {
-          console.log(res.data)
           this.setState({
             isLoaded: true,
             models: res.data

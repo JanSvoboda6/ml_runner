@@ -2,14 +2,12 @@ import React, { Component } from "react";
 import { Redirect } from 'react-router-dom';
 
 import { connect } from "react-redux";
-import { register } from "../actions/Authentication";
+import { Register as register } from "../actions/Authentication";
 import logo from '../styles/logo_but_text.png'
 import { AppState, RegisterState } from "../types";
 
 class Register extends Component<AppState, RegisterState>
 {
-    form: any;
-
     constructor(props: AppState)
     {
         super(props);
@@ -22,7 +20,8 @@ class Register extends Component<AppState, RegisterState>
             username: "",
             email: "",
             password: "",
-            isRegistrationSuccessful: false
+            isRegistrationSuccessful: false,
+            message: ""
         };
     }
 
@@ -50,39 +49,30 @@ class Register extends Component<AppState, RegisterState>
     handleRegister(e: { preventDefault: () => void; })
     {
         e.preventDefault();
-
         this.setState({
             isRegistrationSuccessful: false,
         });
 
-        var isValidationSuccesfull = true;
-        if (isValidationSuccesfull) //TODO Jan: implement proper validation
+        var isValidationSuccesful = true;
+        if (isValidationSuccesful) //TODO Jan: implement proper validation
         {
-            this.props
-                .dispatch(
-                    register(this.state.username, this.state.email, this.state.password)
-                )
+            register(this.state.username, this.state.email, this.state.password)
                 .then(() =>
                 {
-                    this.setState({
-                        isRegistrationSuccessful: true,
+                    this.setState({ isRegistrationSuccessful: true });
+                },
+                    (error: any) =>
+                    {
+                        this.setState({ message: error.response.data.message });
                     });
-                })
-                .catch(() =>
-                {
-                    this.setState({
-                        isRegistrationSuccessful: false,
-                    });
-                });
         }
     }
 
     render()
     {
-        const { message } = this.props; //TODO Jan: Destruct in a way that message.message is not needed
-        const { isRegistrationSuccessful: successful } = this.state;
+        const { isRegistrationSuccessful, message } = this.state;
 
-        if (successful)
+        if (isRegistrationSuccessful)
         {
             return <Redirect to="/login?popup=t" />;
         }
@@ -92,10 +82,10 @@ class Register extends Component<AppState, RegisterState>
                 <div className="register-page">
                     <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
                     <form onSubmit={this.handleRegister}>
-                        {!this.state.isRegistrationSuccessful && (
-                            <div>
+                        <div>
+                            <div className="register-item">
+                                <label htmlFor="username">Username</label>
                                 <div className="register-item username-text">
-                                    <label htmlFor="username">Username</label>
                                     <input
                                         type="text"
                                         className="input-text"
@@ -104,9 +94,11 @@ class Register extends Component<AppState, RegisterState>
                                         onChange={this.onChangeUsername}
                                     />
                                 </div>
+                            </div>
 
+                            <div className="register-item">
+                                <label htmlFor="email">Email</label>
                                 <div className="register-item email-text">
-                                    <label htmlFor="email">Email</label>
                                     <input
                                         type="text"
                                         className="input-text"
@@ -115,9 +107,11 @@ class Register extends Component<AppState, RegisterState>
                                         onChange={this.onChangeEmail}
                                     />
                                 </div>
+                            </div>
 
+                            <div className="register-item">
+                                <label htmlFor="password">Password</label>
                                 <div className="register-item password-text">
-                                    <label htmlFor="password">Password</label>
                                     <input
                                         type="password"
                                         className="input-text"
@@ -126,17 +120,14 @@ class Register extends Component<AppState, RegisterState>
                                         onChange={this.onChangePassword}
                                     />
                                 </div>
-
-                                <button className="register-item submit-button">Sign Up</button>
-
                             </div>
-                        )}
 
-                        {message.message !== "" && (
-                            <div className="form-group">
-                                <div className={this.state.isRegistrationSuccessful ? "alert alert-success" : "alert alert-danger"}>
-                                    {message.message}
-                                </div>
+                            <button className="register-item submit-button">Sign Up</button>
+                        </div>
+
+                        {message !== "" && (
+                            <div className="register-item">
+                                {message}
                             </div>
                         )}
                     </form>
@@ -146,12 +137,4 @@ class Register extends Component<AppState, RegisterState>
     }
 }
 
-function mapStateToProps(state: { message: any; })
-{
-    const { message } = state;
-    return {
-        message,
-    };
-}
-
-export default connect(mapStateToProps)(Register);
+export default connect()(Register);

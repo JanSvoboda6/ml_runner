@@ -3,14 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
-import { combineReducers } from "redux";
-
-import AuthenticationReducer from "./reducers/AuthenticationReducer";
-import MessageReducer from "./reducers/MessageReducer";
 import { BrowserRouter } from 'react-router-dom';
-import store from './Store';
-
-//export default combineReducers({ AuthenticationReducer, MessageReducer });
+import { store } from './redux/store';
 
 ReactDOM.render(
   <Provider store={ store }>
