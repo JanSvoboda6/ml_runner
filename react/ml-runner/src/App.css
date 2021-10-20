@@ -139,7 +139,6 @@ border-radius: 10px;
 .project-item{
   text-align: center;
   margin: 3%;
-  padding-top: 10%;
   padding-bottom: 10%;
   border-style: solid;
   border-color: var(--bg-accent);
@@ -335,4 +334,23 @@ p{
 .upper-navbar-logout-button:hover {
   border-color: rgb(255, 255, 255);
   cursor:pointer;
+}
+
+.control-panel{
+  margin: 0;
+  display: flex; 
+  flex-direction: row;
+  align-items: right;
+}
+
+.play-button{
+  image-rendering: -webkit-optimize-contrast;
+  width: 30px;
+}
+
+.stop-button{
+  image-rendering: -webkit-optimize-contrast;
+  width: 20px;
+  margin-left: 6px;
+  margin-top: 6px;
 }

@@ -79,7 +79,7 @@ public class AuthenticationController
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
-
+        //TODO Jan: validate that fields are not empty and add test cases.
         User user = userCreator.createUser(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
         Set<Role> roles = new HashSet<>();
 

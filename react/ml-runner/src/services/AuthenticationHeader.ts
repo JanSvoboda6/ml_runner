@@ -1,13 +1,13 @@
 import { AuthorizationHeader, User } from "../types";
 
-export default function authHeader()
+export default function AuthorizationHeader()
 {
     const user: User = JSON.parse(localStorage.getItem('user') || '{}');
 
     if (user && user.accessToken)
     {
-        var authothorizationHeader: AuthorizationHeader = { Authorization: 'Bearer ' + user.accessToken };
-        return authothorizationHeader;
+        var authorizationHeader: AuthorizationHeader = { Authorization: 'Bearer ' + user.accessToken };
+        return authorizationHeader;
     } else
     {
         return {};
