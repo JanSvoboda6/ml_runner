@@ -13,7 +13,6 @@ class AuthService
     {
       localStorage.setItem("user", JSON.stringify(response.data));
     }
-
     return response.data;
   }
 
@@ -27,7 +26,6 @@ class AuthService
     var message: string = "";
     return axios.post(API_URL + "/signup", { username, email, password, message })
   }
-
 }
 
 export default new AuthService();

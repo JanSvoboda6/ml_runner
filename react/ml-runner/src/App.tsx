@@ -4,7 +4,7 @@ import "./App.css";
 import Login from "./components/LoginPage";
 import Register from "./components/RegisterPage";
 import Board from "./components/Board";
-import { Logout as logout } from "./actions/Authentication";
+//import { Logout as logout } from "./actions/Authentication";
 import { history } from "./helpers/History";
 import { User } from "./types";
 
@@ -19,7 +19,6 @@ class App extends Component<AppProps, User>
   constructor(props: AppProps)
   {
     super(props);
-    this.logOut = this.logOut.bind(this);
   }
 
   componentDidMount()
@@ -30,12 +29,6 @@ class App extends Component<AppProps, User>
     {
       this.setState(user);
     }
-  }
-
-  logOut()
-  {
-    //this.props.dispatch(logout());
-    logout();
   }
 
   render()

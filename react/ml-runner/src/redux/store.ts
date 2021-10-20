@@ -10,5 +10,6 @@ export const store = configureStore({
     middleware: [thunk]
 })
 
+//TODO Jan: How to use these states?
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

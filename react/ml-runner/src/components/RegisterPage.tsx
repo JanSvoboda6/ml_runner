@@ -1,140 +1,134 @@
-import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
-
+import React, { useState } from "react";
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
-import { Register as register } from "../actions/Authentication";
 import logo from '../styles/logo_but_text.png'
-import { AppState, RegisterState } from "../types";
+import RegisterService from "../services/RegisterService";
 
-class Register extends Component<AppState, RegisterState>
+function Register()
 {
-    constructor(props: AppState)
-    {
-        super(props);
-        this.handleRegister = this.handleRegister.bind(this);
-        this.onChangeUsername = this.onChangeUsername.bind(this);
-        this.onChangeEmail = this.onChangeEmail.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [isRegistrationSuccessful, setRegistrationSuccessful] = useState(false);
 
-        this.state = {
-            username: "",
-            email: "",
-            password: "",
-            isRegistrationSuccessful: false,
-            message: ""
-        };
+    const onChangeUsername = (e: { target: { value: string; }; }) =>
+    {
+        setUsername(e.target.value);
     }
 
-    onChangeUsername(e: { target: { value: string; }; })
+    const onChangeEmail = (e: { target: { value: string; }; }) =>
     {
-        this.setState({
-            username: e.target.value,
-        });
+        setEmail(e.target.value);
     }
 
-    onChangeEmail(e: { target: { value: string; }; })
+    const onChangePassword = (e: { target: { value: string; }; }) =>
     {
-        this.setState({
-            email: e.target.value,
-        });
+        setPassword(e.target.value);
     }
 
-    onChangePassword(e: { target: { value: string; }; })
-    {
-        this.setState({
-            password: e.target.value,
-        });
-    }
-
-    handleRegister(e: { preventDefault: () => void; })
+    const handleRegister = (e: { preventDefault: () => void; }) =>
     {
         e.preventDefault();
-        this.setState({
-            isRegistrationSuccessful: false,
-        });
+        setRegistrationSuccessful(false);
 
         var isValidationSuccesful = true;
         if (isValidationSuccesful) //TODO Jan: implement proper validation
         {
-            register(this.state.username, this.state.email, this.state.password)
-                .then(() =>
+            RegisterService(username, email, password).then(
+                () =>
                 {
-                    this.setState({ isRegistrationSuccessful: true });
+                    setRegistrationSuccessful(true)
                 },
-                    (error: any) =>
+                (error: any) =>
+                {
+                    var message = "";
+                    if (error && error.response && error.response.data.message)
                     {
-                        this.setState({ message: error.response.data.message });
-                    });
-        }
+                        message = error.response.data.message;
+                    }
+                    else if (error.message)
+                    {
+                        console.log(error.message)
+                        message = error.message;
+                    }
+                    else if (error.toString())
+                    {
+                        message = error.toString();
+                    }
+
+                    setMessage(message)
+                });
+        };
     }
 
-    render()
+    if (isRegistrationSuccessful)
     {
-        const { isRegistrationSuccessful, message } = this.state;
+        return <Redirect to="/login?popup=t" />;
+    }
 
-        if (isRegistrationSuccessful)
-        {
-            return <Redirect to="/login?popup=t" />;
-        }
-
-        return (
-            <div>
-                <div className="register-page">
-                    <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
-                    <form onSubmit={this.handleRegister}>
-                        <div>
-                            <div className="register-item">
-                                <label htmlFor="username">Username</label>
-                                <div className="register-item username-text">
-                                    <input
-                                        type="text"
-                                        className="input-text"
-                                        name="username"
-                                        value={this.state.username}
-                                        onChange={this.onChangeUsername}
-                                    />
-                                </div>
+    return (
+        <div>
+            <div className="register-page">
+                <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
+                <form onSubmit={handleRegister}>
+                    <div>
+                        <div className="register-item">
+                            <label htmlFor="username">Username</label>
+                            <div className="register-item username-text">
+                                <input
+                                    type="text"
+                                    className="input-text"
+                                    name="username"
+                                    value={username}
+                                    onChange={onChangeUsername}
+                                />
                             </div>
-
-                            <div className="register-item">
-                                <label htmlFor="email">Email</label>
-                                <div className="register-item email-text">
-                                    <input
-                                        type="text"
-                                        className="input-text"
-                                        name="email"
-                                        value={this.state.email}
-                                        onChange={this.onChangeEmail}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="register-item">
-                                <label htmlFor="password">Password</label>
-                                <div className="register-item password-text">
-                                    <input
-                                        type="password"
-                                        className="input-text"
-                                        name="password"
-                                        value={this.state.password}
-                                        onChange={this.onChangePassword}
-                                    />
-                                </div>
-                            </div>
-
-                            <button className="register-item submit-button">Sign Up</button>
                         </div>
 
-                        {message !== "" && (
-                            <div className="register-item">
-                                {message}
+                        <div className="register-item">
+                            <label htmlFor="email">Email</label>
+                            <div className="register-item email-text">
+                                <input
+                                    type="text"
+                                    className="input-text"
+                                    name="email"
+                                    value={email}
+                                    onChange={onChangeEmail}
+                                />
                             </div>
-                        )}
-                    </form>
+                        </div>
+
+                        <div className="register-item">
+                            <label htmlFor="password">Password</label>
+                            <div className="register-item password-text">
+                                <input
+                                    type="password"
+                                    className="input-text"
+                                    name="password"
+                                    value={password}
+                                    onChange={onChangePassword}
+                                />
+                            </div>
+                        </div>
+
+                        <button className="register-item submit-button">Sign Up</button>
+                    </div>
+
+                    {message !== "" && (
+                        <div className="register-item">
+                            {message}
+                        </div>
+                    )}
+                </form>
+                <div className="register-link">
+                    <p className="register-link-text" >Already have an account?</p>
+                    <Link className="register-link-reference" to="/login">Login</Link>
                 </div>
-            </div >
-        );
-    }
+            </div>
+        </div >
+    );
 }
+
 
 export default connect()(Register);

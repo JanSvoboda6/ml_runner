@@ -9,34 +9,3 @@ export interface AuthorizationHeader
 {
     Authorization: string
 }
-
-export interface AppState
-{
-    dispatch: any,
-    history: any,
-    isLoggedIn: boolean,
-    message: any
-}
-
-export interface LoginState
-{
-    username: string,
-    password: string,
-    loading: boolean,
-    isPopupClosed: boolean
-}
-
-export interface RegisterState
-{
-    username: string,
-    email: string,
-    password: string,
-    isRegistrationSuccessful: boolean,
-    message: string
-}
-
-export interface Action
-{
-    type: string,
-    payload: any
-}

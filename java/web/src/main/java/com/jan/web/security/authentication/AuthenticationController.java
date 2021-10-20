@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -95,9 +96,17 @@ public class AuthenticationController
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest)
     {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
+        Authentication authentication;
+        try
+        {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        }catch (AuthenticationException exception) //TODO Jan: Test this case
+        {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Bad credentials!"));
+        }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jsonWebTokenUtility.generateJwtToken(authentication);
 

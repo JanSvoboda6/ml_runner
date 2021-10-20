@@ -118,10 +118,7 @@ ul {
 .upper-navbar-item-logout{
   margin-left: auto;
   margin-right: 13px;
-  padding: 0.5rem 1%;
-  background-color: var(--bg-accent);
-  color: var(--bg-primary);
-  border-radius: 20px;
+  margin-top: 9px;
 }
 
 .main-body{
@@ -295,3 +292,47 @@ a{
   margin: 1vh;
 }
 
+.login-link{
+  font-size: 15px;
+  text-align: right;
+}
+
+.login-link-reference{
+   text-decoration: underline;
+   color: var(--bg-accent);
+}
+
+.register-link{
+  font-size: 15px;
+  text-align: right;
+}
+
+.register-link-reference{
+   text-decoration: underline;
+   color: var(--bg-accent);
+}
+
+p{
+    margin-block-start: 5px;
+    margin-block-end: 5px;
+}
+
+.upper-navbar-logout-button{
+  padding: 0.5em 1.7em;
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  background-color: var(--bg-accent);
+  border-radius: 2em;
+  text-decoration: none;
+  color: #ffffff;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  margin: 0 auto;
+  font-size: 17px;
+}
+
+.upper-navbar-logout-button:hover {
+  border-color: rgb(255, 255, 255);
+  cursor:pointer;
+}
