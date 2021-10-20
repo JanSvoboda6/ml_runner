@@ -27,14 +27,15 @@ function Board()
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
             </style>
-            <div className="upper-navbar">
-                <a className="logo-container" href="/"><img className='logo' src={logo} alt="logo_but" /></a>
-                <li className="upper-navbar-item"><a href="projects">Projects</a></li>
-                <li className="upper-navbar-item"><a href="detais">Details</a></li>
-                <li className="upper-navbar-item"><a href="summary">Summary</a></li>
-                <li className="upper-navbar-item-logout"><button className="upper-navbar-logout-button" onClick={handleLogout}><Link to="/logout">Logout</Link></button></li>
+            <div className="navbar-wrapper">
+                <div className="upper-navbar">
+                    <a className="logo-container" href="/"><img className='logo' src={logo} alt="logo_but" /></a>
+                    <li className="upper-navbar-item"><a href="projects">Projects</a></li>
+                    <li className="upper-navbar-item"><a href="detais">Details</a></li>
+                    <li className="upper-navbar-item"><a href="summary">Summary</a></li>
+                    <li className="upper-navbar-item-logout"><button className="upper-navbar-logout-button" onClick={handleLogout}><Link to="/logout">Logout</Link></button></li>
+                </div>
             </div>
-            <hr></hr>
             <div className="main-body">
                 <ModelList />
             </div>
