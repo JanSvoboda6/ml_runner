@@ -7,6 +7,8 @@ import Board from "./components/Board";
 //import { Logout as logout } from "./actions/Authentication";
 import { history } from "./helpers/History";
 import { User } from "./types";
+import Project from "./components/Project";
+import Navbar from "./components/Navbar";
 
 interface AppProps
 {
@@ -47,6 +49,7 @@ class App extends Component<AppProps, User>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/logout" component={Login} />
+              <Route exact path="/newproject" component={Project} />
             </Switch>
           </div>
         </Router>

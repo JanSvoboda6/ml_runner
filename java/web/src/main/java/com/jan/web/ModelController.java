@@ -2,8 +2,10 @@ package com.jan.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +20,6 @@ public class ModelController
         this.modelRepository = modelRepository;
     }
 
-    @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Model> getModels() throws InterruptedException
     {
@@ -30,6 +31,13 @@ public class ModelController
     @GetMapping("/{id}")
     public Model getModel(@PathVariable Long id) {
         return modelRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    @PostMapping("/api/saveproject")
+    public ResponseEntity<?> createModel(@Valid @RequestBody ProjectRequest request)
+    {
+        System.out.println(request);
+        return ResponseEntity.ok("Project saved!");
     }
 
     public List<Model> list() {

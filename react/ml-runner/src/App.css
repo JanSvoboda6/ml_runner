@@ -363,3 +363,36 @@ p{
   margin-top: 6px;
   opacity: 50%;
 }
+
+.project-form{
+background-color: var(--bg-secondary);
+width: 50vh;
+height: 50vh;
+margin-top: 5rem;
+margin-left: auto;
+margin-right: auto;
+display: flex; 
+flex-direction: column;
+border-radius: 10px;
+}
+
+.project-form-block{
+text-align: center;
+background-color: var(--bg-accent);
+width: 80%;
+height: 10vh;
+margin-top: 1rem;
+margin-left: auto;
+margin-right: auto;
+border-radius: 10px;
+}
+
+input[type="text"]
+{
+    font-size: 1rem;
+}
+
+input[type="file"]
+{
+    font-size: 1rem;
+}
