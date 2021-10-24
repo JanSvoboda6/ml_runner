@@ -72,8 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         http.authorizeRequests().antMatchers("/api/models/**").permitAll();
         http.csrf().ignoringAntMatchers("/api/models/**");
 
-        http.authorizeRequests().antMatchers("/api/saveproject").permitAll();
-        http.csrf().ignoringAntMatchers("/api/saveproject");
+        http.authorizeRequests().antMatchers("/api/saveproject/**").permitAll();
+        http.csrf().ignoringAntMatchers("/api/saveproject/**");
         
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

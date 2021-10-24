@@ -39,7 +39,7 @@ function Project()
             <Navbar />
             <div className="project-form">
                 <div className="project-form-block"> <input type="text" onChange={handleNameChange} placeholder="Name" /> </div>
-                <div className="project-form-block"> <input type="file" onChange={handleFileUpload} multiple /></div>
+                <div className="project-form-block"> <input type="file" className="file-input" onChange={handleFileUpload} multiple /></div>
                 <div className="project-form-block">
                     Choose algorithm:
                     <select name="model-select" onChange={handleModelSelection}>
@@ -47,7 +47,7 @@ function Project()
                         <option value="Support Vector Machines">More models will be added in the future...</option>
                     </select>
                 </div>
-                <div className="project-form-block"><button onClick={handleProjectSaving}>Save</button></div>
+                <div className="project-form-block"><button className="save-button" onClick={handleProjectSaving}>Save</button></div>
             </div>
         </div>
     )

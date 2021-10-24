@@ -365,27 +365,29 @@ p{
 }
 
 .project-form{
-background-color: var(--bg-secondary);
-width: 50vh;
-height: 50vh;
-margin-top: 5rem;
-margin-left: auto;
-margin-right: auto;
-display: flex; 
-flex-direction: column;
-border-radius: 10px;
+  background-color: var(--bg-primary);
+  width: 50vh;
+  height: 50vh;
+  margin-top: 5rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex; 
+  flex-direction: column;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: var(--bg-accent);
 }
 
 .project-form-block{
-text-align: center;
-background-color: var(--bg-accent);
-width: 80%;
-height: 10vh;
-margin-top: 1rem;
-margin-left: auto;
-margin-right: auto;
-border-radius: 10px;
-}
+  text-align: center;
+  background-color: var(--bg-primary);
+  width: 80%;
+  height: 10vh;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  }
 
 input[type="text"]
 {
@@ -395,4 +397,29 @@ input[type="text"]
 input[type="file"]
 {
     font-size: 1rem;
+}
+
+.file-input {
+  margin-top: 8%;
+  margin-left: 15%;
+}
+
+.save-button{
+  padding: 0.5em 1.7em;
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  background-color: var(--bg-accent);
+  border-radius: 2em;
+  text-decoration: none;
+  color: #ffffff;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  margin: 0 auto;
+  font-size: 17px;
+}
+
+.save-button:hover {
+  border-color: rgb(255, 255, 255);
+  cursor:pointer;
 }
