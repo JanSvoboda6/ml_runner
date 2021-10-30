@@ -9,7 +9,6 @@ import javax.persistence.Id;
 @Entity
 public class Model
 {
-
     @Id
     @GeneratedValue
     private Long id;

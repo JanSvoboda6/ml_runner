@@ -2,7 +2,8 @@ import React from "react";
 import { Link, Redirect } from 'react-router-dom';
 import Popup from "./Popup";
 import { useDispatch } from "react-redux";
-import logo from '../styles/logo_but_text.png'
+import logo from '../styles/logo_but_text.png';
+import dots from '../styles/logo_dots_new.svg';
 import { LoginService } from '../services/LoginService';
 import { useState } from "react";
 
@@ -50,7 +51,6 @@ function Login()
                     },
                     (error: any) =>
                     {
-                        console.log(error);
                         setLoggedIn(false);
                         setLoading(false);
 
@@ -88,58 +88,60 @@ function Login()
     }
 
     return (
-        <div className="login-page">
-            {showPopup == 't' && !isPopupClosed && (<Popup content="Thanks for registration.  Now you can login!" handleClose={closePopup} />)}
-            <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
-            <div className="login-page-content">
+        <div>
+            <div className="wrapper">
+                <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a>
+                {/* <a className="login-banner-text">Random</a> */}
 
-                <form onSubmit={handleLogin}>
-                    <div className="login-item">
-                        <label htmlFor="username">Username</label>
-                        <div className="login-item">
-                            <input
-                                type="text"
-                                className="input-text"
-                                name="username"
-                                value={username}
-                                onChange={onChangeUsername}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="login-item">
-                        <label htmlFor="password">Password</label>
-                        <div className="login-item">
-                            <input
-                                type="password"
-                                className="input-text"
-                                name="password"
-                                value={password}
-                                onChange={onChangePassword}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="login-item">
-                        <button className="submit-button" disabled={loading}>
-                            <span>Login</span>
-                        </button>
-                    </div>
-
-                    {message && (
-                        <div className="login-item">
-                            <div className="alert-text">
-                                {message}
+            </div>
+            <div className="landing-page">
+                <div className="landing-page-text">Machine Learning <a className="landing-page-text-color">Runner</a></div>
+                <div className="login-page">
+                    {showPopup == 't' && !isPopupClosed && (<Popup content="Thanks for registration.  Now you can login!" handleClose={closePopup} />)}
+                    <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
+                    <div className="login-page-content">
+                        <form onSubmit={handleLogin}>
+                            <div className="login-item">
+                                <input
+                                    type="text"
+                                    className="input-text"
+                                    name="username"
+                                    placeholder="Username"
+                                    value={username}
+                                    onChange={onChangeUsername}
+                                />
                             </div>
+                            <div className="login-item">
+                                <input
+                                    type="password"
+                                    className="input-text"
+                                    name="password"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={onChangePassword}
+                                />
+                            </div>
+                            <div className="login-item">
+                                <button className="submit-button" disabled={loading}>
+                                    <span>Login</span>
+                                </button>
+                            </div>
+                            {message && (
+                                <div className="login-item">
+                                    <div className="alert-text">
+                                        {message}
+                                    </div>
+                                </div>
+                            )}
+                        </form>
+                        <div className="login-link">
+                            <p className="login-link-text" >Do not have an account?</p>
+                            <Link className="login-link-reference" to="/register">Register</Link>
                         </div>
-                    )}
-                </form>
-                <div className="login-link">
-                    <p className="login-link-text" >Do not have an account?</p>
-                    <Link className="login-link-reference" to="/register">Register</Link>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

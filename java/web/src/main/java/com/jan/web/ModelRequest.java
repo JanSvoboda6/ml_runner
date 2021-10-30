@@ -2,22 +2,22 @@ package com.jan.web;
 
 import javax.validation.constraints.NotBlank;
 
-public class ProjectRequest
+public class ModelRequest
 {
     @NotBlank
-    private String projectName;
+    private String modelName;
 
     @NotBlank
     private String selectedModel;
 
-    public String getProjectName()
+    public String getModelName()
     {
-        return projectName;
+        return modelName;
     }
 
-    public void setProjectName(String projectName)
+    public void setModelName(String modelName)
     {
-        this.projectName = projectName;
+        this.modelName = modelName;
     }
 
     public String getSelectedModel()

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
-import logo from '../styles/logo_but_text.png'
+import logo from '../styles/logo_but_text.png';
+import dots from '../styles/logo_dots_new.svg';
 import RegisterService from "../services/RegisterService";
 
 function Register()
@@ -69,6 +70,10 @@ function Register()
 
     return (
         <div>
+            <div className="wrapper">
+                <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a>
+                {/* <a className="login-banner-text">Random</a> */}
+            </div>
             <div className="register-page">
                 <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
                 <form onSubmit={handleRegister}>

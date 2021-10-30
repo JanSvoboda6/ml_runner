@@ -9,6 +9,7 @@ import { history } from "./helpers/History";
 import { User } from "./types";
 import Project from "./components/Project";
 import Navbar from "./components/Navbar";
+import Summary from "./components/Summary";
 
 interface AppProps
 {
@@ -46,6 +47,8 @@ class App extends Component<AppProps, User>
           <div className="navigation-page" >
             <Switch>
               <Route exact path={["/", "/home"]} component={Board} />
+              <Route exact path="/projects" component={Board} />
+              <Route exact path="/summary" component={Summary} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/logout" component={Login} />
@@ -53,6 +56,9 @@ class App extends Component<AppProps, User>
             </Switch>
           </div>
         </Router>
+        <footer>
+          <p>made with ♥️ by jan</p>
+        </footer>
       </div>
     );
   }
