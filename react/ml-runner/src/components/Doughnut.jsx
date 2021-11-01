@@ -1,8 +1,5 @@
 import React from 'react'
-import { Doughnut as Dough, defaults } from 'react-chartjs-2'
-
-// defaults.global.tooltips.enabled = false
-// defaults.global.legend.position = 'bottom'
+import { Doughnut as Dough } from 'react-chartjs-2'
 
 const Doughnut = () =>
 {
@@ -14,9 +11,9 @@ const Doughnut = () =>
                         {
                             data: [12, 19, 15],
                             backgroundColor: [
-                                'rgba(113, 228, 170, 0.5)',
-                                'rgba(133, 38, 201, 0.8)',
-                                'rgba(201, 38, 76, 0.5)',
+                                'rgba(113, 228, 170, 0.9)',
+                                'rgba(133, 38, 201, 0.9)',
+                                'rgba(201, 38, 76, 0.9)',
                             ],
                             borderColor: [
                                 'rgba(255, 99, 132, 1)',

@@ -1,5 +1,5 @@
 :root {
-  font-size: 17px;
+  font-size: 19px;
   --text-primary: rgb(2, 1, 15);
   --text-secondary: #ffffff;
   --bg-primary: #ffffff;
@@ -129,9 +129,29 @@ nav .upper-navbar-animation
 
 .start-at-projects
 {
-  left: -10rem;
-  width: 100px;
-  opacity: 0;
+  left: 9.5rem;
+  width: 80px;
+  opacity: 50%;
+}
+
+.start-at-datasets
+{
+  left: 17.35rem;
+  width: 80px;
+  opacity: 50%;
+}
+
+.start-at-summary
+{
+  left: 25.3rem;
+  width: 80px;
+  opacity: 50%;
+}
+
+.start-at-new-project{
+  left: 33.8rem;
+  width: 130px;
+  opacity: 50%;
 }
 
 nav a:nth-child(2):hover~.upper-navbar-animation
@@ -140,6 +160,7 @@ nav a:nth-child(2):hover~.upper-navbar-animation
   width: 80px;
   opacity: 100;
 }
+
 
 nav a:nth-child(3):hover~.upper-navbar-animation
 {
@@ -150,7 +171,14 @@ nav a:nth-child(3):hover~.upper-navbar-animation
 
 nav a:nth-child(4):hover~.upper-navbar-animation
 {
-  left: 25.5rem;
+  left: 25.3rem;
+  width: 80px;
+  opacity: 100;
+}
+
+nav a:nth-child(5):hover~.upper-navbar-animation
+{
+  left: 33.8rem;
   width: 130px;
   opacity: 100;
 }
@@ -166,15 +194,14 @@ nav a:nth-child(4):hover~.upper-navbar-animation
 
 .logo{
   image-rendering: -webkit-optimize-contrast;
-  width: 120px;
-  height: 80%;
+  width: 135px;
   margin-top: 5px;
   background-color: rgb(0, 0, 0);
 }
 
 .logo-dots{
   image-rendering: -webkit-optimize-contrast;
-  width: 65px;
+  width: 71px;
   /* background-color: var(--bg-accent); */
   margin-top: 5px;
   margin-left: 7px;
@@ -193,7 +220,7 @@ nav a:nth-child(4):hover~.upper-navbar-animation
 
 .project-list{
   width: 50vh;
-  margin-top: 3rem;
+  margin-top: 5rem;
   margin-left: auto;
   margin-right: auto;
   display: flex; 
@@ -311,6 +338,7 @@ a{
 ::placeholder {
   color: rgb(0, 0, 0);
   opacity: 0.5;
+  font-size: 15px;
 }
 
 .input-text{
@@ -318,9 +346,9 @@ a{
   border-radius: 7px;
   border-color: rgb(221, 216, 216);
   border-width: 2px;
-  height: 2vh;
+  height: 3vh;
   border-style:solid;
-  font-size: 17px;
+  font-size: 19px;
   padding: 0rem 0.5rem 0rem 0.5rem;
 }
 
@@ -350,7 +378,7 @@ a{
 }
 
 .login-page {
-  width: 40vh;
+  width: 50vh;
   margin-top: 5rem;
   margin-right: auto;
   background-color: var(--bg-primary);
@@ -436,7 +464,7 @@ p{
 }
 
 .project-form{
-  width: 60vh;
+  width: 75vh;
   height: 50vh;
   margin-top: 5rem;
   margin-left: auto;
@@ -577,7 +605,7 @@ footer{
 
 .logo-dots-bigger{
   image-rendering: -webkit-optimize-contrast;
-  width: 70px;
+  width: 71px;
   margin-top: 10px;
   /* background-color: var(--bg-accent); */
   filter: contrast(135%);
@@ -615,12 +643,77 @@ body {
 }
 
 .landing-page-text{
-  max-width: 850px;
+  max-width: 830px;
   margin-top: 5rem;
   margin-left: 7rem;
-  font-size: 10rem;
+  font-size: 135px;
 }
 
 .landing-page-text-color{
 color: #ff8800;
+}
+
+.file-editor-wrapper
+{
+  width: 67%;
+  margin: 10vh auto;
+  border-style: solid;
+  border-radius: 20px;
+  padding: 10px;
+  opacity: 100%;
+  border-color: #cfb5b550;
+  background-color: #ffffff50;
+}
+
+.total-list{
+  border-style: solid;
+  width: 20rem;
+  margin-left: 2.5rem;
+  border-color: #cfb5b550;
+  background-color: #ffffff50;
+  border-radius: 15px;
+}
+
+.total{
+  font-size: 20px;
+  margin: 1rem;
+  text-align: center;
+}
+
+.total-number{
+  margin-top: 0.5rem;
+  color: #2a4f9e;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* .open-dataset-button{
+    padding: 0.5em 1.7em;
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  background-color: black;
+  border-radius: 2em;
+  text-decoration: none;
+  color: #ffffff;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  margin: 0 auto;
+  font-size: 17px;
+} */
+
+.choose-dataset-button
+{
+  padding: 0.5em 1.7em;
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  background-color: black;
+  border-radius: 2em;
+  text-decoration: none;
+  color: #ffffff;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  margin: 0;
+  font-size: 17px;
 }

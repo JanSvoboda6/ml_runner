@@ -10,12 +10,11 @@ function Board()
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
             </style>
-            <Navbar />
+            <Navbar start="start-at-projects" />
             <div className="main-body">
                 <ModelList />
             </div>
         </div>
     );
 }
-
 export default Board;

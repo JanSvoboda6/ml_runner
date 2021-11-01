@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import playButton from '../styles/play-button.png';
 import stopButton from '../styles/stop-button.png';
-import BarChart from "./BarChart";
+import PieChart from "./PieChart";
 import Doughnut from "./Doughnut";
 
 const Model = (props: any) =>

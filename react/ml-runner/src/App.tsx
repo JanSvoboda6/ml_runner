@@ -8,8 +8,8 @@ import Board from "./components/Board";
 import { history } from "./helpers/History";
 import { User } from "./types";
 import Project from "./components/Project";
-import Navbar from "./components/Navbar";
 import Summary from "./components/Summary";
+import DatasetPage from "./components/DatasetPage";
 
 interface AppProps
 {
@@ -48,6 +48,7 @@ class App extends Component<AppProps, User>
             <Switch>
               <Route exact path={["/", "/home"]} component={Board} />
               <Route exact path="/projects" component={Board} />
+              <Route exact path="/datasets" component={DatasetPage} />
               <Route exact path="/summary" component={Summary} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
@@ -57,7 +58,7 @@ class App extends Component<AppProps, User>
           </div>
         </Router>
         <footer>
-          <p>made with ♥️ by jan</p>
+          <p>made by jan</p>
         </footer>
       </div>
     );

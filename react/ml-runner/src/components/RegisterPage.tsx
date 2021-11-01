@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
 import logo from '../styles/logo_but_text.png';
-import dots from '../styles/logo_dots_new.svg';
+import dots from '../styles/dots_logo_big.svg';
 import RegisterService from "../services/RegisterService";
 
 function Register()
@@ -72,50 +72,42 @@ function Register()
         <div>
             <div className="wrapper">
                 <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a>
-                {/* <a className="login-banner-text">Random</a> */}
             </div>
             <div className="register-page">
                 <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
                 <form onSubmit={handleRegister}>
                     <div>
-                        <div className="register-item">
-                            <label htmlFor="username">Username</label>
-                            <div className="register-item username-text">
-                                <input
-                                    type="text"
-                                    className="input-text"
-                                    name="username"
-                                    value={username}
-                                    onChange={onChangeUsername}
-                                />
-                            </div>
+                        <div className="register-item username-text">
+                            <input
+                                type="text"
+                                className="input-text"
+                                name="username"
+                                placeholder="Username"
+                                value={username}
+                                onChange={onChangeUsername}
+                            />
+                        </div>
+                        <div className="register-item email-text">
+                            <input
+                                type="text"
+                                className="input-text"
+                                name="email"
+                                placeholder="Email"
+                                value={email}
+                                onChange={onChangeEmail}
+                            />
+                        </div>
+                        <div className="register-item password-text">
+                            <input
+                                type="password"
+                                className="input-text"
+                                name="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={onChangePassword}
+                            />
                         </div>
 
-                        <div className="register-item">
-                            <label htmlFor="email">Email</label>
-                            <div className="register-item email-text">
-                                <input
-                                    type="text"
-                                    className="input-text"
-                                    name="email"
-                                    value={email}
-                                    onChange={onChangeEmail}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="register-item">
-                            <label htmlFor="password">Password</label>
-                            <div className="register-item password-text">
-                                <input
-                                    type="password"
-                                    className="input-text"
-                                    name="password"
-                                    value={password}
-                                    onChange={onChangePassword}
-                                />
-                            </div>
-                        </div>
 
                         <button className="register-item submit-button">Sign Up</button>
                     </div>

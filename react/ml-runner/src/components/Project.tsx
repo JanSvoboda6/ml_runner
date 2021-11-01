@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import Navbar from "./Navbar";
 import ModelService from "./ModelService";
 import { Redirect } from "react-router";
+import 'reactjs-popup/dist/index.css';
+import Popup from "reactjs-popup";
+import Datasets from "./Datasets";
+import "../styles/Project.css";
 
 function Project()
 {
@@ -12,7 +16,7 @@ function Project()
     const [filesOfFirstLabel, setFilesOfFirstLabel] = useState([]);
     const [filesOfSecondLabel, setFilesOfSecondLabel] = useState([]);
     const [selectedModel, setSelectedModel] = useState("Support Vector Machines");
-    const [isSuccessfullySave, setSuccessfullySaved] = useState(false);
+    const [isSuccessfullySaved, setSuccessfullySaved] = useState(false);
 
     const handleNameChange = (e: any) =>
     {
@@ -62,14 +66,19 @@ function Project()
             );
     }
 
-    if (isSuccessfullySave)
+    const handleDatasetOpening = (e: any) =>
+    {
+
+    }
+
+    if (isSuccessfullySaved)
     {
         return <Redirect to='/' />;
     }
 
     return (
         <div>
-            <Navbar />
+            <Navbar start="start-at-new-project" />
             <div className="project-form">
                 <div className="project-form-block"> <input type="text" onChange={handleNameChange} placeholder="Project Name" /> </div>
                 <div className="project-form-block project-form-block-data">
@@ -87,7 +96,15 @@ function Project()
                         <option value="Support Vector Machines">More models will be added in the future...</option>
                     </select>
                 </div>
-                <div className="project-form-block"><button className="save-button" onClick={handleProjectSaving}>Save</button></div>
+                {/* <div className="project-form-block"><button className="open-dataset-button" onClick={handleDatasetOpening}>Open</button></div> */}
+                <div className="project-form-block">
+                    <Popup trigger={<button className="open-dataset-button"> Open Dataset</button>} position="right center" modal>
+                        <div>
+                            <button className="choose-dataset-button">Choose Folder</button>
+                            <Datasets />
+                        </div>
+                    </Popup>
+                </div>
             </div>
         </div>
     )
