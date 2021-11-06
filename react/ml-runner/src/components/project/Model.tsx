@@ -2,8 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import playButton from '../styles/play-button.png';
 import stopButton from '../styles/stop-button.png';
-import PieChart from "./PieChart";
-import Doughnut from "./Doughnut";
+
 
 const Model = (props: any) =>
 {
@@ -26,7 +25,6 @@ const Model = (props: any) =>
             <Link to="/" onClick={(e) => props.handleStopButtonClick(e, props.id)}><img className="stop-button" src={stopButton} alt="stop_button" /></Link>
         </div>
         {props.name}
-        <Doughnut />
     </div>;
 }
 

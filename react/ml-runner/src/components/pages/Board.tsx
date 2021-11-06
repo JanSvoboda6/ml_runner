@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
-import ModelList from './ModelList';
-import Navbar from './Navbar';
+import ModelList from '../project/ModelList';
+import Navbar from '../navigation/Navbar';
 
 function Board()
 {

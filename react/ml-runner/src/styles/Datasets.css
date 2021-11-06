@@ -1,1 +1,46 @@
 @import url("../../node_modules/react-keyed-file-browser/dist/react-keyed-file-browser.css");
+
+button[type=submit]
+{
+ 
+  border: 0.2em solid rgba(255, 255, 255, 0);
+  background-color: rgba(255, 208, 208, 0.589);
+  border-radius: 2em;
+  text-decoration: none;
+  color: #fd0000;
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  margin: 1px 0px;
+  font-size: 13px;
+}
+
+button[type=submit]:hover{
+  border-color: rgba(231, 8, 8, 0.7);
+  cursor:pointer;
+}
+
+button.deleting
+{
+ 
+  border: 0.2em solid rgba(255, 255, 255, 0);
+  background-color: rgba(255, 208, 208, 0.589);
+  border-radius: 2em;
+  text-decoration: none;
+  color: #fd0000;
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  margin: 1px 0px;
+  font-size: 13px;
+}
+
+.deleting:hover{
+  border-color: rgba(231, 8, 8, 0.7);
+  cursor:pointer;
+}
+
+input[type=search]{
+font-family: 'Lato', sans-serif;
+   font-size: 19px;
+}

@@ -18,7 +18,6 @@ body {
   background-color: white;
   margin: 0;
   padding: 0;
-  font-family: 'Lato', sans-serif;
 }
 
 main {
@@ -660,9 +659,8 @@ color: #ff8800;
   border-style: solid;
   border-radius: 20px;
   padding: 10px;
-  opacity: 100%;
   border-color: #cfb5b550;
-  background-color: #ffffff50;
+  background-color: #ffffffcc;
 }
 
 .total-list{
@@ -687,9 +685,10 @@ color: #ff8800;
   font-weight: bold;
 }
 
-/* .open-dataset-button{
-    padding: 0.5em 1.7em;
-  border: 0.16em solid rgba(255, 255, 255, 0);
+.data-folder-button
+{
+  padding: 0.3em 1.7em;
+  border: 0.16em  solid black;
   background-color: black;
   border-radius: 2em;
   text-decoration: none;
@@ -698,11 +697,17 @@ color: #ff8800;
   text-align: center;
   transition: all 0.2s;
   display: block;
-  margin: 0 auto;
-  font-size: 17px;
-} */
+  max-height: 2em;
+  margin: 3px 70px;
+  font-size: 15px;
+}
 
-.choose-dataset-button
+.data-folder-button:hover {
+  border-color: rgb(255, 255, 255);;
+  cursor: pointer;
+}
+
+.choose-data-folder-button
 {
   padding: 0.5em 1.7em;
   border: 0.16em solid rgba(255, 255, 255, 0);
@@ -716,4 +721,9 @@ color: #ff8800;
   display: block;
   margin: 0;
   font-size: 17px;
+}
+
+.choose-data-folder-button:hover {
+  border-color: rgb(255, 255, 255);
+  cursor:pointer;
 }

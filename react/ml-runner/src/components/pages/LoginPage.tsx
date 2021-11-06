@@ -1,10 +1,10 @@
 import React from "react";
 import { Link, Redirect } from 'react-router-dom';
-import Popup from "./Popup";
+import Popup from "../popup/Popup";
 import { useDispatch } from "react-redux";
 import logo from '../styles/logo_but_text.png';
 import dots from '../styles/dots_logo_big.svg';
-import { LoginService } from '../services/LoginService';
+import { LoginService } from '../../services/LoginService';
 import { useState } from "react";
 
 function Login()

@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { Router, Switch, Route, Link } from "react-router-dom";
 import "./App.css";
-import Login from "./components/LoginPage";
-import Register from "./components/RegisterPage";
-import Board from "./components/Board";
+import Login from "./components/pages/LoginPage";
+import Register from "./components/pages/RegisterPage";
+import Board from "./components/pages/Board";
 //import { Logout as logout } from "./actions/Authentication";
 import { history } from "./helpers/History";
 import { User } from "./types";
-import Project from "./components/Project";
-import Summary from "./components/Summary";
-import DatasetPage from "./components/DatasetPage";
+import Project from "./components/pages/Project";
+import Summary from "./components/visualization/Summary";
+import DatasetPage from "./components/pages/DatasetPage";
 
 interface AppProps
 {

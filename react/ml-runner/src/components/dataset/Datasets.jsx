@@ -1,6 +1,5 @@
 import React from 'react'
 import FileBrowser from 'react-keyed-file-browser';
-import Navbar from './Navbar';
 import Moment from 'moment';
 import { Icons } from 'react-keyed-file-browser';
 import '../styles/Datasets.css';
@@ -11,37 +10,32 @@ export default class Datasets extends React.Component
     state = {
         files: [
             {
-                key: 'photos/animals/cat in a hat.png',
+                key: 'datasets/zeros/a.png',
                 modified: +Moment().subtract(1, 'hours'),
                 size: 1.5 * 1024 * 1024,
             },
             {
-                key: 'photos/animals/kitten_ball.png',
+                key: 'datasets/zeros/b.png',
+                modified: +Moment().subtract(1, 'hours'),
+                size: 1.5 * 1024 * 1024,
+            },
+            {
+                key: 'datasets/ones/a.png',
                 modified: +Moment().subtract(3, 'days'),
                 size: 545 * 1024,
             },
             {
-                key: 'photos/animals/elephants.png',
+                key: 'datasets/ones/b.png',
                 modified: +Moment().subtract(3, 'days'),
-                size: 52 * 1024,
+                size: 545 * 1024,
             },
             {
-                key: 'photos/funny fall.gif',
-                modified: +Moment().subtract(2, 'months'),
-                size: 13.2 * 1024 * 1024,
-            },
-            {
-                key: 'photos/holiday.jpg',
-                modified: +Moment().subtract(25, 'days'),
-                size: 85 * 1024,
-            },
-            {
-                key: 'documents/letter chunks.doc',
+                key: 'documents/random_document.doc',
                 modified: +Moment().subtract(15, 'days'),
                 size: 480 * 1024,
             },
             {
-                key: 'documents/export.pdf',
+                key: 'documents/random_pdf_document.pdf',
                 modified: +Moment().subtract(15, 'days'),
                 size: 4.2 * 1024 * 1024,
             },
@@ -144,8 +138,11 @@ export default class Datasets extends React.Component
             return state
         })
     }
+
     handleDeleteFolder = (folderKey) =>
     {
+        //TODO Jan: iterate on multiple folderKey
+        folderKey = folderKey[0];
         this.setState(state =>
         {
             const newFiles = []
@@ -156,8 +153,8 @@ export default class Datasets extends React.Component
                     newFiles.push(file)
                 }
             })
-            state.files = newFiles
-            return state
+            state.files = newFiles;
+            return state;
         })
     }
     handleDeleteFile = (fileKey) =>
@@ -167,13 +164,14 @@ export default class Datasets extends React.Component
             const newFiles = []
             state.files.map((file) =>
             {
+                //TODO Jan: iterate on multiple files
                 if (file.key !== fileKey)
                 {
                     newFiles.push(file)
                 }
             })
-            state.files = newFiles
-            return state
+            state.files = newFiles;
+            return state;
         })
     }
 
@@ -185,7 +183,7 @@ export default class Datasets extends React.Component
     handleNone(fileInformation)
     {
         console.log(fileInformation.file);
-        return (<div>  { fileInformation.file.key } </div>)
+        return (<div>  Selected file: { fileInformation.file.key } </div>)
     }
 
     render()
@@ -204,7 +202,7 @@ export default class Datasets extends React.Component
                         onRenameFolder={ this.handleRenameFolder }
                         onRenameFile={ this.handleRenameFile }
                         onDeleteFolder={ this.handleDeleteFolder }
-                        onDeleteFile={ this.handleDeleteFile }
+                        onDeleteFile={ (fileKey) => this.handleDeleteFile(fileKey) }
                         onSelectFile={ (file) => this.handleFileSelection(file) }
                         detailRenderer={ (fileInformation) => this.handleNone(fileInformation) }
                     />

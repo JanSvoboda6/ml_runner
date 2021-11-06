@@ -1,8 +1,6 @@
 import React from "react";
-import Datasets from "./Datasets";
-import Navbar from "./Navbar";
-
-
+import Datasets from "../dataset/Datasets";
+import Navbar from "../navigation/Navbar";
 
 function DatasetPage()
 {

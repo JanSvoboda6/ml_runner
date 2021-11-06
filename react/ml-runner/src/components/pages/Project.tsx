@@ -1,11 +1,11 @@
 
 import React, { useState } from "react";
-import Navbar from "./Navbar";
-import ModelService from "./ModelService";
+import Navbar from "../navigation/Navbar";
+import ModelService from "../project/ModelService";
 import { Redirect } from "react-router";
 import 'reactjs-popup/dist/index.css';
 import Popup from "reactjs-popup";
-import Datasets from "./Datasets";
+import Datasets from "../dataset/Datasets";
 import "../styles/Project.css";
 
 function Project()
@@ -83,11 +83,21 @@ function Project()
                 <div className="project-form-block"> <input type="text" onChange={handleNameChange} placeholder="Project Name" /> </div>
                 <div className="project-form-block project-form-block-data">
                     <input className="label-name" type="text" onChange={handleFirstLabelChange} placeholder="First label" />
-                    <input type="file" className="file-input" onChange={handleFirstFileUpload} multiple />
+                    <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center" modal>
+                        <div>
+                            <button className="choose-data-folder-button">Choose Folder</button>
+                            <Datasets />
+                        </div>
+                    </Popup>
                 </div>
                 <div className="project-form-block project-form-block-data">
                     <input className="label-name" type="text" onChange={handleSecondLabelChange} placeholder="Second label" />
-                    <input type="file" className="file-input" onChange={handleSecondFileUpload} multiple />
+                    <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center" modal>
+                        <div>
+                            <button className="choose-data-folder-button">Choose Folder</button>
+                            <Datasets />
+                        </div>
+                    </Popup>
                 </div>
                 <div className="project-form-block">
                     <div className="model-select-text">Choose algorithm: </div>
@@ -97,14 +107,7 @@ function Project()
                     </select>
                 </div>
                 {/* <div className="project-form-block"><button className="open-dataset-button" onClick={handleDatasetOpening}>Open</button></div> */}
-                <div className="project-form-block">
-                    <Popup trigger={<button className="open-dataset-button"> Open Dataset</button>} position="right center" modal>
-                        <div>
-                            <button className="choose-dataset-button">Choose Folder</button>
-                            <Datasets />
-                        </div>
-                    </Popup>
-                </div>
+                <div className="project-form-block"><button className="save-button" onClick={handleProjectSaving}>Save</button></div>
             </div>
         </div>
     )

@@ -1,7 +1,8 @@
 import React from "react";
-import Navbar from "./Navbar";
+import Navbar from "../navigation/Navbar";
 import PieChart from "./PieChart";
 import Graph from "./Graph";
+import Doughnut from "./Doughnut";
 
 function Summary()
 {

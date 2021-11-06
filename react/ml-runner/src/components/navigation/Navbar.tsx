@@ -1,10 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import LogoutService from "../services/LogoutService";
-// import logo from '../styles/logo_but_text.png'
+import LogoutService from "../../services/LogoutService";
 import dots from '../styles/dots_logo_big.svg'
-import { scaleDown as Menu } from 'react-burger-menu';
 
 function Navbar(props: any)
 {
@@ -20,8 +18,6 @@ function Navbar(props: any)
         history.push("/login");
         window.location.reload();
     }
-
-    console.log(props.start)
     return (
         <div className="wrapper">
             <nav className="upper-navbar">
