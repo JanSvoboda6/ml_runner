@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import LogoutService from "../../services/LogoutService";
-import dots from '../styles/dots_logo_big.svg'
+import dots from '../../styles/dots_logo_big.svg'
 
 function Navbar(props: any)
 {

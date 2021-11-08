@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
-import logo from '../styles/logo_but_text.png';
-import dots from '../styles/dots_logo_big.svg';
+import logo from '../../styles/logo_but_text.png';
+import dots from '../../styles/dots_logo_big.svg';
 import RegisterService from "../../services/RegisterService";
 
 function Register()

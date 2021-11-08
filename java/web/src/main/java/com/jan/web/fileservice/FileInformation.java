@@ -1,23 +1,21 @@
 package com.jan.web.fileservice;
 
-import java.time.LocalDateTime;
-
 public class FileInformation
 {
-    private final String name;
+    private final String key;
     private final long size;
-    private final long lastModified;
+    private final long modified;
 
-    public FileInformation(String name, long size, long lastModified)
+    public FileInformation(String key, long size, long modified)
     {
-        this.name = name;
+        this.key = key;
         this.size = size;
-        this.lastModified = lastModified;
+        this.modified = modified;
     }
 
-    public String getName()
+    public String getKey()
     {
-        return name;
+        return key;
     }
 
     public long getSize()
@@ -25,8 +23,8 @@ public class FileInformation
         return size;
     }
 
-    public long getLastModified()
+    public long getModified()
     {
-        return lastModified;
+        return modified;
     }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import '../../App.css';
 import ModelList from '../project/ModelList';
 import Navbar from '../navigation/Navbar';
 

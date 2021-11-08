@@ -6,7 +6,7 @@ import { Redirect } from "react-router";
 import 'reactjs-popup/dist/index.css';
 import Popup from "reactjs-popup";
 import Datasets from "../dataset/Datasets";
-import "../styles/Project.css";
+import "../../styles/Project.css";
 
 function Project()
 {

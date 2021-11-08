@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 import axios from "axios";
-import loadingIcon from '../styles/loading_icon.svg'
+import loadingIcon from '../../styles/loading_icon.svg'
 import Model from './Model';
 import RunnerService from '../../services/RunnerService'
 import { Link } from 'react-router-dom';
