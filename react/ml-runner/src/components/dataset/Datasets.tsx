@@ -44,9 +44,10 @@ function Datasets()
 
     const handleCreateFolder = (key: string) =>
     {
+        setLoaded(false);
         const folder: FileInformation = { key: key };
         setFiles(folders => [...folders, folder]);
-        DatasetService.createDirectory(folder);
+        DatasetService.createDirectory(folder).then(() => setLoaded(true));
     }
 
     const handleCreateFiles = (addedFiles: File[], prefix: string) =>
@@ -186,7 +187,7 @@ function Datasets()
 
     if (!isLoaded)
     {
-        return <div>Loading...</div>;
+        return <div className="file-editor-wrapper file-editor-loading-box">Loading...</div>;
     }
     return (
         <div>

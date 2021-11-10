@@ -27,9 +27,11 @@ public class DatasetController
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<FileInformation> getAllFiles()
+    public List<FileInformation> getAllFiles() throws InterruptedException
     {
         //TODO Jan: handle the situation when no file is in the driectory
+        //TODO Jan: handle the situation when directories are empty, currently dirs are not visible
+        Thread.sleep(1000);
         return fileService.getAllFiles();
     }
 
@@ -51,8 +53,6 @@ public class DatasetController
             @RequestPart("keys") Keys keys,
             @RequestPart("files") List<MultipartFile> files)
     {
-        System.out.println(keys.getKeys());
-        System.out.println(files.get(0));
         try
         {
             for (int i = 0; i < keys.getKeys().size(); i++)

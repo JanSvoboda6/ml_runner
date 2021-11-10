@@ -659,8 +659,17 @@ color: #ff8800;
   border-style: solid;
   border-radius: 20px;
   padding: 10px;
+  min-height: 20vh;
   border-color: #cfb5b550;
   background-color: #ffffffcc;
+}
+
+.file-editor-loading-box
+{
+  min-height: 5vh;
+  text-align: center;
+  padding-top: 5vh;
+  min-height: 15.65vh;
 }
 
 .total-list{

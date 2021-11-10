@@ -11,9 +11,9 @@ const createDirectory = (directory: FileInformation) =>
         directory,
         {
             headers: { 'Content-type': 'application/json; charset=utf-8' }
-        })
+        }
+    );
 };
-
 
 const uploadFiles = (files: any) => 
 {
