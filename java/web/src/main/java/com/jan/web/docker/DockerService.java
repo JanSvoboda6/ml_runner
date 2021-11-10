@@ -61,13 +61,7 @@ public class DockerService
             containerId = containers.get(0).getId();
         }
         dockerClient.startContainerCmd(containerId).exec();
-        try
-        {
-            Thread.sleep(5000);
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+
         copyFiles();
 
         dockerClient.stopContainerCmd(containerId).exec();

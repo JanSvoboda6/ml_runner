@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
 public class LocalFileService implements FileService
 {
     public static final String BASE_DIRECTORY = "/Users/jan/app_files/";
