@@ -18,10 +18,10 @@ import java.util.List;
 public class DatasetController
 {
     public static final String BASE_DIRECTORY = "/Users/jan/app_files/";
-    private final FileService fileService;
+    private final ContainerFileService fileService;
 
     @Autowired
-    public DatasetController(FileService fileService)
+    public DatasetController(ContainerFileService fileService)
     {
         this.fileService = fileService;
     }
@@ -31,20 +31,20 @@ public class DatasetController
     {
         //TODO Jan: handle the situation when no file is in the driectory
         //TODO Jan: handle the situation when directories are empty, currently dirs are not visible
-        Thread.sleep(1000);
         return fileService.getAllFiles();
     }
 
     @PostMapping(value = "createdirectory")
     public ResponseEntity<?> createDirectory(@RequestBody Key directoryKey)
     {
-        try
-        {
-            Files.createDirectories(Paths.get(BASE_DIRECTORY + directoryKey.getKey()));
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+//        try
+//        {
+//            Files.createDirectories(Paths.get(BASE_DIRECTORY + directoryKey.getKey()));
+//        } catch (IOException e)
+//        {
+//            e.printStackTrace();
+//        }
+        fileService.createDirectory(directoryKey.getKey());
         return ResponseEntity.ok("OK.");
     }
 
@@ -53,20 +53,7 @@ public class DatasetController
             @RequestPart("keys") Keys keys,
             @RequestPart("files") List<MultipartFile> files)
     {
-        try
-        {
-            for (int i = 0; i < keys.getKeys().size(); i++)
-            {
-                Files.createDirectories(Paths.get(BASE_DIRECTORY + separateFolderPath(keys.getKeys().get(i))));
-                files.get(i).transferTo(Paths.get(BASE_DIRECTORY + keys.getKeys().get(i)));
-            }
-
-        }
-        catch(Exception exception)
-        {
-            exception.printStackTrace();
-        }
-
+        fileService.uploadFiles(keys, files);
         return ResponseEntity.ok("OK.");
     }
 

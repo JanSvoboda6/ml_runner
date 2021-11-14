@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../App.css';
-import ModelList from '../project/ModelList';
+import ProjectList from '../project/ProjectList';
 import Navbar from '../navigation/Navbar';
 
 function Board()
@@ -12,7 +12,7 @@ function Board()
             </style>
             <Navbar start="start-at-projects" />
             <div className="main-body">
-                <ModelList />
+                <ProjectList />
             </div>
         </div>
     );

@@ -91,8 +91,8 @@ ul {
   position: fixed;
   height: 3.1rem;
   width: 100%;
-background: white;
-padding: 0;
+  background: white;
+  padding: 0;
   display: flex; 
   align-items: center;
   overflow: hidden;
@@ -112,7 +112,7 @@ nav .upper-navbar-animation
   position: absolute;
   height: 7%;
   z-index: 0;
-  background:rgb(238, 155, 0);
+  background:rgb(15, 81, 224);
   bottom: 0;
   margin-bottom: 2px;
   transition: all 0.15s;
@@ -130,27 +130,23 @@ nav .upper-navbar-animation
 {
   left: 9.5rem;
   width: 80px;
-  opacity: 50%;
 }
 
 .start-at-datasets
 {
   left: 17.35rem;
   width: 80px;
-  opacity: 50%;
 }
 
 .start-at-summary
 {
   left: 25.3rem;
   width: 80px;
-  opacity: 50%;
 }
 
 .start-at-new-project{
   left: 33.8rem;
   width: 130px;
-  opacity: 50%;
 }
 
 nav a:nth-child(2):hover~.upper-navbar-animation
@@ -463,7 +459,7 @@ p{
 }
 
 .project-form{
-  width: 75vh;
+  width: 83vh;
   height: 50vh;
   margin-top: 5rem;
   margin-left: auto;

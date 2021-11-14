@@ -5,7 +5,6 @@ const API_URL = "http://localhost:8080/api/dataset";
 
 const createDirectory = (directory: FileInformation) =>
 {
-    console.log(directory);
     return axios.post(
         API_URL + '/createdirectory',
         directory,
@@ -20,7 +19,10 @@ const uploadFiles = (files: any) =>
     let formData = new FormData();
     let keys: any = [];
 
-    keys.push(files[0].key);
+    files.forEach(file =>
+    {
+        keys.push(file.key);
+    });
 
     let jsonLabelData = {
         'keys': keys
@@ -31,8 +33,6 @@ const uploadFiles = (files: any) =>
         new Blob([JSON.stringify(jsonLabelData)], {
             type: 'application/json'
         }));
-
-    console.log(jsonLabelData.keys);
 
     for (let key of Object.keys(files))
     {

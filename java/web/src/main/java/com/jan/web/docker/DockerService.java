@@ -62,10 +62,9 @@ public class DockerService
         }
         dockerClient.startContainerCmd(containerId).exec();
 
-        copyFiles();
+        //copyFiles();
 
-        dockerClient.stopContainerCmd(containerId).exec();
-
+        //dockerClient.stopContainerCmd(containerId).exec();
     }
 
     public void copyFiles()

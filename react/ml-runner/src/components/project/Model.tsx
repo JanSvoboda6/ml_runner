@@ -4,7 +4,7 @@ import playButton from '../../styles/play-button.png';
 import stopButton from '../../styles/stop-button.png';
 
 
-const Model = (props: any) =>
+const Project = (props: any) =>
 {
     if (props.isRunning)
     {
@@ -28,4 +28,4 @@ const Model = (props: any) =>
     </div>;
 }
 
-export default Model;
+export default Project;

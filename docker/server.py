@@ -1,21 +1,29 @@
 import os
+from pathlib import Path
 from flask import Flask, request
 from flask import jsonify
 import math
+from subprocess import Popen
 
 app = Flask(__name__)
 
-ROOT_DIRECTORY = '/Users/jan/app_files'
+ROOT_DIRECTORY = 'files/'
 
 
-@app.route('/', methods=['POST'])
+@app.route('/upload', methods=['POST'])
 def handle_form():
-    print("Posted file: {}".format(request.files['file']))
-    file = request.files['file']
-    f = open("files/text.txt", "wb")
-    f.write(file.read())
-    f.close()
-    print(request.form['field1'])
+    for key in request.files.keys():
+        file = request.files[key]
+        f = open(ROOT_DIRECTORY + file.name, "wb")
+        f.write(file.read())
+        f.close()
+    return ""
+
+
+@app.route('/createdirectory', methods=['POST'])
+def createDirectory():
+    directory_name = request.get_json()['key']
+    Path(ROOT_DIRECTORY + directory_name).mkdir(parents=True, exist_ok=True)
     return ""
 
 
@@ -31,7 +39,7 @@ def walk_directory(root_directory):
     files_list = []
     for top, directories, files in os.walk(root_directory):
         for directory in directories:
-            directories_list.append(directory)
+            directories_list.append(directory + '/')
         for file in files:
             shifted_root_directory = top.replace(root_directory, '', 1) + '/'
             if(shifted_root_directory == '/'):
@@ -45,6 +53,16 @@ def walk_directory(root_directory):
             files_list.append(file_information)
 
     return directories_list, files_list
+
+
+@app.route('/runproject', methods=['POST'])
+def run_project():
+    project = request.get_json()
+    print(project)
+    if(project['selectedModel'] == "Support Vector Machines"):
+        Popen(['python3', 'models/svm.py', project['name'], project['firstLabel'],
+              project['secondLabel'], project['firstLabelFiles'], project['secondLabelFile']])
+    return ""
 
 
 if __name__ == "__main__":

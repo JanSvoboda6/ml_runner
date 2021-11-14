@@ -1,13 +1,13 @@
 import React, { Component, useEffect, useState } from 'react';
 import axios from "axios";
 import loadingIcon from '../../styles/loading_icon.svg'
-import Model from './Model';
+import Project from './Model';
 import RunnerService from '../../services/RunnerService'
 import { Link } from 'react-router-dom';
 
 const API_URL = "http://localhost:8080/api";
 
-interface Model
+interface Project
 {
   id: number,
   name: string
@@ -15,22 +15,22 @@ interface Model
 
 const resultMap = new Map();
 
-function ModelList()
+function ProjectList()
 {
   const [isLoaded, setLoaded] = useState(false);
-  const [models, setModels] = useState<Model[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const nonExistingId = -1;
-  const [idOfRunningModel, setIdOfRunningModel] = useState(nonExistingId);
+  const [idOfRunningProject, setIdOfRunningProject] = useState(nonExistingId);
 
   useEffect(() =>
   {
-    axios.get(API_URL + "/models")
+    axios.get(API_URL + "/project")
       .then(
         (res) =>
         {
           setLoaded(true);
-          setModels(res.data);
+          setProjects(res.data);
         },
         (error) =>
         {
@@ -43,7 +43,7 @@ function ModelList()
 
   const handleRunButtonClick = (e: any, id: number) =>
   {
-    setIdOfRunningModel(id);
+    setIdOfRunningProject(id);
     RunnerService.run(id)
       .then((res) =>
       {
@@ -72,7 +72,7 @@ function ModelList()
       })
       .finally(() =>
       {
-        setIdOfRunningModel(nonExistingId);
+        setIdOfRunningProject(nonExistingId);
       }
       );
   }
@@ -90,7 +90,7 @@ function ModelList()
   if (!isLoaded)
   {
     return <div className="project-loading-message"><img className='loading-icon' src={loadingIcon} alt="loading_icon" /></div>;
-  } else if (errorMessage || models.length === 0)
+  } else if (errorMessage || projects.length === 0)
   {
     return (
       <ul className="project-list">
@@ -101,15 +101,16 @@ function ModelList()
   {
     return (
       <ul className="project-list">
-        {models.map(model => (
-          <li key={model.id} className="project-item">
-            <Model id={model.id}
-              name={model.name}
+        {projects.map(project => (
+          <li key={project.id} className="project-item">
+            <Project
+              id={project.id}
+              name={project.name}
               handlePlayButtonClick={handleRunButtonClick}
               handleStopButtonClick={handleStopButtonClick}
-              isRunning={idOfRunningModel === model.id}
+              isRunning={idOfRunningProject === project.id}
               hideValidationResult={handleValidationResultHiding}
-              result={resultMap.get(model.id)} />
+              result={resultMap.get(project.id)} />
           </li>
         ))}
       </ul>
@@ -117,4 +118,4 @@ function ModelList()
   }
 }
 
-export default ModelList;
+export default ProjectList;

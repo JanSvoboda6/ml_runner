@@ -11,7 +11,7 @@ import DatasetService from './DatasetService';
 
 const API_URL = "http://localhost:8080/api";
 
-function Datasets()
+function Datasets(props)
 {
     const [isLoaded, setLoaded] = useState(false);
     const [files, setFiles] = useState<FileInformation[]>([]);
@@ -28,6 +28,11 @@ function Datasets()
                     {
                         res.data.forEach(file =>
                         {
+                            if (file.key.endsWith('/'))
+                            {
+                                files.push({ key: file.key });
+                                return;
+                            }
                             files.push(file);
                         });
                     }
@@ -63,7 +68,7 @@ function Datasets()
             return {
                 key: newKey,
                 size: file.size,
-                modified: +Moment().unix() * 1000,
+                modified: +Moment().unix(),
                 data: file
             }
         })
@@ -185,6 +190,14 @@ function Datasets()
     //     return (<div>  Selected file: {fileInformation.file.key} </div>)
     // }
 
+    const handleFolderSelection = (folder) =>
+    {
+        if (props.handleFolderSelection)
+        {
+            props.handleFolderSelection(folder)
+        }
+    }
+
     if (!isLoaded)
     {
         return <div className="file-editor-wrapper file-editor-loading-box">Loading...</div>;
@@ -198,7 +211,7 @@ function Datasets()
                         const modifiedTimeInUnixFormat = file.modified ? file.modified : 0;
                         if (modifiedTimeInUnixFormat !== 0)
                         {
-                            const modified = Moment.duration(modifiedTimeInUnixFormat);
+                            const modified = Moment.duration(modifiedTimeInUnixFormat * 1000);
                             return ({
                                 key: file.key,
                                 modified: +modified,
@@ -213,6 +226,7 @@ function Datasets()
 
                     onCreateFolder={handleCreateFolder}
                     onCreateFiles={handleCreateFiles}
+                    onSelectFolder={(folder) => handleFolderSelection(folder)}
                 // onMoveFolder={this.handleRenameFolder}
                 // onMoveFile={this.handleRenameFile}
                 // onRenameFolder={this.handleRenameFolder}

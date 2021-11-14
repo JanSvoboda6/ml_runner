@@ -9,5 +9,6 @@ RUN pip3 install -r requirements.txt
 
 COPY ./files ./files
 COPY ./server.py ./server.py
+COPY ./svm.py ./models/svm.py
 
-CMD [ "python3", "server.py"]
+CMD tail -f /dev/null

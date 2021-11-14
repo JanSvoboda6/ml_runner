@@ -8,14 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-public class ModelServiceTest
+public class ProjectServiceTest
 {
     @Autowired
-    private ModelController modelController;
+    private ProjectController projectController;
 
     @Test
     public void whenApplicationStarts_thenHibernateCreatesInitialRecords() {
-        List<Model> models = modelController.list();
+        List<Project> models = projectController.list();
 
         Assertions.assertThat(models.size()).isEqualTo(3);
     }

@@ -1,6 +1,7 @@
 package com.jan.web.fileservice;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,5 +34,11 @@ public class LocalFileService implements FileService
         }
         System.out.println(fileInformationList.get(0).getKey());
         return fileInformationList;
+    }
+
+    @Override
+    public void uploadFiles(Keys keys, List<MultipartFile> files)
+    {
+        //empty
     }
 }

@@ -1,38 +1,37 @@
 package com.jan.web;
 
-import com.jan.web.runner.ModelRunner;
+import com.jan.web.runner.ProjectRunner;
 import com.jan.web.runner.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/api/runner")
 public class ModelRunnerController
 {
-    private final ModelRepository modelRepository;
-    private final ModelRunner modelRunner;
+    private final ProjectRepository projectRepository;
+    private final ProjectRunner projectRunner;
 
     @Autowired
-    public ModelRunnerController(ModelRepository modelRepository, ModelRunner modelRunner)
+    public ModelRunnerController(ProjectRepository projectRepository, ProjectRunner projectRunner)
     {
-        this.modelRepository = modelRepository;
-        this.modelRunner = modelRunner;
+        this.projectRepository = projectRepository;
+        this.projectRunner = projectRunner;
     }
 
     @PostMapping("/run")
     public ResponseEntity<?> createModel(@RequestBody IdHolder modelIdHolder) throws InterruptedException
     {
         System.out.println(modelIdHolder);
-        Optional<Model> model = modelRepository.findById(modelIdHolder.getId());
+        Optional<Project> model = projectRepository.findById(modelIdHolder.getId());
         Result result = null;
 
         if(model.isPresent())
         {
-            result = modelRunner.run(model.get());
+            result = projectRunner.run(model.get());
         }
 
         if (result != null)
