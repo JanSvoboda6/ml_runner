@@ -4,6 +4,6 @@ import com.jan.web.Project;
 
 public interface ProjectRunner
 {
-    Result run(Project project) throws InterruptedException;
-    boolean stop(Project project);
+    void run(Runner runner) throws InterruptedException;
+    boolean stop(Runner runner);
 }

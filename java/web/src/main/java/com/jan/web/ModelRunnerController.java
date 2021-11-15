@@ -1,43 +1,91 @@
 package com.jan.web;
 
 import com.jan.web.runner.ProjectRunner;
-import com.jan.web.runner.Result;
+import com.jan.web.runner.ResultResponse;
+import com.jan.web.runner.Runner;
+import com.jan.web.runner.RunnerRepository;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/runner")
+@RequestMapping("/api/project/runner")
 public class ModelRunnerController
 {
     private final ProjectRepository projectRepository;
+    private final RunnerRepository runnerRepository;
     private final ProjectRunner projectRunner;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public ModelRunnerController(ProjectRepository projectRepository, ProjectRunner projectRunner)
+    public ModelRunnerController(ProjectRepository projectRepository, RunnerRepository runnerRepository, ProjectRunner projectRunner, RestTemplate restTemplate)
     {
         this.projectRepository = projectRepository;
+        this.runnerRepository = runnerRepository;
         this.projectRunner = projectRunner;
+        this.restTemplate = restTemplate;
+    }
+
+    @GetMapping( produces = MediaType.APPLICATION_JSON_VALUE)
+    public Runner getRunner(@RequestParam long projectId, @RequestParam long runnerId)
+    {
+        return runnerRepository.findRunnerByIdAndProjectId(runnerId, projectId);
     }
 
     @PostMapping("/run")
-    public ResponseEntity<?> createModel(@RequestBody IdHolder modelIdHolder) throws InterruptedException
+    public ResponseEntity<?> runProject(@RequestBody RunRequest request) throws InterruptedException
     {
-        System.out.println(modelIdHolder);
-        Optional<Project> model = projectRepository.findById(modelIdHolder.getId());
-        Result result = null;
-
-        if(model.isPresent())
+        Optional<Project> project = projectRepository.findById(request.getProjectId());
+        if(project.isPresent())
         {
-            result = projectRunner.run(model.get());
+
+            Runner runner = new Runner();
+            runner.setProject(project.get());
+            runner.setGammaParameter(request.getGammaParameter());
+            runner.setCParameter(request.getcParameter());
+            runner.setFinished(false);
+            runnerRepository.save(runner);
+
+            projectRunner.run(runner);
+            return  ResponseEntity.ok().body("Project is running!");
         }
 
-        if (result != null)
-       {
-           return ResponseEntity.ok(result);
-       }
-       return  ResponseEntity.badRequest().body("Problem with running selected model!");
+       return  ResponseEntity.badRequest().body("Problem with running selected project!");
+    }
+
+    @GetMapping("/result")
+    public ResponseEntity<?> runProject(@RequestParam long projectId, @RequestParam long runnerId)
+    {
+        try
+        {
+            JSONObject response = new JSONObject();
+            JSONObject resultRequest = new JSONObject();
+            ObjectMapper mapper = new ObjectMapper();
+
+            resultRequest.put("projectId", projectId);
+            resultRequest.put("runnerId", runnerId);
+
+            HttpHeaders resultHeaders = new HttpHeaders();
+            resultHeaders.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
+            ResponseEntity<String> resultResponseFromContainer = restTemplate
+                    .exchange("http://localhost:9999" + "/project/runner/result", HttpMethod.POST, resultEntity, String.class);
+
+            ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
+
+            response.put("firstLabelResult", resultResponse.firstLabelResult);
+            response.put("secondLabelResult", resultResponse.secondLabelResult);
+
+            return ResponseEntity.ok(response.toString());
+        }catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return ResponseEntity.badRequest().body("Problem with getting results!");
     }
 }

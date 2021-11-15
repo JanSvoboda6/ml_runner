@@ -732,3 +732,50 @@ color: #ff8800;
   border-color: rgb(255, 255, 255);
   cursor:pointer;
 }
+
+.runner-form{
+  display: flex;
+  flex-direction: column;
+}
+
+.runner-form-block{
+  text-align: center;
+  width: 80%;
+  height: 8vh;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  border-color: #cfb5b550;
+  background-color: #ffffff50;
+}
+
+.runner-form-run-button{
+  padding: 0.5em 1.7em;
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  background-color: black;
+  border-radius: 2em;
+  text-decoration: none;
+  color: #ffffff;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  margin: auto;
+  font-size: 17px;
+  max-width: 50vh;
+}
+
+.runner-item{
+  text-align: center;
+  width: 80%;
+  height: 13vh;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+  border-color: #cfb5b550;
+  background-color: #000000;
+}

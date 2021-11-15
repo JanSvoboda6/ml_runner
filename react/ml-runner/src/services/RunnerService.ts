@@ -1,14 +1,19 @@
 import axios from "axios";
-const API_URL = "http://localhost:8080/api/runner";
+const API_URL = "http://localhost:8080/api";
 
-const run = (id: number) => 
+const run = (projectId: number, gammaParameter: number, cParameter: number) =>
 {
-    return axios.post<any>(API_URL + '/run', { id })
+    return axios.post<any>(API_URL + '/project/runner/run', { projectId: projectId, gammaParameter: gammaParameter, cParameter: cParameter });
 }
 
-const stop = (id: number) =>
+const stop = (projectId: number, runnerId: number) =>
 {
-    console.log("stop" + id);
+    //not implemented
 }
 
-export default { run, stop }
+const isFinished = (projectId: number, runnerId: number) =>
+{
+    return axios.post<any>(API_URL + '/project/runner/finished', { projectId: projectId, runnerId: runnerId });
+}
+
+export default { run, stop, isFinished }

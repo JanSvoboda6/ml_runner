@@ -67,11 +67,6 @@ function Project()
             );
     }
 
-    const handleDatasetOpening = (e: any) =>
-    {
-
-    }
-
     if (isSuccessfullySaved)
     {
         return <Redirect to='/' />;

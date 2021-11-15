@@ -6,10 +6,10 @@ from sklearn import svm
 from sklearn.metrics import accuracy_score
 
 if __name__ == "__main__":
-
+    time.sleep(5)
     print('Number of arguments:', len(sys.argv), 'arguments.')
     print('Argument List:', str(sys.argv))
-
+    print('FINISHED')
     # zeros = []
     # ones = []
 

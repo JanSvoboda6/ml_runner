@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import axios from "axios";
 import loadingIcon from '../../styles/loading_icon.svg'
-import Project from './Model';
+import ProjectQuickView from './ProjectQuickView';
 import RunnerService from '../../services/RunnerService'
 import { Link } from 'react-router-dom';
 
@@ -20,8 +20,6 @@ function ProjectList()
   const [isLoaded, setLoaded] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const nonExistingId = -1;
-  const [idOfRunningProject, setIdOfRunningProject] = useState(nonExistingId);
 
   useEffect(() =>
   {
@@ -40,53 +38,6 @@ function ProjectList()
       )
   }, [])
 
-
-  const handleRunButtonClick = (e: any, id: number) =>
-  {
-    setIdOfRunningProject(id);
-    RunnerService.run(id)
-      .then((res) =>
-      {
-        const validationResult = {
-          'validationResultFirstLabel': res.data.validationResultFirstLabel,
-          'validationResultSecondLabel': res.data.validationResultSecondLabel
-        }
-        resultMap.set(id, validationResult);
-      })
-      .catch(error =>
-      {
-        var message = "";
-        if (error && error.response && error.response.data.message)
-        {
-          message = error.response.data.message;
-        }
-        else if (error.message)
-        {
-          message = error.message;
-        }
-        else if (error.toString())
-        {
-          message = error.toString();
-        }
-        console.log(message);
-      })
-      .finally(() =>
-      {
-        setIdOfRunningProject(nonExistingId);
-      }
-      );
-  }
-
-  const handleStopButtonClick = (e: any, id: number) =>
-  {
-    RunnerService.stop(id);
-  }
-
-  const handleValidationResultHiding = (e: any, id: number) =>
-  {
-    //TODO Jan: Implement proper map state handling
-    resultMap.delete(id);
-  }
   if (!isLoaded)
   {
     return <div className="project-loading-message"><img className='loading-icon' src={loadingIcon} alt="loading_icon" /></div>;
@@ -103,14 +54,7 @@ function ProjectList()
       <ul className="project-list">
         {projects.map(project => (
           <li key={project.id} className="project-item">
-            <Project
-              id={project.id}
-              name={project.name}
-              handlePlayButtonClick={handleRunButtonClick}
-              handleStopButtonClick={handleStopButtonClick}
-              isRunning={idOfRunningProject === project.id}
-              hideValidationResult={handleValidationResultHiding}
-              result={resultMap.get(project.id)} />
+            <ProjectQuickView id={project.id} name={project.name} />
           </li>
         ))}
       </ul>

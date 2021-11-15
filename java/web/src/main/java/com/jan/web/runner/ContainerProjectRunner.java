@@ -1,6 +1,7 @@
 package com.jan.web.runner;
 
 import com.jan.web.Project;
+import com.jan.web.ProjectRepository;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,62 +17,58 @@ public class ContainerProjectRunner implements ProjectRunner
 {
 
     private final RestTemplate restTemplate;
+    private final RunnerRepository runnerRepository;
+    private final ProjectRepository projectRepository;
 
     @Autowired
-    public ContainerProjectRunner(RestTemplate restTemplate)
+    public ContainerProjectRunner(RestTemplate restTemplate, RunnerRepository runnerRepository, ProjectRepository projectRepository)
     {
         this.restTemplate = restTemplate;
+        this.runnerRepository = runnerRepository;
+        this.projectRepository = projectRepository;
     }
 
     @Override
-    public Result run(Project project)
+    public void run(Runner runner)
     {
-//        ProcessBuilder processBuilder = new ProcessBuilder("python3", "/Users/jan/dev/thesis/ml_runner/python/model.py");
-//        processBuilder.redirectErrorStream(true);
-//        double validationResultFirstLabel = 0;
-//        double validationResultSecondLabel = 0;
-//        try
-//        {
-//            Process process = processBuilder.start();
-//            String output = new BufferedReader(new InputStreamReader(process.getInputStream())).lines().collect(Collectors.joining("\n"));
-//            process.waitFor();
-//            String[] parsedOutput = output.split("\\s+");
-//            validationResultFirstLabel = Double.parseDouble(parsedOutput[0]);
-//            validationResultSecondLabel = Double.parseDouble(parsedOutput[1]);
-//        } catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
-//
-//        return new Result(validationResultFirstLabel, validationResultSecondLabel);
         try
         {
-            JSONObject request = new JSONObject();
-            request.put("name", project.getName());
-            request.put("firstLabel", project.getFirstLabel());
-            request.put("secondLabel", project.getSecondLabel());
-            request.put("firstLabelFolder", project.getFirstLabelFolder());
-            request.put("secondLabelFolder", project.getSecondLabelFolder());
-            request.put("selectedModel", project.getSelectedModel());
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
+            if(runnerRepository.findById(runner.getId()).isPresent())
+            {
+                Project project = runner.getProject();
+                JSONObject request = new JSONObject();
+                request.put("projectId", project.getId());
+                request.put("name", project.getName());
+                request.put("firstLabel", project.getFirstLabel());
+                request.put("secondLabel", project.getSecondLabel());
+                request.put("firstLabelFolder", project.getFirstLabelFolder());
+                request.put("secondLabelFolder", project.getSecondLabelFolder());
+                request.put("selectedModel", project.getSelectedModel());
+                request.put("runnerId", runner.getId());
+                request.put("gammaParameter", runner.getGammaParameter());
+                request.put("cParameter", runner.getCParameter());
 
-            ResponseEntity<String> response = restTemplate
-                    .exchange("http://localhost:9999" + "/runproject", HttpMethod.POST, entity, String.class);
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
 
-            response.getStatusCode();
+                ResponseEntity<String> response = restTemplate
+                        .exchange("http://localhost:9999" + "/runproject", HttpMethod.POST, entity, String.class);
+
+                //TODO Jan: respond
+                response.getStatusCode();
+            }
+
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
-        return  new Result(99.0, 99.0);
     }
 
-
     @Override
-    public boolean stop(Project project)
+    public boolean stop(Runner runner)
     {
+        //not implemented
         return false;
     }
 }

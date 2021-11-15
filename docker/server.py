@@ -3,7 +3,7 @@ from pathlib import Path
 from flask import Flask, request
 from flask import jsonify
 import math
-from subprocess import Popen
+import subprocess
 
 app = Flask(__name__)
 
@@ -59,11 +59,35 @@ def walk_directory(root_directory):
 def run_project():
     project = request.get_json()
     print(project)
+    log_file = open('log_' + f"{project['id']}" + '.txt', 'w')
     if(project['selectedModel'] == "Support Vector Machines"):
-        Popen(['python3', 'models/svm.py', project['name'], project['firstLabel'],
-              project['secondLabel'], project['firstLabelFiles'], project['secondLabelFile']])
+        subprocess.Popen(['nohup', 'python3', 'models/svm.py', project['name'], project['firstLabel'],
+              project['secondLabel'], project['firstLabelFolder'], project['secondLabelFolder']],
+              stdout=log_file, 
+              stderr=log_file,
+              preexec_fn=os.setpgrp)
     return ""
+
+
+@app.route('/project/finished', methods=['POST'])
+def isFinished():
+    isFinished = False
+    with open('log_1.txt', 'r') as log_file:
+        for line in log_file:
+            if 'FINISHED' in line.split():
+                isFinished = True
+    
+    print(isFinished)
+    return jsonify({'isFinished' : isFinished})
+
+
+@app.route('/project/result', methods=['POST'])
+def getResult():
+    print(request.get_json()['id'])
+    return jsonify({'firstLabelResult': 1.0, 'secondLabelResult': 0.9})
+
 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=9999, debug=True)
+

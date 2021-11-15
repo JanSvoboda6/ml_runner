@@ -1,9 +1,12 @@
 package com.jan.web;
 
+import com.jan.web.runner.*;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -12,11 +15,15 @@ import java.util.List;
 public class ProjectController
 {
     private final ProjectRepository projectRepository;
+    private final RestTemplate restTemplate;
+    private final RunnerRepository runnerRepository;
 
     @Autowired
-    public ProjectController(ProjectRepository projectRepository)
+    public ProjectController(ProjectRepository projectRepository, RestTemplate restTemplate, RunnerRepository runnerRepository)
     {
         this.projectRepository = projectRepository;
+        this.restTemplate = restTemplate;
+        this.runnerRepository = runnerRepository;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,6 +49,66 @@ public class ProjectController
                 request.getSelectedModel());
         projectRepository.save(project);
         return ResponseEntity.ok("Project " + project.getName() + " saved!");
+    }
+
+    @PostMapping(value = "/runner/finished", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> isFinished(@RequestBody FinishedRequest frontendRequest)
+    {
+        try
+        {
+            JSONObject request = new JSONObject();
+            request.put("projectId", frontendRequest.getProjectId());
+            request.put("runnerId", frontendRequest.getRunnerId());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> entity = new HttpEntity<>(request.toString(), headers);
+            ResponseEntity<String> responseFromContainer = restTemplate
+                    .exchange("http://localhost:9999" + "/project/runner/finished", HttpMethod.POST, entity, String.class);
+
+            ObjectMapper mapper = new ObjectMapper();
+            FinishedResponse finishedResponse = mapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
+
+            JSONObject response = new JSONObject();
+            response.put("isFinished", finishedResponse.isFinished);
+
+            if(finishedResponse.isFinished)
+            {
+                JSONObject resultRequest = new JSONObject();
+                resultRequest.put("projectId", frontendRequest.getProjectId());
+                resultRequest.put("runnerId", frontendRequest.getRunnerId());
+                HttpHeaders resultHeaders = new HttpHeaders();
+                resultHeaders.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
+                ResponseEntity<String> resultResponseFromContainer = restTemplate
+                        .exchange("http://localhost:9999" + "/project/runner/result", HttpMethod.POST, resultEntity, String.class);
+
+                ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
+
+                response.put("firstLabelResult", resultResponse.firstLabelResult);
+                response.put("secondLabelResult", resultResponse.secondLabelResult);
+
+                if(runnerRepository.findById(frontendRequest.getRunnerId()).isPresent())
+                {
+                    Runner runnerToBeUpdated = runnerRepository.findById(frontendRequest.getRunnerId()).get();
+                    runnerToBeUpdated.setFinished(true);
+                    runnerRepository.save(runnerToBeUpdated);
+                }
+            }
+
+            return ResponseEntity.ok(response.toString());
+
+        } catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return ResponseEntity.badRequest().body("Problem with obtaining the information!");
+    }
+
+    @GetMapping(value = "/runners", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Runner> getRunnerList(@RequestParam(name="projectId") long id)
+    {
+        return runnerRepository.findAllByProjectId(id);
     }
 
     public List<Project> list() {
