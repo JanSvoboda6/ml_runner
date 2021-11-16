@@ -2,8 +2,8 @@
   margin: 0;
   width: 60%;
   padding: 5px;
-  max-height: 35rem;
-  min-height: 35rem;
+  max-height: 50rem;
+  min-height: 50rem;
   border-radius: 10px;
   overflow-y: scroll;
 }

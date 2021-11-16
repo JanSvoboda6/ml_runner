@@ -24,7 +24,7 @@ const ProjectQuickView = (props: any) =>
             </Popup>
         </div>
         <div className="project-name">
-            {props.name}
+            <h2>{props.name}</h2>
         </div>
         <div className="runner-list">
             <RunnerList projectId={props.id} />

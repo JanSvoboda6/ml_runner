@@ -4,42 +4,51 @@ import { Scatter } from 'react-chartjs-2';
 
 export default function ScatterGraph(props)
 {
+
+    // function computeDataPoints(ctx, chartArea)
+    // {
+    //     let dataPoints = [];
+    //     props.runner.forEach(runner =>
+    //     {
+    //         dataPoints.push({ x: runner.gamma, y: runner.c });
+    //     })
+    //     console.log(dataPoints);
+    //     chartArea.data(dataPoints);
+    //     return dataPoints;
+    // }
+
     const state = {
-        labels: ['January', 'February', 'March',
-            'April', 'May'],
+
         datasets: [
             {
-                label: 'Random Chart',
-                backgroundColor: 'rgba(60, 120, 213, 0.4)',
-                borderColor: 'rgba(60, 120, 213, 0.4)',
+                label: 'Gamma/C Parameter Plot',
+                backgroundColor: 'rgba(60, 120, 213, 0.9)',
+                borderColor: 'rgba(60, 120, 213, 0.9)',
                 borderWidth: 2,
 
+                data: [{
+                    x: 1,
+                    y: 0.3
+                }, {
+                    x: 0.9,
+                    y: 0.8
+                }, {
+                    x: 0.7,
+                    y: 0.5
+                }],
 
-                // data: [{
-                //     x: -10,
-                //     y: 0
-                // }, {
-                //     x: 0,
-                //     y: 10
-                // }, {
-                //     x: 10,
-                //     y: 5
-                // }, {
-                //     x: 0.5,
-                //     y: 5.5
-                // }],
+                // data: function (context)
+                // {
+                //     const chart = context.chart;
+                //     const { ctx, chartArea } = chart;
 
-                data: () =>
-                {
-                    let dataPoints = [];
-                    props.runner.forEach(runner =>
-                    {
-                        dataPoints.push({ x: runner.gamma, y: runner.c });
-                    })
+                //     if (!chartArea)
+                //     {
+                //         return;
+                //     }
+                //     return computeDataPoints(ctx, chartArea)
 
-                    console.log(dataPoints);
-                    return dataPoints;
-                }
+                // }
             }
         ]
     }
@@ -52,17 +61,46 @@ export default function ScatterGraph(props)
                 height={ 1 }
                 width={ 2 }
                 options={ {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text: 'Average Rainfall per month',
-                        fontSize: 10
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'GAMMA/C PARAMETER SCATTER PLOT',
+                            font: {
+                                size: 25
+                            }
+                        }
                     },
-                    legend: {
-                        display: true,
-                        position: 'right'
+                    scales:
+                    {
+                        x:
+                        {
+                            title:
+                            {
+                                display: true,
+                                text: 'Gamma',
+                                font: {
+                                    size: 20
+                                },
+                            },
+
+                        },
+                        y:
+                        {
+                            title:
+                            {
+                                display: true,
+                                text: 'C',
+                                font: {
+                                    size: 20
+                                },
+                            }
+                        }
                     }
                 } }
+
             />
         </div>
     );

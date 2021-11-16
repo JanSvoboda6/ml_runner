@@ -555,7 +555,7 @@ input[type="file"]
 .summary-list{
   background-color: var(--bg-primary);
   width: 50vh;
-  margin-top: 5rem;
+  margin-top: 6vh;
   margin-left: auto;
   margin-right: auto;
   display: flex; 
@@ -769,7 +769,7 @@ color: #ff8800;
 .runner-item{
   text-align: center;
   width: 80%;
-  height: 13vh;
+  height: 15vh;
   margin-top: 1rem;
   margin-left: auto;
   margin-right: auto;
@@ -779,3 +779,31 @@ color: #ff8800;
   border-color: #cfb5b550;
   background-color: #000000;
 }
+
+.loading-runner-icon{
+  width: 80px;
+}
+
+
+.average-number{
+  font-size: 30;
+  animation: ease-in 2s;
+}
+
+.slow {
+  display: inline-block;
+  vertical-align: bottom;
+  max-width: 1rem;
+  overflow: hidden;
+  animation: slow 2s ease forwards;
+}
+
+@keyframes slow {
+  from {
+    max-width: 1rem;
+  }
+  to {
+    max-width: 15rem;
+  }
+}
+
