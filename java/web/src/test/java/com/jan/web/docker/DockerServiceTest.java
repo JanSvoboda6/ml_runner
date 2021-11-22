@@ -13,9 +13,9 @@ class DockerServiceTest
     @Autowired
     private DockerService service;
 
-    @Test
-    public void runContainer()
-    {
-        service.createDockerContainer();
-    }
+//    @Test
+//    public void runContainer()
+//    {
+//        service.createDockerContainer();
+//    }
 }

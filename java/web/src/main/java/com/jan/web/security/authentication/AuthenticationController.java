@@ -63,24 +63,18 @@ public class AuthenticationController
         this.userCreator = userCreator;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
     {
         if (userRepository.existsByUsername(signUpRequest.getUsername()))
         {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse("Error: Email is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail()))
-        {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
         //TODO Jan: validate that fields are not empty and add test cases.
-        User user = userCreator.createUser(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
+        User user = userCreator.createUser(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
         Set<Role> roles = new HashSet<>();
 
         Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
@@ -93,7 +87,7 @@ public class AuthenticationController
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest)
     {
         Authentication authentication;
@@ -115,6 +109,6 @@ public class AuthenticationController
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+        return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getId(), userDetails.getUsername(), roles));
     }
 }

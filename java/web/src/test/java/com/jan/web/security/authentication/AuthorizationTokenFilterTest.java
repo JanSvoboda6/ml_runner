@@ -27,8 +27,7 @@ import java.util.Set;
 public class AuthorizationTokenFilterTest
 {
     public static final String PASSWORD = "password";
-    public static final String USERNAME = "TomTheUser";
-    public static final String EMAIL = "user@mail.com";
+    public static final String USERNAME = "user@email.com";
     public static final String RANDOM_JWT = "randomJWT";
 
     private JsonWebTokenUtility jsonWebTokenUtility;
@@ -159,7 +158,7 @@ public class AuthorizationTokenFilterTest
 
     private User createArtificialUser()
     {
-        User user = new User(USERNAME, EMAIL, PASSWORD);
+        User user = new User(USERNAME, PASSWORD);
         user.setRoles(Set.of(new Role(RoleType.ROLE_USER)));
         return user;
     }

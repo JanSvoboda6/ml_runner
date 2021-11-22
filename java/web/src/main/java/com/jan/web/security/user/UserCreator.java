@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserCreator
 {
-    public User createUser(String username, String email, String password)
+    public User createUser(String username, String password)
     {
-        return new User(username, email, password);
+        return new User(username, password);
     }
 }

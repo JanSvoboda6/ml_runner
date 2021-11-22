@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @SpringBootTest
 public class UserDetailsServiceImplTest
 {
+    public static final String USERNAME = "user@email.com";
     @Autowired
     UserRepository userRepository;
 
@@ -18,9 +19,9 @@ public class UserDetailsServiceImplTest
     @Test
     public void whenUserIsFound_thenUserIsReturned()
     {
-        User user = new User("username", "email", "password");
+        User user = new User(USERNAME, "password");
         userRepository.save(user);
-        Assertions.assertNotNull(service.loadUserByUsername("username"));
+        Assertions.assertNotNull(service.loadUserByUsername(USERNAME));
     }
 
     @Test

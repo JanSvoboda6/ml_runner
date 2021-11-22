@@ -32,8 +32,7 @@ import java.util.Set;
 public class AuthenticationControllerTest
 {
     public static final String PASSWORD = "password";
-    public static final String USERNAME = "TomTheUser";
-    public static final String EMAIL = "user@mail.com";
+    public static final String USERNAME = "user@email.com";
 
     private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
@@ -59,12 +58,11 @@ public class AuthenticationControllerTest
     public void whenNewUserTriesToRegister_thenUserIsRegistered()
     {
         Mockito.when(userRepository.existsByUsername(Mockito.anyString())).thenReturn(false);
-        Mockito.when(userRepository.existsByEmail(Mockito.anyString())).thenReturn(false);
         Role role = Mockito.mock(Role.class);
         Mockito.when(roleRepository.findByName(Mockito.any())).thenReturn(java.util.Optional.ofNullable(role));
         SignupRequest request = createArtificialSignupRequest();
         Mockito.when(encoder.encode(request.getPassword())).thenReturn(request.getPassword());
-        Mockito.when(userCreator.createUser(request.getUsername(), request.getEmail(), request.getPassword())).thenReturn(createArtificialUser());
+        Mockito.when(userCreator.createUser(request.getUsername(), request.getPassword())).thenReturn(createArtificialUser());
 
         authenticationController.registerUser(request);
 
@@ -75,12 +73,11 @@ public class AuthenticationControllerTest
     public void whenNewUserTriesToRegister_thenPasswordIsEncrypted()
     {
         Mockito.when(userRepository.existsByUsername(Mockito.anyString())).thenReturn(false);
-        Mockito.when(userRepository.existsByEmail(Mockito.anyString())).thenReturn(false);
         Role role = Mockito.mock(Role.class);
         Mockito.when(roleRepository.findByName(Mockito.any())).thenReturn(java.util.Optional.ofNullable(role));
         SignupRequest request = createArtificialSignupRequest();
         Mockito.when(encoder.encode(request.getPassword())).thenReturn(request.getPassword());
-        Mockito.when(userCreator.createUser(request.getUsername(), request.getEmail(), request.getPassword())).thenReturn(createArtificialUser());
+        Mockito.when(userCreator.createUser(request.getUsername(), request.getPassword())).thenReturn(createArtificialUser());
 
         authenticationController.registerUser(request);
 
@@ -99,21 +96,9 @@ public class AuthenticationControllerTest
     }
 
     @Test
-    public void whenAlreadyRegisteredEmailIsUsed_thenRegistrationProcessReturnsBadRequest()
-    {
-        Mockito.when(userRepository.existsByEmail(Mockito.anyString())).thenReturn(true);
-
-        SignupRequest request = createArtificialSignupRequest();
-        ResponseEntity<?> responseEntity = authenticationController.registerUser(request);
-
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
     public void whenUserIsRegistered_thenUserRoleShouldBeSetOnlyToUser()
     {
         Mockito.when(userRepository.existsByUsername(Mockito.anyString())).thenReturn(false);
-        Mockito.when(userRepository.existsByEmail(Mockito.anyString())).thenReturn(false);
 
         Role role = new Role();
         role.setName(RoleType.ROLE_USER);
@@ -122,7 +107,7 @@ public class AuthenticationControllerTest
         SignupRequest request = createArtificialSignupRequest();
         Mockito.when(encoder.encode(request.getPassword())).thenReturn(request.getPassword());
         User user = createArtificialUser();
-        Mockito.when(userCreator.createUser(request.getUsername(), request.getEmail(), request.getPassword())).thenReturn(user);
+        Mockito.when(userCreator.createUser(request.getUsername(), request.getPassword())).thenReturn(user);
 
         authenticationController.registerUser(request);
 
@@ -180,21 +165,22 @@ public class AuthenticationControllerTest
     {
         Mockito.when(authenticationManager.authenticate(Mockito.any())).thenThrow(new BadCredentialsException("Bad Credentials Exception"));
         LoginRequest request = Mockito.mock(LoginRequest.class);
-        Assertions.assertThrows(BadCredentialsException.class, () -> authenticationController.authenticateUser(request));
+        ResponseEntity<?> responseEntity = authenticationController.authenticateUser(request);
+        int BAD_REQUEST_CODE = 400;
+        Assertions.assertEquals(BAD_REQUEST_CODE, responseEntity.getStatusCodeValue());
     }
 
     private SignupRequest createArtificialSignupRequest()
     {
         SignupRequest request = new SignupRequest();
         request.setUsername(USERNAME);
-        request.setEmail(EMAIL);
         request.setPassword(PASSWORD);
         return request;
     }
 
     private User createArtificialUser()
     {
-        User user = new User(USERNAME, EMAIL, PASSWORD);
+        User user = new User(USERNAME, PASSWORD);
         user.setRoles(Set.of(new Role(RoleType.ROLE_USER)));
         return user;
     }

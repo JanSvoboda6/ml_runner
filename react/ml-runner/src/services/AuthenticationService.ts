@@ -7,7 +7,7 @@ class AuthService
 {
   async login(username: string, password: string) 
   {
-    const response: AxiosResponse<User> = await axios.post(API_URL + "/signin", { username, password });
+    const response: AxiosResponse<User> = await axios.post(API_URL + "/login", { username, password });
 
     if (response.data.accessToken)
     {
@@ -21,10 +21,10 @@ class AuthService
     localStorage.removeItem("user");
   }
 
-  register(username: string, email: string, password: string)
+  register(username: string, password: string)
   {
     var message: string = "";
-    return axios.post(API_URL + "/signup", { username, email, password, message })
+    return axios.post(API_URL + "/register", { username, password, message })
   }
 }
 

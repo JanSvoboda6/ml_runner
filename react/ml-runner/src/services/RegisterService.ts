@@ -1,8 +1,8 @@
 import AuthenticationService from "../services/AuthenticationService";
 
-function RegisterService(username: string, email: string, password: string): any
+function RegisterService(username: string, password: string): any
 {
-    return AuthenticationService.register(username, email, password);
+    return AuthenticationService.register(username, password);
 };
 
 export default RegisterService;

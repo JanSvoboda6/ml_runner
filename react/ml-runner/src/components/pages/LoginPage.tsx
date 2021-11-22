@@ -105,8 +105,8 @@ function Login()
                                 <input
                                     type="text"
                                     className="input-text"
-                                    name="username"
-                                    placeholder="Username"
+                                    name="email"
+                                    placeholder="Email"
                                     value={username}
                                     onChange={onChangeUsername}
                                 />

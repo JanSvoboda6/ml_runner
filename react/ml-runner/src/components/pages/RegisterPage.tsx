@@ -8,7 +8,6 @@ import RegisterService from "../../services/RegisterService";
 function Register()
 {
     const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isRegistrationSuccessful, setRegistrationSuccessful] = useState(false);
@@ -16,11 +15,6 @@ function Register()
     const onChangeUsername = (e: { target: { value: string; }; }) =>
     {
         setUsername(e.target.value);
-    }
-
-    const onChangeEmail = (e: { target: { value: string; }; }) =>
-    {
-        setEmail(e.target.value);
     }
 
     const onChangePassword = (e: { target: { value: string; }; }) =>
@@ -36,7 +30,7 @@ function Register()
         var isValidationSuccesful = true;
         if (isValidationSuccesful) //TODO Jan: implement proper validation
         {
-            RegisterService(username, email, password).then(
+            RegisterService(username, password).then(
                 () =>
                 {
                     setRegistrationSuccessful(true)
@@ -77,24 +71,14 @@ function Register()
                 <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
                 <form onSubmit={handleRegister}>
                     <div>
-                        <div className="register-item username-text">
-                            <input
-                                type="text"
-                                className="input-text"
-                                name="username"
-                                placeholder="Username"
-                                value={username}
-                                onChange={onChangeUsername}
-                            />
-                        </div>
                         <div className="register-item email-text">
                             <input
                                 type="text"
                                 className="input-text"
                                 name="email"
                                 placeholder="Email"
-                                value={email}
-                                onChange={onChangeEmail}
+                                value={username}
+                                onChange={onChangeUsername}
                             />
                         </div>
                         <div className="register-item password-text">
@@ -107,8 +91,6 @@ function Register()
                                 onChange={onChangePassword}
                             />
                         </div>
-
-
                         <button className="register-item submit-button">Sign Up</button>
                     </div>
 
