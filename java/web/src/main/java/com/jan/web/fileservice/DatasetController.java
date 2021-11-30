@@ -18,16 +18,16 @@ import java.util.List;
 public class DatasetController
 {
     public static final String BASE_DIRECTORY = "/Users/jan/app_files/";
-    private final ContainerFileService fileService;
+    private final FileService fileService;
 
     @Autowired
-    public DatasetController(ContainerFileService fileService)
+    public DatasetController(FileService fileService)
     {
         this.fileService = fileService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<FileInformation> getAllFiles() throws InterruptedException
+    public List<FileInformation> getAllFiles()
     {
         //TODO Jan: handle the situation when no file is in the driectory
         //TODO Jan: handle the situation when directories are empty, currently dirs are not visible

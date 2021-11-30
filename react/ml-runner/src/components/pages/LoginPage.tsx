@@ -6,6 +6,7 @@ import logo from '../../styles/logo_but_text.png';
 import dots from '../../styles/dots_logo_big.svg';
 import { LoginService } from '../../services/LoginService';
 import { useState } from "react";
+import {store} from '../../redux/store';
 
 function Login()
 {
@@ -82,6 +83,10 @@ function Login()
         setPopupClosed(true);
     }
 
+    const mainState = store.getState();
+    console.log(mainState.user.isLoggedIn);
+
+    
     if (isLoggedIn)
     {
         return <Redirect to="/" />;

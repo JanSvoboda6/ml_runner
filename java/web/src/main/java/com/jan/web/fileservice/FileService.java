@@ -9,4 +9,5 @@ public interface FileService
 {
     List<FileInformation> getAllFiles();
     void uploadFiles(Keys key, List<MultipartFile> files);
+    void createDirectory(String key);
 }

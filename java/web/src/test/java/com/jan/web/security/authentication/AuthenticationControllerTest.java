@@ -41,6 +41,7 @@ public class AuthenticationControllerTest
     private  JsonWebTokenUtility jsonWebTokenUtility;
     private AuthenticationController authenticationController;
     private UserCreator userCreator;
+    private AuthenticationListener authenticationListener;
 
     @BeforeEach
     public void before()
@@ -51,7 +52,8 @@ public class AuthenticationControllerTest
         encoder = Mockito.mock(PasswordEncoder.class);
         jsonWebTokenUtility = Mockito.mock(JsonWebTokenUtility.class);
         userCreator = Mockito.mock(UserCreator.class);
-        authenticationController = new AuthenticationController(authenticationManager, userRepository, roleRepository, encoder, jsonWebTokenUtility, userCreator);
+        authenticationListener = Mockito.mock(AuthenticationListener.class);
+        authenticationController = new AuthenticationController(authenticationManager, userRepository, roleRepository, encoder, jsonWebTokenUtility, userCreator, authenticationListener);
     }
 
     @Test
@@ -168,6 +170,21 @@ public class AuthenticationControllerTest
         ResponseEntity<?> responseEntity = authenticationController.authenticateUser(request);
         int BAD_REQUEST_CODE = 400;
         Assertions.assertEquals(BAD_REQUEST_CODE, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void whenUserIsSuccessfullySignedIn_thenListenerWillBeCalled()
+    {
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
+        LoginRequest request = Mockito.mock(LoginRequest.class);
+        UserDetailsImpl userDetails = Mockito.mock(UserDetailsImpl.class);
+        Long USER_ID = 999L;
+        Mockito.when(userDetails.getId()).thenReturn(USER_ID);
+        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
+
+        authenticationController.authenticateUser(request);
+        Mockito.verify(authenticationListener).onSuccessfulLogin(USER_ID);
     }
 
     private SignupRequest createArtificialSignupRequest()

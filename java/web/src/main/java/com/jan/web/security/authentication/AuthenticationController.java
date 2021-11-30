@@ -45,6 +45,7 @@ public class AuthenticationController
     private final PasswordEncoder encoder;
     private final JsonWebTokenUtility jsonWebTokenUtility;
     private final UserCreator userCreator;
+    private final AuthenticationListener authenticationListener;
 
     @Autowired
     public AuthenticationController(
@@ -53,7 +54,8 @@ public class AuthenticationController
             RoleRepository roleRepository,
             PasswordEncoder encoder,
             JsonWebTokenUtility jsonWebTokenUtility,
-            UserCreator userCreator)
+            UserCreator userCreator,
+            AuthenticationListener authenticationListener)
     {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
@@ -61,6 +63,7 @@ public class AuthenticationController
         this.encoder = encoder;
         this.jsonWebTokenUtility = jsonWebTokenUtility;
         this.userCreator = userCreator;
+        this.authenticationListener = authenticationListener;
     }
 
     @PostMapping("/register")
@@ -95,12 +98,13 @@ public class AuthenticationController
         {
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        }catch (AuthenticationException exception) //TODO Jan: Test this case
+        } catch (AuthenticationException exception) //TODO Jan: Test this case
         {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Bad credentials!"));
         }
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jsonWebTokenUtility.generateJwtToken(authentication);
 
@@ -108,6 +112,8 @@ public class AuthenticationController
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+
+        authenticationListener.onSuccessfulLogin(userDetails.getId());
 
         return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getId(), userDetails.getUsername(), roles));
     }

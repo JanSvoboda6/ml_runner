@@ -41,4 +41,10 @@ public class LocalFileService implements FileService
     {
         //empty
     }
+
+    @Override
+    public void createDirectory(String key)
+    {
+
+    }
 }
