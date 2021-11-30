@@ -37,8 +37,12 @@ public class JsonWebTokenUtility
                 .compact();
     }
 
-    public String getUserNameFromJwtToken(String token)
+    public String getUsernameFromJwtToken(String token)
     {
+        if(token.contains(BEARER_))
+        {
+            token = token.substring(BEARER_.length());
+        }
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 

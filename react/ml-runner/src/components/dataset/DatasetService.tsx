@@ -1,7 +1,12 @@
 import axios from "axios";
 import { FileInformation } from "../../types";
+import authorizationHeader from "../../services/AuthorizationHeader";
 const API_URL = "http://localhost:8080/api/dataset";
 
+const getFiles = () =>
+{
+    return axios.get(API_URL, {headers: authorizationHeader()});
+}
 
 const createDirectory = (directory: FileInformation) =>
 {
@@ -9,7 +14,11 @@ const createDirectory = (directory: FileInformation) =>
         API_URL + '/createdirectory',
         directory,
         {
-            headers: { 'Content-type': 'application/json; charset=utf-8' }
+            headers: 
+            {
+                'Authorization': authorizationHeader()['Authorization'],
+                'Content-type': 'application/json; charset=utf-8'
+            }
         }
     );
 };
@@ -42,7 +51,7 @@ const uploadFiles = (files: any) =>
         }
     }
 
-    return axios.post(API_URL + '/upload', formData);
+    return axios.post(API_URL + '/upload', formData, { headers: authorizationHeader() }, );
 }
 
-export default { createDirectory, uploadFiles }
+export default { getFiles, createDirectory, uploadFiles }

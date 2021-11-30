@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FileService
 {
-    List<FileInformation> getAllFiles();
-    void uploadFiles(Keys key, List<MultipartFile> files);
-    void createDirectory(String key);
+    List<FileInformation> getAllFiles(long containerId);
+    void uploadFiles(Keys key, List<MultipartFile> files, long containerId);
+    void createDirectory(String key, long containerId);
 }

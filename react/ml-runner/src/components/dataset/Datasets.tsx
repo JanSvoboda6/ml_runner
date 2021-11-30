@@ -19,7 +19,7 @@ function Datasets(props)
 
     useEffect(() =>
     {
-        axios.get(API_URL + "/dataset")
+        DatasetService.getFiles()
             .then(
                 (res: AxiosResponse<any>) =>
                 {

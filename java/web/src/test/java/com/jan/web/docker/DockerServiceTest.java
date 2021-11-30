@@ -16,8 +16,9 @@ import java.util.List;
 class DockerServiceTest
 {
     private final long USER_ID = 999L;
-    private final int HOST_PORT = 15000;
-    String CONTAINER_NAME = "/container-user-" + USER_ID;
+    private final long HOST_PORT = 15000L;
+    String CONTAINER_NAME = "container-user-" + USER_ID;
+    String CONTAINER_NAME_WITH_ADDED_SLASH = "/" + CONTAINER_NAME;
     private DockerService dockerService;
     private ContainerRepository containerRepository;
     private DockerClient dockerClient;
@@ -39,7 +40,7 @@ class DockerServiceTest
         Mockito.when(containerRepository.existsByUserId(USER_ID)).thenReturn(false);
         User user = new User(USER_ID, "user@domain.com", "password");
         Mockito.when(userRepository.getById(USER_ID)).thenReturn(user);
-        Mockito.when(containerRepository.save(Mockito.any())).thenReturn(new ContainerEntity(user, HOST_PORT));
+        Mockito.when(containerRepository.save(Mockito.any())).thenReturn(new ContainerEntity(HOST_PORT, user));
         dockerService.buildDockerContainer(USER_ID);
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 
@@ -49,7 +50,7 @@ class DockerServiceTest
         {
             for (String name : container.getNames())
             {
-                if (CONTAINER_NAME.equals(name))
+                if (CONTAINER_NAME_WITH_ADDED_SLASH.equals(name))
                 {
                     isContainerCreated = true;
                     break;
@@ -85,13 +86,12 @@ class DockerServiceTest
         {
             for (String name : container.getNames())
             {
-                if (CONTAINER_NAME.equals(name))
+                if (CONTAINER_NAME_WITH_ADDED_SLASH.equals(name))
                 {
                     idOfContainerCreatedInTest = container.getId();
                     break;
                 }
             }
-
             if(idOfContainerCreatedInTest.length() > 0)
             {
                 break;

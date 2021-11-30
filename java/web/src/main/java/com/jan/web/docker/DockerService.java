@@ -58,7 +58,7 @@ public class DockerService
         }
 
         ContainerEntity containerEntity = createContainerEntity(userId);
-        Ports portBindings = createPortBindings(containerEntity.getHostPort());
+        Ports portBindings = createPortBindings(containerEntity.getId());
 
         dockerClient.buildImageCmd()
                 .withDockerfile(new File("/Users/jan/dev/thesis/ml_runner/docker/Dockerfile"))
@@ -134,10 +134,10 @@ public class DockerService
         dockerClient.startContainerCmd(provideContainerName(userId));
     }
 
-    private Ports createPortBindings(int hostPortNumber)
+    private Ports createPortBindings(long hostPortNumber)
     {
         Ports portBindings = new Ports();
-        portBindings.bind(ExposedPort.tcp(PYTHON_SERVER_PORT), Ports.Binding.bindPort(hostPortNumber));
+        portBindings.bind(ExposedPort.tcp(PYTHON_SERVER_PORT), Ports.Binding.bindPort((int)hostPortNumber));
         return portBindings;
     }
 }

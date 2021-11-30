@@ -17,7 +17,7 @@ public class LocalFileService implements FileService
     public static final String BASE_DIRECTORY = "/Users/jan/app_files/";
 
     @Override
-    public List<FileInformation> getAllFiles()
+    public List<FileInformation> getAllFiles(long containerId)
     {
         List<FileInformation> fileInformationList = null;
         try (Stream<Path> walk = Files.walk(Paths.get(BASE_DIRECTORY)))
@@ -37,13 +37,13 @@ public class LocalFileService implements FileService
     }
 
     @Override
-    public void uploadFiles(Keys keys, List<MultipartFile> files)
+    public void uploadFiles(Keys keys, List<MultipartFile> files, long containerId)
     {
         //empty
     }
 
     @Override
-    public void createDirectory(String key)
+    public void createDirectory(String key, long containerId)
     {
 
     }

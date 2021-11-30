@@ -11,4 +11,4 @@ COPY ./files ./files
 COPY ./server.py ./server.py
 COPY ./svm.py ./models/svm.py
 
-CMD tail -f /dev/null
+CMD ["python3", "server.py"]

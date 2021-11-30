@@ -96,8 +96,7 @@ public class AuthenticationController
         Authentication authentication;
         try
         {
-            authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (AuthenticationException exception) //TODO Jan: Test this case
         {
             return ResponseEntity
@@ -112,8 +111,6 @@ public class AuthenticationController
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-
-        authenticationListener.onSuccessfulLogin(userDetails.getId());
 
         return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getId(), userDetails.getUsername(), roles));
     }

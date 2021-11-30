@@ -16,6 +16,6 @@ class ContainerFileServiceTest
     @Test
     public void whenGettingAllFiles_thenProperFileInformationListIsReturned()
     {
-        List<FileInformation> fileInformationList = fileService.getAllFiles();
+        List<FileInformation> fileInformationList = fileService.getAllFiles(999L);
     }
 }

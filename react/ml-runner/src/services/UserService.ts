@@ -1,5 +1,5 @@
 import axios from 'axios';
-import authenticationHeader from './AuthenticationHeader';
+import authenticationHeader from './AuthorizationHeader';
 
 const API_URL = 'http://localhost:8080/api/test/';
 

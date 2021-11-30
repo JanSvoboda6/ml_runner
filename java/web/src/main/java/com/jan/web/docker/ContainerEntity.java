@@ -6,18 +6,15 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "containers")
-@SequenceGenerator(name="host_port_sequence", initialValue=20000, allocationSize=1)
 public class ContainerEntity
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_post")
+    @SequenceGenerator(name = "seq_post", initialValue = 20000, allocationSize = 1)
     private Long id;
 
     @OneToOne
     private User user;
-
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="host_port_sequence")
-    private int hostPort;
 
     private boolean isRunning;
 
@@ -31,10 +28,10 @@ public class ContainerEntity
         this.user = user;
     }
 
-    public ContainerEntity(User user, int hostPort)
+    public ContainerEntity(Long id, User user)
     {
+        this.id = id;
         this.user = user;
-        this.hostPort = hostPort;
     }
 
     public Long getId()
@@ -45,11 +42,6 @@ public class ContainerEntity
     public User getUser()
     {
         return user;
-    }
-
-    public int getHostPort()
-    {
-        return hostPort;
     }
 
     public boolean isRunning()

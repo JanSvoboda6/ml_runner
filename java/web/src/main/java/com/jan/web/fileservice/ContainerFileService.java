@@ -1,5 +1,7 @@
 package com.jan.web.fileservice;
 
+import com.jan.web.docker.ContainerEntity;
+import com.jan.web.docker.ContainerRepository;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -27,38 +29,44 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ContainerFileService implements FileService
 {
     private final RestTemplate restTemplate;
+    private final ContainerRepository repository;
 
     @Autowired
-    public ContainerFileService(RestTemplate restTemplate)
+    public ContainerFileService(RestTemplate restTemplate, ContainerRepository repository)
     {
         this.restTemplate = restTemplate;
+        this.repository = repository;
     }
 
     @Override
-    public List<FileInformation> getAllFiles()
+    public List<FileInformation> getAllFiles(long containerId)
     {
         StringBuilder result = new StringBuilder();
         try
         {
-            URL url = new URL("http://localhost:9999/getfiles");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())))
+            Optional<ContainerEntity> containerEntity = repository.findById(containerId);
+            if(containerEntity.isPresent())
             {
-                for (String line; (line = reader.readLine()) != null; )
+                URL url = new URL("http://localhost:" + containerEntity.get().getId() + "/getfiles");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())))
                 {
-                    result.append(line);
+                    for (String line; (line = reader.readLine()) != null; )
+                    {
+                        result.append(line);
+                    }
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
                 }
-            } catch (IOException e)
-            {
-                e.printStackTrace();
             }
-
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -79,49 +87,53 @@ public class ContainerFileService implements FileService
         return fileInformationList;
     }
 
-    public void uploadFiles(Keys keys, List<MultipartFile> files)
+    public void uploadFiles(Keys keys, List<MultipartFile> files, long containerId)
     {
         if(keys.getKeys().size() != files.size())
         {
             return;
         }
-
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost uploadFile = new HttpPost("http://localhost:9999" + "/upload");
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.addTextBody("Files", "Hello Docker!", ContentType.TEXT_PLAIN);
-        try
+        Optional<ContainerEntity> containerEntity = repository.findById(containerId);
+        if(containerEntity.isPresent())
         {
-            for(int i = 0; i < keys.getKeys().size(); i++)
+            HttpPost uploadFile = new HttpPost("http://localhost:" + containerEntity.get().getId() + "/upload");
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.addTextBody("Files", "Hello Docker!", ContentType.TEXT_PLAIN);
+            try
             {
-                builder.addBinaryBody(
-                        keys.getKeys().get(i),
-                        files.get(i).getBytes(),
-                        ContentType.DEFAULT_BINARY,
-                        files.get(i).getName());
+                for (int i = 0; i < keys.getKeys().size(); i++)
+                {
+                    builder.addBinaryBody(
+                            keys.getKeys().get(i),
+                            files.get(i).getBytes(),
+                            ContentType.DEFAULT_BINARY,
+                            files.get(i).getName());
+                }
+            } catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
             }
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
 
-        HttpEntity multipart = builder.build();
-        uploadFile.setEntity(multipart);
+            HttpEntity multipart = builder.build();
+            uploadFile.setEntity(multipart);
 
-        CloseableHttpResponse response = null;
-        try
-        {
-            response = httpClient.execute(uploadFile);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
+            CloseableHttpResponse response = null;
+            try
+            {
+                response = httpClient.execute(uploadFile);
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void createDirectory(String key)
+    @Override
+    public void createDirectory(String key, long containerId)
     {
         try
         {
@@ -131,11 +143,14 @@ public class ContainerFileService implements FileService
             headers.setContentType(MediaType.APPLICATION_JSON);
             org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
 
-            ResponseEntity<String> response = restTemplate
-                    .exchange("http://localhost:9999" + "/createdirectory", HttpMethod.POST, entity, String.class);
+            Optional<ContainerEntity> containerEntity = repository.findById(containerId);
+            if(containerEntity.isPresent())
+            {
+                ResponseEntity<String> response = restTemplate
+                        .exchange("http://localhost:" + containerEntity.get().getId() + "/createdirectory", HttpMethod.POST, entity, String.class);
 
-            response.getStatusCode();
-            //JSONObject userJson = new JSONObject(response.getBody());
+                response.getStatusCode();
+            }
         } catch (JSONException e)
         {
             e.printStackTrace();

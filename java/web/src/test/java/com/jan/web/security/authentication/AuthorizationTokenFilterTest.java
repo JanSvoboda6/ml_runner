@@ -109,7 +109,7 @@ public class AuthorizationTokenFilterTest
         Mockito.when(jsonWebTokenUtility.parseJwt(request)).thenReturn(RANDOM_JWT);
         Mockito.when(jsonWebTokenUtility.validateJwtToken(RANDOM_JWT)).thenReturn(true);
 
-        Mockito.when(jsonWebTokenUtility.getUserNameFromJwtToken(RANDOM_JWT)).thenReturn(USERNAME);
+        Mockito.when(jsonWebTokenUtility.getUsernameFromJwtToken(RANDOM_JWT)).thenReturn(USERNAME);
         User user = createArtificialUser();
 
         user.setRoles(Set.of(new Role(RoleType.ROLE_USER)));
@@ -130,7 +130,7 @@ public class AuthorizationTokenFilterTest
         Mockito.when(jsonWebTokenUtility.parseJwt(request)).thenReturn(RANDOM_JWT);
         Mockito.when(jsonWebTokenUtility.validateJwtToken(RANDOM_JWT)).thenReturn(true);
 
-        Mockito.when(jsonWebTokenUtility.getUserNameFromJwtToken(RANDOM_JWT)).thenReturn(USERNAME);
+        Mockito.when(jsonWebTokenUtility.getUsernameFromJwtToken(RANDOM_JWT)).thenReturn(USERNAME);
         Mockito.when(userDetailsService.loadUserByUsername(USERNAME)).thenThrow(new UsernameNotFoundException("A random message."));
         FilterChain filterChain = Mockito.mock(FilterChain.class);
 

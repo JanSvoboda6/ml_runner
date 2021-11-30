@@ -10,6 +10,7 @@ import { User } from "./types";
 import Project from "./components/pages/Project";
 import Summary from "./components/visualization/Summary";
 import DatasetPage from "./components/pages/DatasetPage";
+import EnvironmentPreparation from "./components/pages/EnvironmentPreparation";
 
 interface AppProps
 {
@@ -54,6 +55,7 @@ class App extends Component<AppProps, User>
               <Route exact path="/register" component={Register} />
               <Route exact path="/logout" component={Login} />
               <Route exact path="/newproject" component={Project} />
+              <Route exact path="/preparing" component={EnvironmentPreparation} />
             </Switch>
           </div>
         </Router>
