@@ -11,6 +11,7 @@ import Project from "./components/pages/Project";
 import Summary from "./components/visualization/Summary";
 import DatasetPage from "./components/pages/DatasetPage";
 import EnvironmentPreparation from "./components/pages/EnvironmentPreparation";
+import PrivateRoute from "./helpers/PrivateRoute";
 
 interface AppProps
 {
@@ -47,15 +48,15 @@ class App extends Component<AppProps, User>
         < Router history={history} >
           <div className="navigation-page" >
             <Switch>
-              <Route exact path={["/", "/home"]} component={Board} />
-              <Route exact path="/projects" component={Board} />
-              <Route exact path="/datasets" component={DatasetPage} />
-              <Route exact path="/summary" component={Summary} />
+              <PrivateRoute exact path={["/", "/home"]} component={Board} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/logout" component={Login} />
-              <Route exact path="/newproject" component={Project} />
-              <Route exact path="/preparing" component={EnvironmentPreparation} />
+              <PrivateRoute exact path="/projects" component={Board} />
+              <PrivateRoute exact path="/datasets" component={DatasetPage} />
+              <PrivateRoute exact path="/summary" component={Summary} />
+              <PrivateRoute exact path="/newproject" component={Project} />
+              <PrivateRoute exact path="/preparing" component={EnvironmentPreparation} />
             </Switch>
           </div>
         </Router>

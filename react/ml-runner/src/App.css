@@ -4,7 +4,7 @@
   --text-secondary: #ffffff;
   --bg-primary: #ffffff;
   --bg-secondary: #6e0a0a;
-  --bg-accent: #2a4f9e;
+  --bg-accent: rgb(15, 81, 224);
   --transition-speed: 600ms;
   --opacity: 90%;
 }
@@ -441,21 +441,29 @@ p{
   margin: 0;
   display: flex; 
   flex-direction: row;
-  align-items: right;
+  align-items: left;
+  background-color: black;
 }
 
-.play-button{
+.project-control-panel-button{
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  background-color: black;
+  text-decoration: none;
+  color: #ffffff;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  font-size: 18px;
   image-rendering: -webkit-optimize-contrast;
-  width: 30px;
   opacity: 90%;
+  margin-top: 5px;
+  outline: none;
 }
 
-.stop-button{
-  image-rendering: -webkit-optimize-contrast;
-  width: 20px;
-  margin-left: 6px;
-  margin-top: 6px;
-  opacity: 90%;
+.project-control-panel-button:hover{
+  color: red;
+  cursor:pointer;
 }
 
 .project-form{

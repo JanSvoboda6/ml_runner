@@ -16,10 +16,10 @@ const ProjectQuickView = (props: any) =>
 {
     return (<div>
         <div className="control-panel">
-            <Popup trigger={<button><img className="play-button" src={playButton} alt="play_button" /></button>} position="right center" modal>
+            <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal>
                 {close => (<RunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => close()} />)}
             </Popup>
-            <Popup trigger={<button>Statistics</button>} position="right center" modal>
+            <Popup trigger={<button className="project-control-panel-button">Statistics</button>} position="right center" modal>
                 {close => (<ProjectStatistics projectName={props.name} projectId={props.id} handleCloseButton={() => close()} />)}
             </Popup>
         </div>

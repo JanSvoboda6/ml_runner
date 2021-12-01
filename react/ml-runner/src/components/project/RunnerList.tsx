@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
+import FadeIn from "react-fade-in";
 import Runner from "./Runner";
 
 const API_URL = "http://localhost:8080/api/project";
@@ -50,11 +51,14 @@ function RunnerList(props: any)
     return (
         <div>
             <ul className="runner-list-inside">
+                <FadeIn delay={25}>
                 {runners.map(runner => (
                     <li key={runner.runnerId} className="runner-item">
-                        <Runner projectName={props.projectName} projectId={runner.projectId} runnerId={runner.runnerId} />
+                        
+                            <Runner projectName={props.projectName} projectId={runner.projectId} runnerId={runner.runnerId} />
                     </li>
                 ))}
+                </FadeIn>
             </ul>
         </div>
     )

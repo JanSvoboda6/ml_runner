@@ -1,18 +1,13 @@
-// import React from 'react';
-// import { Route, Redirect } from 'react-router-dom';
-// import store from '../redux/store';
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+//import {store} from '../redux/store';
 
-// const PrivateRoute = ({component: Component, ...rest}) => {
-//     return (
-//         const state = store.getState();
-//         // Show the component only when the user is logged in
-//         // Otherwise, redirect the user to /signin page
-//         <Route {...rest} render={props => (
-//             state.isLoggedIn ?
-//                 <Component {...props} />
-//             : <Redirect to="/signin" />
-//         )} />
-//     );
-// };
+const PrivateRoute = ({component: Component, ...rest}) => {
+    return (
+        <Route {...rest} render={props => (
+            localStorage.user ? <Component {...props} /> : <Redirect to="/login" />
+        )} />
+    );
+};
 
-// export default PrivateRoute;
+export default PrivateRoute;
