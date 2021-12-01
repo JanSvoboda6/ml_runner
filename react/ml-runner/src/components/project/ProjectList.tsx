@@ -1,8 +1,9 @@
 import React, { Component, useEffect, useState } from 'react';
 import axios from "axios";
-import loadingIcon from '../../styles/loading_icon.svg'
+import loadingIcon from '../../styles/loading_icon.svg';
 import ProjectQuickView from './ProjectQuickView';
-import RunnerService from '../../services/RunnerService'
+import RunnerService from '../../services/RunnerService';
+import authorizationHeader from "../../services/AuthorizationHeader";
 import { Link } from 'react-router-dom';
 
 const API_URL = "http://localhost:8080/api";
@@ -23,7 +24,7 @@ function ProjectList()
 
   useEffect(() =>
   {
-    axios.get(API_URL + "/project")
+    axios.get(API_URL + "/project", { headers: authorizationHeader() })
       .then(
         (res) =>
         {

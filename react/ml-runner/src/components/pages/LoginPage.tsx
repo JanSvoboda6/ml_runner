@@ -7,6 +7,8 @@ import dots from '../../styles/dots_logo_big.svg';
 import { LoginService } from '../../services/LoginService';
 import { useState } from "react";
 import {store} from '../../redux/store';
+import HelperBox from "../navigation/HelperBox";
+import FadeIn from "react-fade-in";
 
 function Login()
 {
@@ -77,11 +79,6 @@ function Login()
         }
     }
 
-    const closePopup = (e: { preventDefault: () => void; }) =>
-    {
-        e.preventDefault();
-        setPopupClosed(true);
-    }
 
     const mainState = store.getState();
     console.log(mainState.user.isLoggedIn);
@@ -95,14 +92,14 @@ function Login()
     return (
         <div>
             <div className="wrapper">
+                {showPopup == 't' && <HelperBox content="Thanks for registration.  Now you can login!" />}
                 <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a>
                 {/* <a className="login-banner-text">Random</a> */}
-
             </div>
+            <FadeIn delay={250}>
             <div className="landing-page">
                 <div className="landing-page-text">Machine Learning <a className="landing-page-text-color">Runner</a></div>
                 <div className="login-page">
-                    {showPopup == 't' && !isPopupClosed && (<Popup content="Thanks for registration.  Now you can login!" handleClose={closePopup} />)}
                     <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
                     <div className="login-page-content">
                         <form onSubmit={handleLogin}>
@@ -146,6 +143,7 @@ function Login()
                     </div>
                 </div>
             </div>
+                </FadeIn>
         </div >
     );
 }

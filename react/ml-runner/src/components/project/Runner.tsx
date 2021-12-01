@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import RunnerService from "../../services/RunnerService";
 import loadingIcon from '../../styles/loading_icon.svg';
+import authorizationHeader from "../../services/AuthorizationHeader";
 
 const API_URL = "http://localhost:8080/api/project";
 
@@ -23,7 +24,7 @@ function Runner(props: any)
 
     useEffect(() =>
     {
-        axios.get(API_URL + '/runner?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId)
+        axios.get(API_URL + '/runner?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, { headers: authorizationHeader() })
             .then(
                 (res: AxiosResponse<any>) =>
                 {

@@ -1,9 +1,10 @@
 import sys
-from PIL import Image
-from glob import glob
-import numpy as np
-from sklearn import svm
-from sklearn.metrics import accuracy_score
+import time
+#from PIL import Image
+#from glob import glob
+#import numpy as np
+#from sklearn import svm
+#from sklearn.metrics import accuracy_score
 
 if __name__ == "__main__":
     time.sleep(5)

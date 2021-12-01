@@ -1,6 +1,7 @@
 package com.jan.web.runner;
 
 import com.jan.web.Project;
+import com.jan.web.docker.ContainerEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

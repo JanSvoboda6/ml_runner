@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import logo from '../../styles/logo_but_text.png';
 import dots from '../../styles/dots_logo_big.svg';
 import RegisterService from "../../services/RegisterService";
+import FadeIn from "react-fade-in";
 
 function Register()
 {
@@ -67,45 +68,47 @@ function Register()
             <div className="wrapper">
                 <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a>
             </div>
-            <div className="register-page">
-                <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
-                <form onSubmit={handleRegister}>
-                    <div>
-                        <div className="register-item email-text">
-                            <input
-                                type="text"
-                                className="input-text"
-                                name="email"
-                                placeholder="Email"
-                                value={username}
-                                onChange={onChangeUsername}
-                            />
+            <FadeIn>
+                <div className="register-page">
+                    <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
+                    <form onSubmit={handleRegister}>
+                        <div>
+                            <div className="register-item email-text">
+                                <input
+                                    type="text"
+                                    className="input-text"
+                                    name="email"
+                                    placeholder="Email"
+                                    value={username}
+                                    onChange={onChangeUsername}
+                                />
+                            </div>
+                            <div className="register-item password-text">
+                                <input
+                                    type="password"
+                                    className="input-text"
+                                    name="password"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={onChangePassword}
+                                />
+                            </div>
+                            <button className="register-item submit-button">Sign Up</button>
                         </div>
-                        <div className="register-item password-text">
-                            <input
-                                type="password"
-                                className="input-text"
-                                name="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={onChangePassword}
-                            />
-                        </div>
-                        <button className="register-item submit-button">Sign Up</button>
-                    </div>
 
-                    {message !== "" && (
-                        <div className="register-item">
-                            {message}
-                        </div>
-                    )}
-                </form>
-                <div className="register-link">
-                    <p className="register-link-text" >Already have an account?</p>
-                    <Link className="register-link-reference" to="/login">Login</Link>
+                        {message !== "" && (
+                            <div className="register-item">
+                                {message}
+                            </div>
+                        )}
+                    </form>
+                    <div className="register-link">
+                        <p className="register-link-text" >Already have an account?</p>
+                        <Link className="register-link-reference" to="/login">Login</Link>
+                    </div>
                 </div>
-            </div>
-        </div >
+            </FadeIn >
+        </div>
     );
 }
 

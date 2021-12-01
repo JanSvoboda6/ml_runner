@@ -2,6 +2,10 @@ import axios, { AxiosResponse } from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import ScatterGraph from "./ScatterChart";
+import authorizationHeader from "../../services/AuthorizationHeader";
+import Heatmap from "./Heatmap";
+import { Legend } from "@visx/legend";
+import Example from "./Legend";
 
 const API_URL = "http://localhost:8080/api/project";
 
@@ -38,7 +42,7 @@ function ProjectStatistics(props)
 
                     let cumulativeResult = 0;
                     runners.forEach((runner, index) =>
-                        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + runner.runnerId)
+                        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + runner.runnerId, { headers: authorizationHeader() })
                             .then((res: AxiosResponse<any>) =>
                             {
                                 runners[index]['result'] = (res.data.firstLabelResult + res.data.secondLabelResult) / 2;
@@ -69,6 +73,10 @@ function ProjectStatistics(props)
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="heatmap-wrapper">
+                <Example/>
+                <Heatmap width={800} height={480} />
             </div>
             <ScatterGraph runners={runners} />
         </div >

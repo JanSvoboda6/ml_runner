@@ -4,6 +4,8 @@ from flask import Flask, request
 from flask import jsonify
 import math
 import subprocess
+from random import random
+
 
 app = Flask(__name__)
 
@@ -57,22 +59,23 @@ def walk_directory(root_directory):
 
 @app.route('/runproject', methods=['POST'])
 def run_project():
-    project = request.get_json()
-    print(project)
-    log_file = open('log_' + f"{project['id']}" + '.txt', 'w')
-    if(project['selectedModel'] == "Support Vector Machines"):
-        subprocess.Popen(['nohup', 'python3', 'models/svm.py', project['name'], project['firstLabel'],
-              project['secondLabel'], project['firstLabelFolder'], project['secondLabelFolder']],
-              stdout=log_file, 
+    runner = request.get_json()
+
+    log_file = open('log_' + str(f"{runner['projectId']}") + '_' + str(f"{runner['runnerId']}") + '.txt', 'w')
+    if(runner['selectedModel'] == "Support Vector Machines"):
+        subprocess.Popen(['nohup', 'python3', 'models/svm.py', runner['name'], runner['firstLabel'],
+              runner['secondLabel'], runner['firstLabelFolder'], runner['secondLabelFolder'], str(runner['gammaParameter']), str(runner['cParameter'])],
+              stdout=log_file,
               stderr=log_file,
               preexec_fn=os.setpgrp)
     return ""
 
 
-@app.route('/project/finished', methods=['POST'])
+@app.route('/project/runner/finished', methods=['POST'])
 def isFinished():
+    runner = request.get_json()
     isFinished = False
-    with open('log_1.txt', 'r') as log_file:
+    with open('log_' + f"{runner['projectId']}" + '_' + f"{runner['runnerId']}" + '.txt', 'r') as log_file:
         for line in log_file:
             if 'FINISHED' in line.split():
                 isFinished = True
@@ -81,13 +84,12 @@ def isFinished():
     return jsonify({'isFinished' : isFinished})
 
 
-@app.route('/project/result', methods=['POST'])
+@app.route('/project/runner/result', methods=['POST'])
 def getResult():
-    print(request.get_json()['id'])
-    return jsonify({'firstLabelResult': 1.0, 'secondLabelResult': 0.9})
-
+    runner = request.get_json()
+    print(runner)
+    return jsonify({'firstLabelResult': random(), 'secondLabelResult': random()})
 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=9999, debug=True)
-
