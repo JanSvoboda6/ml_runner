@@ -56,7 +56,7 @@ export default function Example({ events = false }: { events?: boolean })
 {
     return (
         <div className="legends">
-            <LegendDemo title="Size">
+            {/* <LegendDemo title="Size">
                 <LegendSize scale={sizeScale}>
                     {labels =>
                         labels.map(label =>
@@ -139,7 +139,7 @@ export default function Example({ events = false }: { events?: boolean })
                         ))
                     }
                 </LegendLinear>
-            </LegendDemo>
+            </LegendDemo> */}
             <LegendDemo title="Threshold">
                 <LegendThreshold scale={thresholdScale}>
                     {labels =>
@@ -163,7 +163,7 @@ export default function Example({ events = false }: { events?: boolean })
                     }
                 </LegendThreshold>
             </LegendDemo>
-            <LegendDemo title="Ordinal">
+            {/* <LegendDemo title="Ordinal">
                 <LegendOrdinal scale={ordinalColorScale} labelFormat={label => `${label.toUpperCase()}`}>
                     {labels => (
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -187,7 +187,7 @@ export default function Example({ events = false }: { events?: boolean })
                         </div>
                     )}
                 </LegendOrdinal>
-            </LegendDemo>
+            </LegendDemo> */}
         </div>
     );
 }

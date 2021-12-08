@@ -6,11 +6,11 @@ import { HeatmapCircle, HeatmapRect } from '@visx/heatmap';
 import { getSeededRandom } from '@visx/mock-data';
 
 
-const hot1 = '#77312f';
-const hot2 = '#f33d15';
-const cool1 = '#122549';
-const cool2 = '#b4fbde';
-export const background = '#28272c';
+// const hot1 = '#77312f';
+// const hot2 = '#f33d15';
+const hot1 = '#122549';
+const hot2 = '#b4fbde';
+export const background = '#221c1c';
 
 const binData = genBins(/* length = */ 15, /* height = */ 15);
 
@@ -47,7 +47,7 @@ const rectColorScale = scaleLinear < string > ({
     domain: [0, colorMax],
 });
 const opacityScale = scaleLinear < number > ({
-    range: [0.1, 1],
+    range: [1, 1],
     domain: [0, colorMax],
 });
 
@@ -88,7 +88,7 @@ export default ({
     yScale.range([yMax, 0]);
 
     return width < 10 ? null : (
-        <svg width={ width } height={ height }>
+        <svg width={ width/2 } height={ height }>
                 <HeatmapRect
                     data={ binData }
                     xScale={ xScale }

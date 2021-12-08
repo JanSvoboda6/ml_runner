@@ -882,9 +882,29 @@ input[type="file"]
 }
 
 .heatmap-wrapper{
+  opacity: 100%;
   display: flex; 
-  flex-direction: column;
+  justify-content: center;
+  flex-direction: row;
   align-items: center;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
+}
+
+.graph-wrapper{
+  flex-direction: column;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}
+
+.analysis-heatmap{
+  display: flex; 
+  flex-direction: row;
+  padding: 50px;
+  background-color: var(--bg-primary);
+}
+
+.analysis-graph{
+  padding: 30px;
 }
 /* #endregion STATISTICS */

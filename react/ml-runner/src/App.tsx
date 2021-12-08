@@ -12,6 +12,7 @@ import Summary from "./components/visualization/Summary";
 import DatasetPage from "./components/pages/DatasetPage";
 import EnvironmentPreparation from "./components/pages/EnvironmentPreparation";
 import PrivateRoute from "./helpers/PrivateRoute";
+import Analysis from "./components/analysis/Analysis";
 
 interface AppProps
 {
@@ -57,6 +58,7 @@ class App extends Component<AppProps, User>
               <PrivateRoute exact path="/summary" component={Summary} />
               <PrivateRoute exact path="/newproject" component={Project} />
               <PrivateRoute exact path="/preparing" component={EnvironmentPreparation} />
+              <PrivateRoute exact path="/analysis" component={Analysis} />
             </Switch>
           </div>
         </Router>
