@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import FadeIn from "react-fade-in";
+import authorizationHeader from "../../services/AuthorizationHeader";
 import Runner from "./Runner";
 
 const API_URL = "http://localhost:8080/api/project";
@@ -21,10 +22,11 @@ function RunnerList(props: any)
     useEffect(() =>
     {
         console.log('RunnerList');
-        axios.get(API_URL + "/runners?projectId=" + props.projectId)
+        axios.get(API_URL + "/runners?projectId=" + props.projectId, { headers: authorizationHeader()})
             .then(
                 (res: AxiosResponse<any>) =>
                 {
+                    console.log(res);
                     setLoaded(true);
                     const runners: Array<Runner> = [];
                     res.data.forEach(runner =>

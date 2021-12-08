@@ -69,7 +69,6 @@ public class ContainerProjectRunner implements ProjectRunner
 
                 //TODO Jan: respond
                 response.getStatusCode();
-
             }
 
         } catch (JSONException e)

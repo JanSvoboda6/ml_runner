@@ -8,7 +8,7 @@ const prepareContainer = () =>
     return axios.get(
         API_URL,
         {
-            headers:authorizationHeader(),
+            headers: authorizationHeader(),
         }
     );
 };

@@ -74,7 +74,7 @@ public class ModelRunnerController
     }
 
     @GetMapping("/result")
-    public ResponseEntity<?> runProject(@RequestHeader(name="Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId)
+    public ResponseEntity<?> getResult(@RequestHeader(name="Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId)
     {
         try
         {

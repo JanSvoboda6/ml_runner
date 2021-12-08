@@ -14,13 +14,13 @@ interface Parameters
 
 function Runner(props: any)
 {
-    let intervalId: any;
-    let isFinishedControlForIntervalHook = undefined;
+    let intervalId:any;
     const [isFinished, setFinished] = useState(false);
     const [firstLabelResult, setFirstLabelResult] = useState<number | undefined>(undefined);
     const [secondLabelResult, setSecondLabelResult] = useState<number | undefined>(undefined);
     const [isLoaded, setLoaded] = useState(false);
     const [parameters, setParameters] = useState<Parameters>({ gamma: undefined, c: undefined });
+    const FIVE_SECONDS = 5 * 1000;
 
     useEffect(() =>
     {
@@ -31,41 +31,36 @@ function Runner(props: any)
                     setLoaded(true);
                     setParameters({ gamma: res.data.gammaParameter, c: res.data.cparameter })
                     setFinished(res.data.finished);
-                    isFinishedControlForIntervalHook = res.data.finished;
 
                     if (res.data.finished)
                     {
-                        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId)
+                        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
                             .then((res: AxiosResponse<any>) =>
                             {
                                 setFirstLabelResult(res.data.firstLabelResult);
                                 setSecondLabelResult(res.data.secondLabelResult);
                             })
                     }
-
-                    if (!res.data.finished)
+                    else
                     {
-                        startReccurentRequests();
+                        startRecurrentRequests();
                     }
                 },
                 (error) =>
                 {
                 }
             )
-
-
     }, [])
 
-    const startReccurentRequests = () =>
+    const startRecurrentRequests = () =>
     {
-        intervalId = setInterval(isRunningFinished, 1000);
+        intervalId = setInterval(isRunningFinished, FIVE_SECONDS);
     }
 
     const isRunningFinished = () =>
     {
-        console.log(isFinishedControlForIntervalHook);
-        console.log(intervalId);
-
+        if(!isFinished)
+        {
         RunnerService.isFinished(props.projectId, props.runnerId)
             .then(
                 (res) =>
@@ -86,6 +81,7 @@ function Runner(props: any)
                     console.log("PROBLEM");
                 }
             )
+        }
     }
 
 

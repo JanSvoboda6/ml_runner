@@ -1,4 +1,5 @@
 @import url("../../node_modules/react-keyed-file-browser/dist/react-keyed-file-browser.css");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');
 
 button[type=submit]
 {
@@ -22,7 +23,6 @@ button[type=submit]:hover{
 
 button.deleting
 {
- 
   border: 0.2em solid rgba(255, 255, 255, 0);
   background-color: rgba(255, 208, 208, 0.589);
   border-radius: 2em;
@@ -41,6 +41,21 @@ button.deleting
 }
 
 input[type=search]{
-font-family: 'Lato', sans-serif;
-   font-size: 19px;
+  background-color: black;
+  color: white;
+  font-size:'Roboto Mono', monospace;
+  font-size: 19px;
+}
+
+div.rendered-react-keyed-file-browser div.files table th, div.rendered-react-keyed-file-browser div.files table td{
+  font-weight: 300;
+}
+
+div.rendered-react-keyed-file-browser div.files table tr.selected td {
+  font-weight: normal; 
+}
+
+div.rendered-react-keyed-file-browser div.files table tr.selected td.name:after 
+{
+  background: #f7e4e4; 
 }
