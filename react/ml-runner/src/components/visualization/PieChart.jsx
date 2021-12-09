@@ -13,15 +13,15 @@ const PieChart = () =>
                             label: 'Random pie',
                             data: [3, 7, 5, 4],
                             backgroundColor: [
-                                'rgba(60, 120, 213, 0.4)',
-                                'rgba(60, 120, 213, 0.6)',
-                                'rgba(60, 120, 213, 0.8)',
-                                'rgba(60, 120, 213, 0.9)'
+                                'rgba(120, 120, 213, 0.4)',
+                                'rgba(120, 120, 213, 0.6)',
+                                'rgba(120, 120, 213, 0.8)',
+                                'rgba(120, 120, 213, 0.9)'
                             ],
                             borderColor: [
-                                'rgba(255, 255, 255, 1)',
+                                'rgba(0, 0, 0, 0.1)',
                             ],
-                            borderWidth: 5,
+                            borderWidth: 3,
                         },
                     ],
                 } }

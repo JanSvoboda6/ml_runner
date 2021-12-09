@@ -20,6 +20,7 @@ input:focus{
 
 *{
   font-family: var(--font);
+  /* font-weight: 400; */
   margin: 0;
   padding: 0;
 } 
@@ -32,12 +33,11 @@ body {
   padding: 0;
 }
 
-/* body {
-  background:linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("./styles/background.svg");
-
+body {
+  background:linear-gradient(rgba(17, 16, 16, 0.67), rgba(7, 16, 16, 0.67)), url("./styles/background-dark.svg");
   image-rendering: -webkit-optimize-contrast;
   background-size: cover;
-} */
+}
 
 footer{
   position:fixed;
@@ -391,6 +391,10 @@ nav .upper-navbar-animation
   padding: 2rem;
   float: right;
   color: var(--text-primary);
+}
+
+.upper-navbar-item:hover{
+  text-decoration: underline 3px;
 }
 
 .start-at-projects
@@ -906,5 +910,9 @@ input[type="file"]
 
 .analysis-graph{
   padding: 30px;
+}
+
+.center-box{
+
 }
 /* #endregion STATISTICS */

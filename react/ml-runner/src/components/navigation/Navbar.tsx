@@ -22,12 +22,12 @@ function Navbar(props: any)
         <div className="wrapper">
             <nav className="upper-navbar">
                 <a className="logo-container" href="/"><img className='logo-dots' src={dots} alt="logo_but" /></a>
-                <a className="upper-navbar-item"><Link to="/projects">Projects</Link></a>
-                <a className="upper-navbar-item"><Link to="/datasets">Datasets</Link></a>
-                <a className="upper-navbar-item"><Link to="/summary">Summary</Link></a>
-                <a className="upper-navbar-item"><Link to="/newproject">Add New Project</Link></a>
+                <Link to="/projects" className="upper-navbar-item" >Projects</Link>
+                <Link to="/datasets" className="upper-navbar-item">Datasets</Link>
+                <Link to="/summary" className="upper-navbar-item">Summary</Link>
+                <Link to="/newproject" className="upper-navbar-item">Add New Project</Link>
                 <a className="upper-navbar-item-logout"><button className="upper-navbar-logout-button" onClick={handleLogout}><Link to="/logout">Logout</Link></button></a>
-                <div className={"upper-navbar-animation" + " " + props.start}></div>
+                {/* <div className={"upper-navbar-animation" + " " + props.start}></div> */}
             </nav>
         </div >)
 }

@@ -3,6 +3,9 @@ import Navbar from "../navigation/Navbar";
 import PieChart from "./PieChart";
 import Graph from "./Graph";
 import Doughnut from "./Doughnut";
+import { AxisBottom } from "@visx/axis";
+import { scaleLinear } from "@visx/scale";
+import DefaultAxis from "../analysis/DefaultAxis";
 
 function Summary()
 {
@@ -18,7 +21,7 @@ function Summary()
                     </div>
                 </div>
                 <div className="summary-list-item"> <PieChart /></div>
-                <div className="summary-list-item"> <Graph backgroundColor='rgba(229, 81, 116, 0.9)' /></div>
+                <div className="summary-list-item"> <Graph backgroundColor='rgba(229, 81, 116, 0.1)' /></div>
             </div>
         </div>
     )

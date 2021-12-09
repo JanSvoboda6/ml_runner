@@ -4,6 +4,8 @@ import genBins, { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
 import { scaleLinear } from '@visx/scale';
 import { HeatmapCircle, HeatmapRect } from '@visx/heatmap';
 import { getSeededRandom } from '@visx/mock-data';
+import { Axis } from '@visx/axis';
+import DefaultAxis from '../analysis/DefaultAxis';
 
 
 // const hot1 = '#77312f';
@@ -12,7 +14,7 @@ const hot1 = '#122549';
 const hot2 = '#b4fbde';
 export const background = '#221c1c';
 
-const binData = genBins(/* length = */ 15, /* height = */ 15);
+const binData = genBins(/* length = */ 10, /* height = */ 10);
 
 function max<Datum>(data: Datum[], value: (d: Datum) => number): number
 {
@@ -24,14 +26,12 @@ function min<Datum>(data: Datum[], value: (d: Datum) => number): number
     return Math.min(...data.map(value));
 }
 
-// accessors
 const bins = (d: Bins) => d.bins;
 const count = (d: Bin) => d.count;
 
 const colorMax = max(binData, d => max(bins(d), count));
 const bucketSizeMax = max(binData, d => bins(d).length);
 
-// scales
 const xScale = scaleLinear < number > ({
     domain: [0, binData.length],
 });
@@ -59,19 +59,18 @@ export type HeatmapProps = {
     events?: boolean;
 };
 
-const defaultMargin = { top: 10, left: 20, right: 20, bottom: 110 };
+const defaultMargin = { top: 100, left: 50, right: 50, bottom: 50 };
 
 function changeBackground(e)
 {
-    e.target.style.maring = '10px';
+  
 }
-
 export default ({
     width,
     height,
     events = false,
     margin = defaultMargin,
-    separation = 20,
+    separation = 50
 }: HeatmapProps) =>
 {
     // bounds
@@ -89,6 +88,7 @@ export default ({
 
     return width < 10 ? null : (
         <svg width={ width/2 } height={ height }>
+            <g transform={`translate(${margin.left},${margin.top - 20})`}>
                 <HeatmapRect
                     data={ binData }
                     xScale={ xScale }
@@ -97,7 +97,7 @@ export default ({
                     opacityScale={ opacityScale }
                     binWidth={ binWidth }
                     binHeight={ binWidth }
-                    gap={ 2 }
+                    gap={ 5 }
                 >
                     { heatmap =>
                         heatmap.map(heatmapBins =>
@@ -116,6 +116,7 @@ export default ({
                                     {
                                         //if (!events) return;
                                         const { row, column } = bin;
+                                        console.log(binData);
                                         console.log(JSON.stringify({ row, column, bin: bin.bin }));
                                     } }
                                 />
@@ -123,6 +124,14 @@ export default ({
                         )
                     }
                 </HeatmapRect>
+                </g>
+
+            <g transform={'translate(21, -12)'}>
+            <DefaultAxis width={width / 2.17} height={height} orientation="left" margin={{top:30, right: 25, bottom: 350, left:20}}/>
+            </g>
+            <g transform={'translate(0, 0)'}>
+            <DefaultAxis width={width / 2} height={height} orientation="bottom"/>
+            </g>
         </svg>
     );
 };
