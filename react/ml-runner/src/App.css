@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;300;400&display=swap');
+
 :root {
   font-size: 19px;
   --text-primary: #fcf4f4;
@@ -557,6 +558,22 @@ input[type="file"]
 /* PAGES */
 
 /* #region LOGIN */
+
+.landing-page-information-text{
+  position: absolute;
+  width: 295px;
+  height: 146px;
+  left: 228px;
+  top: 459px;
+
+  font-family: Roboto Mono;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 47px;
+
+  color: rgba(255, 255, 255, 0.8);
+}
 .login-banner{
   position: fixed;
   height: 4rem;
@@ -583,13 +600,24 @@ input[type="file"]
 {
   display: flex;
   align-items: center;
+  flex-direction: column;
 }
 
 .landing-page-text{
-  max-width: 830px;
-  margin-top: 5rem;
-  margin-left: 7rem;
-  font-size: 135px;
+position: absolute;
+width: 1379px;
+height: 140px;
+left: 66px;
+top: 34px;
+
+font-family: Roboto Mono;
+font-style: normal;
+font-weight: 100;
+font-size: 96px;
+line-height: 98px;
+letter-spacing: 0.585em;
+
+color: rgba(255, 255, 255, 0.9);
 }
 
 .landing-page-text-color{
@@ -605,7 +633,20 @@ input[type="file"]
   margin: 0;
 }
 
+.cube-animation{
+  position: absolute;
+  opacity: 90%;
+  height: 260px;
+  left: 470px;
+  top: 27.1%;
+  mix-blend-mode:lighten;
+  image-rendering: -webkit-optimize-contrast;
+}
+
 .login-page {
+  position: absolute;
+  left: 1000px;
+  top: 300px;
   width: 50vh;
   margin-top: 5rem;
   margin-right: auto;
@@ -679,12 +720,17 @@ input[type="file"]
 
 .preparing-text-wrapper
 {
+  position: absolute;
+  top:123px;
+  left: 470px;
   margin-top: 10px;
   text-align: center;
 }
+
 .preparing-text, .loading-dots{
   opacity: 50%;
   font-size: 29px;
+  top: 800px;
 }
 
 .loading-dots:before
@@ -709,9 +755,10 @@ input[type="file"]
   padding-top: 3px;
   /* -webkit-filter: invert(1);
   filter: invert(1); */
-  opacity:70%;
+  opacity: 45%;
   width: 50vh;
   margin: auto;
+  image-rendering: -webkit-optimize-contrast;
 }
 /* #endregion PREPARING */
 
@@ -904,7 +951,7 @@ input[type="file"]
 .analysis-heatmap{
   display: flex; 
   flex-direction: row;
-  padding: 50px;
+  padding: 10px 50px 100px 50px;
   background-color: var(--bg-primary);
 }
 
@@ -912,7 +959,17 @@ input[type="file"]
   padding: 30px;
 }
 
-.center-box{
+.legends{
+  padding-top: 5.7rem;
+  padding-left: 1rem;
+}
 
+.heatmap-box{
+  display: flex;
+  flex-direction: column;
+}
+
+.selected-value{
+  margin-left: 6rem;
 }
 /* #endregion STATISTICS */

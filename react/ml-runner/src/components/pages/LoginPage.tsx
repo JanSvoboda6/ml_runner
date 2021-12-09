@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Popup from "../popup/Popup";
 import { useDispatch } from "react-redux";
 import logo from '../../styles/logo_but_text.png';
+import cube from '../../styles/cube_animation.gif';
 import dots from '../../styles/dots_logo_big.svg';
 import { LoginService } from '../../services/LoginService';
 import { useState } from "react";
@@ -93,12 +94,19 @@ function Login()
         <div>
             <div className="wrapper">
                 {showPopup == 't' && <HelperBox content="Thanks for registration.  Now you can login!" />}
-                <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a>
+                {/* <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a> */}
                 {/* <a className="login-banner-text">Random</a> */}
             </div>
+            <img className='cube-animation' src={cube} alt="cube_animation" />
             <FadeIn delay={250}>
             <div className="landing-page">
-                <div className="landing-page-text">Machine Learning <a className="landing-page-text-color">Runner</a></div>
+                <div className="landing-page-text">Machine Learning Runner</div>
+                <div className='landing-page-information-text'>
+                    Upload data.
+                    Run model.
+                    Analyze.
+                </div>
+
                 <div className="login-page">
                     <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
                     <div className="login-page-content">

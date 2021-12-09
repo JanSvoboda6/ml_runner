@@ -313,7 +313,7 @@ export default function ExampleControls({ children }: ControlsProps)
                 yAxisOrientation,
                 ...getAnimatedOrUnanimatedComponents(useAnimatedComponents),
             })}
-            {/** This style is used for annotated elements via colorAccessor. */}
+       
             <svg className="pattern-lines">
                 <PatternLines
                     id={selectedDatumPatternId}
@@ -325,7 +325,6 @@ export default function ExampleControls({ children }: ControlsProps)
                 />
             </svg>
             <div className="controls">
-                {/** data */}
                 <div>
                     <strong>data</strong>
                     <label>
@@ -354,7 +353,6 @@ export default function ExampleControls({ children }: ControlsProps)
                     </label>
                 </div>
 
-                {/** theme */}
                 <div>
                     <strong>theme</strong>
                     <label>
@@ -377,8 +375,6 @@ export default function ExampleControls({ children }: ControlsProps)
 
                 <br />
 
-                {/** series */}
-                {/** orientation */}
                 <div>
                     <strong>series orientation</strong>
                     <label>
@@ -480,7 +476,7 @@ export default function ExampleControls({ children }: ControlsProps)
                         step
                     </label>
                 </div>
-                {/** glyph */}
+            
                 <div>
                     <strong>glyph series</strong>
                     <label>
@@ -617,7 +613,7 @@ export default function ExampleControls({ children }: ControlsProps)
                 </div>
 
                 <br />
-                {/** tooltip */}
+     
                 <div>
                     <strong>tooltip</strong>
                     <label>
@@ -723,7 +719,7 @@ export default function ExampleControls({ children }: ControlsProps)
                         🍍
                     </label>
                 </div>
-                {/** annotation */}
+            
                 <div>
                     <strong>annotation</strong> (click chart to update)
                     <label>
@@ -789,7 +785,6 @@ export default function ExampleControls({ children }: ControlsProps)
 
                 <br />
 
-                {/** axes */}
                 <div>
                     <strong>axes</strong>
                     <label>
@@ -827,7 +822,6 @@ export default function ExampleControls({ children }: ControlsProps)
                     </label>
                 </div>
 
-                {/** grid */}
                 <div>
                     <strong>grid</strong>
                     <label>

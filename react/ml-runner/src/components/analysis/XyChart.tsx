@@ -229,16 +229,6 @@ export default function XyChart({ height }: XYChartProps)
                             />
                         </>
                     ) }
-                    { renderGlyphSeries && (
-                        <GlyphSeries
-                            dataKey="San Francisco"
-                            data={ data }
-                            xAccessor={ accessors.x['San Francisco'] }
-                            yAccessor={ accessors.y['San Francisco'] }
-                            renderGlyph={ renderGlyph }
-                            colorAccessor={ colorAccessorFactory('San Francisco') }
-                        />
-                    ) }
                     <Axis
                         key={ `time-axis-${ animationTrajectory }-${ renderHorizontally }` }
                         orientation={ renderHorizontally ? yAxisOrientation : xAxisOrientation }

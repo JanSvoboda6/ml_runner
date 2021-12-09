@@ -14,7 +14,7 @@ import { GridColumnsProps } from '@visx/grid/lib/grids/GridColumns';
 export const backgroundColor = '#da7cff';
 const axisColor = '#fff';
 const tickLabelColor = '#fff';
-export const labelColor = '#340098';
+export const labelColor = '#fff';
 const gridColor = '#6e0fca';
 const seededRandom = getSeededRandom(0.5);
 const defaultMargin = {
@@ -26,7 +26,8 @@ const defaultMargin = {
 
 const tickLabelProps = () =>
 ({
-    dy: '-0.1em',
+    dy: '0em',
+    dx: '0em',
     fill: tickLabelColor,
     fontSize: 14,
     fontFamily: 'sans-serif',
@@ -42,13 +43,16 @@ const getMinMax = (vals: (number | { valueOf(): number })[]) =>
 export type AxisProps = {
     width: number;
     height: number;
-    orientation: string,
+    values: Array<number>,
+    orientation: string;
     margin?: {
         top: number,
         right: number,
         bottom: number,
         left: number
-    },
+    };
+    dyTickLabel?: string;
+    dxTickLabel?: string;
     showControls?: boolean;
 };
 
@@ -73,9 +77,12 @@ type GridColumnsComponent = React.FC<
 export default function DefaultAxis({
     width: outerWidth = 800,
     height: outerHeight = 800,
+    values: values = [],
     orientation = "bottom",
     margin = defaultMargin,
-    showControls = true
+    showControls = true,
+    dxTickLabel = '0em',
+    dyTickLabel = '0em'
 }: AxisProps)
 {
     // use non-animated components if prefers-reduced-motion is set
@@ -104,16 +111,18 @@ export default function DefaultAxis({
 
     const axes: AxisDemoProps<AxisScale<number>>[] = useMemo(() =>
     {
-        // toggle between two value ranges to demo animation
-        const linearValues = dataToggle ? [0, 2, 4, 6, 8, 10] : [6, 8, 10, 12];
         return [
             {
-                scale: scaleLinear({
-                    domain: getMinMax(linearValues),
+                scale: scaleBand({
+                    domain: values,
                     range: [0, width],
+                    paddingOuter: 0,
+                    paddingInner: 1,
                 }),
-                values: linearValues
-            }
+                values: values,
+                tickFormat: (v: string) => v,
+                label: 'GAMMA',
+            },
         ];
     }, [dataToggle, width]);
 
@@ -150,7 +159,14 @@ export default function DefaultAxis({
                                 tickFormat={tickFormat}
                                 stroke={axisColor}
                                 tickStroke={axisColor}
-                                tickLabelProps={tickLabelProps}
+                                tickLabelProps={() => ({
+                                    dy: dyTickLabel,
+                                    dx: dxTickLabel,
+                                    fill: tickLabelColor,
+                                    fontSize: 14,
+                                    fontFamily: 'sans-serif',
+                                    textAnchor: 'middle',
+                                })}
                                 tickValues={label === 'log' || label === 'time' ? undefined : values}
                                 numTicks={label === 'time' ? 6 : undefined}
                                 label={label}

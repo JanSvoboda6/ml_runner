@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Group } from '@visx/group';
 import genBins, { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
 import { scaleLinear } from '@visx/scale';
@@ -6,6 +6,7 @@ import { HeatmapCircle, HeatmapRect } from '@visx/heatmap';
 import { getSeededRandom } from '@visx/mock-data';
 import { Axis } from '@visx/axis';
 import DefaultAxis from '../analysis/DefaultAxis';
+import { FunctionTypeNode } from 'typescript';
 
 
 // const hot1 = '#77312f';
@@ -14,7 +15,7 @@ const hot1 = '#122549';
 const hot2 = '#b4fbde';
 export const background = '#221c1c';
 
-const binData = genBins(/* length = */ 10, /* height = */ 10);
+const binData = genBins(/* length = */ 7, /* height = */ 7);
 
 function max<Datum>(data: Datum[], value: (d: Datum) => number): number
 {
@@ -61,10 +62,6 @@ export type HeatmapProps = {
 
 const defaultMargin = { top: 100, left: 50, right: 50, bottom: 50 };
 
-function changeBackground(e)
-{
-  
-}
 export default ({
     width,
     height,
@@ -73,6 +70,15 @@ export default ({
     separation = 50
 }: HeatmapProps) =>
 {
+
+
+    const[valueOfSelectedBin, setValueOfSelectedBin] = useState(0);
+
+    const onBinClick = (bin: any) =>
+    {
+        console.log(bin.bin.count);
+        setValueOfSelectedBin(bin.bin.count);
+    };
     // bounds
     const size =
         width > margin.left + margin.right ? width - margin.left - margin.right - separation : width;
@@ -87,8 +93,11 @@ export default ({
     yScale.range([yMax, 0]);
 
     return width < 10 ? null : (
+        <div className='heatmap-box'>
+            <p className='selected-value'>Selected Value: {valueOfSelectedBin.toFixed(3)}</p>
         <svg width={ width/2 } height={ height }>
-            <g transform={`translate(${margin.left},${margin.top - 20})`}>
+           
+            <g transform={`translate(${margin.left + 30},${margin.top - 150})`}>
                 <HeatmapRect
                     data={ binData }
                     xScale={ xScale }
@@ -111,12 +120,14 @@ export default ({
                                     y={ bin.y }
                                     fill={ bin.color }
                                     fillOpacity={ bin.opacity }
-                                    onMouseEnter={changeBackground}
                                     onClick={ () =>
                                     {
                                         //if (!events) return;
                                         const { row, column } = bin;
-                                        console.log(binData);
+                                        if(bin.bin)
+                                        {                 
+                                            onBinClick(bin);
+                                        }            
                                         console.log(JSON.stringify({ row, column, bin: bin.bin }));
                                     } }
                                 />
@@ -126,12 +137,13 @@ export default ({
                 </HeatmapRect>
                 </g>
 
-            <g transform={'translate(21, -12)'}>
-            <DefaultAxis width={width / 2.17} height={height} orientation="left" margin={{top:30, right: 25, bottom: 350, left:20}}/>
+            <g transform={'translate(21, -110)'}>
+                <DefaultAxis width={width / 2.25} height={height} values={[0.001, 0.01, 0.1, 1, 10, 100, 1000].reverse()} orientation="left" margin={{ top: 30, right: 25, bottom: 350, left: 50 }} dyTickLabel='0.3em' dxTickLabel='-1.5em' />
             </g>
-            <g transform={'translate(0, 0)'}>
-            <DefaultAxis width={width / 2} height={height} orientation="bottom"/>
+            <g transform={'translate(50, -113)'}>
+                <DefaultAxis width={width / 2.2} height={height} values={[0.001, 0.01, 0.1, 1, 10, 100, 1000]} orientation="bottom"/>
             </g>
         </svg>
+        </div>
     );
 };

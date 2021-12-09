@@ -36,8 +36,8 @@ const linearScale = scaleLinear<string>({
 });
 
 const thresholdScale = scaleThreshold<number, string>({
-    domain: [0.01, 0.02, 0.04, 0.06, 0.08],
-    range: ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'],
+    domain: [0.01, 0.02, 0.04, 0.06, 0.09],
+    range: ['#122549', 'rgb(26,44,78)', 'rgb(37,59,82)', 'rgb(66,101,113)', 'rgb(84,127,131)', '#b4fbde'],
 });
 
 const ordinalColorScale = scaleOrdinal<string, string>({
@@ -140,7 +140,7 @@ export default function Example({ events = false }: { events?: boolean })
                     }
                 </LegendLinear>
             </LegendDemo> */}
-            <LegendDemo title="Threshold">
+            <LegendDemo title="Legend">
                 <LegendThreshold scale={thresholdScale}>
                     {labels =>
                         labels.reverse().map((label, i) => (

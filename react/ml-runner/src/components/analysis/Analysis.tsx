@@ -36,6 +36,11 @@ function Analysis(props)
  
     }, [])
 
+    function updateDisplayedValue(value: any)
+    {
+        console.log(value);
+    }
+
     return (
         <div>
             <Navbar start="start-at-projects" />
@@ -54,7 +59,7 @@ function Analysis(props)
             <SimpleGraph />
             <div className="heatmap-wrapper">
                 <div className="analysis-heatmap">
-                    <Heatmap width={800} height={480} />
+                    <Heatmap width={800} height={480}/>
                     <Example />
                 </div>
                 <div className="analysis-heatmap">
