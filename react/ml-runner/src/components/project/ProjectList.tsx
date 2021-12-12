@@ -24,12 +24,12 @@ function ProjectList()
 
   useEffect(() =>
   {
-    axios.get(API_URL + "/project", { headers: authorizationHeader() })
+    axios.get<any>(API_URL + "/project", { headers: authorizationHeader() })
       .then(
         (res) =>
         {
           setLoaded(true);
-          setProjects(res.data);
+          setProjects(res.data.reverse());
         },
         (error) =>
         {

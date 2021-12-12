@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import RunnerService from "../../services/RunnerService";
 import loadingIcon from '../../styles/loading_icon.svg';
+import loadingAnimation from '../../styles/loading_graphics.gif';
 import authorizationHeader from "../../services/AuthorizationHeader";
 
 const API_URL = "http://localhost:8080/api/project";
@@ -75,27 +76,21 @@ function Runner(props: any)
                         setFirstLabelResult(res.data.firstLabelResult);
                         setSecondLabelResult(res.data.secondLabelResult);
                     }
-                },
-                (error) =>
-                {
-                    console.log("PROBLEM");
                 }
             )
         }
     }
-
 
     return (
         <div>
             <p> RUNNER ID:{props.runnerId}</p>
             <p>Gamma parameter: {parameters.gamma} </p>
             <p>C parameter: {parameters.c}</p>
-            <p>IS FINISHED: {isFinished ? "TRUE" : "FALSE"}</p>
-            <div className="running-indicator">{!isFinished && <img className='loading-runner-icon' src={loadingIcon} alt="loading_icon" />}</div>
+            <div className="running-indicator">{!isFinished && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_icon" />}</div>
             {isFinished && firstLabelResult !== undefined && secondLabelResult !== undefined &&
                 <div>
-                    <div>Validation result of first label: {(firstLabelResult * 100).toFixed(2)}%</div>
-                    <div>Validation result of second label: {(secondLabelResult * 100).toFixed(2)}%</div>
+                    <div className="text-confirm">Validation result of first label: {(firstLabelResult * 100).toFixed(2)}%</div>
+                    <div className="text-confirm">Validation result of second label: {(secondLabelResult * 100).toFixed(2)}%</div>
                 </div>
             }
         </div >

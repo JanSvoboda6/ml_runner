@@ -56,10 +56,13 @@ function Analysis(props)
                 </div>
             </div>
             <FadeIn>
-            <SimpleGraph />
             <div className="heatmap-wrapper">
                 <div className="analysis-heatmap">
                     <Heatmap width={800} height={480}/>
+                    <Example />
+                </div>
+                <div className="analysis-heatmap">
+                    <Heatmap width={800} height={480} />
                     <Example />
                 </div>
                 <div className="analysis-heatmap">

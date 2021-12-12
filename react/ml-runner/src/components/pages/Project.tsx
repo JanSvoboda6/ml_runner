@@ -72,6 +72,8 @@ function Project()
         return <Redirect to='/' />;
     }
 
+    console.log(firstLabelFolder)
+
     return (
         <div>
             <Navbar start="start-at-new-project" />
@@ -85,7 +87,7 @@ function Project()
                         )
                         }
                     </Popup>
-                    {firstLabelFolder && <div>Selected: {firstLabelFolder}</div>}
+                    {firstLabelFolder && <div className="text-confirm">Selected: {firstLabelFolder}</div>}
                 </div>
                 <div className="project-form-block project-form-block-data">
                     <input className="label-name" type="text" onChange={handleSecondLabelChange} placeholder="Second label" />
@@ -95,7 +97,7 @@ function Project()
                         )
                         }
                     </Popup>
-                    {secondLabelFolder && <div>Selected: {secondLabelFolder}</div>}
+                    {secondLabelFolder && <div className="text-confirm">Selected: {secondLabelFolder}</div>}
                 </div>
                 <div className="project-form-block">
                     <div className="model-select-text">Choose algorithm: </div>

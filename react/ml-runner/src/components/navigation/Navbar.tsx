@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import LogoutService from "../../services/LogoutService";
-import dots from '../../styles/dots_logo_big.svg'
+import logo from '../../styles/vut_simple_logo.png'
 
 function Navbar(props: any)
 {
@@ -21,7 +21,7 @@ function Navbar(props: any)
     return (
         <div className="wrapper">
             <nav className="upper-navbar">
-                <a className="logo-container" href="/"><img className='logo-dots' src={dots} alt="logo_but" /></a>
+                <a className="logo-container" href="/"><img className='logo-simple' src={logo} alt="logo_but" /></a>
                 <Link to="/projects" className="upper-navbar-item" >Projects</Link>
                 <Link to="/datasets" className="upper-navbar-item">Datasets</Link>
                 <Link to="/summary" className="upper-navbar-item">Summary</Link>

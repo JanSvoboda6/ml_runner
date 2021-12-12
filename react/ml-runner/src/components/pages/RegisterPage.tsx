@@ -65,12 +65,12 @@ function Register()
 
     return (
         <div>
-            <div className="wrapper">
+            {/* <div className="wrapper">
                 <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a>
-            </div>
+            </div> */}
             <FadeIn>
                 <div className="register-page">
-                    <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
+                    <img className='logo' src={logo} alt="logo_but" />
                     <form onSubmit={handleRegister}>
                         <div>
                             <div className="register-item email-text">
@@ -93,12 +93,15 @@ function Register()
                                     onChange={onChangePassword}
                                 />
                             </div>
-                            <button className="register-item submit-button">Sign Up</button>
+                            <div className="register-item">
+                            <button className="submit-button">Sign Up</button>
+                            </div>
                         </div>
-
                         {message !== "" && (
                             <div className="register-item">
+                                <div className="alert-text">
                                 {message}
+                                </div>
                             </div>
                         )}
                     </form>

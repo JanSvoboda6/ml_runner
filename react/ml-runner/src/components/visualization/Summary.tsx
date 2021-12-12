@@ -21,7 +21,6 @@ function Summary()
                     </div>
                 </div>
                 <div className="summary-list-item"> <PieChart /></div>
-                <div className="summary-list-item"> <Graph backgroundColor='rgba(229, 81, 116, 0.1)' /></div>
             </div>
         </div>
     )

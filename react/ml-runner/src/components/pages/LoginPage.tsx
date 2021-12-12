@@ -7,7 +7,7 @@ import cube from '../../styles/cube_animation.gif';
 import dots from '../../styles/dots_logo_big.svg';
 import { LoginService } from '../../services/LoginService';
 import { useState } from "react";
-import {store} from '../../redux/store';
+import { store } from '../../redux/store';
 import HelperBox from "../navigation/HelperBox";
 import FadeIn from "react-fade-in";
 
@@ -84,75 +84,86 @@ function Login()
     const mainState = store.getState();
     console.log(mainState.user.isLoggedIn);
 
-    
+
     if (isLoggedIn)
     {
         return <Redirect to="/preparing" />;
     }
 
     return (
-        <div>
+            <>
             <div className="wrapper">
                 {showPopup == 't' && <HelperBox content="Thanks for registration.  Now you can login!" />}
                 {/* <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a> */}
                 {/* <a className="login-banner-text">Random</a> */}
             </div>
-            <img className='cube-animation' src={cube} alt="cube_animation" />
-            <FadeIn delay={250}>
-            <div className="landing-page">
-                <div className="landing-page-text">Machine Learning Runner</div>
-                <div className='landing-page-information-text'>
-                    Upload data.
-                    Run model.
-                    Analyze.
-                </div>
-
-                <div className="login-page">
-                    <a className="register-item logo-register"><img className='logo' src={logo} alt="logo_but" /></a>
-                    <div className="login-page-content">
-                        <form onSubmit={handleLogin}>
-                            <div className="login-item">
-                                <input
-                                    type="text"
-                                    className="input-text"
-                                    name="email"
-                                    placeholder="Email"
-                                    value={username}
-                                    onChange={onChangeUsername}
-                                />
+            <div className="landing-page-wrapper">
+                <div className="landing-page-content">
+                    <FadeIn delay={250}>
+                        <div className="landing-page">
+                            <div className="landing-page-text">Machine Learning Runner</div>
+                            <div className="landing-page-information-text-wrapper">
+                                <div className='landing-page-information-text'>
+                                    Upload data.
+                                    Run model.
+                                    Analyze.
+                                </div>
                             </div>
-                            <div className="login-item">
-                                <input
-                                    type="password"
-                                    className="input-text"
-                                    name="password"
-                                    placeholder="Password"
-                                    value={password}
-                                    onChange={onChangePassword}
-                                />
-                            </div>
-                            <div className="login-item">
-                                <button className="submit-button" disabled={loading}>
-                                    <span>Login</span>
-                                </button>
-                            </div>
-                            {message && (
-                                <div className="login-item">
-                                    <div className="alert-text">
-                                        {message}
+                            <div className="login-form-wrapper">
+                                <div className="login-form">
+                                    <img className='logo' src={logo} alt="logo_but" />
+                                    <div className="login-page-content">
+                                        <form onSubmit={handleLogin}>
+                                            <div className="login-item">
+                                                <input
+                                                    type="text"
+                                                    className="input-text"
+                                                    name="email"
+                                                    placeholder="Email"
+                                                    value={username}
+                                                    onChange={onChangeUsername}
+                                                />
+                                            </div>
+                                            <div className="login-item">
+                                                <input
+                                                    type="password"
+                                                    className="input-text"
+                                                    name="password"
+                                                    placeholder="Password"
+                                                    value={password}
+                                                    onChange={onChangePassword}
+                                                />
+                                            </div>
+                                            <div className="login-item">
+                                                <button className="submit-button" disabled={loading}>
+                                                    <span>Login</span>
+                                                </button>
+                                            </div>
+                                            {message && (
+                                                <div className="login-item">
+                                                    <div className="alert-text">
+                                                        {message}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </form>
+                                        <div className="login-link">
+                                            <p className="login-link-text" >Do not have an account?</p>
+                                            <Link className="login-link-reference" to="/register">Register</Link>
+                                        </div>
                                     </div>
                                 </div>
-                            )}
-                        </form>
-                        <div className="login-link">
-                            <p className="login-link-text" >Do not have an account?</p>
-                            <Link className="login-link-reference" to="/register">Register</Link>
+                            </div>
+                            <div className="cube-image-wrapper">
+                                <img className='cube-animation fade-in-image' src={cube} alt="cube_animation" />
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </FadeIn>
+
+
+                </div >
             </div>
-                </FadeIn>
-        </div >
+            </>
     );
 }
 

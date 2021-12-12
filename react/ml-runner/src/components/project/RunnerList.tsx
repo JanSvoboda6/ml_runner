@@ -33,7 +33,7 @@ function RunnerList(props: any)
                     {
                         runners.push({ projectId: runner.project.id, runnerId: runner.id })
                     });
-                    setRunners(runners);
+                    setRunners(runners.reverse());
                     console.log(res.data);
                 },
                 (error) =>
@@ -55,8 +55,7 @@ function RunnerList(props: any)
             <ul className="runner-list-inside">
                 <FadeIn delay={25}>
                 {runners.map(runner => (
-                    <li key={runner.runnerId} className="runner-item">
-                        
+                    <li key={runner.runnerId} className="runner-item">        
                             <Runner projectName={props.projectName} projectId={runner.projectId} runnerId={runner.runnerId} />
                     </li>
                 ))}

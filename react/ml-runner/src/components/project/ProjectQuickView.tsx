@@ -9,12 +9,13 @@ import stopButton from '../../styles/stop-button.png';
 import ProjectStatistics from "../visualization/ProjectStatistics";
 import RunnerForm from "./RunnerForm";
 import RunnerList from "./RunnerList";
+//import "../../styles/ProjectQuickView.css";
 
 const API_URL = "http://localhost:8080/api/project";
 
 const ProjectQuickView = (props: any) =>
 {
-    return (<div>
+    return (<div className="project-quick-view">
         <div className="control-panel">
             <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal>
                 {close => (<RunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => close()} />)}
