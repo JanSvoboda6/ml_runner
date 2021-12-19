@@ -56,8 +56,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -74,7 +73,6 @@
   },
   "devDependencies": {
     "@types/react-burger-menu": "^2.8.2",
-    "eslint-plugin-react-hooks": "^4.2.0",
     "redux-devtools-extension": "^2.13.9"
   }
 }

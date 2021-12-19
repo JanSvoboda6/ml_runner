@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import RunnerService from "../../services/RunnerService";
-import loadingIcon from '../../styles/loading_icon.svg';
 import loadingAnimation from '../../styles/loading_graphics.gif';
 import authorizationHeader from "../../services/AuthorizationHeader";
 
@@ -15,7 +14,7 @@ interface Parameters
 
 function Runner(props: any)
 {
-    let intervalId:any;
+    let intervalId: any;
     const [isFinished, setFinished] = useState(false);
     const [firstLabelResult, setFirstLabelResult] = useState<number | undefined>(undefined);
     const [secondLabelResult, setSecondLabelResult] = useState<number | undefined>(undefined);
@@ -66,9 +65,6 @@ function Runner(props: any)
             .then(
                 (res) =>
                 {
-                    console.log(res.data.isFinished);
-                    console.log(res.data.firstLabelResult);
-                    console.log(res.data.secondLabelResult);
                     setFinished(res.data.isFinished);
                     if (res.data.isFinished)
                     {
@@ -83,7 +79,7 @@ function Runner(props: any)
 
     return (
         <div>
-            <p> RUNNER ID:{props.runnerId}</p>
+            <p> RUNNER ID: {props.runnerId}</p>
             <p>Gamma parameter: {parameters.gamma} </p>
             <p>C parameter: {parameters.c}</p>
             <div className="running-indicator">{!isFinished && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_icon" />}</div>

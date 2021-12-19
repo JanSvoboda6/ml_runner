@@ -1,28 +1,25 @@
-import axios, { AxiosResponse } from "axios";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import {useHistory } from "react-router-dom";
 import Popup from "reactjs-popup";
-import RunnerService from "../../services/RunnerService";
-import playButton from '../../styles/play-button.png';
-import stopButton from '../../styles/stop-button.png';
-import ProjectStatistics from "../visualization/ProjectStatistics";
 import RunnerForm from "./RunnerForm";
 import RunnerList from "./RunnerList";
-//import "../../styles/ProjectQuickView.css";
 
 const API_URL = "http://localhost:8080/api/project";
 
 const ProjectQuickView = (props: any) =>
 {
+    let history = useHistory();
+    const redirectToAnalysisPage = () =>
+    {
+        history.push('/analysis');
+    }
+
     return (<div className="project-quick-view">
         <div className="control-panel">
             <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal>
                 {close => (<RunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => close()} />)}
             </Popup>
-            <Popup trigger={<button className="project-control-panel-button">Statistics</button>} position="right center" modal>
-                {close => (<ProjectStatistics projectName={props.name} projectId={props.id} handleCloseButton={() => close()} />)}
-            </Popup>
+            <button className="project-control-panel-button" onClick={redirectToAnalysisPage}>Statistics</button>
         </div>
         <div className="project-name">
             <h2>{props.name}</h2>

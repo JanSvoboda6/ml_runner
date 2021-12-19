@@ -49,7 +49,7 @@ public class ProjectController
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Project> getProjects(@RequestHeader(name="Authorization") String token)
+    public List<Project> getProjects(@RequestHeader(name="Authorization") String token) throws InterruptedException
     {
         String username = jsonWebTokenUtility.getUsernameFromJwtToken(token);
         Optional<User> user = userRepository.findByUsername(username);
@@ -96,7 +96,9 @@ public class ProjectController
             request.put("runnerId", frontendRequest.getRunnerId());
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<>(request.toString(), headers);
+            HttpEntity<String> entity = new HttpEntity<>(
+                    request.toString(),
+                    headers);
             Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
             if(containerEntity.isPresent())
             {
@@ -162,15 +164,4 @@ public class ProjectController
         }
         return Collections.emptyList();
     }
-//    String username = jsonWebTokenUtility.getUsernameFromJwtToken(token);
-//    Optional<User> user = userRepository.findByUsername(username);
-//        if(user.isPresent())
-//    {
-//        Project project = projectRepository.getById(id);
-//        if(user.get() == project.getUser())
-//        {
-//            return runnerRepository.findAllByProjectId(id);
-//        }
-//    }
-//        return Collections.emptyList();
 }

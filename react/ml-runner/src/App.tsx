@@ -39,8 +39,6 @@ class App extends Component<AppProps, User>
 
   render()
   {
-    const user = this.state;
-
     return (
       <div>
         <style>
@@ -55,7 +53,6 @@ class App extends Component<AppProps, User>
               <Route exact path="/logout" component={Login} />
               <PrivateRoute exact path="/projects" component={Board} />
               <PrivateRoute exact path="/datasets" component={DatasetPage} />
-              <PrivateRoute exact path="/summary" component={Summary} />
               <PrivateRoute exact path="/newproject" component={Project} />
               <PrivateRoute exact path="/preparing" component={EnvironmentPreparation} />
               <PrivateRoute exact path="/analysis" component={Analysis} />

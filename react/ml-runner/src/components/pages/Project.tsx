@@ -8,6 +8,7 @@ import Popup from "reactjs-popup";
 import Datasets from "../dataset/Datasets";
 import "../../styles/Project.css";
 import SelectableDataset from "../dataset/SelectableDataset";
+import FadeIn from "react-fade-in";
 
 function Project()
 {
@@ -77,38 +78,40 @@ function Project()
     return (
         <div>
             <Navbar start="start-at-new-project" />
-            <div className="project-form">
-                <div className="project-form-block"> <input type="text" onChange={handleNameChange} placeholder="Project Name" /> </div>
-                <div className="project-form-block project-form-block-data">
-                    <input className="label-name" type="text" onChange={handleFirstLabelChange} placeholder="First label" />
-                    <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center" modal>
-                        {close => (
-                            <SelectableDataset handleFolderSelection={(folder) => { handleFirstLabelFolderSelection(folder); close(); }} />
-                        )
-                        }
-                    </Popup>
-                    {firstLabelFolder && <div className="text-confirm">Selected: {firstLabelFolder}</div>}
-                </div>
-                <div className="project-form-block project-form-block-data">
-                    <input className="label-name" type="text" onChange={handleSecondLabelChange} placeholder="Second label" />
-                    <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center" modal>
-                        {close => (
-                            <SelectableDataset handleFolderSelection={(folder) => { handleSecondLabelFolderSelection(folder); close(); }} />
-                        )
-                        }
-                    </Popup>
-                    {secondLabelFolder && <div className="text-confirm">Selected: {secondLabelFolder}</div>}
-                </div>
-                <div className="project-form-block">
-                    <div className="model-select-text">Choose algorithm: </div>
-                    <select name="model-select" onChange={handleModelSelection}>
-                        <option value="Support Vector Machines">Support Vector Machines</option>
-                        <option value="Support Vector Machines">More models will be added in the future...</option>
-                    </select>
-                </div>
-                {/* <div className="project-form-block"><button className="open-dataset-button" onClick={handleDatasetOpening}>Open</button></div> */}
-                <div className="project-form-block"><button className="save-button" onClick={handleProjectSaving}>Save</button></div>
+            <FadeIn>
+                <div className="project-form">
+                    <div className="project-form-block"> <input type="text" onChange={handleNameChange} placeholder="Project Name" /> </div>
+                    <div className="project-form-block project-form-block-data">
+                        <input className="label-name" type="text" onChange={handleFirstLabelChange} placeholder="First label" />
+                        <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center" modal>
+                            {close => (
+                                <SelectableDataset handleFolderSelection={(folder) => { handleFirstLabelFolderSelection(folder); close(); }} />
+                            )
+                            }
+                        </Popup>
+                        {firstLabelFolder && <div className="text-confirm">Selected: {firstLabelFolder}</div>}
+                    </div>
+                    <div className="project-form-block project-form-block-data">
+                        <input className="label-name" type="text" onChange={handleSecondLabelChange} placeholder="Second label" />
+                        <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center" modal>
+                            {close => (
+                                <SelectableDataset handleFolderSelection={(folder) => { handleSecondLabelFolderSelection(folder); close(); }} />
+                            )
+                            }
+                        </Popup>
+                        {secondLabelFolder && <div className="text-confirm">Selected: {secondLabelFolder}</div>}
+                    </div>
+                    <div className="project-form-block">
+                        <div className="model-select-text">Choose algorithm: </div>
+                        <select name="model-select" onChange={handleModelSelection}>
+                            <option value="Support Vector Machines">Support Vector Machines</option>
+                            <option value="Support Vector Machines">More models will be added in the future...</option>
+                        </select>
+                    </div>
+                    {/* <div className="project-form-block"><button className="open-dataset-button" onClick={handleDatasetOpening}>Open</button></div> */}
+                    <div className="project-form-block"><button className="save-button" onClick={handleProjectSaving}>Save</button></div>
             </div>
+            </FadeIn>
         </div>
     )
 }

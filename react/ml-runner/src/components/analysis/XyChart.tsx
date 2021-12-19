@@ -9,7 +9,7 @@ export type XYChartProps = {
     height: number;
 };
 
-type City = 'San Francisco' | 'New York' | 'Austin';
+type City = 'Class #1' | 'Class #2' | 'Average Accuracy';
 
 export default function XyChart({ height }: XYChartProps)
 {
@@ -239,7 +239,7 @@ export default function XyChart({ height }: XYChartProps)
                         key={ `temp-axis-${ animationTrajectory }-${ renderHorizontally }` }
                         label={
                             stackOffset == null
-                                ? 'Temperature (°F)'
+                                ? 'Accuracy %'
                                 : stackOffset === 'expand'
                                     ? 'Fraction of total temperature'
                                     : ''
@@ -313,15 +313,14 @@ export default function XyChart({ height }: XYChartProps)
                         <em
                           style={{
                             color: colorScale?.(city),
-                            textDecoration:
-                              tooltipData?.nearestDatum?.key === city ? 'underline' : undefined,
+
                           }}
                         >
-                          {city}
+                          Accuracy
                         </em>{' '}
                         {temperature == null || Number.isNaN(temperature)
                           ? '–'
-                          : `${temperature}° F`}
+                          : `${temperature}%`}
                       </div>
                     );
                   })}

@@ -59,7 +59,6 @@ public class DockerService
 
         ContainerEntity containerEntity = createContainerEntity(userId);
         Ports portBindings = createPortBindings(containerEntity.getId());
-
         dockerClient.buildImageCmd()
                 .withDockerfile(new File("/Users/jan/dev/thesis/ml_runner/docker/Dockerfile"))
                 .withPull(true)
@@ -89,40 +88,6 @@ public class DockerService
     {
         return "container-user-" + userId.toString();
     }
-
-//    public void copyFiles()
-//    {
-//        CloseableHttpClient httpClient = HttpClients.createDefault();
-//        HttpPost uploadFile = new HttpPost("http://localhost:9999");
-//        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-//        builder.addTextBody("field1", "yes", ContentType.TEXT_PLAIN);
-//
-//        File file = new File("/Users/jan/app_files/text.txt");
-//        try
-//        {
-//            builder.addBinaryBody(
-//                    "file",
-//                    new FileInputStream(file),
-//                    ContentType.DEFAULT_BINARY,
-//                    file.getName()
-//            );
-//        } catch (FileNotFoundException e)
-//        {
-//            e.printStackTrace();
-//        }
-//
-//        HttpEntity multipart = builder.build();
-//        uploadFile.setEntity(multipart);
-//
-//        CloseableHttpResponse response = null;
-//        try
-//        {
-//            response = httpClient.execute(uploadFile);
-//        } catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
 
     private boolean containerHasBeenAlreadyBuilt(Long userId)
     {

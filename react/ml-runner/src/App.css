@@ -13,6 +13,7 @@
   --border-color: #221c1c;
   --form-input-color: rgb(20,25,25);
   --font: 'Roboto Mono', monospace;
+  --opacity: 90%;
 }
 
 input:focus{
@@ -220,6 +221,17 @@ width: 7rem;
   cursor:pointer;
 }
 
+.loading-animation-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.project-loading-animation{
+  width: 250px;
+}
+
 .project-control-panel-button{
   border: 0.16em solid rgba(255, 255, 255, 0);
   background-color: transparent;
@@ -384,7 +396,6 @@ width: 7rem;
   position: fixed;
   height: 3.1rem;
   width: 100%;
-  background: var(--navbar);
   padding: 0;
   display: flex; 
   align-items: center;
@@ -882,7 +893,7 @@ input[type="file"]
 
 .total-list{
   border: 2px solid;
-  width: 20rem;
+  width: 25rem;
   border-color: var(--border-color);
   background-color: var(--bg-secondary);
   border-radius: 15px;
@@ -897,7 +908,7 @@ input[type="file"]
 
 .total-number{
   margin-top: 0.5rem;
-  color: var(--accent);
+  color: var(--confirm-color);
   text-align: center;
   font-weight: bold;
 }
@@ -917,12 +928,15 @@ input[type="file"]
   background-color: var(--bg-secondary);
 }
 
-.file-editor-loading-box
-{
-  min-height: 5vh;
-  text-align: center;
-  padding-top: 5vh;
-  min-height: 15.65vh;
+.loading-animation-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.dataset-loading-animation{
+  width: 250px;
 }
 
 /* #endregion DATASET */
@@ -989,6 +1003,15 @@ input[type="file"]
     max-width: 15rem;
   }
 }
+
+.heatmap-names{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 365px;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+}
 .heatmap-bin{
   color: var(--text-primary);
 }
@@ -997,6 +1020,8 @@ input[type="file"]
 }
 
 .heatmap-wrapper{
+  position: relative;
+  left: 40px;
   display: flex; 
   justify-content: center;
   flex-direction: row;
@@ -1012,6 +1037,12 @@ input[type="file"]
   background-color: transparent;
 }
 
+.underlined-text{
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  margin-bottom: 10px;
+}
+
 .analysis-heatmap{
   display: flex; 
   flex-direction: row;
@@ -1020,8 +1051,7 @@ input[type="file"]
 }
 
 .analysis-graph{
-  padding: 30px;
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .legends{

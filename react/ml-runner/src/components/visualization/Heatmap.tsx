@@ -70,8 +70,6 @@ export default ({
     separation = 50
 }: HeatmapProps) =>
 {
-
-
     const[valueOfSelectedBin, setValueOfSelectedBin] = useState(0);
 
     const onBinClick = (bin: any) =>
@@ -94,7 +92,7 @@ export default ({
 
     return width < 10 ? null : (
         <div className='heatmap-box'>
-            <p className='selected-value'>Selected Value: {valueOfSelectedBin.toFixed(3)}</p>
+            <p className='selected-value'>Selected Value: {valueOfSelectedBin.toFixed(3)}&#37;</p>
         <svg width={ width/2 } height={ height }>
            
             <g transform={`translate(${margin.left + 30},${margin.top - 150})`}>

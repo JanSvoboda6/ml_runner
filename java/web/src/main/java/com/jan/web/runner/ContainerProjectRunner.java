@@ -2,7 +2,6 @@ package com.jan.web.runner;
 
 import com.jan.web.Project;
 import com.jan.web.ProjectRepository;
-import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.ContainerUtility;
 import org.json.JSONException;
@@ -14,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
 
 @Component
 public class ContainerProjectRunner implements ProjectRunner

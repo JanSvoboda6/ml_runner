@@ -8,6 +8,8 @@ import { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { FileInformation } from '../../types';
 import DatasetService from './DatasetService';
+import loadingAnimation from "../../styles/loading_graphics.gif";
+import FadeIn from 'react-fade-in';
 
 const API_URL = "http://localhost:8080/api";
 
@@ -200,44 +202,50 @@ function Datasets(props)
 
     if (!isLoaded)
     {
-        return <div className="file-editor-wrapper file-editor-loading-box">Loading...</div>;
+        return <FadeIn>
+                    <div className='loading-animation-wrapper'>
+                        <img className='dataset-loading-animation' src={loadingAnimation} alt="loadingAnimation" />
+                    </div>
+               </FadeIn>;
     }
     return (
         <div>
-            <div className="file-editor-wrapper">
-                <FileBrowser
-                    files={files.map(file => 
-                    {
-                        const modifiedTimeInUnixFormat = file.modified ? file.modified : 0;
-                        if (modifiedTimeInUnixFormat !== 0)
+            <FadeIn>
+                <div className="file-editor-wrapper">
+                    <FileBrowser
+                        files={files.map(file =>
                         {
-                            const modified = Moment.duration(modifiedTimeInUnixFormat * 1000);
+                            const modifiedTimeInUnixFormat = file.modified ? file.modified : 0;
+                            if (modifiedTimeInUnixFormat !== 0)
+                            {
+                                const modified = Moment.duration(modifiedTimeInUnixFormat * 1000);
+                                return ({
+                                    key: file.key,
+                                    modified: +modified,
+                                    size: file.size
+                                })
+                            }
                             return ({
-                                key: file.key,
-                                modified: +modified,
-                                size: file.size
+                                key: file.key
                             })
-                        }
-                        return ({
-                            key: file.key
-                        })
-                    })}
-                    icons={Icons.FontAwesome(4)}
+                        })}
+                        icons={Icons.FontAwesome(4)}
 
-                    onCreateFolder={handleCreateFolder}
-                    onCreateFiles={handleCreateFiles}
-                    onSelectFolder={(folder) => handleFolderSelection(folder)}
-                // onMoveFolder={this.handleRenameFolder}
-                // onMoveFile={this.handleRenameFile}
-                // onRenameFolder={this.handleRenameFolder}
-                // onRenameFile={this.handleRenameFile}
-                // onDeleteFolder={this.handleDeleteFolder}
-                // onDeleteFile={(fileKey) => this.handleDeleteFile(fileKey)}
-                // onSelectFile={(file) => this.handleFileSelection(file)}
-                // detailRenderer={(fileInformation) => this.handleNone(fileInformation)}
+                        onCreateFolder={handleCreateFolder}
+                        onCreateFiles={handleCreateFiles}
+                        onSelectFolder={(folder) => handleFolderSelection(folder)}
+                    // onMoveFolder={this.handleRenameFolder}
+                    // onMoveFile={this.handleRenameFile}
+                    // onRenameFolder={this.handleRenameFolder}
+                    // onRenameFile={this.handleRenameFile}
+                    // onDeleteFolder={this.handleDeleteFolder}
+                    // onDeleteFile={(fileKey) => this.handleDeleteFile(fileKey)}
+                    // onSelectFile={(file) => this.handleFileSelection(file)}
+                    // detailRenderer={(fileInformation) => this.handleNone(fileInformation)}
                 />
 
-            </div>
+                </div>
+            </FadeIn>;
         </div >
     )
 }

@@ -2,8 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');
 
 button[type=submit]
-{
- 
+{ 
   border: 0.2em solid rgba(255, 255, 255, 0);
   background-color: rgba(255, 208, 208, 0.589);
   border-radius: 2em;
@@ -43,6 +42,7 @@ button.deleting
 input[type=search]{
   background-color: black;
   color: white;
+  opacity: 90%;
   font-size:'Roboto Mono', monospace;
   font-size: 19px;
 }
@@ -52,10 +52,26 @@ div.rendered-react-keyed-file-browser div.files table th, div.rendered-react-key
 }
 
 div.rendered-react-keyed-file-browser div.files table tr.selected td {
-  font-weight: normal; 
+  font-weight: normal;
 }
 
 div.rendered-react-keyed-file-browser div.files table tr.selected td.name:after 
 {
-  background: #f7e4e4; 
+  background: rgb(82, 190, 136);
+}
+
+div.rendered-react-keyed-file-browser div.files table thead th {
+    border-bottom: 1px solid grey; 
+}
+
+div.rendered-react-keyed-file-browser div.files table tr:not(:last-child) td {
+    border-bottom: 1px solid grey; 
+}
+
+div.rendered-react-keyed-file-browser div.action-bar input[type="search"] {
+    border: 1px solid grey; 
+  }
+
+div.rendered-react-keyed-file-browser div.files table tr.dragover td, div.rendered-react-keyed-file-browser div.files table tr.dragover th {
+  color: black ;
 }
