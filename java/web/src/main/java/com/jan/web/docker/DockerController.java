@@ -29,7 +29,7 @@ public class DockerController
     }
 
     @GetMapping
-    public ResponseEntity<?> prepareContainer(@RequestHeader(name="Authorization") String token)
+    public ResponseEntity<?> prepareContainer(@RequestHeader(name = "Authorization") String token)
     {
         dockerService.buildDockerContainer(getUserId(token));
         return ResponseEntity.ok("Container has been prepared.");
@@ -39,7 +39,7 @@ public class DockerController
     {
         String username = jsonWebTokenUtility.getUsernameFromJwtToken(token);
         Optional<User> user = userRepository.findByUsername(username);
-        if( user.isPresent())
+        if (user.isPresent())
         {
             return user.get().getId();
         }

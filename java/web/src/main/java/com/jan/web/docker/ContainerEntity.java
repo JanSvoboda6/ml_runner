@@ -16,11 +16,8 @@ public class ContainerEntity
     @OneToOne
     private User user;
 
-    private boolean isRunning;
-
     public ContainerEntity()
     {
-
     }
 
     public ContainerEntity(User user)
@@ -42,15 +39,5 @@ public class ContainerEntity
     public User getUser()
     {
         return user;
-    }
-
-    public boolean isRunning()
-    {
-        return isRunning;
-    }
-
-    public void setRunning(boolean running)
-    {
-        isRunning = running;
     }
 }

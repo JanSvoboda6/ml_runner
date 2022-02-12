@@ -1,6 +1,5 @@
 package com.jan.web.docker;
 
-import com.jan.web.fileservice.FileService;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;

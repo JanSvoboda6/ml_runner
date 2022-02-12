@@ -9,25 +9,22 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Set;
 
 @Component
 public class DockerService
 {
+    @Value("${jan.dockerFilePath}")
+    private String dockerFilePath;
+
+    @Value("${jan.dockerImageName}")
+    private String dockerImageName;
+
     private final int PYTHON_SERVER_PORT = 9999;
     private final DockerClient dockerClient;
     private final ContainerRepository containerRepository;
@@ -42,11 +39,13 @@ public class DockerService
         dockerClient = DockerClientBuilder.getInstance(config.build()).build();
     }
 
-    public DockerService(ContainerRepository containerRepository, UserRepository userRepository, DockerClient dockerClient)
+    public DockerService(ContainerRepository containerRepository, UserRepository userRepository, DockerClient dockerClient, String dockerFilePath, String dockerImageName)
     {
         this.containerRepository = containerRepository;
         this.userRepository = userRepository;
         this.dockerClient = dockerClient;
+        this.dockerFilePath = dockerFilePath;
+        this.dockerImageName = dockerImageName;
     }
 
     public void buildDockerContainer(Long userId)
@@ -60,14 +59,14 @@ public class DockerService
         ContainerEntity containerEntity = createContainerEntity(userId);
         Ports portBindings = createPortBindings(containerEntity.getId());
         dockerClient.buildImageCmd()
-                .withDockerfile(new File("/Users/jan/dev/thesis/ml_runner/docker/Dockerfile"))
+                .withDockerfile(new File(dockerFilePath))
                 .withPull(true)
                 .withNoCache(true)
-                .withTags(Set.of("python_server"))
+                .withTags(Set.of(dockerImageName))
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
-        String containerId = dockerClient.createContainerCmd("python_server")
+        String containerId = dockerClient.createContainerCmd(dockerImageName)
                 .withName(provideContainerName(userId))
                 .withHostName(provideContainerName(userId))
                 .withExposedPorts(ExposedPort.tcp(PYTHON_SERVER_PORT))

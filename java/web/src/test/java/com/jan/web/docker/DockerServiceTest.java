@@ -9,17 +9,19 @@ import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.nio.file.FileSystems;
 import java.util.List;
 
 @SpringBootTest
 class DockerServiceTest
 {
-    private final long USER_ID = 999L;
-    private final long HOST_PORT = 15000L;
-    String CONTAINER_NAME = "container-user-" + USER_ID;
-    String CONTAINER_NAME_WITH_ADDED_SLASH = "/" + CONTAINER_NAME;
+    private static final long USER_ID = 999L;
+    private static final long HOST_PORT = 15000L;
+    private static final String CONTAINER_NAME = "container-user-" + USER_ID;
+    private static final String CONTAINER_NAME_WITH_ADDED_SLASH = "/" + CONTAINER_NAME;
     private DockerService dockerService;
     private ContainerRepository containerRepository;
     private DockerClient dockerClient;
@@ -34,7 +36,13 @@ class DockerServiceTest
 
         containerRepository = Mockito.mock(ContainerRepository.class);
         userRepository = Mockito.mock(UserRepository.class);
-        dockerService = new DockerService(containerRepository, userRepository);
+        String dockerFilePath = FileSystems.getDefault().getPath("../../docker/Dockerfile").normalize().toAbsolutePath().toString();
+
+        dockerService = new DockerService(containerRepository,
+                userRepository,
+                dockerClient,
+                dockerFilePath,
+                "python_server");
     }
 
     @Test
@@ -74,7 +82,11 @@ class DockerServiceTest
     {
         DockerClient dockerClient = Mockito.mock(DockerClient.class);
         Mockito.when(containerRepository.existsByUserId(USER_ID)).thenReturn(true);
-        DockerService dockerServiceWithMockedDockerClient = new DockerService(containerRepository, userRepository, dockerClient);
+        DockerService dockerServiceWithMockedDockerClient = new DockerService(containerRepository,
+                userRepository,
+                dockerClient,
+                "Random path to docker file",
+                "Random name of Docker image");
 
         dockerServiceWithMockedDockerClient.buildDockerContainer(USER_ID);
 

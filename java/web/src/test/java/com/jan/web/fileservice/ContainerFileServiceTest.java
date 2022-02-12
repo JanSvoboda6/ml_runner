@@ -13,16 +13,23 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.FileSystems;
 import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
+@ExtendWith(SpringExtension.class)    // @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(initializers = ConfigDataApplicationContextInitializer.class)
 class ContainerFileServiceTest
 {
     private final long USER_ID = 999L;
@@ -52,7 +59,8 @@ class ContainerFileServiceTest
         Mockito.when(containerRepository.save(Mockito.any())).thenReturn(containerEntity);
         Mockito.when(containerRepository.findById(CONTAINER_ID)).thenReturn(Optional.of(containerEntity));
 
-        dockerService = new DockerService(containerRepository, userRepository);
+        String dockerFilePath = FileSystems.getDefault().getPath("../../docker/Dockerfile").normalize().toAbsolutePath().toString();
+        dockerService = new DockerService(containerRepository, userRepository, dockerClient, dockerFilePath, "python_server");
         fileService = new ContainerFileService(new RestTemplate(), containerRepository);
 
         buildDockerContainerAndWaitForTheServerToStart();
