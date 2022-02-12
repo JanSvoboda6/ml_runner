@@ -12,7 +12,6 @@ class ContainerFileServiceTest
 {
     @Autowired
     ContainerFileService fileService;
-
     @Test
     public void whenGettingAllFiles_thenProperFileInformationListIsReturned()
     {

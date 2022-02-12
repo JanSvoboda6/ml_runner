@@ -206,7 +206,7 @@ function Datasets(props)
                     <div className='loading-animation-wrapper'>
                         <img className='dataset-loading-animation' src={loadingAnimation} alt="loadingAnimation" />
                     </div>
-               </FadeIn>;
+               </FadeIn>
     }
     return (
         <div>
@@ -245,7 +245,7 @@ function Datasets(props)
                 />
 
                 </div>
-            </FadeIn>;
+            </FadeIn>
         </div >
     )
 }

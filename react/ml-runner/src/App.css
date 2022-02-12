@@ -400,12 +400,11 @@ width: 7rem;
   display: flex; 
   align-items: center;
   overflow: hidden;
-  opacity: var(--opacity);
   /* border-style: solid;
   border-color: rgb(250, 234, 234); */
   border-width: 0px 0px 2px 0px;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   -webkit-box-shadow: 0px 10px 13px -7px var(--bg-secondary), 0px 3px 3px 2px var(--bg-third); 
   box-shadow: 0px 10px 13px -7px var(--bg-secondary), 0px 0px 0px 1px var(--bg-third);
   z-index: 1;
