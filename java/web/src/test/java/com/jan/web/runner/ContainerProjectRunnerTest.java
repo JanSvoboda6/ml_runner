@@ -1,6 +1,7 @@
 package com.jan.web.runner;
 
 import com.jan.web.Project;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -36,5 +37,11 @@ public class ContainerProjectRunnerTest
 
         Mockito.verify(restTemplate, Mockito.times(1))
                 .exchange(Mockito.anyString(), Mockito.any(HttpMethod.class), Mockito.any(), Mockito.any(Class.class));
+    }
+
+    @Test
+    public void whenStopMethodIsCalled_thenContainerIsInformed()
+    {
+        Assertions.fail("Test case not implemented.");
     }
 }

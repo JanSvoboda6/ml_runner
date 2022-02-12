@@ -1,5 +1,8 @@
-package com.jan.web;
+package com.jan.web.runner;
 
+import com.jan.web.Project;
+import com.jan.web.ProjectRepository;
+import com.jan.web.RunRequest;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.ContainerUtility;
@@ -26,6 +29,7 @@ public class ModelRunnerController
     private final ContainerUtility containerUtility;
     private final ProjectRunner projectRunner;
     private final RestTemplate restTemplate;
+    private final ModelRunnerService runnerService;
 
     @Autowired
     public ModelRunnerController(ProjectRepository projectRepository,
@@ -33,7 +37,8 @@ public class ModelRunnerController
                                  ContainerRepository containerRepository,
                                  ContainerUtility containerUtility,
                                  ProjectRunner projectRunner,
-                                 RestTemplate restTemplate)
+                                 RestTemplate restTemplate,
+                                 ModelRunnerService runnerService)
     {
         this.projectRepository = projectRepository;
         this.runnerRepository = runnerRepository;
@@ -41,6 +46,7 @@ public class ModelRunnerController
         this.containerUtility = containerUtility;
         this.projectRunner = projectRunner;
         this.restTemplate = restTemplate;
+        this.runnerService = runnerService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,14 +64,7 @@ public class ModelRunnerController
             Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
             if (containerEntity.isPresent())
             {
-                Runner runner = new Runner();
-                runner.setProject(project.get());
-                runner.setGammaParameter(request.getGammaParameter());
-                runner.setCParameter(request.getcParameter());
-                runner.setFinished(false);
-                runnerRepository.save(runner);
-
-                projectRunner.run(runner, containerEntity.get().getId());
+                runnerService.runProject(request, project.get(), containerEntity.get());
                 return ResponseEntity.ok().body("Project is running!");
             }
         }
