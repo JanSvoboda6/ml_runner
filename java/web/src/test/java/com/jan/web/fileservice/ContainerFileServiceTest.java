@@ -16,8 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 class ContainerFileServiceTest
@@ -30,13 +32,11 @@ class ContainerFileServiceTest
     private ContainerRepository containerRepository;
     private DockerClient dockerClient;
     private UserRepository userRepository;
-    private Long containerId;
 
-    @Autowired
     ContainerFileService fileService;
 
     @BeforeEach
-    void before()
+    void before() throws InterruptedException
     {
         DefaultDockerClientConfig.Builder config = DefaultDockerClientConfig.createDefaultConfigBuilder();
         dockerClient = DockerClientBuilder.getInstance(config.build()).build();
@@ -51,19 +51,21 @@ class ContainerFileServiceTest
         ContainerEntity containerEntity = new ContainerEntity(CONTAINER_ID, user);
 
         Mockito.when(containerRepository.save(Mockito.any())).thenReturn(containerEntity);
+        Mockito.when(containerRepository.findById(CONTAINER_ID)).thenReturn(Optional.of(containerEntity));
 
         dockerService = new DockerService(containerRepository, userRepository);
+        fileService = new ContainerFileService(new RestTemplate(), containerRepository);
 
-        dockerService.buildDockerContainer(USER_ID);
+        buildDockerContainerAndWaitForTheServerToStart();
     }
 
     @Test
     public void whenCreatingDirectory_thenDirectoryIsCreatedInContainer()
     {
-        final String directoryName = "test_directory";
+        final String directoryName = "test_directory/";
         fileService.createDirectory(directoryName, CONTAINER_ID);
-
-        Assertions.fail("Test case not implemented.");
+        List<FileInformation> files = fileService.getAllFiles(CONTAINER_ID);
+        Assertions.assertThat(files.get(0).getKey()).isEqualTo(directoryName);
     }
 
     @Test
@@ -110,5 +112,11 @@ class ContainerFileServiceTest
         Assertions.assertThatCode(() -> dockerClient.pingCmd().exec())
                 .withFailMessage("Docker services cannot be reached. Make sure that Docker engine is running.")
                 .doesNotThrowAnyException();
+    }
+
+    private void buildDockerContainerAndWaitForTheServerToStart() throws InterruptedException
+    {
+        dockerService.buildDockerContainer(USER_ID);
+        Thread.sleep(500);
     }
 }
