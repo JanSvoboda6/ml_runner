@@ -17,25 +17,14 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ContainerProjectRunner implements ProjectRunner
 {
-
     private final RestTemplate restTemplate;
     private final RunnerRepository runnerRepository;
-    private final ProjectRepository projectRepository;
-    private final ContainerRepository containerRepository;
-    private final ContainerUtility containerUtility;
 
     @Autowired
-    public ContainerProjectRunner(RestTemplate restTemplate,
-                                  RunnerRepository runnerRepository,
-                                  ProjectRepository projectRepository,
-                                  ContainerRepository containerRepository,
-                                  ContainerUtility containerUtility)
+    public ContainerProjectRunner(RestTemplate restTemplate, RunnerRepository runnerRepository)
     {
         this.restTemplate = restTemplate;
         this.runnerRepository = runnerRepository;
-        this.projectRepository = projectRepository;
-        this.containerRepository = containerRepository;
-        this.containerUtility = containerUtility;
     }
 
     @Override
@@ -61,11 +50,7 @@ public class ContainerProjectRunner implements ProjectRunner
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
                 org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
-                ResponseEntity<String> response = restTemplate
-                        .exchange("http://localhost:" + containerId + "/runproject", HttpMethod.POST, entity, String.class);
-
-                //TODO Jan: respond
-                response.getStatusCode();
+                restTemplate.exchange("http://localhost:" + containerId + "/runproject", HttpMethod.POST, entity, String.class);
             }
 
         } catch (JSONException e)
