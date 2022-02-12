@@ -1,7 +1,5 @@
 package com.jan.web.fileservice;
 
-import java.util.List;
-
 public class Key
 {
     private String key;

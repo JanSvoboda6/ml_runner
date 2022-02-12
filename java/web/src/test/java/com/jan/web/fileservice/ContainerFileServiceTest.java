@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
-@ExtendWith(SpringExtension.class)    // @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(initializers = ConfigDataApplicationContextInitializer.class)
 class ContainerFileServiceTest
 {
     private final long USER_ID = 999L;
