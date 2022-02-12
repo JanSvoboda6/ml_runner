@@ -14,9 +14,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,9 +30,7 @@ class ContainerFileServiceTest
     String CONTAINER_NAME = "container-user-" + USER_ID;
     String CONTAINER_NAME_WITH_ADDED_SLASH = "/" + CONTAINER_NAME;
     private DockerService dockerService;
-    private ContainerRepository containerRepository;
     private DockerClient dockerClient;
-    private UserRepository userRepository;
 
     ContainerFileService fileService;
 
@@ -42,8 +41,8 @@ class ContainerFileServiceTest
         dockerClient = DockerClientBuilder.getInstance(config.build()).build();
         validateThatDockerIsRunning();
 
-        containerRepository = Mockito.mock(ContainerRepository.class);
-        userRepository = Mockito.mock(UserRepository.class);
+        ContainerRepository containerRepository = Mockito.mock(ContainerRepository.class);
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
 
         User user = new User(USER_ID, "user@domain.com", "password");
         Mockito.when(userRepository.getById(USER_ID)).thenReturn(user);
@@ -62,22 +61,23 @@ class ContainerFileServiceTest
     @Test
     public void whenCreatingDirectory_thenDirectoryIsCreatedInContainer()
     {
-        final String directoryName = "test_directory/";
-        fileService.createDirectory(directoryName, CONTAINER_ID);
+        final String directory = "test_directory/";
+        fileService.createDirectory(directory, CONTAINER_ID);
         List<FileInformation> files = fileService.getAllFiles(CONTAINER_ID);
-        Assertions.assertThat(files.get(0).getKey()).isEqualTo(directoryName);
+        Assertions.assertThat(files.get(0).getKey()).isEqualTo(directory);
     }
 
     @Test
     public void whenUploadingFiles_thenFilesAreStoredInContainer()
     {
-        Assertions.fail("Test case not implemented.");
-    }
+        final String fileName = "test_file.txt";
+        Keys keys = new Keys();
+        keys.setKeys(List.of(fileName));
+        List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]));
 
-    @Test
-    public void whenGettingAllFiles_thenProperFileInformationListIsReturned()
-    {
-        Assertions.fail("Test case not implemented.");
+        fileService.uploadFiles(keys, files, CONTAINER_ID);
+        List<FileInformation> uploadedFiles = fileService.getAllFiles(CONTAINER_ID);
+        Assertions.assertThat(uploadedFiles.get(0).getKey()).isEqualTo(fileName);
     }
 
     @AfterEach
