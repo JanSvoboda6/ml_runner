@@ -36,6 +36,11 @@ public class RequestValidatorImpl implements RequestValidator
     @Override
     public ContainerEntity validateContainerEntity(long containerEntityId)
     {
-        return null;
+        Optional<ContainerEntity> containerEntity = containerRepository.findById(containerEntityId);
+        if(containerEntity.isPresent())
+        {
+            return containerEntity.get();
+        }
+        throw new RuntimeException("The container with id " + containerEntityId + " does not exist.");
     }
 }
