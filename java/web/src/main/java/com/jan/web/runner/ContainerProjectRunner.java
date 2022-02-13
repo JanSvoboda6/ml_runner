@@ -30,21 +30,17 @@ public class ContainerProjectRunner implements ProjectRunner
     @Override
     public void run(Runner runner, long containerId)
     {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         try
         {
-            if (runnerRepository.findById(runner.getId()).isPresent())
-            {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(
-                        assembleRequest(runner).toString(),
-                        headers);
-                restTemplate.exchange("http://localhost:" + containerId + "/runproject", HttpMethod.POST, entity, String.class);
-            }
-
-        } catch (JSONException e)
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(
+                    assembleRequest(runner).toString(),
+                    headers);
+            restTemplate.exchange("http://localhost:" + containerId + "/runproject", HttpMethod.POST, entity, String.class);
+        } catch (Exception exception)
         {
-            e.printStackTrace();
+            throw new RuntimeException(exception);
         }
     }
 
