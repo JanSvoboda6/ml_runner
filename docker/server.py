@@ -32,7 +32,6 @@ def createDirectory():
 @app.route('/getfiles')
 def hello_world():
     directories, files = walk_directory(ROOT_DIRECTORY)
-    print(files)
     return jsonify({'directories': directories, 'files': files})
 
 
@@ -79,8 +78,7 @@ def isFinished():
         for line in log_file:
             if 'FINISHED' in line.split():
                 isFinished = True
-    
-    print(isFinished)
+
     return jsonify({'isFinished' : isFinished})
 
 
