@@ -14,12 +14,14 @@ public class RequestValidatorImpl implements RequestValidator
 {
     private final ProjectRepository projectRepository;
     private final ContainerRepository containerRepository;
+    private final RunnerRepository runnerRepository;
 
     @Autowired
-    public RequestValidatorImpl(ProjectRepository projectRepository, ContainerRepository containerRepository)
+    public RequestValidatorImpl(ProjectRepository projectRepository, ContainerRepository containerRepository, RunnerRepository runnerRepository)
     {
         this.projectRepository = projectRepository;
         this.containerRepository = containerRepository;
+        this.runnerRepository = runnerRepository;
     }
 
     @Override
@@ -41,6 +43,17 @@ public class RequestValidatorImpl implements RequestValidator
         {
             return containerEntity.get();
         }
-        throw new RuntimeException("The container with id " + containerEntityId + " does not exist.");
+        throw new RuntimeException("The container with id " + containerEntityId + " cannot be found!");
+    }
+
+    @Override
+    public Runner validateRunner(long runnerId)
+    {
+        Optional<Runner> runner = runnerRepository.findById(runnerId);
+        if(runner.isPresent())
+        {
+            return runner.get();
+        }
+        throw new RuntimeException("The runner with id " + runnerId + " cannot be found!");
     }
 }

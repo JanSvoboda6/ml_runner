@@ -7,4 +7,5 @@ public interface RequestValidator
 {
     Project validateProject(long projectId);
     ContainerEntity validateContainerEntity(long containerEntityId);
+    Runner validateRunner(long runnerId);
 }

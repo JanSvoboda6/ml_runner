@@ -85,6 +85,17 @@ public class ModelRunnerController
     @GetMapping("/result")
     public ResponseEntity<?> getResult(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId)
     {
+        ContainerEntity containerEntity;
+        try
+        {
+            containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
+            requestValidator.validateProject(projectId);
+            requestValidator.validateRunner(runnerId);
+        } catch (RuntimeException exception)
+        {
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+
         try
         {
             JSONObject response = new JSONObject();
@@ -97,23 +108,21 @@ public class ModelRunnerController
             HttpHeaders resultHeaders = new HttpHeaders();
             resultHeaders.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
-            Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
-            if (containerEntity.isPresent())
-            {
-                ResponseEntity<String> resultResponseFromContainer = restTemplate
-                        .exchange("http://localhost:" + containerEntity.get().getId() + "/project/runner/result", HttpMethod.POST, resultEntity, String.class);
+            ResponseEntity<String> resultResponseFromContainer = restTemplate
+                    .exchange("http://localhost:" + containerEntity.getId() + "/project/runner/result", HttpMethod.POST, resultEntity, String.class);
 
-                ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
+            ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
 
-                response.put("firstLabelResult", resultResponse.firstLabelResult);
-                response.put("secondLabelResult", resultResponse.secondLabelResult);
+            response.put("firstLabelResult", resultResponse.firstLabelResult);
+            response.put("secondLabelResult", resultResponse.secondLabelResult);
 
-                return ResponseEntity.ok(response.toString());
-            }
+            return ResponseEntity.ok(response.toString());
+
         } catch (Exception exception)
         {
             exception.printStackTrace();
         }
+
         return ResponseEntity.badRequest().body("Problem with getting results!");
     }
 }
