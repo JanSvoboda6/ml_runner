@@ -30,6 +30,7 @@ public class ModelRunnerController
     private final ProjectRunner projectRunner;
     private final RestTemplate restTemplate;
     private final ModelRunnerService runnerService;
+    private final RequestValidator requestValidator;
 
     @Autowired
     public ModelRunnerController(ProjectRepository projectRepository,
@@ -38,7 +39,8 @@ public class ModelRunnerController
                                  ContainerUtility containerUtility,
                                  ProjectRunner projectRunner,
                                  RestTemplate restTemplate,
-                                 ModelRunnerService runnerService)
+                                 ModelRunnerService runnerService,
+                                 RequestValidator requestValidator)
     {
         this.projectRepository = projectRepository;
         this.runnerRepository = runnerRepository;
@@ -47,6 +49,7 @@ public class ModelRunnerController
         this.projectRunner = projectRunner;
         this.restTemplate = restTemplate;
         this.runnerService = runnerService;
+        this.requestValidator = requestValidator;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -56,24 +59,31 @@ public class ModelRunnerController
     }
 
     @PostMapping("/run")
-    public ResponseEntity<?> runProject(@RequestHeader(name="Authorization") String token, @RequestBody RunRequest request) throws InterruptedException
+    public ResponseEntity<?> runProject(@RequestHeader(name = "Authorization") String token, @RequestBody RunRequest request)
     {
-        Optional<Project> project = projectRepository.findById(request.getProjectId());
-        if(project.isPresent())
+        Project project;
+        ContainerEntity containerEntity;
+        try
         {
-            Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
-            if (containerEntity.isPresent())
-            {
-                runnerService.runProject(request, project.get(), containerEntity.get());
-                return ResponseEntity.ok().body("Project is running!");
-            }
+            project = requestValidator.validateProject(request.getProjectId());
+            containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
+        } catch (RuntimeException exception)
+        {
+            return ResponseEntity.badRequest().body(exception.getMessage());
         }
 
-       return  ResponseEntity.badRequest().body("Problem with running selected project!");
+        try
+        {
+            runnerService.runProject(request, project, containerEntity);
+            return ResponseEntity.ok().body("Project is running!");
+        } catch (Exception exception)
+        {
+            return ResponseEntity.badRequest().body("Problem with running the selected project!");
+        }
     }
 
     @GetMapping("/result")
-    public ResponseEntity<?> getResult(@RequestHeader(name="Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId)
+    public ResponseEntity<?> getResult(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId)
     {
         try
         {
@@ -88,7 +98,7 @@ public class ModelRunnerController
             resultHeaders.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
             Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
-            if(containerEntity.isPresent())
+            if (containerEntity.isPresent())
             {
                 ResponseEntity<String> resultResponseFromContainer = restTemplate
                         .exchange("http://localhost:" + containerEntity.get().getId() + "/project/runner/result", HttpMethod.POST, resultEntity, String.class);
@@ -100,7 +110,7 @@ public class ModelRunnerController
 
                 return ResponseEntity.ok(response.toString());
             }
-        }catch (Exception exception)
+        } catch (Exception exception)
         {
             exception.printStackTrace();
         }
