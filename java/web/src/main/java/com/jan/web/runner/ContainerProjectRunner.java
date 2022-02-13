@@ -34,22 +34,11 @@ public class ContainerProjectRunner implements ProjectRunner
         {
             if (runnerRepository.findById(runner.getId()).isPresent())
             {
-                Project project = runner.getProject();
-                JSONObject request = new JSONObject();
-                request.put("projectId", project.getId());
-                request.put("name", project.getName());
-                request.put("firstLabel", project.getFirstLabel());
-                request.put("secondLabel", project.getSecondLabel());
-                request.put("firstLabelFolder", project.getFirstLabelFolder());
-                request.put("secondLabelFolder", project.getSecondLabelFolder());
-                request.put("selectedModel", project.getSelectedModel());
-                request.put("runnerId", runner.getId());
-                request.put("gammaParameter", runner.getGammaParameter());
-                request.put("cParameter", runner.getCParameter());
-
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
-                org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
+                org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(
+                        assembleRequest(runner).toString(),
+                        headers);
                 restTemplate.exchange("http://localhost:" + containerId + "/runproject", HttpMethod.POST, entity, String.class);
             }
 
@@ -57,6 +46,23 @@ public class ContainerProjectRunner implements ProjectRunner
         {
             e.printStackTrace();
         }
+    }
+
+    private JSONObject assembleRequest(Runner runner) throws JSONException
+    {
+        Project project = runner.getProject();
+        JSONObject request = new JSONObject();
+        request.put("projectId", project.getId());
+        request.put("name", project.getName());
+        request.put("firstLabel", project.getFirstLabel());
+        request.put("secondLabel", project.getSecondLabel());
+        request.put("firstLabelFolder", project.getFirstLabelFolder());
+        request.put("secondLabelFolder", project.getSecondLabelFolder());
+        request.put("selectedModel", project.getSelectedModel());
+        request.put("runnerId", runner.getId());
+        request.put("gammaParameter", runner.getGammaParameter());
+        request.put("cParameter", runner.getCParameter());
+        return request;
     }
 
     @Override

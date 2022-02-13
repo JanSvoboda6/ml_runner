@@ -61,6 +61,7 @@ public class ModelRunnerController
         ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
         requestValidator.validateProject(projectId);
         requestValidator.validateRunner(runnerId);
+
         JSONObject response = new JSONObject();
         JSONObject resultRequest = new JSONObject();
         ObjectMapper mapper = new ObjectMapper();
