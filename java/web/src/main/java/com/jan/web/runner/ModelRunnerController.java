@@ -40,6 +40,7 @@ public class ModelRunnerController
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Runner getRunner(@RequestParam long projectId, @RequestParam long runnerId)
     {
+        //TODO Jan: Why it has two 2 parameters?
         return runnerRepository.findRunnerByIdAndProjectId(runnerId, projectId);
     }
 

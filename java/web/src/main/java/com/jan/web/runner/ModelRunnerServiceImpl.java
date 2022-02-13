@@ -23,13 +23,17 @@ public class ModelRunnerServiceImpl implements ModelRunnerService
     @Override
     public void runProject(RunRequest request, Project project, ContainerEntity containerEntity)
     {
+        projectRunner.run(mapRequestToRunner(request, project), containerEntity.getId());
+    }
+
+    private Runner mapRequestToRunner(RunRequest request, Project project)
+    {
         Runner runner = new Runner();
         runner.setProject(project);
         runner.setGammaParameter(request.getGammaParameter());
         runner.setCParameter(request.getcParameter());
         runner.setFinished(false);
         runnerRepository.save(runner);
-
-        projectRunner.run(runner, containerEntity.getId());
+        return runner;
     }
 }
