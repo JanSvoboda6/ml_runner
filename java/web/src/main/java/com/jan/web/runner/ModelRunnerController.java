@@ -61,25 +61,11 @@ public class ModelRunnerController
     @PostMapping("/run")
     public ResponseEntity<?> runProject(@RequestHeader(name = "Authorization") String token, @RequestBody RunRequest request)
     {
-        Project project;
-        ContainerEntity containerEntity;
-        try
-        {
-            project = requestValidator.validateProject(request.getProjectId());
-            containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
-        } catch (RuntimeException exception)
-        {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+        runnerService.runProject(request,
+                requestValidator.validateProject(request.getProjectId()),
+                requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token)));
 
-        try
-        {
-            runnerService.runProject(request, project, containerEntity);
-            return ResponseEntity.ok().body("Project is running!");
-        } catch (Exception exception)
-        {
-            return ResponseEntity.badRequest().body("Problem with running the selected project!");
-        }
+        return ResponseEntity.ok().body("Project is running!");
     }
 
     @GetMapping("/result")

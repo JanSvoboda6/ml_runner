@@ -6,5 +6,5 @@ import com.jan.web.docker.ContainerEntity;
 
 public interface ModelRunnerService
 {
-   void runProject(RunRequest request, Project project, ContainerEntity containerEntity) throws InterruptedException;
+   void runProject(RunRequest request, Project project, ContainerEntity containerEntity);
 }

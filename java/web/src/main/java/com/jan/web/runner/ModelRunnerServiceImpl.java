@@ -21,7 +21,7 @@ public class ModelRunnerServiceImpl implements ModelRunnerService
     }
 
     @Override
-    public void runProject(RunRequest request, Project project, ContainerEntity containerEntity) throws InterruptedException
+    public void runProject(RunRequest request, Project project, ContainerEntity containerEntity)
     {
         Runner runner = new Runner();
         runner.setProject(project);

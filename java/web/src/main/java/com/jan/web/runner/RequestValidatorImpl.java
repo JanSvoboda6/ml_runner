@@ -4,6 +4,7 @@ import com.jan.web.Project;
 import com.jan.web.ProjectRepository;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
+import com.jan.web.security.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,7 @@ public class RequestValidatorImpl implements RequestValidator
         {
             return project.get();
         }
-        throw new RuntimeException("The project with id " + projectId + " cannot be found!");
+        throw new ValidationException("The project with id " + projectId + " cannot be found!");
     }
 
     @Override
@@ -43,7 +44,7 @@ public class RequestValidatorImpl implements RequestValidator
         {
             return containerEntity.get();
         }
-        throw new RuntimeException("The container with id " + containerEntityId + " cannot be found!");
+        throw new ValidationException("The container with id " + containerEntityId + " cannot be found!");
     }
 
     @Override
@@ -54,6 +55,6 @@ public class RequestValidatorImpl implements RequestValidator
         {
             return runner.get();
         }
-        throw new RuntimeException("The runner with id " + runnerId + " cannot be found!");
+        throw new ValidationException("The runner with id " + runnerId + " cannot be found!");
     }
 }

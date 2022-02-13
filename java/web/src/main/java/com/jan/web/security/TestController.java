@@ -15,7 +15,7 @@ public class TestController
     JsonWebTokenUtility jsonWebTokenUtility;
 
     @GetMapping("/all")
-    public String allAccess()
+    public String allAccess() throws ValidationException
     {
         return "Public Content.";
     }
