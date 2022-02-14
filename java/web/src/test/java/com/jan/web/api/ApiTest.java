@@ -134,8 +134,7 @@ public class ApiTest
         headers.add("Authorization", "Bearer " + jwtToken);
         HttpEntity<String> request = new HttpEntity<>(headers);
 
-        Assertions.assertThat(restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, request, String.class)
-                        .getBody())
+        Assertions.assertThat(restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, request, String.class).getBody())
                 .contains("");
     }
 
@@ -153,9 +152,22 @@ public class ApiTest
         restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, request, String.class);
         String body = restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, request, String.class).getBody();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonResponse = objectMapper.readTree(body);
+        JsonNode jsonResponse = new ObjectMapper().readTree(body);
+
         Assertions.assertThat(jsonResponse.get(0).get("name").toString()).contains("random name");
     }
 
-}
+    @Test
+    public void whenProjectHasRunners_thenRunnersAreReturned()
+    {
+        Assertions.fail("Not implemented.");
+    }
+
+    @Test
+    public void whenProjectHasNoRunners_thenNoRunnersAreReturned()
+    {
+        Assertions.fail("Not implemented.");
+    }
+
+
+    }

@@ -84,7 +84,6 @@ public class ProjectController
         return ResponseEntity.badRequest().body("Problem with creating project!");
     }
 
-
     @GetMapping(value = "/runners", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Runner> getRunnerList(@RequestHeader(name="Authorization") String token, @RequestParam(name="projectId") long id)
