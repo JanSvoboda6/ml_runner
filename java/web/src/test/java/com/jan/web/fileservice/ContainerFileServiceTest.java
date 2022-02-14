@@ -4,6 +4,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.jan.web.ContainerRequestMaker;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.DockerService;
@@ -14,9 +15,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.FileSystems;
@@ -33,7 +34,10 @@ class ContainerFileServiceTest
     private DockerService dockerService;
     private DockerClient dockerClient;
 
-    ContainerFileService fileService;
+    @Autowired
+    private ContainerRequestMaker requestMaker;
+
+    private ContainerFileService fileService;
 
     @BeforeEach
     void before() throws InterruptedException
@@ -55,7 +59,7 @@ class ContainerFileServiceTest
 
         String dockerFilePath = FileSystems.getDefault().getPath("../../docker/Dockerfile").normalize().toAbsolutePath().toString();
         dockerService = new DockerService(containerRepository, userRepository, dockerClient, dockerFilePath, "python_server");
-        fileService = new ContainerFileService(new RestTemplate(), containerRepository);
+        fileService = new ContainerFileService(containerRepository, requestMaker);
 
         buildDockerContainerAndWaitForTheServerToStart();
     }

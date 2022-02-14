@@ -1,5 +1,7 @@
 package com.jan.web.fileservice;
 
+import com.jan.web.RequestMaker;
+import com.jan.web.RequestMethod;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import org.apache.http.HttpEntity;
@@ -34,14 +36,14 @@ import java.util.Optional;
 @Component
 public class ContainerFileService implements FileService
 {
-    private final RestTemplate restTemplate;
     private final ContainerRepository repository;
+    private final RequestMaker requestMaker;
 
     @Autowired
-    public ContainerFileService(RestTemplate restTemplate, ContainerRepository repository)
+    public ContainerFileService(ContainerRepository repository, RequestMaker requestMaker)
     {
-        this.restTemplate = restTemplate;
         this.repository = repository;
+        this.requestMaker = requestMaker;
     }
 
     @Override
@@ -146,9 +148,10 @@ public class ContainerFileService implements FileService
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             if(containerEntity.isPresent())
             {
-                ResponseEntity<String> response = restTemplate
-                        .exchange("http://localhost:" + containerEntity.get().getId() + "/createdirectory", HttpMethod.POST, entity, String.class);
-
+                ResponseEntity<String> response = requestMaker.makePostRequest(
+                        (int) containerEntity.get().getId(),
+                        RequestMethod.CREATE_DIRECTORY,
+                        entity);
                 response.getStatusCode();
             }
         } catch (JSONException e)
