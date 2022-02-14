@@ -31,7 +31,7 @@ public class ContainerProjectRunner implements ProjectRunner
             org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(
                     assembleRequest(runner).toString(),
                     headers);
-            requestMaker.makePostRequest((int) containerId, RequestMethod.RUN_PROJECT, entity);
+            requestMaker.makePostRequest(containerId, RequestMethod.RUN_PROJECT, entity);
 
         } catch (Exception exception)
         {

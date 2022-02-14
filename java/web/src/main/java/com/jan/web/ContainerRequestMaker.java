@@ -19,7 +19,7 @@ public class ContainerRequestMaker implements RequestMaker
     }
 
     @Override
-    public ResponseEntity<String> makePostRequest(int portNumber, RequestMethod requestMethod, HttpEntity<String> requestEntity)
+    public ResponseEntity<String> makePostRequest(long portNumber, RequestMethod requestMethod, HttpEntity<String> requestEntity)
     {
         return restTemplate.exchange(
                 composeUrl(portNumber, requestMethod.getRequestUrl()),
@@ -28,7 +28,7 @@ public class ContainerRequestMaker implements RequestMaker
                 String.class);
     }
 
-    private String composeUrl(int portNumber, String requestUrl)
+    private String composeUrl(long portNumber, String requestUrl)
     {
         return CONTAINER_BASE_URL + portNumber + requestUrl;
     }

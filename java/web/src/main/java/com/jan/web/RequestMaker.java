@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface RequestMaker
 {
-    ResponseEntity<String> makePostRequest(int portNumber, RequestMethod requestMethod, HttpEntity<String> requestEntity);
+    ResponseEntity<String> makePostRequest(long portNumber, RequestMethod requestMethod, HttpEntity<String> requestEntity);
 }

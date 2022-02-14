@@ -30,7 +30,7 @@ public class ContainerRequestMakerTest
         Mockito.when(restTemplate.exchange(Mockito.anyString(), Mockito.any(HttpMethod.class), Mockito.any(), Mockito.any(Class.class)))
                 .thenReturn(responseEntity);
 
-        Assertions.assertThat(requestMaker.makePostRequest(999, RequestMethod.RUN_PROJECT, requestEntity))
+        Assertions.assertThat(requestMaker.makePostRequest(999L, RequestMethod.RUN_PROJECT, requestEntity))
                 .isEqualTo(responseEntity);
     }
 

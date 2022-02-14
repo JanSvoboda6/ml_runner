@@ -78,7 +78,7 @@ public class ModelRunnerController
         HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
 
         ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
-                (int) containerEntity.getId(),
+                containerEntity.getId(),
                 RequestMethod.RUNNER_RESULT,
                 resultEntity);
 

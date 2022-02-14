@@ -105,8 +105,8 @@ public class ProjectController
             if(containerEntity.isPresent())
             {
                 ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
-                        (int) containerEntity.get().getId(),
-                        RequestMethod.IS_PROJECT_FINISHED,
+                        containerEntity.get().getId(),
+                        RequestMethod.IS_RUNNER_FINISHED,
                         entity);
 
                 ObjectMapper mapper = new ObjectMapper();
@@ -125,7 +125,7 @@ public class ProjectController
                     HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
 
                     ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
-                            (int) containerEntity.get().getId(),
+                            containerEntity.get().getId(),
                             RequestMethod.RUNNER_RESULT,
                             resultEntity);
 

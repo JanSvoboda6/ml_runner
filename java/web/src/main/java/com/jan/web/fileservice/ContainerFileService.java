@@ -57,7 +57,7 @@ public class ContainerFileService implements FileService
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             if(containerEntity.isPresent())
             {
-                URL url = new URL(composeUrl((int) containerEntity.get().getId(), RequestMethod.GET_FILES.getRequestUrl()));
+                URL url = new URL(composeUrl(containerEntity.get().getId(), RequestMethod.GET_FILES.getRequestUrl()));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())))
@@ -101,7 +101,7 @@ public class ContainerFileService implements FileService
         Optional<ContainerEntity> containerEntity = repository.findById(containerId);
         if(containerEntity.isPresent())
         {
-            HttpPost uploadFile = new HttpPost(composeUrl((int) containerEntity.get().getId(), RequestMethod.UPLOAD_FILES.getRequestUrl()));
+            HttpPost uploadFile = new HttpPost(composeUrl(containerEntity.get().getId(), RequestMethod.UPLOAD_FILES.getRequestUrl()));
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.addTextBody("Files", "Hello Docker!", ContentType.TEXT_PLAIN);
             try
@@ -151,7 +151,7 @@ public class ContainerFileService implements FileService
             if(containerEntity.isPresent())
             {
                 ResponseEntity<String> response = requestMaker.makePostRequest(
-                        (int) containerEntity.get().getId(),
+                        containerEntity.get().getId(),
                         RequestMethod.CREATE_DIRECTORY,
                         entity);
                 response.getStatusCode();
@@ -162,7 +162,7 @@ public class ContainerFileService implements FileService
         }
     }
 
-    private String composeUrl(int port, String requestMethod)
+    private String composeUrl(long port, String requestMethod)
     {
         return ContainerRequestMaker.CONTAINER_BASE_URL + port + requestMethod;
     }
