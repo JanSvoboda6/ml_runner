@@ -1,5 +1,7 @@
 package com.jan.web.runner;
 
+import com.jan.web.RequestMaker;
+import com.jan.web.RequestMethod;
 import com.jan.web.RunRequest;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerUtility;
@@ -7,9 +9,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
@@ -19,22 +23,22 @@ public class ModelRunnerController
 {
     private final RunnerRepository runnerRepository;
     private final ContainerUtility containerUtility;
-    private final RestTemplate restTemplate;
     private final ModelRunnerService runnerService;
     private final RequestValidator requestValidator;
+    private final RequestMaker requestMaker;
 
     @Autowired
     public ModelRunnerController(RunnerRepository runnerRepository,
                                  ContainerUtility containerUtility,
-                                 RestTemplate restTemplate,
                                  ModelRunnerService runnerService,
-                                 RequestValidator requestValidator)
+                                 RequestValidator requestValidator,
+                                 RequestMaker requestMaker)
     {
         this.runnerRepository = runnerRepository;
         this.containerUtility = containerUtility;
-        this.restTemplate = restTemplate;
         this.runnerService = runnerService;
         this.requestValidator = requestValidator;
+        this.requestMaker = requestMaker;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -72,8 +76,11 @@ public class ModelRunnerController
         HttpHeaders resultHeaders = new HttpHeaders();
         resultHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
-        ResponseEntity<String> resultResponseFromContainer = restTemplate
-                .exchange("http://localhost:" + containerEntity.getId() + "/project/runner/result", HttpMethod.POST, resultEntity, String.class);
+
+        ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
+                (int) containerEntity.getId(),
+                RequestMethod.RUNNER_RESULT,
+                resultEntity);
 
         ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
 

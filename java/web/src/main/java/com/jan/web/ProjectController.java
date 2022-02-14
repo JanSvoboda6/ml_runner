@@ -126,7 +126,7 @@ public class ProjectController
 
                     ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
                             (int) containerEntity.get().getId(),
-                            RequestMethod.PROJECT_RESULT,
+                            RequestMethod.RUNNER_RESULT,
                             resultEntity);
 
                     ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
