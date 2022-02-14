@@ -1,7 +1,7 @@
 package com.jan.web.runner;
 
-import com.jan.web.Project;
-import com.jan.web.ProjectRepository;
+import com.jan.web.project.Project;
+import com.jan.web.project.ProjectRepository;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import org.assertj.core.api.Assertions;

@@ -1,4 +1,4 @@
-package com.jan.web;
+package com.jan.web.project;
 
 import javax.validation.constraints.NotBlank;
 

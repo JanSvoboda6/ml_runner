@@ -1,19 +1,13 @@
-package com.jan.web;
+package com.jan.web.project;
 
-import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.ContainerUtility;
 import com.jan.web.request.RequestMaker;
-import com.jan.web.request.RequestMethod;
 import com.jan.web.runner.*;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

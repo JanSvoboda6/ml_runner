@@ -1,4 +1,4 @@
-package com.jan.web;
+package com.jan.web.project;
 
 import com.jan.web.security.user.User;
 import org.springframework.lang.NonNull;
