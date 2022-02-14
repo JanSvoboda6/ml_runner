@@ -23,27 +23,18 @@ public class ProjectController
     private final ProjectRepository projectRepository;
     private final JsonWebTokenUtility jsonWebTokenUtility;
     private final RunnerRepository runnerRepository;
-    private final ContainerRepository containerRepository;
     private final UserRepository userRepository;
-    private final ContainerUtility containerUtility;
-    private final RequestMaker requestMaker;
 
     @Autowired
     public ProjectController(ProjectRepository projectRepository,
                              JsonWebTokenUtility jsonWebTokenUtility,
                              RunnerRepository runnerRepository,
-                             ContainerRepository containerRepository,
-                             UserRepository userRepository,
-                             ContainerUtility containerUtility,
-                             RequestMaker requestMaker)
+                             UserRepository userRepository)
     {
         this.projectRepository = projectRepository;
         this.jsonWebTokenUtility = jsonWebTokenUtility;
         this.runnerRepository = runnerRepository;
-        this.containerRepository = containerRepository;
         this.userRepository = userRepository;
-        this.containerUtility = containerUtility;
-        this.requestMaker = requestMaker;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

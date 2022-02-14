@@ -1,6 +1,9 @@
 package com.jan.web.api;
 
+import com.jan.web.project.Project;
 import com.jan.web.project.ProjectRepository;
+import com.jan.web.runner.Runner;
+import com.jan.web.runner.RunnerRepository;
 import com.jan.web.security.role.Role;
 import com.jan.web.security.role.RoleRepository;
 import com.jan.web.security.role.RoleType;
@@ -68,8 +71,12 @@ public class ApiTest
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private RunnerRepository runnerRepository;
+
     private User user;
     private String jwtToken;
+    private Runner runner;
 
     @BeforeEach
     public void before()
@@ -88,6 +95,10 @@ public class ApiTest
     @AfterEach
     public void after()
     {
+        if(runner != null)
+        {
+            runnerRepository.delete(runner);
+        }
         projectRepository.deleteAll(projectRepository.findAllByUser(user));
         userRepository.delete(user);
     }
@@ -135,7 +146,7 @@ public class ApiTest
         HttpEntity<String> request = new HttpEntity<>(headers);
 
         Assertions.assertThat(restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, request, String.class).getBody())
-                .contains("");
+                .isNotBlank();
     }
 
     @Test
@@ -158,16 +169,51 @@ public class ApiTest
     }
 
     @Test
-    public void whenProjectHasRunners_thenRunnersAreReturned()
+    public void whenProjectHasRunners_thenRunnersAreReturned() throws IOException, JSONException
     {
-        Assertions.fail("Not implemented.");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        JSONObject projectRequestJson = new JSONObject();
+        projectRequestJson.put("projectName", "random name");
+
+        HttpEntity<String> projectRequest = new HttpEntity<>(projectRequestJson.toString(), headers);
+        restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, projectRequest, String.class);
+        String projectResponseBody = restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, projectRequest, String.class).getBody();
+
+        JsonNode projectJson = new ObjectMapper().readTree(projectResponseBody);
+        Long projectId = Long.parseLong(projectJson.get(0).get("id").toString());
+
+        runner = new Runner();
+        runner.setProject(projectRepository.getById(projectId));
+        runnerRepository.save(runner);
+
+        HttpEntity<String> runnerRequest = new HttpEntity<>(headers);
+        String runnerResponseBody = restTemplate.exchange(BASE_URL + port + "/api/project/runners?projectId=" + projectId, HttpMethod.GET, runnerRequest, String.class).getBody();
+        JsonNode runnerJson = new ObjectMapper().readTree(runnerResponseBody);
+
+        Assertions.assertThat(Long.parseLong(runnerJson.get(0).get("project").get("id").toString())).isEqualTo(projectId);
     }
 
     @Test
-    public void whenProjectHasNoRunners_thenNoRunnersAreReturned()
+    public void whenProjectHasNoRunners_thenNoRunnersAreReturned() throws IOException, JSONException
     {
-        Assertions.fail("Not implemented.");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        JSONObject projectRequestJson = new JSONObject();
+        projectRequestJson.put("projectName", "random name");
+
+        HttpEntity<String> projectRequest = new HttpEntity<>(projectRequestJson.toString(), headers);
+        restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, projectRequest, String.class);
+        String projectResponseBody = restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, projectRequest, String.class).getBody();
+
+        JsonNode projectJson = new ObjectMapper().readTree(projectResponseBody);
+        Long projectId = Long.parseLong(projectJson.get(0).get("id").toString());
+
+        HttpEntity<String> runnerRequest = new HttpEntity<>(headers);
+        Assertions.assertThat(restTemplate.exchange(BASE_URL + port + "/api/project/runners?projectId=" + projectId, HttpMethod.GET, runnerRequest, String.class).getBody())
+                .isEqualTo("[ ]");
     }
 
-
-    }
+}
