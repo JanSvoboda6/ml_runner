@@ -1,4 +1,4 @@
-package com.jan.web;
+package com.jan.web.request;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;

@@ -3,6 +3,8 @@ package com.jan.web;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.ContainerUtility;
+import com.jan.web.request.RequestMaker;
+import com.jan.web.request.RequestMethod;
 import com.jan.web.runner.*;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
@@ -106,7 +108,7 @@ public class ProjectController
             {
                 ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
                         containerEntity.get().getId(),
-                        RequestMethod.IS_RUNNER_FINISHED,
+                        com.jan.web.request.RequestMethod.IS_RUNNER_FINISHED,
                         entity);
 
                 ObjectMapper mapper = new ObjectMapper();

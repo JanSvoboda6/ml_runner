@@ -1,4 +1,4 @@
-package com.jan.web;
+package com.jan.web.request;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

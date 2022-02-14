@@ -1,8 +1,8 @@
 package com.jan.web.runner;
 
 import com.jan.web.Project;
-import com.jan.web.RequestMaker;
-import com.jan.web.RequestMethod;
+import com.jan.web.request.RequestMaker;
+import com.jan.web.request.RequestMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

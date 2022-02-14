@@ -1,11 +1,10 @@
 package com.jan.web.fileservice;
 
-import com.jan.web.ContainerRequestMaker;
-import com.jan.web.RequestMaker;
-import com.jan.web.RequestMethod;
+import com.jan.web.request.ContainerRequestMaker;
+import com.jan.web.request.RequestMaker;
+import com.jan.web.request.RequestMethod;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
-import com.jan.web.runner.ContainerProjectRunner;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -18,11 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;

@@ -1,8 +1,8 @@
 package com.jan.web.runner;
 
 import com.jan.web.Project;
-import com.jan.web.RequestMaker;
-import com.jan.web.RequestMethod;
+import com.jan.web.request.RequestMaker;
+import com.jan.web.request.RequestMethod;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

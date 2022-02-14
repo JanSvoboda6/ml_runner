@@ -4,7 +4,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.jan.web.ContainerRequestMaker;
+import com.jan.web.request.ContainerRequestMaker;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.DockerService;

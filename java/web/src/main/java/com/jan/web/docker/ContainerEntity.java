@@ -11,7 +11,7 @@ public class ContainerEntity
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_post")
     @SequenceGenerator(name = "seq_post", initialValue = 20000, allocationSize = 1)
-    private long id;
+    private Long id;
 
     @OneToOne
     private User user;

@@ -1,4 +1,4 @@
-package com.jan.web;
+package com.jan.web.request;
 
 public enum RequestMethod
 {
