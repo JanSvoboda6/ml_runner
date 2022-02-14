@@ -1,7 +1,6 @@
 package com.jan.web.runner;
 
-import com.jan.web.Project;
-import com.jan.web.RunRequest;
+import com.jan.web.project.Project;
 import com.jan.web.docker.ContainerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package com.jan.web.runner;
 
-import com.jan.web.Project;
+import com.jan.web.project.Project;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
 import org.json.JSONException;

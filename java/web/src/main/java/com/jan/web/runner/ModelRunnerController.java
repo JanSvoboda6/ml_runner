@@ -3,7 +3,6 @@ package com.jan.web.runner;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
-import com.jan.web.RunRequest;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerUtility;
 import org.codehaus.jackson.map.ObjectMapper;
