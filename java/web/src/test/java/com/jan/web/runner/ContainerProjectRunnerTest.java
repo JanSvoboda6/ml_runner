@@ -36,7 +36,7 @@ public class ContainerProjectRunnerTest
         projectRunner.run(runner, RANDOM_CONTAINER_ID);
 
         Mockito.verify(requestMaker, Mockito.times(1))
-                .makePostRequest(Mockito.anyInt(), Mockito.eq(RequestMethod.RUN_PROJECT), Mockito.any());
+                .makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.RUN_PROJECT), Mockito.any());
     }
 
     @Test
