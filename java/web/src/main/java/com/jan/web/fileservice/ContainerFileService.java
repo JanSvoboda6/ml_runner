@@ -1,9 +1,11 @@
 package com.jan.web.fileservice;
 
+import com.jan.web.ContainerRequestMaker;
 import com.jan.web.RequestMaker;
 import com.jan.web.RequestMethod;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
+import com.jan.web.runner.ContainerProjectRunner;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -55,7 +57,7 @@ public class ContainerFileService implements FileService
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             if(containerEntity.isPresent())
             {
-                URL url = new URL("http://localhost:" + containerEntity.get().getId() + "/getfiles");
+                URL url = new URL(composeUrl((int) containerEntity.get().getId(), RequestMethod.GET_FILES.getRequestUrl()));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())))
@@ -99,7 +101,7 @@ public class ContainerFileService implements FileService
         Optional<ContainerEntity> containerEntity = repository.findById(containerId);
         if(containerEntity.isPresent())
         {
-            HttpPost uploadFile = new HttpPost("http://localhost:" + containerEntity.get().getId() + "/upload");
+            HttpPost uploadFile = new HttpPost(composeUrl((int) containerEntity.get().getId(), RequestMethod.UPLOAD_FILES.getRequestUrl()));
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.addTextBody("Files", "Hello Docker!", ContentType.TEXT_PLAIN);
             try
@@ -158,5 +160,10 @@ public class ContainerFileService implements FileService
         {
             e.printStackTrace();
         }
+    }
+
+    private String composeUrl(int port, String requestMethod)
+    {
+        return ContainerRequestMaker.CONTAINER_BASE_URL + port + requestMethod;
     }
 }
