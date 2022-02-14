@@ -66,16 +66,11 @@ public class ApiTest
     {
         user = userCreator.createUser(TEST_USER, encoder.encode(PASSWORD));
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        Role userRole = roleRepository.findByName(RoleType.ROLE_USER).orElseThrow();
         roles.add(userRole);
-
         user.setRoles(roles);
         userRepository.save(user);
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(TEST_USER, PASSWORD));
-
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(TEST_USER, PASSWORD));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         jwtToken = jsonWebTokenUtility.generateJwtToken(authentication);
     }
