@@ -1,16 +1,12 @@
 package com.jan.web.runner;
 
 import com.jan.web.Project;
-import com.jan.web.ProjectRepository;
-import com.jan.web.docker.ContainerRepository;
-import com.jan.web.docker.ContainerUtility;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,13 +14,11 @@ import org.springframework.web.client.RestTemplate;
 public class ContainerProjectRunner implements ProjectRunner
 {
     private final RestTemplate restTemplate;
-    private final RunnerRepository runnerRepository;
 
     @Autowired
-    public ContainerProjectRunner(RestTemplate restTemplate, RunnerRepository runnerRepository)
+    public ContainerProjectRunner(RestTemplate restTemplate)
     {
         this.restTemplate = restTemplate;
-        this.runnerRepository = runnerRepository;
     }
 
     @Override

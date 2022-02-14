@@ -22,7 +22,7 @@ public class ContainerProjectRunnerTest
     {
         restTemplate = Mockito.mock(RestTemplate.class);
         runnerRepository = Mockito.mock(RunnerRepository.class);
-        projectRunner = new ContainerProjectRunner(restTemplate, runnerRepository);
+        projectRunner = new ContainerProjectRunner(restTemplate);
     }
 
     @Test
