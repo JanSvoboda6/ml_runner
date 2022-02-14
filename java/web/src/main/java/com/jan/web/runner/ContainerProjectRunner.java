@@ -1,24 +1,24 @@
 package com.jan.web.runner;
 
 import com.jan.web.Project;
+import com.jan.web.RequestMaker;
+import com.jan.web.RequestMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ContainerProjectRunner implements ProjectRunner
 {
-    private final RestTemplate restTemplate;
+    private final RequestMaker requestMaker;
 
     @Autowired
-    public ContainerProjectRunner(RestTemplate restTemplate)
+    public ContainerProjectRunner(RequestMaker requestMaker)
     {
-        this.restTemplate = restTemplate;
+        this.requestMaker = requestMaker;
     }
 
     @Override
@@ -31,7 +31,8 @@ public class ContainerProjectRunner implements ProjectRunner
             org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(
                     assembleRequest(runner).toString(),
                     headers);
-            restTemplate.exchange("http://localhost:" + containerId + "/runproject", HttpMethod.POST, entity, String.class);
+            requestMaker.makePostRequest((int) containerId, RequestMethod.RUN_PROJECT, entity);
+
         } catch (Exception exception)
         {
             throw new RuntimeException(exception);

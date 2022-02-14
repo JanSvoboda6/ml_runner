@@ -1,12 +1,12 @@
 package com.jan.web.runner;
 
 import com.jan.web.Project;
+import com.jan.web.RequestMaker;
+import com.jan.web.RequestMethod;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -14,15 +14,15 @@ public class ContainerProjectRunnerTest
 {
     public static final int RANDOM_CONTAINER_ID = 999;
     private ContainerProjectRunner projectRunner;
-    private RestTemplate restTemplate;
     private RunnerRepository runnerRepository;
+    private RequestMaker requestMaker;
 
     @BeforeEach
     public void before()
     {
-        restTemplate = Mockito.mock(RestTemplate.class);
         runnerRepository = Mockito.mock(RunnerRepository.class);
-        projectRunner = new ContainerProjectRunner(restTemplate);
+        requestMaker = Mockito.mock(RequestMaker.class);
+        projectRunner = new ContainerProjectRunner(requestMaker);
     }
 
     @Test
@@ -35,8 +35,8 @@ public class ContainerProjectRunnerTest
 
         projectRunner.run(runner, RANDOM_CONTAINER_ID);
 
-        Mockito.verify(restTemplate, Mockito.times(1))
-                .exchange(Mockito.anyString(), Mockito.any(HttpMethod.class), Mockito.any(), Mockito.any(Class.class));
+        Mockito.verify(requestMaker, Mockito.times(1))
+                .makePostRequest(Mockito.anyInt(), Mockito.eq(RequestMethod.RUN_PROJECT), Mockito.any());
     }
 
     @Test
