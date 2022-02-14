@@ -10,9 +10,11 @@ import com.jan.web.security.utility.JsonWebTokenUtility;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,33 +25,33 @@ import java.util.Optional;
 public class ProjectController
 {
     private final ProjectRepository projectRepository;
-    private final RestTemplate restTemplate;
     private final JsonWebTokenUtility jsonWebTokenUtility;
     private final RunnerRepository runnerRepository;
     private final ContainerRepository containerRepository;
     private final UserRepository userRepository;
     private final ContainerUtility containerUtility;
+    private final RequestMaker requestMaker;
 
     @Autowired
     public ProjectController(ProjectRepository projectRepository,
-                             RestTemplate restTemplate,
                              JsonWebTokenUtility jsonWebTokenUtility,
                              RunnerRepository runnerRepository,
                              ContainerRepository containerRepository,
                              UserRepository userRepository,
-                             ContainerUtility containerUtility)
+                             ContainerUtility containerUtility,
+                             RequestMaker requestMaker)
     {
         this.projectRepository = projectRepository;
-        this.restTemplate = restTemplate;
         this.jsonWebTokenUtility = jsonWebTokenUtility;
         this.runnerRepository = runnerRepository;
         this.containerRepository = containerRepository;
         this.userRepository = userRepository;
         this.containerUtility = containerUtility;
+        this.requestMaker = requestMaker;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Project> getProjects(@RequestHeader(name="Authorization") String token) throws InterruptedException
+    public List<Project> getProjects(@RequestHeader(name="Authorization") String token)
     {
         String username = jsonWebTokenUtility.getUsernameFromJwtToken(token);
         Optional<User> user = userRepository.findByUsername(username);
@@ -102,8 +104,10 @@ public class ProjectController
             Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
             if(containerEntity.isPresent())
             {
-                ResponseEntity<String> responseFromContainer = restTemplate
-                        .exchange("http://localhost:" + containerEntity.get().getId() + "/project/runner/finished", HttpMethod.POST, entity, String.class);
+                ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
+                        (int) containerEntity.get().getId(),
+                        RequestMethod.IS_PROJECT_FINISHED,
+                        entity);
 
                 ObjectMapper mapper = new ObjectMapper();
                 FinishedResponse finishedResponse = mapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
@@ -119,8 +123,11 @@ public class ProjectController
                     HttpHeaders resultHeaders = new HttpHeaders();
                     resultHeaders.setContentType(MediaType.APPLICATION_JSON);
                     HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
-                    ResponseEntity<String> resultResponseFromContainer = restTemplate
-                            .exchange("http://localhost:" + containerEntity.get().getId() + "/project/runner/result", HttpMethod.POST, resultEntity, String.class);
+
+                    ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
+                            (int) containerEntity.get().getId(),
+                            RequestMethod.PROJECT_RESULT,
+                            resultEntity);
 
                     ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
 
