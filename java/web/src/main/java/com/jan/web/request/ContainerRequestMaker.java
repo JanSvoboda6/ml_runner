@@ -14,7 +14,6 @@ public class ContainerRequestMaker implements RequestMaker
 
     public ContainerRequestMaker(RestTemplate restTemplate)
     {
-
         this.restTemplate = restTemplate;
     }
 

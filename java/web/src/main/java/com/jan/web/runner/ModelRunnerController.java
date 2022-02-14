@@ -44,7 +44,7 @@ public class ModelRunnerController
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Runner getRunner(@RequestParam long projectId, @RequestParam long runnerId)
     {
-        //TODO Jan: Why it has two 2 parameters?
+        //TODO Jan: Why it has two 2 parameters? - we need just one parameter
         return runnerRepository.findRunnerByIdAndProjectId(runnerId, projectId);
     }
 
@@ -61,11 +61,17 @@ public class ModelRunnerController
     @GetMapping("/result")
     public ResponseEntity<?> getResult(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId) throws JSONException, IOException
     {
-
         ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
         requestValidator.validateProject(projectId);
         requestValidator.validateRunner(runnerId);
 
+        JSONObject response = getResultResponse(projectId, runnerId, containerEntity);
+
+        return ResponseEntity.ok(response.toString());
+    }
+
+    private JSONObject getResultResponse(long projectId, long runnerId, ContainerEntity containerEntity) throws JSONException, IOException
+    {
         JSONObject response = new JSONObject();
         JSONObject resultRequest = new JSONObject();
         ObjectMapper mapper = new ObjectMapper();
@@ -86,7 +92,6 @@ public class ModelRunnerController
 
         response.put("firstLabelResult", resultResponse.firstLabelResult);
         response.put("secondLabelResult", resultResponse.secondLabelResult);
-
-        return ResponseEntity.ok(response.toString());
+        return response;
     }
 }

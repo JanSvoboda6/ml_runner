@@ -27,7 +27,7 @@ public class ContainerUtility
     {
         String username = jsonWebTokenUtility.getUsernameFromJwtToken(token);
         Optional<User> user = userRepository.findByUsername(username);
-        if( user.isPresent())
+        if (user.isPresent())
         {
             return containerRepository.findByUserId(user.get().getId()).getId();
         }

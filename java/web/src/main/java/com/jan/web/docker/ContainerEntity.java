@@ -31,7 +31,7 @@ public class ContainerEntity
         this.user = user;
     }
 
-    public long getId()
+    public Long getId()
     {
         return id;
     }
