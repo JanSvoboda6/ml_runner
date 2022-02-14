@@ -1,5 +1,6 @@
 package com.jan.web.runner;
 
+import com.jan.web.docker.ContainerRepository;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
 import com.jan.web.RunRequest;
@@ -16,12 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/project/runner")
 public class ModelRunnerController
 {
     private final RunnerRepository runnerRepository;
+    private final ContainerRepository containerRepository;
     private final ContainerUtility containerUtility;
     private final ModelRunnerService runnerService;
     private final RequestValidator requestValidator;
@@ -29,12 +32,14 @@ public class ModelRunnerController
 
     @Autowired
     public ModelRunnerController(RunnerRepository runnerRepository,
+                                 ContainerRepository containerRepository,
                                  ContainerUtility containerUtility,
                                  ModelRunnerService runnerService,
                                  RequestValidator requestValidator,
                                  RequestMaker requestMaker)
     {
         this.runnerRepository = runnerRepository;
+        this.containerRepository = containerRepository;
         this.containerUtility = containerUtility;
         this.runnerService = runnerService;
         this.requestValidator = requestValidator;
@@ -68,6 +73,71 @@ public class ModelRunnerController
         JSONObject response = getResultResponse(projectId, runnerId, containerEntity);
 
         return ResponseEntity.ok(response.toString());
+    }
+
+
+    @PostMapping(value = "/finished", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> isFinished(@RequestHeader(name="Authorization") String token, @RequestBody FinishedRequest frontendRequest)
+    {
+        try
+        {
+            JSONObject request = new JSONObject();
+            request.put("projectId", frontendRequest.getProjectId());
+            request.put("runnerId", frontendRequest.getRunnerId());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> entity = new HttpEntity<>(
+                    request.toString(),
+                    headers);
+            Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
+            if(containerEntity.isPresent())
+            {
+                ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
+                        containerEntity.get().getId(),
+                        com.jan.web.request.RequestMethod.IS_RUNNER_FINISHED,
+                        entity);
+
+                ObjectMapper mapper = new ObjectMapper();
+                FinishedResponse finishedResponse = mapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
+
+                JSONObject response = new JSONObject();
+                response.put("isFinished", finishedResponse.isFinished);
+
+                if (finishedResponse.isFinished)
+                {
+                    JSONObject resultRequest = new JSONObject();
+                    resultRequest.put("projectId", frontendRequest.getProjectId());
+                    resultRequest.put("runnerId", frontendRequest.getRunnerId());
+                    HttpHeaders resultHeaders = new HttpHeaders();
+                    resultHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
+
+                    ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
+                            containerEntity.get().getId(),
+                            RequestMethod.RUNNER_RESULT,
+                            resultEntity);
+
+                    ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
+
+                    response.put("firstLabelResult", resultResponse.firstLabelResult);
+                    response.put("secondLabelResult", resultResponse.secondLabelResult);
+
+                    if (runnerRepository.findById(frontendRequest.getRunnerId()).isPresent())
+                    {
+                        Runner runnerToBeUpdated = runnerRepository.findById(frontendRequest.getRunnerId()).get();
+                        runnerToBeUpdated.setFinished(true);
+                        runnerRepository.save(runnerToBeUpdated);
+                    }
+                }
+
+                return ResponseEntity.ok(response.toString());
+            }
+
+        } catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return ResponseEntity.badRequest().body("Problem with obtaining the information!");
     }
 
     private JSONObject getResultResponse(long projectId, long runnerId, ContainerEntity containerEntity) throws JSONException, IOException

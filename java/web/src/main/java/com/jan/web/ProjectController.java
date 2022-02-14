@@ -90,69 +90,6 @@ public class ProjectController
         return ResponseEntity.badRequest().body("Problem with creating project!");
     }
 
-    @PostMapping(value = "/runner/finished", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> isFinished(@RequestHeader(name="Authorization") String token, @RequestBody FinishedRequest frontendRequest)
-    {
-        try
-        {
-            JSONObject request = new JSONObject();
-            request.put("projectId", frontendRequest.getProjectId());
-            request.put("runnerId", frontendRequest.getRunnerId());
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<>(
-                    request.toString(),
-                    headers);
-            Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
-            if(containerEntity.isPresent())
-            {
-                ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
-                        containerEntity.get().getId(),
-                        com.jan.web.request.RequestMethod.IS_RUNNER_FINISHED,
-                        entity);
-
-                ObjectMapper mapper = new ObjectMapper();
-                FinishedResponse finishedResponse = mapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
-
-                JSONObject response = new JSONObject();
-                response.put("isFinished", finishedResponse.isFinished);
-
-                if (finishedResponse.isFinished)
-                {
-                    JSONObject resultRequest = new JSONObject();
-                    resultRequest.put("projectId", frontendRequest.getProjectId());
-                    resultRequest.put("runnerId", frontendRequest.getRunnerId());
-                    HttpHeaders resultHeaders = new HttpHeaders();
-                    resultHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
-
-                    ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
-                            containerEntity.get().getId(),
-                            RequestMethod.RUNNER_RESULT,
-                            resultEntity);
-
-                    ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
-
-                    response.put("firstLabelResult", resultResponse.firstLabelResult);
-                    response.put("secondLabelResult", resultResponse.secondLabelResult);
-
-                    if (runnerRepository.findById(frontendRequest.getRunnerId()).isPresent())
-                    {
-                        Runner runnerToBeUpdated = runnerRepository.findById(frontendRequest.getRunnerId()).get();
-                        runnerToBeUpdated.setFinished(true);
-                        runnerRepository.save(runnerToBeUpdated);
-                    }
-                }
-
-                return ResponseEntity.ok(response.toString());
-            }
-
-        } catch (Exception exception)
-        {
-            exception.printStackTrace();
-        }
-        return ResponseEntity.badRequest().body("Problem with obtaining the information!");
-    }
 
     @GetMapping(value = "/runners", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
