@@ -1,5 +1,12 @@
 package com.jan.web.api;
 
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.jan.web.docker.ContainerEntity;
+import com.jan.web.docker.ContainerRepository;
+import com.jan.web.docker.DockerService;
 import com.jan.web.project.Project;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.runner.Runner;
@@ -19,6 +26,7 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -34,7 +42,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -43,6 +53,12 @@ public class ApiTest
     private static final String BASE_URL = "http://localhost:";
     public static final String TEST_USER = "test_user";
     public static final String PASSWORD = "password";
+
+    private static final String CONTAINER_NAME = "container-user-";
+    private static final String CONTAINER_NAME_WITH_ADDED_SLASH = "/" + CONTAINER_NAME;
+
+    @Autowired
+    private DockerService dockerService;
 
     @LocalServerPort
     private int port;
@@ -74,9 +90,14 @@ public class ApiTest
     @Autowired
     private RunnerRepository runnerRepository;
 
+    @Autowired
+    private ContainerRepository containerRepository;
+
     private User user;
     private String jwtToken;
     private Runner runner;
+    private ContainerEntity containerEntity;
+    private DockerClient dockerClient;
 
     @BeforeEach
     public void before()
@@ -90,11 +111,19 @@ public class ApiTest
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(TEST_USER, PASSWORD));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         jwtToken = jsonWebTokenUtility.generateJwtToken(authentication);
+
+        DefaultDockerClientConfig.Builder config = DefaultDockerClientConfig.createDefaultConfigBuilder();
+        dockerClient = DockerClientBuilder.getInstance(config.build()).build();
     }
 
     @AfterEach
     public void after()
     {
+        if(containerEntity != null)
+        {
+            containerRepository.delete(containerEntity);
+        }
+
         if(runner != null)
         {
             runnerRepository.delete(runner);
@@ -115,7 +144,7 @@ public class ApiTest
     {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
-        HttpEntity<String> request = new HttpEntity<String>(headers);
+        HttpEntity<String> request = new HttpEntity<>(headers);
 
         Assertions.assertThat(restTemplate
                         .exchange(BASE_URL + port + "/api/test/user", HttpMethod.GET, request, String.class)
@@ -209,11 +238,38 @@ public class ApiTest
         String projectResponseBody = restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, projectRequest, String.class).getBody();
 
         JsonNode projectJson = new ObjectMapper().readTree(projectResponseBody);
-        Long projectId = Long.parseLong(projectJson.get(0).get("id").toString());
+        long projectId = Long.parseLong(projectJson.get(0).get("id").toString());
 
         HttpEntity<String> runnerRequest = new HttpEntity<>(headers);
         Assertions.assertThat(restTemplate.exchange(BASE_URL + port + "/api/project/runners?projectId=" + projectId, HttpMethod.GET, runnerRequest, String.class).getBody())
                 .isEqualTo("[ ]");
     }
 
+//    @Test
+//    public void whenRequestForRunningProject_thenRunnerIsCreated() throws JSONException, IOException
+//    {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Authorization", "Bearer " + jwtToken);
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        JSONObject projectRequestJson = new JSONObject();
+//        projectRequestJson.put("projectName", "random name");
+//
+//        HttpEntity<String> projectRequest = new HttpEntity<>(projectRequestJson.toString(), headers);
+//        restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, projectRequest, String.class);
+//        String projectResponseBody = restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, projectRequest, String.class).getBody();
+//
+//        JsonNode projectJson = new ObjectMapper().readTree(projectResponseBody);
+//        long projectId = Long.parseLong(projectJson.get(0).get("id").toString());
+//
+//        JSONObject runRequestJson = new JSONObject();
+//        runRequestJson.put("projectId", projectId);
+//
+//        HttpEntity<String> runRequest = new HttpEntity<>(runRequestJson.toString(), headers);
+//        String runnerResponseBody = restTemplate.exchange(BASE_URL + port + "/api/project/runner/run", HttpMethod.POST, runRequest, String.class).getBody();
+//        JsonNode runnerJson = new ObjectMapper().readTree(runnerResponseBody);
+//
+//        containerEntity = containerRepository.findById(Long.parseLong(runnerJson.get(0).get("id").toString())).get();
+//
+//        Assertions.assertThat(runnerRepository.findAllByProjectId(projectId).get(0)).isNotNull();
+//    }
 }
