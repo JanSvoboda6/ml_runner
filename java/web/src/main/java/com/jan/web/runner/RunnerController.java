@@ -1,10 +1,12 @@
 package com.jan.web.runner;
 
+import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
+import com.jan.web.docker.ContainerUtility;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
-import com.jan.web.docker.ContainerEntity;
-import com.jan.web.docker.ContainerUtility;
+import com.jan.web.result.Result;
+import com.jan.web.result.ResultRepository;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,8 +16,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -32,6 +32,7 @@ public class RunnerController
     private final RequestValidator requestValidator;
     private final RequestMaker requestMaker;
     private final ObjectMapper objectMapper;
+    private final ResultRepository resultRepository;
 
     @Autowired
     public RunnerController(RunnerRepository runnerRepository,
@@ -40,7 +41,7 @@ public class RunnerController
                             RunnerService runnerService,
                             RequestValidator requestValidator,
                             RequestMaker requestMaker,
-                            ObjectMapper objectMapper)
+                            ObjectMapper objectMapper, ResultRepository resultRepository)
     {
         this.runnerRepository = runnerRepository;
         this.containerRepository = containerRepository;
@@ -49,6 +50,7 @@ public class RunnerController
         this.requestValidator = requestValidator;
         this.requestMaker = requestMaker;
         this.objectMapper = objectMapper;
+        this.resultRepository = resultRepository;
     }
 
     @Bean
@@ -100,6 +102,7 @@ public class RunnerController
             HttpEntity<String> entity = new HttpEntity<>(
                     request.toString(),
                     headers);
+
             Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
             if(containerEntity.isPresent())
             {
@@ -153,6 +156,13 @@ public class RunnerController
     private JSONObject getResultResponse(long projectId, long runnerId, ContainerEntity containerEntity) throws JSONException, IOException
     {
         JSONObject response = new JSONObject();
+        Result result = resultRepository.findByRunnerId(runnerId);
+        if(result != null)
+        {
+            response.put("firstLabelResult", result.getFirstLabelResult());
+            response.put("secondLabelResult", result.getSecondLabelResult());
+            return response;
+        }
         JSONObject resultRequest = new JSONObject();
 
         resultRequest.put("projectId", projectId);

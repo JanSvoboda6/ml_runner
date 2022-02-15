@@ -5,10 +5,11 @@ import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.ContainerUtility;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
+import com.jan.web.result.Result;
+import com.jan.web.result.ResultRepository;
 import org.assertj.core.api.Assertions;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -29,6 +30,7 @@ public class RunnerControllerTest
     private RequestMaker requestMaker;
     private ProjectRunner projectRunner;
     private ObjectMapper objectMapper;
+    private ResultRepository resultRepository;
 
     @BeforeEach
     public void before()
@@ -41,6 +43,7 @@ public class RunnerControllerTest
         projectRunner = Mockito.mock(ProjectRunner.class);
         runnerService = new RunnerServiceImpl(runnerRepository, projectRunner);
         objectMapper = Mockito.mock(ObjectMapper.class);
+        resultRepository = Mockito.mock(ResultRepository.class);
         runnerController = new RunnerController(
                 runnerRepository,
                 containerRepository,
@@ -48,7 +51,8 @@ public class RunnerControllerTest
                 runnerService,
                 requestValidator,
                 requestMaker,
-                objectMapper);
+                objectMapper,
+                resultRepository);
     }
 
     @Test
@@ -90,10 +94,11 @@ public class RunnerControllerTest
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
         Mockito.when(containerEntity.getId()).thenReturn(999L);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
-        //resultRepository - when result is found then return it
-        runnerController.getResult(RANDOM_JWT_TOKEN, 999L, 999L);
-        Mockito.verify(requestMaker, Mockito.times(1)).makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any());
-        Assertions.fail("Production code not implemented.");
+        Result result = Mockito.mock(Result.class);
+        Mockito.when(resultRepository.findByRunnerId(Mockito.anyLong())).thenReturn(result);
+        ResponseEntity<?> response = runnerController.getResult(RANDOM_JWT_TOKEN, 999L, 999L);
+        Mockito.verifyZeroInteractions(requestMaker);
+        Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
     }
 
     @Test
@@ -111,14 +116,14 @@ public class RunnerControllerTest
         Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
 
         runnerController.getResult(RANDOM_JWT_TOKEN,999, 999);
-        //Mockito.verify - resultRepository.save was called
-        Assertions.fail("Production code not implemented.");
+        Mockito.verify(resultRepository, Mockito.times(1)).save(Mockito.any());
+        Assertions.fail("Production code not implemented - isFinished request must be used before getting the result or persisted Result");
     }
 
     @Test
     public void whenRequestForResultForUnfinishedRunner_thenMessageInReturned()
     {
-        Assertions.fail("Test case not implemented");
+       Assertions.fail("Test case not implemented");
     }
 
     @Test
@@ -148,7 +153,7 @@ public class RunnerControllerTest
         Mockito.verifyZeroInteractions(requestMaker);
         Mockito.verify(runner, Mockito.times(1)).isFinished();
         Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-        Assertions.fail("Production code not implemented");
+        Assertions.fail("Production code not implemented - in production finished is mixed with getting the result");
     }
 
     @Test
