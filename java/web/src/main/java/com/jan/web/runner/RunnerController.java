@@ -88,13 +88,13 @@ public class RunnerController
 
 
     @PostMapping(value = "/finished", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> isFinished(@RequestHeader(name="Authorization") String token, @RequestBody FinishedRequest frontendRequest)
+    public ResponseEntity<?> isFinished(@RequestHeader(name="Authorization") String token, @RequestBody FinishedRequest finishedRequest)
     {
         try
         {
             JSONObject request = new JSONObject();
-            request.put("projectId", frontendRequest.getProjectId());
-            request.put("runnerId", frontendRequest.getRunnerId());
+            request.put("projectId", finishedRequest.getProjectId());
+            request.put("runnerId", finishedRequest.getRunnerId());
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>(
@@ -108,8 +108,7 @@ public class RunnerController
                         com.jan.web.request.RequestMethod.IS_RUNNER_FINISHED,
                         entity);
 
-                ObjectMapper mapper = new ObjectMapper();
-                FinishedResponse finishedResponse = mapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
+                FinishedResponse finishedResponse = objectMapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
 
                 JSONObject response = new JSONObject();
                 response.put("isFinished", finishedResponse.isFinished);
@@ -117,8 +116,8 @@ public class RunnerController
                 if (finishedResponse.isFinished)
                 {
                     JSONObject resultRequest = new JSONObject();
-                    resultRequest.put("projectId", frontendRequest.getProjectId());
-                    resultRequest.put("runnerId", frontendRequest.getRunnerId());
+                    resultRequest.put("projectId", finishedRequest.getProjectId());
+                    resultRequest.put("runnerId", finishedRequest.getRunnerId());
                     HttpHeaders resultHeaders = new HttpHeaders();
                     resultHeaders.setContentType(MediaType.APPLICATION_JSON);
                     HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
@@ -128,14 +127,14 @@ public class RunnerController
                             RequestMethod.RUNNER_RESULT,
                             resultEntity);
 
-                    ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
+                    ResultResponse resultResponse = objectMapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
 
                     response.put("firstLabelResult", resultResponse.firstLabelResult);
                     response.put("secondLabelResult", resultResponse.secondLabelResult);
 
-                    if (runnerRepository.findById(frontendRequest.getRunnerId()).isPresent())
+                    if (runnerRepository.findById(finishedRequest.getRunnerId()).isPresent())
                     {
-                        Runner runnerToBeUpdated = runnerRepository.findById(frontendRequest.getRunnerId()).get();
+                        Runner runnerToBeUpdated = runnerRepository.findById(finishedRequest.getRunnerId()).get();
                         runnerToBeUpdated.setFinished(true);
                         runnerRepository.save(runnerToBeUpdated);
                     }
