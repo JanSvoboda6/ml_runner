@@ -9,10 +9,13 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,6 +31,7 @@ public class RunnerController
     private final RunnerService runnerService;
     private final RequestValidator requestValidator;
     private final RequestMaker requestMaker;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public RunnerController(RunnerRepository runnerRepository,
@@ -35,7 +39,8 @@ public class RunnerController
                             ContainerUtility containerUtility,
                             RunnerService runnerService,
                             RequestValidator requestValidator,
-                            RequestMaker requestMaker)
+                            RequestMaker requestMaker,
+                            ObjectMapper objectMapper)
     {
         this.runnerRepository = runnerRepository;
         this.containerRepository = containerRepository;
@@ -43,6 +48,13 @@ public class RunnerController
         this.runnerService = runnerService;
         this.requestValidator = requestValidator;
         this.requestMaker = requestMaker;
+        this.objectMapper = objectMapper;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper()
+    {
+        return new ObjectMapper();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -143,7 +155,6 @@ public class RunnerController
     {
         JSONObject response = new JSONObject();
         JSONObject resultRequest = new JSONObject();
-        ObjectMapper mapper = new ObjectMapper();
 
         resultRequest.put("projectId", projectId);
         resultRequest.put("runnerId", runnerId);
@@ -157,7 +168,7 @@ public class RunnerController
                 RequestMethod.RUNNER_RESULT,
                 resultEntity);
 
-        ResultResponse resultResponse = mapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
+        ResultResponse resultResponse = objectMapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
 
         response.put("firstLabelResult", resultResponse.firstLabelResult);
         response.put("secondLabelResult", resultResponse.secondLabelResult);
