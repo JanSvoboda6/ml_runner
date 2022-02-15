@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class ModelRunnerServiceImpl implements ModelRunnerService
+public class RunnerServiceImpl implements RunnerService
 {
     RunnerRepository runnerRepository;
     ProjectRunner projectRunner;
 
     @Autowired
-    public ModelRunnerServiceImpl(RunnerRepository runnerRepository, ProjectRunner projectRunner)
+    public RunnerServiceImpl(RunnerRepository runnerRepository, ProjectRunner projectRunner)
     {
         this.runnerRepository = runnerRepository;
         this.projectRunner = projectRunner;

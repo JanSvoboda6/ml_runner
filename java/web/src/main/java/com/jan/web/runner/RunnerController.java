@@ -20,22 +20,22 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/project/runner")
-public class ModelRunnerController
+public class RunnerController
 {
     private final RunnerRepository runnerRepository;
     private final ContainerRepository containerRepository;
     private final ContainerUtility containerUtility;
-    private final ModelRunnerService runnerService;
+    private final RunnerService runnerService;
     private final RequestValidator requestValidator;
     private final RequestMaker requestMaker;
 
     @Autowired
-    public ModelRunnerController(RunnerRepository runnerRepository,
-                                 ContainerRepository containerRepository,
-                                 ContainerUtility containerUtility,
-                                 ModelRunnerService runnerService,
-                                 RequestValidator requestValidator,
-                                 RequestMaker requestMaker)
+    public RunnerController(RunnerRepository runnerRepository,
+                            ContainerRepository containerRepository,
+                            ContainerUtility containerUtility,
+                            RunnerService runnerService,
+                            RequestValidator requestValidator,
+                            RequestMaker requestMaker)
     {
         this.runnerRepository = runnerRepository;
         this.containerRepository = containerRepository;
