@@ -68,9 +68,14 @@ function Runner(props: any)
                     setFinished(res.data.isFinished);
                     if (res.data.isFinished)
                     {
+                        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
+                            .then((res: AxiosResponse<any>) =>
+                            {
+                                setFirstLabelResult(res.data.firstLabelResult);
+                                setSecondLabelResult(res.data.secondLabelResult);
+                            })
+
                         clearInterval(intervalId);
-                        setFirstLabelResult(res.data.firstLabelResult);
-                        setSecondLabelResult(res.data.secondLabelResult);
                     }
                 }
             )
