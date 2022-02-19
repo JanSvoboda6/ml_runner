@@ -62,12 +62,11 @@ public class RunnerControllerTest
     public void whenRequestForRunningProject_thenRunnerIsPersisted()
     {
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getId()).thenReturn(999L);
+        Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
 
-        long projectId = 999;
         RunRequest runRequest = new RunRequest();
-        runRequest.setProjectId(projectId);
+        runRequest.setProjectId(PROJECT_ID);
 
         runnerController.runProject(RANDOM_JWT_TOKEN, runRequest);
         Mockito.verify(runnerRepository, Mockito.times(1)).save(Mockito.any());
@@ -77,7 +76,7 @@ public class RunnerControllerTest
     public void whenRequestForResultForFinishedRunnerForFirstTime_thenResultIsObtainedFromContainer() throws JSONException, IOException
     {
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getId()).thenReturn(999L);
+        Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
 
         ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
@@ -99,11 +98,11 @@ public class RunnerControllerTest
     public void whenRequestForResultForFinishedRunnerForSecondTime_thenResultIsObtainedFromLocalSource() throws JSONException, IOException
     {
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getId()).thenReturn(999L);
+        Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
         Result result = Mockito.mock(Result.class);
         Mockito.when(resultRepository.findByRunnerId(Mockito.anyLong())).thenReturn(result);
-        ResponseEntity<?> response = runnerController.getResult(RANDOM_JWT_TOKEN, 999L, 999L);
+        ResponseEntity<?> response = runnerController.getResult(RANDOM_JWT_TOKEN, PROJECT_ID, RUNNER_ID);
         Mockito.verifyZeroInteractions(requestMaker);
         Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
     }
