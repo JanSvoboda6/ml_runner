@@ -76,6 +76,7 @@ public class RunnerController
         return ResponseEntity.ok().body("Project is running!");
     }
 
+    //TODO: Jan - projectId is redundant
     @GetMapping("/result")
     public ResponseEntity<?> getResult(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId) throws JSONException, IOException
     {
@@ -83,74 +84,72 @@ public class RunnerController
         requestValidator.validateProject(projectId);
         requestValidator.validateRunner(runnerId);
 
-        JSONObject response = getResultResponse(projectId, runnerId, containerEntity);
+        if(isFinished(containerEntity.getId(), projectId, runnerId))
+        {
+            JSONObject response = getResultResponse(projectId, runnerId, containerEntity);
+
+            return ResponseEntity.ok(response.toString());
+        }
+
+        return ResponseEntity.ok("Result cannot be obtained since project is still running!");
+    }
+
+    @PostMapping(value = "/finished", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> isFinished(@RequestHeader(name="Authorization") String token, @RequestBody FinishedRequest finishedRequest) throws JSONException, IOException
+    {
+        ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
+        requestValidator.validateProject(finishedRequest.getProjectId());
+        requestValidator.validateRunner(finishedRequest.getRunnerId());
+
+        JSONObject response = new JSONObject();
+        response.put("isFinished", isFinished(containerEntity.getId(), finishedRequest.getProjectId(), finishedRequest.getRunnerId()));
 
         return ResponseEntity.ok(response.toString());
     }
 
-
-    @PostMapping(value = "/finished", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> isFinished(@RequestHeader(name="Authorization") String token, @RequestBody FinishedRequest finishedRequest)
+    private boolean isFinished(long containerId, long projectId, long runnerId) throws JSONException, IOException
     {
-        try
+        if (runnerRepository.findById(runnerId).isPresent())
         {
-            JSONObject request = new JSONObject();
-            request.put("projectId", finishedRequest.getProjectId());
-            request.put("runnerId", finishedRequest.getRunnerId());
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<>(
-                    request.toString(),
-                    headers);
-
-            Optional<ContainerEntity> containerEntity = containerRepository.findById(containerUtility.getContainerIdFromToken(token));
-            if(containerEntity.isPresent())
+            boolean isFinished = runnerRepository.findById(runnerId).get().isFinished();
+            if (isFinished)
             {
-                ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
-                        containerEntity.get().getId(),
-                        com.jan.web.request.RequestMethod.IS_RUNNER_FINISHED,
-                        entity);
+                return true;
+            }
+        }
 
-                FinishedResponse finishedResponse = objectMapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
+        JSONObject request = new JSONObject();
+        request.put("projectId", projectId);
+        request.put("runnerId", runnerId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(
+                request.toString(),
+                headers);
 
-                JSONObject response = new JSONObject();
-                response.put("isFinished", finishedResponse.isFinished);
+        Optional<ContainerEntity> containerEntity = containerRepository.findById(containerId);
+        if (containerEntity.isPresent())
+        {
+            ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
+                    containerEntity.get().getId(),
+                    com.jan.web.request.RequestMethod.IS_RUNNER_FINISHED,
+                    entity);
 
-                if (finishedResponse.isFinished)
+            FinishedResponse finishedResponse = objectMapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
+
+            if (finishedResponse.isFinished)
+            {
+                if (runnerRepository.findById(runnerId).isPresent())
                 {
-                    JSONObject resultRequest = new JSONObject();
-                    resultRequest.put("projectId", finishedRequest.getProjectId());
-                    resultRequest.put("runnerId", finishedRequest.getRunnerId());
-                    HttpHeaders resultHeaders = new HttpHeaders();
-                    resultHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
-
-                    ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
-                            containerEntity.get().getId(),
-                            RequestMethod.RUNNER_RESULT,
-                            resultEntity);
-
-                    ResultResponse resultResponse = objectMapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
-
-                    response.put("firstLabelResult", resultResponse.firstLabelResult);
-                    response.put("secondLabelResult", resultResponse.secondLabelResult);
-
-                    if (runnerRepository.findById(finishedRequest.getRunnerId()).isPresent())
-                    {
-                        Runner runnerToBeUpdated = runnerRepository.findById(finishedRequest.getRunnerId()).get();
-                        runnerToBeUpdated.setFinished(true);
-                        runnerRepository.save(runnerToBeUpdated);
-                    }
+                    Runner runnerToBeUpdated = runnerRepository.findById(runnerId).get();
+                    runnerToBeUpdated.setFinished(true);
+                    runnerRepository.save(runnerToBeUpdated);
                 }
-
-                return ResponseEntity.ok(response.toString());
             }
 
-        } catch (Exception exception)
-        {
-            exception.printStackTrace();
+            return finishedResponse.isFinished;
         }
-        return ResponseEntity.badRequest().body("Problem with obtaining the information!");
+        return false;
     }
 
     private JSONObject getResultResponse(long projectId, long runnerId, ContainerEntity containerEntity) throws JSONException, IOException
@@ -181,6 +180,13 @@ public class RunnerController
 
         response.put("firstLabelResult", resultResponse.firstLabelResult);
         response.put("secondLabelResult", resultResponse.secondLabelResult);
+
+        result = new Result();
+        result.setRunner(runnerRepository.findById(runnerId).get());
+        result.setFirstLabelResult(resultResponse.firstLabelResult);
+        result.setFirstLabelResult(resultResponse.secondLabelResult);
+        resultRepository.save(result);
+
         return response;
     }
 }
