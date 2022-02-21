@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import logo from '../../styles/logo_but_text.png';
 import cube from '../../styles/cube_animation.gif';
 import dots from '../../styles/dots_logo_big.svg';
-import { LoginService } from '../../services/LoginService';
+import LoginService from '../../services/LoginService';
 import { useState } from "react";
 import { store } from '../../redux/store';
 import HelperBox from "../navigation/HelperBox";
@@ -47,7 +47,7 @@ function Login()
         {
             var user = { username: username, password: password, accessToken: "" };
 
-            LoginService(dispatch, user)
+            LoginService.login(dispatch, user)
                 .then(
                     (user: any) =>
                     {
@@ -80,11 +80,6 @@ function Login()
         }
     }
 
-
-    const mainState = store.getState();
-    console.log(mainState.user.isLoggedIn);
-
-
     if (isLoggedIn)
     {
         return <Redirect to="/preparing" />;
@@ -113,7 +108,7 @@ function Login()
                                 <div className="login-form">
                                     <img className='logo' src={logo} alt="logo_but" />
                                     <div className="login-page-content">
-                                        <form onSubmit={handleLogin}>
+                                        {/*<form onSubmit={handleLogin}>*/}
                                             <div className="login-item">
                                                 <input
                                                     type="text"
@@ -135,7 +130,7 @@ function Login()
                                                 />
                                             </div>
                                             <div className="login-item">
-                                                <button className="submit-button" disabled={loading}>
+                                                <button className="submit-button" disabled={loading} onClick={handleLogin}>
                                                     <span>Login</span>
                                                 </button>
                                             </div>
@@ -146,7 +141,7 @@ function Login()
                                                     </div>
                                                 </div>
                                             )}
-                                        </form>
+                                        {/*</form>*/}
                                         <div className="login-link">
                                             <p className="login-link-text" >Do not have an account?</p>
                                             <Link className="login-link-reference" to="/register">Register</Link>

@@ -31,6 +31,7 @@
     "axios": "^0.22.0",
     "chart.js": "^3.6.0",
     "font-awesome": "^4.7.0",
+    "jest-environment-jsdom-sixteen": "^2.0.0",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-burger-menu": "^3.0.6",
@@ -51,7 +52,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

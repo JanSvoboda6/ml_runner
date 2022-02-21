@@ -1,15 +1,17 @@
 import AuthenticationService from "./AuthenticationService";
 import { User } from "../types";
-import { login } from '../redux/UserSlice';
+import { login as doLogin} from '../redux/UserSlice';
 
-export function LoginService(dispatch: any, user: User)
+const login = (dispatch: any, user: User) =>
 {
     return (
         AuthenticationService.login(user.username, user.password).then(
             (user: any) =>
             {
-                dispatch(login(user));
+                dispatch(doLogin(user));
             },
         )
     );
 }
+
+export default {login};
