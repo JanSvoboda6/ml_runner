@@ -88,7 +88,7 @@ function Login()
     return (
             <>
             <div className="wrapper">
-                {showPopup == 't' && <HelperBox content="Thanks for registration.  Now you can login!" />}
+                {showPopup == 't' && <HelperBox content="Thanks for registration. Now you can login!" />}
                 {/* <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a> */}
                 {/* <a className="login-banner-text">Random</a> */}
             </div>

@@ -1,65 +1,53 @@
 import React from 'react';
 import * as redux from "react-redux";
-import {act, fireEvent, render, screen, waitFor} from "@testing-library/react";
+import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import LoginPage from "../../components/pages/LoginPage";
 import {Router} from "react-router";
 import {createMemoryHistory} from 'history';
 import LoginService from "../../services/LoginService";
-import {User} from "../../types";
 import Login from "../../components/pages/LoginPage";
-import exp from "constants";
 import userEvent from "@testing-library/user-event";
-// const mockDispatch = jest.fn();
-// jest.mock('react-redux', () => ({
-//     useSelector: jest.fn(),
-//     useDispatch: () => mockDispatch
-// }));
-
-const historyMock = {
-    push: jest.fn(),
-    listen: jest.fn()
-};
-
 
 describe('Rendering', () => {
     test('When form is rendered then submit button is enabled', () => {
-        const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-        const mockDispatchFn = jest.fn();
-        useDispatchSpy.mockReturnValue(mockDispatchFn);
-
+        jest.spyOn(redux, 'useDispatch').mockReturnValue(jest.fn());
         render(<Router history={createMemoryHistory()}><LoginPage/></Router>);
         const loginButton = screen.getByText(/login/i);
         expect(loginButton).toBeEnabled();
     });
-    it.todo('When there is a login popup parameter then pop window with successful registration is displayed')
+
+    test('When there is a login popup parameter then pop window with successful registration is displayed', () => {
+        jest.spyOn(redux, 'useDispatch').mockReturnValue(jest.fn());
+        const url = "http://random-url.com/?popup=t";
+        Object.defineProperty(window, "location", {
+            value: new URL(url)
+        });
+
+        render(<Router history={createMemoryHistory()}><LoginPage/></Router>);
+        const popupMessage = screen.getByText("Thanks for registration. Now you can login!");
+        expect(popupMessage).toBeInTheDocument();
+    })
 });
 
 describe('Login', () => {
     test('When form is successfully submitted then user is redirected to the main page', async () => {
-        const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-        const mockDispatchFn = jest.fn();
-        useDispatchSpy.mockReturnValue(mockDispatchFn);
-
+        jest.spyOn(redux, 'useDispatch').mockReturnValue(jest.fn());
         const history = createMemoryHistory();
-
         const user = {
             username: 'jan@jan.com',
             password: 'jan',
             accessToken: 'a random token'
         }
-
         jest.spyOn(LoginService, 'login').mockResolvedValue({user: user});
-
         history.replace = jest.fn();
-
         render(<Router history={history}><LoginPage/></Router>);
 
         const email = screen.getByPlaceholderText(/email/i);
         const password = screen.getByPlaceholderText(/password/i);
         const loginButton = screen.getByText(/login/i);
 
-        fireEvent.change(email, {target: {value: 'jan@jan.com'}});
-        fireEvent.change(password, {target: {value: 'jan'}});
+        fireEvent.change(email, {target: {value: 'user@user.com'}});
+        fireEvent.change(password, {target: {value: 'password'}});
         userEvent.click(loginButton);
 
         await waitFor(() => expect(loginButton).not.toBeInTheDocument());
