@@ -42,8 +42,8 @@ function Login()
 
         setLoading(true);
 
-        var isValidationSuccesfull = true;
-        if (isValidationSuccesfull) //TODO Jan: implement proper validation
+        var isValidationSuccessful = true;
+        if (isValidationSuccessful) //TODO Jan: implement proper validation
         {
             var user = { username: username, password: password, accessToken: "" };
 
