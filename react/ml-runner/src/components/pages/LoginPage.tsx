@@ -10,6 +10,7 @@ import { useState } from "react";
 import { store } from '../../redux/store';
 import HelperBox from "../navigation/HelperBox";
 import FadeIn from "react-fade-in";
+import validator from 'validator';
 
 function Login()
 {
@@ -17,7 +18,7 @@ function Login()
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isPopupClosed, setPopupClosed] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [isLoggedIn, setLoggedIn] = useState(false);
 
     const search = window.location.search;
@@ -40,10 +41,9 @@ function Login()
     {
         e.preventDefault();
 
-        setLoading(true);
+        setIsLoading(true);
 
-        var isValidationSuccessful = true;
-        if (isValidationSuccessful) //TODO Jan: implement proper validation
+        if (validateForm()) //TODO Jan: implement proper validation
         {
             var user = { username: username, password: password, accessToken: "" };
 
@@ -56,7 +56,7 @@ function Login()
                     (error: any) =>
                     {
                         setLoggedIn(false);
-                        setLoading(false);
+                        setIsLoading(false);
 
                         var message = "";
                         if (error && error.response && error.response.data.message)
@@ -76,8 +76,22 @@ function Login()
                     });
         } else
         {
-            setLoading(false);
+            setIsLoading(false);
         }
+    }
+
+    const validateForm = ():boolean => {
+        if (!validator.isEmail(username, {ignore_max_length: false})){
+            setMessage("Email format is not valid!");
+            return false;
+        }
+
+        if(!validator.isLength(password, {min:8, max: 50}) || !validator.isStrongPassword(password)){
+            setMessage("Password is not valid!");
+            return  false;
+        }
+
+        return  true;
     }
 
     if (isLoggedIn)
@@ -108,7 +122,7 @@ function Login()
                                 <div className="login-form">
                                     <img className='logo' src={logo} alt="logo_but" />
                                     <div className="login-page-content">
-                                        {/*<form onSubmit={handleLogin}>*/}
+                                        <form onSubmit={handleLogin}>
                                             <div className="login-item">
                                                 <input
                                                     type="text"
@@ -130,7 +144,7 @@ function Login()
                                                 />
                                             </div>
                                             <div className="login-item">
-                                                <button className="submit-button" disabled={loading} onClick={handleLogin}>
+                                                <button className="submit-button" disabled={isLoading}>
                                                     <span>Login</span>
                                                 </button>
                                             </div>
@@ -141,7 +155,7 @@ function Login()
                                                     </div>
                                                 </div>
                                             )}
-                                        {/*</form>*/}
+                                        </form>
                                         <div className="login-link">
                                             <p className="login-link-text" >Do not have an account?</p>
                                             <Link className="login-link-reference" to="/register">Register</Link>
