@@ -21,12 +21,7 @@ function RunnerForm(props: any)
     const handleRunButton = (e: any) =>
     {
         e.preventDefault();
-        console.log(props.projectId, gammaParameter, cParameter);
-        RunnerService.run(props.projectId, gammaParameter, cParameter)
-            .then(res =>
-            {
-                console.log("Running a project!");
-            })
+        RunnerService.run(props.projectId, gammaParameter, cParameter);
         window.location.reload();
     }
 

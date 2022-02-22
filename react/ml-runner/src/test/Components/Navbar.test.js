@@ -1,6 +1,6 @@
 describe('Rendering', () =>
 {
-    it.todo('When page is rendered then navigation list is present');
+    it.todo('When page is rendered then all items in navigation list are present');
     it.todo('When page is rendered then logout button list is present');
 });
 

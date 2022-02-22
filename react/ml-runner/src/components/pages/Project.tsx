@@ -59,7 +59,6 @@ function Project()
     const handleProjectSaving = (e: any) =>
     {
         e.preventDefault();
-        //TODO Jan: Decide whether to use project or model name
         ProjectService.save(projectName, firstLabel, secondLabel, firstLabelFolder, secondLabelFolder, selectedModel)
             .then(() =>
             {
@@ -72,8 +71,6 @@ function Project()
     {
         return <Redirect to='/' />;
     }
-
-    console.log(firstLabelFolder)
 
     return (
         <div>

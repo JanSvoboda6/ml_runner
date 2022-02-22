@@ -26,7 +26,6 @@ function RunnerList(props: any)
             .then(
                 (res: AxiosResponse<any>) =>
                 {
-                    console.log(res);
                     setLoaded(true);
                     const runners: Array<Runner> = [];
                     res.data.forEach(runner =>
@@ -34,7 +33,6 @@ function RunnerList(props: any)
                         runners.push({ projectId: runner.project.id, runnerId: runner.id })
                     });
                     setRunners(runners.reverse());
-                    console.log(res.data);
                 },
                 (error) =>
                 {

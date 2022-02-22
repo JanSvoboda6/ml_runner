@@ -4,8 +4,6 @@ import Popup from "reactjs-popup";
 import RunnerForm from "./RunnerForm";
 import RunnerList from "./RunnerList";
 
-const API_URL = "http://localhost:8080/api/project";
-
 const ProjectQuickView = (props: any) =>
 {
     let history = useHistory();
