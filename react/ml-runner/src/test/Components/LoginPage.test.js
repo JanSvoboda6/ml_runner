@@ -85,8 +85,6 @@ describe('Login', () => {
         const errorMessage = screen.getByText(message);
         expect(errorMessage).toBeInTheDocument();
     });
-
-    it.todo('When form is not successfully submitted then user information are not stored in the local storage');
     it.todo('When form is submitted then POST request is sent');
     it.todo('When form is submitted and there is an exception on server side then error message is displayed');
     it.todo('When form has been submitted then submit button becomes disabled');

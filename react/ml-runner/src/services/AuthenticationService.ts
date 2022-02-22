@@ -3,7 +3,7 @@ import { User } from "../types";
 
 const API_URL = "http://localhost:8080/api/auth";
 
-class AuthService
+class AuthenticationService
 {
   async login(username: string, password: string) 
   {
@@ -28,4 +28,4 @@ class AuthService
   }
 }
 
-export default new AuthService();
+export default new AuthenticationService();
