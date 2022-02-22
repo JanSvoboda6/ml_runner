@@ -11,6 +11,7 @@ function Register()
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [isRegistrationSuccessful, setRegistrationSuccessful] = useState(false);
 
     const onChangeUsername = (e: { target: { value: string; }; }) =>
@@ -26,12 +27,13 @@ function Register()
     const handleRegister = (e: { preventDefault: () => void; }) =>
     {
         e.preventDefault();
+        setIsLoading(true);
         setRegistrationSuccessful(false);
 
         var isValidationSuccesful = true;
         if (isValidationSuccesful) //TODO Jan: implement proper validation
         {
-            RegisterService(username, password).then(
+            RegisterService.register(username, password).then(
                 () =>
                 {
                     setRegistrationSuccessful(true)
@@ -54,8 +56,12 @@ function Register()
                     }
 
                     setMessage(message)
+                    setIsLoading(false);
                 });
-        };
+        } else
+        {
+         setIsLoading(false);
+        }
     }
 
     if (isRegistrationSuccessful)
@@ -115,5 +121,4 @@ function Register()
     );
 }
 
-
-export default connect()(Register);
+export default Register;
