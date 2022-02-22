@@ -8,7 +8,6 @@ import LoginService from "../../services/LoginService";
 import Login from "../../components/pages/LoginPage";
 import userEvent from "@testing-library/user-event";
 import {act} from 'react-dom/test-utils';
-import {LocalStorageMock} from '@react-mock/localstorage';
 
 describe('Rendering', () => {
     test('When form is rendered then submit button is enabled', () => {
@@ -64,13 +63,7 @@ describe('Login', () => {
         const history = createMemoryHistory();
 
         let message = 'A problem occurred';
-        const error = {
-            response: {
-                data: {
-                    message: message
-                }
-            }
-        }
+        const error = {response: {data: {message: message}}}
 
         jest.spyOn(LoginService, 'login').mockRejectedValue(error);
         history.replace = jest.fn();
