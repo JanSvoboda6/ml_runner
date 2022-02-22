@@ -1,6 +1,6 @@
 import React from 'react';
 import * as redux from "react-redux";
-import {fireEvent, render, screen, waitFor, queryByText} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import LoginPage from "../../components/pages/LoginPage";
 import {Router} from "react-router";
 import {createMemoryHistory} from 'history';
