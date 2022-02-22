@@ -316,7 +316,7 @@ describe('Validation', () => {
             fireEvent.click(loginButton);
         });
 
-        const errorMessage = screen.queryByText("Password format is not valid!");
+        const errorMessage = screen.queryByText("Password is not valid!");
         expect(errorMessage).not.toBeInTheDocument()
     });
 

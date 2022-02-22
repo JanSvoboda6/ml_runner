@@ -6,7 +6,7 @@ import cube from '../../styles/cube_animation.gif';
 import LoginService from '../../services/LoginService';
 import HelperBox from "../navigation/HelperBox";
 import FadeIn from "react-fade-in";
-import validator from 'validator';
+import Validator from 'validator';
 
 function Login()
 {
@@ -76,12 +76,12 @@ function Login()
     }
 
     const validateForm = ():boolean => {
-        if (!validator.isEmail(username, {ignore_max_length: false})){
+        if (!Validator.isEmail(username, {ignore_max_length: false})){
             setMessage("Email format is not valid!");
             return false;
         }
 
-        if(!validator.isLength(password, {min:8, max: 50}) || !validator.isStrongPassword(password)){
+        if(!Validator.isLength(password, {min:8, max: 50}) || !Validator.isStrongPassword(password)){
             setMessage("Password is not valid!");
             return  false;
         }
