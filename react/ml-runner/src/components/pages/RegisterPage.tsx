@@ -5,6 +5,7 @@ import logo from '../../styles/logo_but_text.png';
 import dots from '../../styles/dots_logo_big.svg';
 import RegisterService from "../../services/RegisterService";
 import FadeIn from "react-fade-in";
+import Validator from "validator";
 
 function Register()
 {
@@ -30,8 +31,7 @@ function Register()
         setIsLoading(true);
         setRegistrationSuccessful(false);
 
-        var isValidationSuccesful = true;
-        if (isValidationSuccesful) //TODO Jan: implement proper validation
+        if (validateForm()) //TODO Jan: implement proper validation
         {
             RegisterService.register(username, password).then(
                 () =>
@@ -62,6 +62,20 @@ function Register()
         {
          setIsLoading(false);
         }
+    }
+
+    const validateForm = ():boolean => {
+        if (!Validator.isEmail(username, {ignore_max_length: false})){
+            setMessage("Email format is not valid!");
+            return false;
+        }
+
+        if(!Validator.isLength(password, {min:8, max: 50}) || !Validator.isStrongPassword(password)){
+            setMessage("Password is not valid!");
+            return  false;
+        }
+
+        return  true;
     }
 
     if (isRegistrationSuccessful)

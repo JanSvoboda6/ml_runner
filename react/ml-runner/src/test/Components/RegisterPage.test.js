@@ -5,6 +5,7 @@ import {Router} from "react-router";
 import React from "react";
 import RegisterService from "../../services/RegisterService";
 import RegisterPage from "../../components/pages/RegisterPage";
+import Validator from "validator";
 
 describe('Submitting', () => {
     test('When form is successfully submitted then user is redirected to the login page', async() => {
@@ -141,12 +142,160 @@ describe('Submitting', () => {
 
 describe('Validation', () =>
 {
-    it.todo('When form is submitted then all fields must be filled');
-    it.todo('When fields are not properly filled then submit button is disabled');
-    it.todo('When fields are properly filled then submit button is enabled');
-    it.todo('When email is filled then email has correct format');
-    it.todo('When email is filled then email must be shorter or equal to maximum email length');
-    it.todo('When password is filled then password must be shorter or equal to maximum password length');
-    it.todo('When email is not in a correct format then the warning message is displayed');
-    it.todo('When password is not in a correct length then the warning message is displayed');
+    test('When form is submitted then fields are validated', async() => {
+        let isEmailSpy = jest.spyOn(Validator, "isEmail").mockReturnValue(true);
+        let isLengthSpy = jest.spyOn(Validator, "isLength").mockReturnValue(true);
+        let isStrongPasswordSpy = jest.spyOn(Validator, "isStrongPassword").mockReturnValue(true);
+
+        const history = createMemoryHistory();
+
+        const user = {
+            username: 'user@domain.com',
+            password: 'Thisisarandompassword_999'
+        };
+
+        let message = 'A problem occurred';
+        const error = {response: {data: {message: message}}}
+
+        jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
+        history.replace = jest.fn();
+
+        await act(async () => {
+            render(<Router history={history}><RegisterPage/></Router>);
+        });
+
+        const email = screen.getByPlaceholderText(/email/i);
+        const password = screen.getByPlaceholderText(/password/i);
+        const signUpButton = screen.getByText("Sign Up");
+
+        await act(async () => {
+            fireEvent.change(email, {target: {value: user.username}});
+            fireEvent.change(password, {target: {value: user.password}});
+        });
+
+        await act(async () => {
+            fireEvent.click(signUpButton);
+        });
+
+        expect(isEmailSpy).toHaveBeenCalledTimes(1);
+        expect(isLengthSpy).toHaveBeenCalledTimes(1);
+        expect(isStrongPasswordSpy).toHaveBeenCalledTimes(1);
+    })
+
+    test('When email is not in a correct format then the warning message is displayed', async() =>{
+        jest.spyOn(Validator, "isEmail").mockReturnValue(false);
+        jest.spyOn(Validator, "isLength").mockReturnValue(true);
+        jest.spyOn(Validator, "isStrongPassword").mockReturnValue(true);
+
+        const history = createMemoryHistory();
+
+        const user = {
+            username: 'user@domain.com',
+            password: 'Thisisarandompassword_999'
+        };
+
+        let message = 'A problem occurred';
+        const error = {response: {data: {message: message}}}
+
+        jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
+        history.replace = jest.fn();
+
+        await act(async () => {
+            render(<Router history={history}><RegisterPage/></Router>);
+        });
+
+        const email = screen.getByPlaceholderText(/email/i);
+        const password = screen.getByPlaceholderText(/password/i);
+        const signUpButton = screen.getByText("Sign Up");
+
+        await act(async () => {
+            fireEvent.change(email, {target: {value: user.username}});
+            fireEvent.change(password, {target: {value: user.password}});
+        });
+
+        await act(async () => {
+            fireEvent.click(signUpButton);
+        });
+
+        const errorMessage = screen.getByText("Email format is not valid!");
+        expect(errorMessage).toBeInTheDocument()
+    });
+
+    test('When password is longer than maximum length then the warning message is displayed', async() =>{
+        jest.spyOn(Validator, "isEmail").mockReturnValue(true);
+        jest.spyOn(Validator, "isLength").mockReturnValue(false);
+        jest.spyOn(Validator, "isStrongPassword").mockReturnValue(true);
+
+        const history = createMemoryHistory();
+
+        const user = {
+            username: 'user@domain.com',
+            password: 'Thisisarandompassword_999'
+        };
+
+        let message = 'A problem occurred';
+        const error = {response: {data: {message: message}}}
+
+        jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
+        history.replace = jest.fn();
+
+        await act(async () => {
+            render(<Router history={history}><RegisterPage/></Router>);
+        });
+
+        const email = screen.getByPlaceholderText(/email/i);
+        const password = screen.getByPlaceholderText(/password/i);
+        const signUpButton = screen.getByText("Sign Up");
+
+        await act(async () => {
+            fireEvent.change(email, {target: {value: user.username}});
+            fireEvent.change(password, {target: {value: user.password}});
+        });
+
+        await act(async () => {
+            fireEvent.click(signUpButton);
+        });
+
+        const errorMessage = screen.getByText("Password is not valid!");
+        expect(errorMessage).toBeInTheDocument();
+    });
+
+    test('When password is not a strong password then the warning message is displayed', async() =>{
+        jest.spyOn(Validator, "isEmail").mockReturnValue(true);
+        jest.spyOn(Validator, "isLength").mockReturnValue(true);
+        jest.spyOn(Validator, "isStrongPassword").mockReturnValue(false);
+
+        const history = createMemoryHistory();
+
+        const user = {
+            username: 'user@domain.com',
+            password: 'Thisisarandompassword_999'
+        };
+
+        let message = 'A problem occurred';
+        const error = {response: {data: {message: message}}}
+
+        jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
+        history.replace = jest.fn();
+
+        await act(async () => {
+            render(<Router history={history}><RegisterPage/></Router>);
+        });
+
+        const email = screen.getByPlaceholderText(/email/i);
+        const password = screen.getByPlaceholderText(/password/i);
+        const signUpButton = screen.getByText("Sign Up");
+
+        await act(async () => {
+            fireEvent.change(email, {target: {value: user.username}});
+            fireEvent.change(password, {target: {value: user.password}});
+        });
+
+        await act(async () => {
+            fireEvent.click(signUpButton);
+        });
+
+        const errorMessage = screen.getByText("Password is not valid!");
+        expect(errorMessage).toBeInTheDocument();
+    });
 });
