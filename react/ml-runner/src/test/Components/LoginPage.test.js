@@ -6,7 +6,6 @@ import {Router} from "react-router";
 import {createMemoryHistory} from 'history';
 import LoginService from "../../services/LoginService";
 import Login from "../../components/pages/LoginPage";
-import userEvent from "@testing-library/user-event";
 import {act} from 'react-dom/test-utils';
 
 describe('Rendering', () => {

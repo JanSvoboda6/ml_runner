@@ -1,13 +1,9 @@
-import React from "react";
-import { Link, Redirect } from 'react-router-dom';
-import Popup from "../popup/Popup";
-import { useDispatch } from "react-redux";
+import React, {useState} from "react";
+import {Link, Redirect} from 'react-router-dom';
+import {useDispatch} from "react-redux";
 import logo from '../../styles/logo_but_text.png';
 import cube from '../../styles/cube_animation.gif';
-import dots from '../../styles/dots_logo_big.svg';
 import LoginService from '../../services/LoginService';
-import { useState } from "react";
-import { store } from '../../redux/store';
 import HelperBox from "../navigation/HelperBox";
 import FadeIn from "react-fade-in";
 import validator from 'validator';
@@ -17,7 +13,6 @@ function Login()
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
-    const [isPopupClosed, setPopupClosed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoggedIn, setLoggedIn] = useState(false);
 
@@ -103,8 +98,6 @@ function Login()
             <>
             <div className="wrapper">
                 {showPopup == 't' && <HelperBox content="Thanks for registration. Now you can login!" />}
-                {/* <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a> */}
-                {/* <a className="login-banner-text">Random</a> */}
             </div>
             <div className="landing-page-wrapper">
                 <div className="landing-page-content">
@@ -168,8 +161,6 @@ function Login()
                             </div>
                         </div>
                     </FadeIn>
-
-
                 </div >
             </div>
             </>
