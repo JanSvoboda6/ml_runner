@@ -10,6 +10,8 @@ import { FileInformation } from '../../types';
 import DatasetService from './DatasetService';
 import loadingAnimation from "../../styles/loading_graphics.gif";
 import FadeIn from 'react-fade-in';
+import DatasetUtility from "./DatasetUtility";
+
 
 const API_URL = "http://localhost:8080/api";
 
@@ -59,43 +61,9 @@ function Datasets(props)
 
     const handleCreateFiles = (addedFiles: File[], prefix: string) =>
     {
-        const newFiles: Array<FileInformation> = addedFiles.map((file) =>
-        {
-            let newKey = prefix
-            if (prefix !== '' && prefix.substring(prefix.length - 1, prefix.length) !== '/')
-            {
-                newKey += '/'
-            }
-            newKey += file.name
-            return {
-                key: newKey,
-                size: file.size,
-                modified: +Moment().unix(),
-                data: file
-            }
-        })
-
-        const uniqueNewFiles: Array<FileInformation> = [];
-
-        newFiles.map((newFile) =>
-        {
-            let fileAlreadyExists = false;
-            files.map((existingFile) =>
-            {
-                if (existingFile.key === newFile.key)
-                {
-                    fileAlreadyExists = true;
-                }
-            })
-            if (!fileAlreadyExists)
-            {
-                uniqueNewFiles.push(newFile)
-            }
-        })
-
-        DatasetService.uploadFiles(uniqueNewFiles);
-
-        setFiles(existingFiles => [...existingFiles, ...uniqueNewFiles]);
+        const uniqueAddedFiles: FileInformation[] = DatasetUtility.getUniqueAddedFiles(files, addedFiles, prefix);
+        DatasetService.uploadFiles(uniqueAddedFiles);
+        setFiles(existingFiles => [...existingFiles, ...uniqueAddedFiles]);
     }
 
     // handleRenameFolder = (oldKey, newKey) =>
