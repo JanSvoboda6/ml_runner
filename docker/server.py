@@ -39,13 +39,10 @@ def walk_directory(root_directory):
     directories_list = []
     files_list = []
     for top, directories, files in os.walk(root_directory):
+        shifted_root_directory = top.replace(root_directory, '', 1)
         for directory in directories:
-            directories_list.append(directory + '/')
+            directories_list.append(os.path.join(shifted_root_directory, directory + '/'))
         for file in files:
-            shifted_root_directory = top.replace(root_directory, '', 1) + '/'
-            if(shifted_root_directory == '/'):
-                shifted_root_directory = ''
-
             file_information = {'key': shifted_root_directory + file,
                                 'size': os.path.getsize(os.path.join(top, file)),
                                 'modified': math.floor(os.path.getmtime(os.path.join(top, file)))

@@ -100,7 +100,6 @@ public class ContainerFileService implements FileService
         {
             HttpPost uploadFile = new HttpPost(composeUrl(containerEntity.get().getId(), RequestMethod.UPLOAD_FILES.getRequestUrl()));
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            builder.addTextBody("Files", "Hello Docker!", ContentType.TEXT_PLAIN);
             try
             {
                 for (int i = 0; i < keys.getKeys().size(); i++)

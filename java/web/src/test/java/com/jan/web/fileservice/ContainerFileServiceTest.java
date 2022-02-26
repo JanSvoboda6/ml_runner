@@ -74,6 +74,19 @@ class ContainerFileServiceTest
     }
 
     @Test
+    public void whenCreatingChildDirectory_thenChildDirectoryIsCreatedInContainer()
+    {
+        final String directory = "test_directory/";
+        fileService.createDirectory(directory, CONTAINER_ID);
+
+        final String childDirectory = directory + "child_directory/";
+        fileService.createDirectory(childDirectory, CONTAINER_ID);
+        List<FileInformation> files = fileService.getAllFiles(CONTAINER_ID);
+
+        Assertions.assertThat(files.get(1).getKey()).isEqualTo(childDirectory);
+    }
+
+    @Test
     public void whenUploadingFiles_thenFilesAreStoredInContainer()
     {
         final String fileName = "test_file.txt";

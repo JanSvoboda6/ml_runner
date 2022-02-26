@@ -12,9 +12,6 @@ import loadingAnimation from "../../styles/loading_graphics.gif";
 import FadeIn from 'react-fade-in';
 import DatasetUtility from "./DatasetUtility";
 
-
-const API_URL = "http://localhost:8080/api";
-
 function Datasets(props)
 {
     const [isLoaded, setLoaded] = useState(false);
@@ -71,6 +68,24 @@ function Datasets(props)
         setFiles(DatasetUtility.deleteSelectedFolders(files, folderKeys));
     }
 
+    // const handleDeleteFile = (fileKey) =>
+    // {
+    //     this.setState(state =>
+    //     {
+    //         const newFiles = []
+    //         state.files.map((file) =>
+    //         {
+    //             //TODO Jan: iterate on multiple files
+    //             if (file.key !== fileKey)
+    //             {
+    //                 newFiles.push(file)
+    //             }
+    //         })
+    //         state.files = newFiles;
+    //         return state;
+    //     })
+    // }
+
     // handleRenameFolder = (oldKey, newKey) =>
     // {
     //     this.setState(state =>
@@ -115,24 +130,6 @@ function Datasets(props)
     //         })
     //         state.files = newFiles
     //         return state
-    //     })
-    // }
-
-    // handleDeleteFile = (fileKey) =>
-    // {
-    //     this.setState(state =>
-    //     {
-    //         const newFiles = []
-    //         state.files.map((file) =>
-    //         {
-    //             //TODO Jan: iterate on multiple files
-    //             if (file.key !== fileKey)
-    //             {
-    //                 newFiles.push(file)
-    //             }
-    //         })
-    //         state.files = newFiles;
-    //         return state;
     //     })
     // }
 
@@ -193,8 +190,8 @@ function Datasets(props)
                     // onMoveFile={this.handleRenameFile}
                     // onRenameFolder={this.handleRenameFolder}
                     // onRenameFile={this.handleRenameFile}
-                    // onDeleteFolder={this.handleDeleteFolder}
-                    // onDeleteFile={(fileKey) => this.handleDeleteFile(fileKey)}
+                        onDeleteFolder={handleDeleteFolder}
+                        // onDeleteFile={(fileKey) => this.handleDeleteFile(fileKey)}
                     // onSelectFile={(file) => this.handleFileSelection(file)}
                     // detailRenderer={(fileInformation) => this.handleNone(fileInformation)}
                 />
