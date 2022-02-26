@@ -53,11 +53,6 @@ public class RunnerController
         this.resultRepository = resultRepository;
     }
 
-    @Bean
-    public ObjectMapper objectMapper()
-    {
-        return new ObjectMapper();
-    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Runner getRunner(@RequestParam long projectId, @RequestParam long runnerId)

@@ -4,6 +4,7 @@ import com.jan.web.security.authentication.AuthorizationTokenFilter;
 import com.jan.web.security.authentication.AuthenticationEntryPointJwt;
 import com.jan.web.security.user.UserDetailsServiceImpl;
 import com.jan.web.security.utility.JsonWebTokenUtility;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,6 +42,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     public AuthorizationTokenFilter authenticationJwtTokenFilter()
     {
         return new AuthorizationTokenFilter(jsonWebTokenUtility, userDetailsService);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper()
+    {
+        return new ObjectMapper();
     }
 
     @Bean
