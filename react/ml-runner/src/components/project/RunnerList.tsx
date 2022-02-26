@@ -21,7 +21,6 @@ function RunnerList(props: any)
 
     useEffect(() =>
     {
-        console.log('RunnerList');
         axios.get(API_URL + "/runners?projectId=" + props.projectId, { headers: authorizationHeader()})
             .then(
                 (res: AxiosResponse<any>) =>

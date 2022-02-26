@@ -41,7 +41,7 @@ function ProjectList()
   {
     return <FadeIn>
                 <div className='loading-animation-wrapper'>
-                    <img className='project-loading-animation' src={loadingAnimation} alt="loadingAnimation" />
+                    <img className='project-loading-animation' src={loadingAnimation} alt="loading animation" />
                 </div>
           </FadeIn>;
   } else if (errorMessage || projects.length === 0)
