@@ -66,6 +66,11 @@ function Datasets(props)
         setFiles(existingFiles => [...existingFiles, ...uniqueAddedFiles]);
     }
 
+    const handleDeleteFolder = (folderKeys: string[]) =>
+    {
+        setFiles(DatasetUtility.deleteSelectedFolders(files, folderKeys));
+    }
+
     // handleRenameFolder = (oldKey, newKey) =>
     // {
     //     this.setState(state =>
@@ -113,24 +118,6 @@ function Datasets(props)
     //     })
     // }
 
-    // handleDeleteFolder = (folderKey) =>
-    // {
-    //     //TODO Jan: iterate on multiple folderKey
-    //     folderKey = folderKey[0];
-    //     this.setState(state =>
-    //     {
-    //         const newFiles = []
-    //         state.files.map((file) =>
-    //         {
-    //             if (file.key.substr(0, folderKey.length) !== folderKey)
-    //             {
-    //                 newFiles.push(file)
-    //             }
-    //         })
-    //         state.files = newFiles;
-    //         return state;
-    //     })
-    // }
     // handleDeleteFile = (fileKey) =>
     // {
     //     this.setState(state =>

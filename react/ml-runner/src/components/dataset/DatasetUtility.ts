@@ -1,7 +1,7 @@
 import {FileInformation} from "../../types";
 import Moment from "moment";
 
-const getUniqueAddedFiles = (files: FileInformation[], addedFiles: File[], prefix: string): FileInformation[] => {
+const getUniqueAddedFiles = (existingFiles: FileInformation[], addedFiles: File[], prefix: string): FileInformation[] => {
     const newFiles: Array<FileInformation> = addedFiles.map((file) =>
     {
         let newKey = prefix
@@ -23,7 +23,7 @@ const getUniqueAddedFiles = (files: FileInformation[], addedFiles: File[], prefi
     newFiles.map((newFile) =>
     {
         let fileAlreadyExists = false;
-        files.map((existingFile) =>
+        existingFiles.map((existingFile) =>
         {
             if (existingFile.key === newFile.key)
             {
@@ -39,4 +39,20 @@ const getUniqueAddedFiles = (files: FileInformation[], addedFiles: File[], prefi
     return uniqueNewFiles;
 }
 
-export default {getUniqueAddedFiles};
+const deleteSelectedFolders = (existingFiles: FileInformation[], keysOfFoldersToBeDeleted: string[]): FileInformation[] => {
+    return existingFiles.filter(file => !shouldBeDeleted(file.key, keysOfFoldersToBeDeleted));
+}
+
+const shouldBeDeleted = (existingFileKey: string, keysOfFoldersToBeDeleted: string[]): boolean => {
+    let shouldDelete = false;
+    keysOfFoldersToBeDeleted.forEach((keyOfFolderToBeDeleted) => {
+        if (existingFileKey.substr(0, keyOfFolderToBeDeleted.length) === keyOfFolderToBeDeleted)
+        {
+            shouldDelete = true;
+            return;
+        }
+    });
+    return shouldDelete;
+}
+
+export default {getUniqueAddedFiles, deleteSelectedFolders};
