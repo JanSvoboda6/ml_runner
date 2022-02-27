@@ -68,70 +68,15 @@ function Datasets(props)
         setFiles(DatasetUtility.deleteSelectedFolders(files, folderKeys));
     }
 
-    // const handleDeleteFile = (fileKey) =>
-    // {
-    //     this.setState(state =>
-    //     {
-    //         const newFiles = []
-    //         state.files.map((file) =>
-    //         {
-    //             //TODO Jan: iterate on multiple files
-    //             if (file.key !== fileKey)
-    //             {
-    //                 newFiles.push(file)
-    //             }
-    //         })
-    //         state.files = newFiles;
-    //         return state;
-    //     })
-    // }
+    const handleDeleteFile = (fileKey) =>
+    {
+       setFiles(DatasetUtility.deleteSelectedFile(files, fileKey));
+    }
 
-    // handleRenameFolder = (oldKey, newKey) =>
-    // {
-    //     this.setState(state =>
-    //     {
-    //         const newFiles = []
-    //         state.files.map((file) =>
-    //         {
-    //             if (file.key.substr(0, oldKey.length) === oldKey)
-    //             {
-    //                 newFiles.push({
-    //                     ...file,
-    //                     key: file.key.replace(oldKey, newKey),
-    //                     modified: +Moment(),
-    //                 })
-    //             } else
-    //             {
-    //                 newFiles.push(file)
-    //             }
-    //         })
-    //         state.files = newFiles
-    //         return state
-    //     })
-    // }
-    // handleRenameFile = (oldKey, newKey) =>
-    // {
-    //     this.setState(state =>
-    //     {
-    //         const newFiles = []
-    //         state.files.map((file) =>
-    //         {
-    //             if (file.key === oldKey)
-    //             {
-    //                 newFiles.push({
-    //                     ...file,
-    //                     key: newKey,
-    //                     modified: +Moment(),
-    //                 })
-    //             } else
-    //             {
-    //                 newFiles.push(file)
-    //             }
-    //         })
-    //         state.files = newFiles
-    //         return state
-    //     })
-    // }
+    const handleRenameFile = (oldKey, newKey) =>
+    {
+        setFiles(DatasetUtility.renameFile(files, oldKey, newKey));
+    }
 
     // handleFileSelection(file)
     // {
@@ -187,11 +132,11 @@ function Datasets(props)
                         onCreateFiles={handleCreateFiles}
                         onSelectFolder={(folder) => handleFolderSelection(folder)}
                     // onMoveFolder={this.handleRenameFolder}
-                    // onMoveFile={this.handleRenameFile}
+                        onMoveFile={handleRenameFile}
                     // onRenameFolder={this.handleRenameFolder}
-                    // onRenameFile={this.handleRenameFile}
+                        onRenameFile={handleRenameFile}
                         onDeleteFolder={handleDeleteFolder}
-                        // onDeleteFile={(fileKey) => this.handleDeleteFile(fileKey)}
+                        onDeleteFile={(fileKey) => handleDeleteFile(fileKey)}
                     // onSelectFile={(file) => this.handleFileSelection(file)}
                     // detailRenderer={(fileInformation) => this.handleNone(fileInformation)}
                 />

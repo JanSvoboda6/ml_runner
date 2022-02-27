@@ -59,7 +59,59 @@ describe('Creating files', () => {
     })
 });
 
-describe("Renaming files and folders", () => {
+describe('Renaming files and folders', () => {
+    test('When file is renamed then name of the file is changed', () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            },
+            {
+                'key': 'AAA/bbb.txt',
+            }
+        ];
+        const oldKey = 'AAA/aaa.txt';
+        const newKey = 'AAA/ccc.txt';
+
+        const remainingFiles = JSON.stringify(DatasetUtility.renameFile(existingFiles, oldKey, newKey));
+        expect(remainingFiles).toMatch('AAA/ccc.txt');
+        expect(remainingFiles).not.toMatch('AAA/aaa.txt');
+    })
+
+    test('When file is renamed then modified time is changed', () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            }
+        ];
+        const oldKey = 'AAA/aaa.txt';
+        const newKey = 'AAA/bbb.txt';
+
+        const remainingFiles = DatasetUtility.renameFile(existingFiles, oldKey, newKey);
+        expect(remainingFiles[0].modified).not.toBe(null);
+    })
+
+    test('When file is renamed then new key has to be unique in the directory', () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            },
+            {
+                'key': 'AAA/bbb.txt',
+            },
+            {
+                'key':'AAA/ccc.txt'
+            }
+        ];
+        const oldKey = 'AAA/aaa.txt';
+        const newKey = 'AAA/ccc.txt';
+
+        const remainingFiles = JSON.stringify(DatasetUtility.renameFile(existingFiles, oldKey, newKey));
+        expect(remainingFiles).toMatch('AAA/aaa.txt');
+        expect(remainingFiles).toMatch('AAA/bbb.txt');
+        expect(remainingFiles).toMatch('AAA/ccc.txt');
+    })
+
+
 });
 
 describe("Deleting files and folders", () => {
@@ -212,7 +264,6 @@ describe("Deleting files and folders", () => {
     });
 
 });
-
 describe("Downloading files and folders", () => {
 });
 
