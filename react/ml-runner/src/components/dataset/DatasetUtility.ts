@@ -48,7 +48,7 @@ const deleteSelectedFile = (existingFiles: FileInformation[], keyOfFileToBeDelet
 }
 
 const renameFile = (existingFiles: FileInformation[], oldKey: string, newKey: string): FileInformation[] => {
-    const unique = isUnique(existingFiles, newKey);
+    const unique = isFileKeyUnique(existingFiles, newKey);
     let updatedFiles: FileInformation[] = [];
     existingFiles.forEach(file => {
         if(unique && file.key === oldKey){
@@ -64,13 +64,42 @@ const renameFile = (existingFiles: FileInformation[], oldKey: string, newKey: st
     return updatedFiles;
 }
 
-const isUnique = (existingFiles: FileInformation[], keyOfTheFile: string): boolean => {
+const renameFolder = (existingFiles: FileInformation[], oldKey: string, newKey: string): FileInformation[] => {
+    const unique = isFolderKeyUnique(existingFiles, newKey);
+    let updatedFiles: FileInformation[] = [];
+    existingFiles.forEach(file => {
+        if (unique && (file.key.substr(0, oldKey.length) === oldKey))
+        {
+            updatedFiles.push({
+                ...file,
+                key: file.key.replace(oldKey, newKey),
+                modified: +Moment(),
+            })
+        } else {
+            updatedFiles.push(file)
+        }
+    })
+    return  updatedFiles;
+}
+
+const isFileKeyUnique = (existingFiles: FileInformation[], keyOfTheFile: string): boolean => {
     let unique = true;
     existingFiles.forEach(file => {
         if(file.key === keyOfTheFile)
         {
             unique = false;
             return;
+        }
+    })
+    return unique;
+}
+
+const isFolderKeyUnique = (existingFiles: FileInformation[], keyOfTheFolder: string): boolean => {
+    let unique = true;
+    existingFiles.forEach(file => {
+        if (file.key.substr(0, keyOfTheFolder.length) === keyOfTheFolder)
+        {
+            unique = false;
         }
     })
     return unique;
@@ -88,4 +117,4 @@ const shouldBeDeleted = (existingFileKey: string, keysOfFoldersToBeDeleted: stri
     return shouldDelete;
 }
 
-export default {getUniqueAddedFiles, deleteSelectedFolders, deleteSelectedFile, renameFile};
+export default {getUniqueAddedFiles, deleteSelectedFolders, deleteSelectedFile, renameFile, renameFolder};

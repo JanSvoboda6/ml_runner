@@ -87,7 +87,7 @@ describe('Renaming files and folders', () => {
         const newKey = 'AAA/bbb.txt';
 
         const remainingFiles = DatasetUtility.renameFile(existingFiles, oldKey, newKey);
-        expect(remainingFiles[0].modified).not.toBe(null);
+        expect(remainingFiles[0].modified).not.toBe(undefined);
     })
 
     test('When file is renamed then new key has to be unique in the directory', () => {
@@ -111,6 +111,78 @@ describe('Renaming files and folders', () => {
         expect(remainingFiles).toMatch('AAA/ccc.txt');
     })
 
+    test('When folder is renamed then folder name is changed', () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            }
+        ];
+        const oldKey = 'AAA/';
+        const newKey = 'BBB/';
+
+        const remainingFiles = JSON.stringify(DatasetUtility.renameFolder(existingFiles, oldKey, newKey));
+        expect(remainingFiles).toMatch('BBB/aaa.txt');
+    })
+
+    test('When folder is renamed then all child files and folders keys are updated', () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            },
+            {
+                'key': 'AAA/bbb.txt',
+            },
+            {
+                'key':'AAA/ccc.txt'
+            },
+            {
+                'key':'AAA/BBB/ddd.txt'
+            }
+        ];
+        const oldKey = 'AAA/';
+        const newKey = 'CCC/';
+
+        const remainingFiles = JSON.stringify(DatasetUtility.renameFolder(existingFiles, oldKey, newKey));
+        expect(remainingFiles).toMatch('CCC/aaa.txt');
+        expect(remainingFiles).toMatch('CCC/bbb.txt');
+        expect(remainingFiles).toMatch('CCC/ccc.txt');
+        expect(remainingFiles).toMatch('CCC/BBB/ddd.txt');
+
+    })
+
+    test('When folder is renamed then new name has to be unique in the hierarchy', () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            },
+            {
+                'key': 'BBB/bbb.txt',
+            }
+        ];
+        const oldKey = 'AAA/';
+        const newKey = 'BBB/';
+
+        const remainingFiles = JSON.stringify(DatasetUtility.renameFolder(existingFiles, oldKey, newKey));
+        expect(remainingFiles).toMatch('AAA/aaa.txt');
+        expect(remainingFiles).toMatch('BBB/bbb.txt');
+    })
+
+    test('When folder is renamed then modified time of the child files is changed', () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            },
+            {
+                'key': 'CCC/ccc.txt'
+            }
+        ];
+        const oldKey = 'AAA/';
+        const newKey = 'BBB/';
+
+        const remainingFiles = DatasetUtility.renameFolder(existingFiles, oldKey, newKey);
+        expect(remainingFiles[0].modified).not.toBe(undefined);
+        expect(remainingFiles[1].modified).toBe(undefined);
+    })
 
 });
 

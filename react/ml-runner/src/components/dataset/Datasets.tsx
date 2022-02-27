@@ -78,6 +78,11 @@ function Datasets(props)
         setFiles(DatasetUtility.renameFile(files, oldKey, newKey));
     }
 
+    const handleRenameFolder = (oldKey, newKey) =>
+    {
+        setFiles(DatasetUtility.renameFolder(files, oldKey, newKey));
+    }
+
     // handleFileSelection(file)
     // {
     //     console.log(file.key);
@@ -131,10 +136,10 @@ function Datasets(props)
                         onCreateFolder={handleCreateFolder}
                         onCreateFiles={handleCreateFiles}
                         onSelectFolder={(folder) => handleFolderSelection(folder)}
-                    // onMoveFolder={this.handleRenameFolder}
-                        onMoveFile={handleRenameFile}
-                    // onRenameFolder={this.handleRenameFolder}
-                        onRenameFile={handleRenameFile}
+                        onMoveFolder={(oldKey, newKey) => handleRenameFolder(oldKey, newKey)}
+                        onMoveFile={(oldKey, newKey) => handleRenameFile(oldKey, newKey)}
+                        onRenameFolder={(oldKey, newKey) => handleRenameFolder(oldKey, newKey)}
+                        onRenameFile={(oldKey, newKey) => handleRenameFile(oldKey, newKey)}
                         onDeleteFolder={handleDeleteFolder}
                         onDeleteFile={(fileKey) => handleDeleteFile(fileKey)}
                     // onSelectFile={(file) => this.handleFileSelection(file)}
