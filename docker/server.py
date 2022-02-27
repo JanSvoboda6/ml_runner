@@ -4,8 +4,6 @@ from flask import Flask, request
 from flask import jsonify
 import math
 import subprocess
-from random import uniform
-
 
 app = Flask(__name__)
 
@@ -23,7 +21,7 @@ def handle_form():
 
 
 @app.route('/createdirectory', methods=['POST'])
-def createDirectory():
+def create_directory():
     directory_name = request.get_json()['key']
     Path(ROOT_DIRECTORY + directory_name).mkdir(parents=True, exist_ok=True)
     return ""
@@ -58,29 +56,30 @@ def run_project():
     runner = request.get_json()
 
     log_file = open('log_' + str(f"{runner['projectId']}") + '_' + str(f"{runner['runnerId']}") + '.txt', 'w')
-    if(runner['selectedModel'] == "Support Vector Machines"):
+    if runner['selectedModel'] == "Support Vector Machines":
         subprocess.Popen(['nohup', 'python3', 'models/svm.py', runner['name'], runner['firstLabel'],
-              runner['secondLabel'], runner['firstLabelFolder'], runner['secondLabelFolder'], str(runner['gammaParameter']), str(runner['cParameter'])],
-              stdout=log_file,
-              stderr=log_file,
-              preexec_fn=os.setpgrp)
+                          runner['secondLabel'], runner['firstLabelFolder'], runner['secondLabelFolder'],
+                          str(runner['gammaParameter']), str(runner['cParameter'])],
+                         stdout=log_file,
+                         stderr=log_file,
+                         preexec_fn=os.setpgrp)
     return ""
 
 
 @app.route('/project/runner/finished', methods=['POST'])
-def isFinished():
+def is_finished():
     runner = request.get_json()
-    isFinished = False
+    finished = False
     with open('log_' + f"{runner['projectId']}" + '_' + f"{runner['runnerId']}" + '.txt', 'r') as log_file:
         for line in log_file:
             if 'FINISHED' in line.split():
-                isFinished = True
+                finished = True
 
-    return jsonify({'isFinished' : isFinished})
+    return jsonify({'isFinished': finished})
 
 
 @app.route('/project/runner/result', methods=['POST'])
-def getResult():
+def get_result():
     runner = request.get_json()
     first_label_accuracy = 0
     second_label_accuracy = 0
@@ -90,7 +89,7 @@ def getResult():
                 first_label_accuracy = line.split()[1]
             elif 'SECOND_LABEL_ACCURACY:' in line.split():
                 second_label_accuracy = line.split()[1]
-            
+
     return jsonify({'firstLabelResult': first_label_accuracy, 'secondLabelResult': second_label_accuracy})
 
 
