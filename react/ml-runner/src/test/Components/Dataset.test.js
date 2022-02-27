@@ -197,6 +197,20 @@ describe("Deleting files and folders", () => {
         expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt'}, {'key': 'AAA/BBB/bbb.txt'}]);
     });
 
+    test("When deleting a file then file is not present in the files anymore",  () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            },
+            {
+                'key': 'AAA/BBB/bbb.txt',
+            }
+        ];
+        const keyOfFileTObeDeleted = 'AAA/BBB/bbb.txt';
+        const remainingFiles =  DatasetUtility.deleteSelectedFile(existingFiles, keyOfFileTObeDeleted);
+        expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt'}]);
+    });
+
 });
 
 describe("Downloading files and folders", () => {

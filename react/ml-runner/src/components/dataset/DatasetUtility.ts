@@ -43,6 +43,9 @@ const deleteSelectedFolders = (existingFiles: FileInformation[], keysOfFoldersTo
     return existingFiles.filter(file => !shouldBeDeleted(file.key, keysOfFoldersToBeDeleted));
 }
 
+const deleteSelectedFile = (existingFiles: FileInformation[], keyOfFileToBeDeleted: string): FileInformation[] => {
+    return existingFiles.filter(file => file.key !== keyOfFileToBeDeleted);
+}
 const shouldBeDeleted = (existingFileKey: string, keysOfFoldersToBeDeleted: string[]): boolean => {
     let shouldDelete = false;
     keysOfFoldersToBeDeleted.forEach((keyOfFolderToBeDeleted) => {
@@ -55,4 +58,4 @@ const shouldBeDeleted = (existingFileKey: string, keysOfFoldersToBeDeleted: stri
     return shouldDelete;
 }
 
-export default {getUniqueAddedFiles, deleteSelectedFolders};
+export default {getUniqueAddedFiles, deleteSelectedFolders, deleteSelectedFile};
