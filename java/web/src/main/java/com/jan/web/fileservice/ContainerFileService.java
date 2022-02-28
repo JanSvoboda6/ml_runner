@@ -197,6 +197,29 @@ public class ContainerFileService implements FileService
         }
     }
 
+    @Override
+    public void moveFile(String oldKey, String newKey, long containerId)
+    {
+        try
+        {
+            JSONObject request = new JSONObject();
+            request.put("key", oldKey);
+            request.put("newKey", newKey);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
+
+            Optional<ContainerEntity> containerEntity = repository.findById(containerId);
+            containerEntity.ifPresent(container -> requestMaker.makePostRequest(
+                    container.getId(),
+                    RequestMethod.MOVE_FILE,
+                    entity));
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private String composeUrl(long port, String requestMethod)
     {
         return ContainerRequestMaker.CONTAINER_BASE_URL + port + requestMethod;

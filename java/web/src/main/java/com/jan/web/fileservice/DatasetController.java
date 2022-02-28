@@ -60,4 +60,11 @@ public class DatasetController
         fileService.deleteFiles(keys, containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
+
+    @PostMapping(value = "/files/move")
+    public ResponseEntity<?> moveFile(@RequestHeader(name="Authorization") String token, @RequestBody MoveFileRequest request)
+    {
+        fileService.moveFile(request.getOldKey(), request.getNewKey(), containerUtility.getContainerIdFromToken(token));
+        return ResponseEntity.ok("OK.");
+    }
 }

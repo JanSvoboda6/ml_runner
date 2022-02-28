@@ -151,6 +151,24 @@ class ContainerFileServiceTest
         Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).get(0).getKey()).isEqualTo(folderName);
     }
 
+    @Test
+    public void whenMovingFile_thenFileIsMovedInContainer()
+    {
+        final String folderName = "AAA/";
+        final String fileName =  folderName + "aaa.txt";
+        final String renamedFile =  folderName + "bbb.txt";
+
+        Keys fileKeys = new Keys();
+        fileKeys.setKeys(List.of(fileName, renamedFile));
+        List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]),
+                new MockMultipartFile(renamedFile, new byte[1]));
+
+        fileService.createDirectory(folderName, CONTAINER_ID);
+        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.moveFile(fileName, renamedFile, CONTAINER_ID);
+        Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).get(1).getKey()).isEqualTo(renamedFile);
+    }
+
     @AfterEach
     void after()
     {

@@ -11,4 +11,5 @@ public interface FileService
     void createDirectory(String key, long containerId);
     void deleteFolders(List<String> keys, long containerId);
     void deleteFiles(List<String> keys, long containerId);
+    void moveFile(String oldKey, String newKey, long containerId);
 }

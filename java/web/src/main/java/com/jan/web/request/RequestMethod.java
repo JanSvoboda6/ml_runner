@@ -9,7 +9,8 @@ public enum RequestMethod
     IS_RUNNER_FINISHED("/project/runner/finished"),
     RUNNER_RESULT("/project/runner/result"),
     GET_FILES("/getfiles"),
-    UPLOAD_FILES("/upload");
+    UPLOAD_FILES("/upload"),
+    MOVE_FILE("/files/move");
 
     private final String requestUrl;
 

@@ -76,7 +76,9 @@ function Datasets(props)
 
     const handleRenameFile = (oldKey: string, newKey: string) =>
     {
-        setFiles(DatasetUtility.renameFile(files, oldKey, newKey));
+        DatasetService.moveFile(oldKey, newKey).then( () => {
+            setFiles(DatasetUtility.renameFile(files, oldKey, newKey));
+        })
     }
 
     const handleRenameFolder = (oldKey: string, newKey: string) =>

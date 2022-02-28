@@ -3,11 +3,11 @@
 
 button[type=submit]
 { 
-  border: 0.2em solid rgba(255, 255, 255, 0);
-  background-color: rgba(255, 208, 208, 0.589);
-  border-radius: 2em;
+  border: 0.15em solid rgba(255, 255, 255, 0);
+  background-color: rgb(182, 94, 94);
+  border-radius: 0.3em;
   text-decoration: none;
-  color: #fd0000;
+  color: #c40909;
   text-align: center;
   transition: all 0.2s;
   display: block;
@@ -16,17 +16,17 @@ button[type=submit]
 }
 
 button[type=submit]:hover{
-  border-color: rgba(231, 8, 8, 0.7);
+  outline: 0.11em solid #c40909;
   cursor:pointer;
 }
 
 button.deleting
 {
-  border: 0.2em solid rgba(255, 255, 255, 0);
-  background-color: rgba(255, 208, 208, 0.589);
-  border-radius: 2em;
+  border: 0.15em solid rgba(255, 255, 255, 0);
+  background-color: rgb(182, 94, 94);
+  border-radius: 0.3em;
   text-decoration: none;
-  color: #fd0000;
+  color: #c40909;
   text-align: center;
   transition: all 0.2s;
   display: block;
@@ -34,8 +34,8 @@ button.deleting
   font-size: 13px;
 }
 
-.deleting:hover{
-  border-color: rgba(231, 8, 8, 0.7);
+button.deleting:hover{
+  outline: 0.11em solid #c40909;
   cursor:pointer;
 }
 

@@ -82,4 +82,18 @@ const deleteFiles = (keys: string[]) => {
     );
 }
 
-export default { getFiles, createDirectory, uploadFiles, deleteFolders, deleteFiles }
+const moveFile = (oldKey: string, newKey: string) => {
+    return axios.post(
+        API_URL + '/files/move',
+        {oldKey, newKey},
+        {
+            headers:
+                {
+                    'Authorization': authorizationHeader()['Authorization'],
+                    'Content-type': 'application/json; charset=utf-8'
+                }
+        }
+    );
+}
+
+export default { getFiles, createDirectory, uploadFiles, deleteFolders, deleteFiles, moveFile }
