@@ -40,24 +40,24 @@ const getUniqueAddedFiles = (existingFiles: FileInformation[], addedFiles: File[
 }
 
 const deleteSelectedFolders = (existingFiles: FileInformation[], keysOfFoldersToBeDeleted: string[]): FileInformation[] => {
-    return existingFiles.filter(file => !shouldBeDeleted(file.key, keysOfFoldersToBeDeleted));
+    return existingFiles.filter(file => !shouldBeFolderDeleted(file.key, keysOfFoldersToBeDeleted));
 }
 
-const deleteSelectedFile = (existingFiles: FileInformation[], keyOfFileToBeDeleted: string): FileInformation[] => {
-    return existingFiles.filter(file => file.key !== keyOfFileToBeDeleted);
+const deleteSelectedFiles = (existingFiles: FileInformation[], keysOfFilesToBeDeleted: string[]): FileInformation[] => {
+    return existingFiles.filter(file => !shouldBeFileDeleted(file.key, keysOfFilesToBeDeleted));
 }
 
 const renameFile = (existingFiles: FileInformation[], oldKey: string, newKey: string): FileInformation[] => {
     const unique = isFileKeyUnique(existingFiles, newKey);
     let updatedFiles: FileInformation[] = [];
     existingFiles.forEach(file => {
-        if(unique && file.key === oldKey){
+        if (unique && file.key === oldKey) {
             updatedFiles.push({
                 ...file,
                 key: newKey,
                 modified: +Moment(),
             })
-        }else{
+        } else {
             updatedFiles.push(file);
         }
     });
@@ -79,13 +79,13 @@ const renameFolder = (existingFiles: FileInformation[], oldKey: string, newKey: 
             updatedFiles.push(file)
         }
     })
-    return  updatedFiles;
+    return updatedFiles;
 }
 
 const isFileKeyUnique = (existingFiles: FileInformation[], keyOfTheFile: string): boolean => {
     let unique = true;
     existingFiles.forEach(file => {
-        if(file.key === keyOfTheFile)
+        if (file.key === keyOfTheFile)
         {
             unique = false;
             return;
@@ -105,7 +105,7 @@ const isFolderKeyUnique = (existingFiles: FileInformation[], keyOfTheFolder: str
     return unique;
 }
 
-const shouldBeDeleted = (existingFileKey: string, keysOfFoldersToBeDeleted: string[]): boolean => {
+const shouldBeFolderDeleted = (existingFileKey: string, keysOfFoldersToBeDeleted: string[]): boolean => {
     let shouldDelete = false;
     keysOfFoldersToBeDeleted.forEach((keyOfFolderToBeDeleted) => {
         if (existingFileKey.substr(0, keyOfFolderToBeDeleted.length) === keyOfFolderToBeDeleted)
@@ -117,4 +117,16 @@ const shouldBeDeleted = (existingFileKey: string, keysOfFoldersToBeDeleted: stri
     return shouldDelete;
 }
 
-export default {getUniqueAddedFiles, deleteSelectedFolders, deleteSelectedFile, renameFile, renameFolder};
+const shouldBeFileDeleted = (existingFileKey: string, keysOfFilesToBeDeleted: string[]): boolean => {
+    let shouldDelete = false;
+    keysOfFilesToBeDeleted.forEach((keyOfFileToBeDeleted) => {
+        if (keyOfFileToBeDeleted === existingFileKey)
+        {
+            shouldDelete = true;
+            return;
+        }
+    });
+    return shouldDelete;
+}
+
+export default {getUniqueAddedFiles, deleteSelectedFolders, deleteSelectedFiles, renameFile, renameFolder};

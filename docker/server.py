@@ -4,6 +4,7 @@ from flask import Flask, request
 from flask import jsonify
 import math
 import subprocess
+from shutil import rmtree
 
 app = Flask(__name__)
 
@@ -28,9 +29,36 @@ def create_directory():
 
 
 @app.route('/getfiles')
-def hello_world():
+def get_files():
     directories, files = walk_directory(ROOT_DIRECTORY)
     return jsonify({'directories': directories, 'files': files})
+
+
+# @app.route('/files<key>', methods=['DELETE'])
+# def delete_file(key):
+#     os.remove(ROOT_DIRECTORY + key)
+#
+#
+# @app.route('/folders<key>', methods=['DELETE'])
+# def delete_folder(key):
+#     rmtree(ROOT_DIRECTORY + key)
+
+
+@app.route('/files/delete', methods=['POST'])
+def batch_delete_files():
+    file_names = request.get_json()['keys']
+    for file_name in file_names:
+        os.remove(ROOT_DIRECTORY + file_name)
+    return ""
+
+@app.route('/folders/delete', methods=['POST'])
+def batch_delete_folders():
+    folder_names = request.get_json()['keys']
+    print(folder_names)
+    for folder_name in folder_names:
+        print(ROOT_DIRECTORY + folder_name)
+        rmtree(ROOT_DIRECTORY + folder_name)
+    return ""
 
 
 def walk_directory(root_directory):

@@ -54,4 +54,18 @@ const uploadFiles = (files: any) =>
     return axios.post(API_URL + '/upload', formData, { headers: authorizationHeader() }, );
 }
 
-export default { getFiles, createDirectory, uploadFiles }
+const deleteFolders = (keys: string[]) => {
+    return axios.post(
+        API_URL + '/folders/delete',
+        keys,
+        {
+            headers:
+                {
+                    'Authorization': authorizationHeader()['Authorization'],
+                    'Content-type': 'application/json; charset=utf-8'
+                }
+        }
+    );
+}
+
+export default { getFiles, createDirectory, uploadFiles, deleteFolders }

@@ -99,6 +99,24 @@ class ContainerFileServiceTest
         Assertions.assertThat(uploadedFiles.get(0).getKey()).isEqualTo(fileName);
     }
 
+    @Test
+    public void whenDeletingFolder_thenFolderAndItsContentIsDeletedFromContainer()
+    {
+        final String folderName = "AAA/";
+        final String fileName =  folderName + "test_file.txt";
+
+        Keys fileKeys = new Keys();
+        fileKeys.setKeys(List.of(fileName));
+        List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]));
+
+        fileService.createDirectory(folderName, CONTAINER_ID);
+        fileService.createDirectory(folderName + "BBB/", CONTAINER_ID);
+        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.deleteFolders(List.of(folderName), CONTAINER_ID);
+
+        Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID)).isEmpty();
+    }
+
     @AfterEach
     void after()
     {

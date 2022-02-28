@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -144,14 +143,32 @@ public class ContainerFileService implements FileService
             org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
 
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
-            if(containerEntity.isPresent())
-            {
-                ResponseEntity<String> response = requestMaker.makePostRequest(
-                        containerEntity.get().getId(),
-                        RequestMethod.CREATE_DIRECTORY,
-                        entity);
-                response.getStatusCode();
-            }
+            containerEntity.ifPresent(container -> requestMaker.makePostRequest(
+                    container.getId(),
+                    RequestMethod.CREATE_DIRECTORY,
+                    entity));
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteFolders(List<String> keys, long containerId)
+    {
+        try
+        {
+            JSONObject request = new JSONObject();
+            request.put("keys", keys);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
+
+            Optional<ContainerEntity> containerEntity = repository.findById(containerId);
+            containerEntity.ifPresent(container -> requestMaker.makePostRequest(
+                    container.getId(),
+                    RequestMethod.BATCH_DELETE_FOLDERS,
+                    entity));
         } catch (JSONException e)
         {
             e.printStackTrace();

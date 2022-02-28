@@ -27,7 +27,7 @@ describe('Dataset rendering', () => {
         expect(screen.getByText('aRandomFile.txt')).toBeInTheDocument();
         expect(screen.getByText('aRandomDirectory')).toBeInTheDocument();
     });
-})
+});
 
 describe('Creating files', () => {
     test('When creating new files then only unique new files are returned', () => {
@@ -99,7 +99,7 @@ describe('Renaming files and folders', () => {
                 'key': 'AAA/bbb.txt',
             },
             {
-                'key':'AAA/ccc.txt'
+                'key': 'AAA/ccc.txt'
             }
         ];
         const oldKey = 'AAA/aaa.txt';
@@ -133,10 +133,10 @@ describe('Renaming files and folders', () => {
                 'key': 'AAA/bbb.txt',
             },
             {
-                'key':'AAA/ccc.txt'
+                'key': 'AAA/ccc.txt'
             },
             {
-                'key':'AAA/BBB/ddd.txt'
+                'key': 'AAA/BBB/ddd.txt'
             }
         ];
         const oldKey = 'AAA/';
@@ -187,7 +187,7 @@ describe('Renaming files and folders', () => {
 });
 
 describe("Deleting files and folders", () => {
-    test("When deleting folder then all files of the folder are deleted",  () => {
+    test("When deleting folder then all files of the folder are deleted", () => {
         const existingFiles = [
             {
                 'key': 'AAA/aaa.txt',
@@ -200,7 +200,7 @@ describe("Deleting files and folders", () => {
         expect(remainingFiles).toEqual([]);
     });
 
-    test("When deleting folder then all child folders and files of the folder are deleted",  () => {
+    test("When deleting folder then all child folders and files of the folder are deleted", () => {
         const existingFiles = [
             {
                 'key': 'AAA/aaa.txt',
@@ -216,7 +216,7 @@ describe("Deleting files and folders", () => {
         expect(remainingFiles).toEqual([]);
     })
 
-    test("When deleting folder then parent folders and files are not deleted",  () => {
+    test("When deleting folder then parent folders and files are not deleted", () => {
         const existingFiles = [
             {
                 'key': 'AAA/aaa.txt',
@@ -228,11 +228,11 @@ describe("Deleting files and folders", () => {
 
         const keysOfFoldersToBeDeleted = ['AAA/BBB/'];
 
-        const remainingFiles =  DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
-        expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt' }]);
+        const remainingFiles = DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
+        expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt'}]);
     });
 
-    test("When deleting multiple folders then all child folders and files are deleted",  () => {
+    test("When deleting multiple folders then all child folders and files are deleted", () => {
         const existingFiles = [
             {
                 'key': 'AAA/aaa.txt',
@@ -244,11 +244,11 @@ describe("Deleting files and folders", () => {
 
         const keysOfFoldersToBeDeleted = ['AAA/', 'BBB/'];
 
-        const remainingFiles =  DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
+        const remainingFiles = DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
         expect(remainingFiles).toEqual([]);
     });
 
-    test("When deleting multiple folders then parent folders and files are not deleted",  () => {
+    test("When deleting multiple folders then parent folders and files are not deleted", () => {
         const existingFiles = [
             {
                 'key': 'AAA/aaa.txt',
@@ -263,11 +263,11 @@ describe("Deleting files and folders", () => {
 
         const keysOfFoldersToBeDeleted = ['AAA/BBB/', 'AAA/CCC/'];
 
-        const remainingFiles =  DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
-        expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt' }]);
+        const remainingFiles = DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
+        expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt'}]);
     });
 
-    test("When deleting multiple folders with deleting the parent first then all folders and files are deleted",  () => {
+    test("When deleting multiple folders with deleting the parent first then all folders and files are deleted", () => {
         const existingFiles = [
             {
                 'key': 'AAA/aaa.txt',
@@ -282,11 +282,11 @@ describe("Deleting files and folders", () => {
 
         const keysOfFoldersToBeDeleted = ['AAA/', 'AAA/CCC/'];
 
-        const remainingFiles =  DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
+        const remainingFiles = DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
         expect(remainingFiles).toEqual([]);
     });
 
-    test("When deleting folders without files then all child folders are deleted",  () => {
+    test("When deleting folders without files then all child folders are deleted", () => {
         const existingFiles = [
             {
                 'key': 'AAA/',
@@ -301,11 +301,11 @@ describe("Deleting files and folders", () => {
 
         const keysOfFoldersToBeDeleted = ['AAA/BBB/'];
 
-        const remainingFiles =  DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
+        const remainingFiles = DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
         expect(remainingFiles).toEqual([{'key': 'AAA/'}]);
     });
 
-    test("When deleting non exiting folders then all existing files remain",  () => {
+    test("When deleting non exiting folders then all existing files remain", () => {
         const existingFiles = [
             {
                 'key': 'AAA/aaa.txt',
@@ -317,11 +317,11 @@ describe("Deleting files and folders", () => {
 
         const keysOfFoldersToBeDeleted = ['CCC/DDD/'];
 
-        const remainingFiles =  DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
+        const remainingFiles = DatasetUtility.deleteSelectedFolders(existingFiles, keysOfFoldersToBeDeleted);
         expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt'}, {'key': 'AAA/BBB/bbb.txt'}]);
     });
 
-    test("When deleting a file then file is not present in the files anymore",  () => {
+    test("When deleting a file then file is not present anymore", () => {
         const existingFiles = [
             {
                 'key': 'AAA/aaa.txt',
@@ -330,12 +330,30 @@ describe("Deleting files and folders", () => {
                 'key': 'AAA/BBB/bbb.txt',
             }
         ];
-        const keyOfFileTObeDeleted = 'AAA/BBB/bbb.txt';
-        const remainingFiles =  DatasetUtility.deleteSelectedFile(existingFiles, keyOfFileTObeDeleted);
+        const keyOfFileTobeDeleted = ['AAA/BBB/bbb.txt'];
+        const remainingFiles = DatasetUtility.deleteSelectedFiles(existingFiles, keyOfFileTobeDeleted);
+        expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt'}]);
+    });
+
+    test("When deleting a multiple files then files are not present anymore", () => {
+        const existingFiles = [
+            {
+                'key': 'AAA/aaa.txt',
+            },
+            {
+                'key': 'AAA/BBB/bbb.txt',
+            },
+            {
+                'key': 'AAA/CCC/ccc.txt'
+            }
+        ];
+        const keyOfFileTobeDeleted = ['AAA/BBB/bbb.txt', 'AAA/CCC/ccc.txt'];
+        const remainingFiles = DatasetUtility.deleteSelectedFiles(existingFiles, keyOfFileTobeDeleted);
         expect(remainingFiles).toEqual([{'key': 'AAA/aaa.txt'}]);
     });
 
 });
+
 describe("Downloading files and folders", () => {
 });
 

@@ -46,4 +46,12 @@ public class DatasetController
         fileService.uploadFiles(keys, files, containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
+
+    @PostMapping(value = "/folders/delete")
+    public ResponseEntity<?> batchDeleteFolders(@RequestHeader(name="Authorization") String token, @RequestBody List<String> keys)
+    {
+        fileService.deleteFolders(keys, containerUtility.getContainerIdFromToken(token));
+        return ResponseEntity.ok("OK.");
+    }
+
 }

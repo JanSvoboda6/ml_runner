@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react'
-import FileBrowser from 'react-keyed-file-browser';
+import React, {useEffect, useState} from 'react'
+import FileBrowser, {Icons} from 'react-keyed-file-browser';
 import Moment from 'moment';
-import { Icons } from 'react-keyed-file-browser';
 import '../../styles/Datasets.css';
 import 'font-awesome/css/font-awesome.min.css';
-import { useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
-import { FileInformation } from '../../types';
+import {AxiosResponse} from 'axios';
+import {FileInformation} from '../../types';
 import DatasetService from './DatasetService';
 import loadingAnimation from "../../styles/loading_graphics.gif";
 import FadeIn from 'react-fade-in';
@@ -31,7 +29,7 @@ function Datasets(props)
                         {
                             if (file.key.endsWith('/'))
                             {
-                                files.push({ key: file.key });
+                                files.push({key: file.key});
                                 return;
                             }
                             files.push(file);
@@ -51,7 +49,7 @@ function Datasets(props)
     const handleCreateFolder = (key: string) =>
     {
         setLoaded(false);
-        const folder: FileInformation = { key: key };
+        const folder: FileInformation = {key: key};
         setFiles(folders => [...folders, folder]);
         DatasetService.createDirectory(folder).then(() => setLoaded(true));
     }
@@ -59,40 +57,38 @@ function Datasets(props)
     const handleCreateFiles = (addedFiles: File[], prefix: string) =>
     {
         const uniqueAddedFiles: FileInformation[] = DatasetUtility.getUniqueAddedFiles(files, addedFiles, prefix);
-        DatasetService.uploadFiles(uniqueAddedFiles);
-        setFiles(existingFiles => [...existingFiles, ...uniqueAddedFiles]);
+        DatasetService.uploadFiles(uniqueAddedFiles).then(() => setFiles(existingFiles => [...existingFiles, ...uniqueAddedFiles]));
     }
 
-    const handleDeleteFolder = (folderKeys: string[]) =>
+    const handleDeleteFolders = (folderKeys: string[]) =>
     {
-        setFiles(DatasetUtility.deleteSelectedFolders(files, folderKeys));
+        DatasetService.deleteFolders(folderKeys).then( () => {
+            setFiles(DatasetUtility.deleteSelectedFolders(files, folderKeys));
+        });
     }
 
-    const handleDeleteFile = (fileKey) =>
+    const handleDeleteFiles = (fileKeys: string[]) =>
     {
-       setFiles(DatasetUtility.deleteSelectedFile(files, fileKey));
+        setFiles(DatasetUtility.deleteSelectedFiles(files, fileKeys));
     }
 
-    const handleRenameFile = (oldKey, newKey) =>
+    const handleRenameFile = (oldKey: string, newKey: string) =>
     {
         setFiles(DatasetUtility.renameFile(files, oldKey, newKey));
     }
 
-    const handleRenameFolder = (oldKey, newKey) =>
+    const handleRenameFolder = (oldKey: string, newKey: string) =>
     {
         setFiles(DatasetUtility.renameFolder(files, oldKey, newKey));
     }
 
-    // handleFileSelection(file)
-    // {
-    //     console.log(file.key);
-    // }
+    const handleDownloadFile = (keys: string[]) => {
+        console.log(keys);
+    }
 
-    // handleNone(fileInformation)
-    // {
-    //     console.log(fileInformation.file);
-    //     return (<div>  Selected file: {fileInformation.file.key} </div>)
-    // }
+    const handleDownloadFolder = (keys: string[]) => {
+        console.log(keys);
+    }
 
     const handleFolderSelection = (folder) =>
     {
@@ -105,10 +101,10 @@ function Datasets(props)
     if (!isLoaded)
     {
         return <FadeIn>
-                    <div className='loading-animation-wrapper'>
-                        <img className='dataset-loading-animation' src={loadingAnimation} alt="loadingAnimation" />
-                    </div>
-               </FadeIn>
+            <div className='loading-animation-wrapper'>
+                <img className='dataset-loading-animation' src={loadingAnimation} alt="loadingAnimation"/>
+            </div>
+        </FadeIn>
     }
     return (
         <div>
@@ -140,15 +136,14 @@ function Datasets(props)
                         onMoveFile={(oldKey, newKey) => handleRenameFile(oldKey, newKey)}
                         onRenameFolder={(oldKey, newKey) => handleRenameFolder(oldKey, newKey)}
                         onRenameFile={(oldKey, newKey) => handleRenameFile(oldKey, newKey)}
-                        onDeleteFolder={handleDeleteFolder}
-                        onDeleteFile={(fileKey) => handleDeleteFile(fileKey)}
-                    // onSelectFile={(file) => this.handleFileSelection(file)}
-                    // detailRenderer={(fileInformation) => this.handleNone(fileInformation)}
-                />
-
+                        onDeleteFolder={handleDeleteFolders}
+                        onDeleteFile={handleDeleteFiles}
+                        onDownloadFile={handleDownloadFile}
+                        onDownloadFolder={handleDownloadFolder}
+                    />
                 </div>
             </FadeIn>
-        </div >
+        </div>
     )
 }
 
