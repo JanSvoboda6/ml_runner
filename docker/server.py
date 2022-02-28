@@ -69,7 +69,7 @@ def walk_directory(root_directory):
         for directory in directories:
             directories_list.append(os.path.join(shifted_root_directory, directory + '/'))
         for file in files:
-            file_information = {'key': shifted_root_directory + file,
+            file_information = {'key': os.path.join(shifted_root_directory, file),
                                 'size': os.path.getsize(os.path.join(top, file)),
                                 'modified': math.floor(os.path.getmtime(os.path.join(top, file)))
                                 }

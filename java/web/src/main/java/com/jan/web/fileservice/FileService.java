@@ -10,4 +10,5 @@ public interface FileService
     void uploadFiles(Keys key, List<MultipartFile> files, long containerId);
     void createDirectory(String key, long containerId);
     void deleteFolders(List<String> keys, long containerId);
+    void deleteFiles(List<String> keys, long containerId);
 }

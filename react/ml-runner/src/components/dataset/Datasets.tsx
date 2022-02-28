@@ -69,7 +69,9 @@ function Datasets(props)
 
     const handleDeleteFiles = (fileKeys: string[]) =>
     {
-        setFiles(DatasetUtility.deleteSelectedFiles(files, fileKeys));
+        DatasetService.deleteFiles(fileKeys).then( () => {
+            setFiles(DatasetUtility.deleteSelectedFiles(files, fileKeys));
+        });
     }
 
     const handleRenameFile = (oldKey: string, newKey: string) =>

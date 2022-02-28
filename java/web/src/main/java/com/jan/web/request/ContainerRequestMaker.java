@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-
 @Component
 public class ContainerRequestMaker implements RequestMaker
 {
@@ -27,12 +25,6 @@ public class ContainerRequestMaker implements RequestMaker
                 HttpMethod.POST,
                 requestEntity,
                 String.class);
-    }
-
-    @Override
-    public void makeDeleteRequest(long portNumber, RequestMethod requestMethod, Map<String, String> parameters)
-    {
-        restTemplate.delete(composeUrl(portNumber, requestMethod.getRequestUrl()), parameters);
     }
 
     private String composeUrl(long portNumber, String requestUrl)

@@ -100,6 +100,21 @@ class ContainerFileServiceTest
     }
 
     @Test
+    public void whenUploadingFilesToFolder_thenFilesAreStoredInContainer()
+    {
+        final String folderName = "AAA/";
+        final String fileName = folderName + "aaa.txt";
+        Keys keys = new Keys();
+        keys.setKeys(List.of(fileName));
+        List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]));
+
+        fileService.createDirectory(folderName, CONTAINER_ID);
+        fileService.uploadFiles(keys, files, CONTAINER_ID);
+        List<FileInformation> uploadedFiles = fileService.getAllFiles(CONTAINER_ID);
+        Assertions.assertThat(uploadedFiles.get(1).getKey()).isEqualTo(fileName);
+    }
+
+    @Test
     public void whenDeletingFolder_thenFolderAndItsContentIsDeletedFromContainer()
     {
         final String folderName = "AAA/";
@@ -115,6 +130,25 @@ class ContainerFileServiceTest
         fileService.deleteFolders(List.of(folderName), CONTAINER_ID);
 
         Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID)).isEmpty();
+    }
+
+    @Test
+    public void whenDeletingFiles_thenFilesAreDeletedFromContainer()
+    {
+        final String folderName = "AAA/";
+        final String firstFileName =  folderName + "aaa.txt";
+        final String secondFileName =  folderName + "bbb.txt";
+
+        Keys fileKeys = new Keys();
+        fileKeys.setKeys(List.of(firstFileName, secondFileName));
+        List<MultipartFile> files = List.of(new MockMultipartFile(firstFileName, new byte[1]),
+                new MockMultipartFile(secondFileName, new byte[1]));
+
+        fileService.createDirectory(folderName, CONTAINER_ID);
+        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.deleteFiles(List.of(firstFileName, secondFileName), CONTAINER_ID);
+        Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).size()).isEqualTo(1);
+        Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).get(0).getKey()).isEqualTo(folderName);
     }
 
     @AfterEach

@@ -54,4 +54,10 @@ public class DatasetController
         return ResponseEntity.ok("OK.");
     }
 
+    @PostMapping(value = "/files/delete")
+    public ResponseEntity<?> batchDeleteFiles(@RequestHeader(name="Authorization") String token, @RequestBody List<String> keys)
+    {
+        fileService.deleteFiles(keys, containerUtility.getContainerIdFromToken(token));
+        return ResponseEntity.ok("OK.");
+    }
 }
