@@ -96,4 +96,18 @@ const moveFile = (oldKey: string, newKey: string) => {
     );
 }
 
-export default { getFiles, createDirectory, uploadFiles, deleteFolders, deleteFiles, moveFile }
+const moveFolder = (oldKey: string, newKey: string) => {
+    return axios.post(
+        API_URL + '/folders/move',
+        {oldKey, newKey},
+        {
+            headers:
+                {
+                    'Authorization': authorizationHeader()['Authorization'],
+                    'Content-type': 'application/json; charset=utf-8'
+                }
+        }
+    );
+}
+
+export default { getFiles, createDirectory, uploadFiles, deleteFolders, deleteFiles, moveFile, moveFolder }

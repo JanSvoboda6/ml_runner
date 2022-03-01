@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.FileSystems;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 class ContainerFileServiceTest
@@ -68,7 +69,7 @@ class ContainerFileServiceTest
     public void whenCreatingDirectory_thenDirectoryIsCreatedInContainer()
     {
         final String directory = "test_directory/";
-        fileService.createDirectory(directory, CONTAINER_ID);
+        fileService.createFolder(directory, CONTAINER_ID);
         List<FileInformation> files = fileService.getAllFiles(CONTAINER_ID);
         Assertions.assertThat(files.get(0).getKey()).isEqualTo(directory);
     }
@@ -77,10 +78,10 @@ class ContainerFileServiceTest
     public void whenCreatingChildDirectory_thenChildDirectoryIsCreatedInContainer()
     {
         final String directory = "test_directory/";
-        fileService.createDirectory(directory, CONTAINER_ID);
+        fileService.createFolder(directory, CONTAINER_ID);
 
         final String childDirectory = directory + "child_directory/";
-        fileService.createDirectory(childDirectory, CONTAINER_ID);
+        fileService.createFolder(childDirectory, CONTAINER_ID);
         List<FileInformation> files = fileService.getAllFiles(CONTAINER_ID);
 
         Assertions.assertThat(files.get(1).getKey()).isEqualTo(childDirectory);
@@ -108,7 +109,7 @@ class ContainerFileServiceTest
         keys.setKeys(List.of(fileName));
         List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]));
 
-        fileService.createDirectory(folderName, CONTAINER_ID);
+        fileService.createFolder(folderName, CONTAINER_ID);
         fileService.uploadFiles(keys, files, CONTAINER_ID);
         List<FileInformation> uploadedFiles = fileService.getAllFiles(CONTAINER_ID);
         Assertions.assertThat(uploadedFiles.get(1).getKey()).isEqualTo(fileName);
@@ -124,8 +125,8 @@ class ContainerFileServiceTest
         fileKeys.setKeys(List.of(fileName));
         List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]));
 
-        fileService.createDirectory(folderName, CONTAINER_ID);
-        fileService.createDirectory(folderName + "BBB/", CONTAINER_ID);
+        fileService.createFolder(folderName, CONTAINER_ID);
+        fileService.createFolder(folderName + "BBB/", CONTAINER_ID);
         fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
         fileService.deleteFolders(List.of(folderName), CONTAINER_ID);
 
@@ -144,7 +145,7 @@ class ContainerFileServiceTest
         List<MultipartFile> files = List.of(new MockMultipartFile(firstFileName, new byte[1]),
                 new MockMultipartFile(secondFileName, new byte[1]));
 
-        fileService.createDirectory(folderName, CONTAINER_ID);
+        fileService.createFolder(folderName, CONTAINER_ID);
         fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
         fileService.deleteFiles(List.of(firstFileName, secondFileName), CONTAINER_ID);
         Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).size()).isEqualTo(1);
@@ -163,10 +164,38 @@ class ContainerFileServiceTest
         List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]),
                 new MockMultipartFile(renamedFile, new byte[1]));
 
-        fileService.createDirectory(folderName, CONTAINER_ID);
+        fileService.createFolder(folderName, CONTAINER_ID);
         fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
         fileService.moveFile(fileName, renamedFile, CONTAINER_ID);
         Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).get(1).getKey()).isEqualTo(renamedFile);
+    }
+
+    @Test
+    public void whenMovingFolder_thenFolderAndItsContentIsMovedInContainer()
+    {
+        final String folderName = "AAA/";
+        final String newFolderName = "BBB/";
+        final String firstFileName =  folderName + "aaa.txt";
+        final String secondFileName =  folderName + "bbb.txt";
+
+        Keys fileKeys = new Keys();
+        fileKeys.setKeys(List.of(firstFileName, secondFileName));
+        List<MultipartFile> files = List.of(new MockMultipartFile(firstFileName, new byte[1]),
+                new MockMultipartFile(secondFileName, new byte[1]));
+
+        fileService.createFolder(folderName, CONTAINER_ID);
+        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.moveFolder(folderName, newFolderName, CONTAINER_ID);
+
+        final String newFirstFileName =  newFolderName + "aaa.txt";
+        final String newSecondFileName =  newFolderName + "bbb.txt";
+
+        List<String> keys = fileService.getAllFiles(CONTAINER_ID).stream().map(FileInformation::getKey).collect(Collectors.toList());
+
+        Assertions.assertThat(keys.size()).isEqualTo(3);
+        Assertions.assertThat(keys).contains(newFolderName);
+        Assertions.assertThat(keys).contains(newFirstFileName);
+        Assertions.assertThat(keys).contains(newSecondFileName);
     }
 
     @AfterEach

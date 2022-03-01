@@ -33,7 +33,7 @@ public class DatasetController
     public ResponseEntity<?> createDirectory(@RequestHeader(name="Authorization") String token, @RequestBody Key directoryKey) //TODO Jan: is Key needed?
     {
         //TODO Jan: Filter keys with parent directory symbols ..
-        fileService.createDirectory(directoryKey.getKey(), containerUtility.getContainerIdFromToken(token));
+        fileService.createFolder(directoryKey.getKey(), containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 
@@ -62,7 +62,14 @@ public class DatasetController
     }
 
     @PostMapping(value = "/files/move")
-    public ResponseEntity<?> moveFile(@RequestHeader(name="Authorization") String token, @RequestBody MoveFileRequest request)
+    public ResponseEntity<?> moveFile(@RequestHeader(name="Authorization") String token, @RequestBody MoveRequest request)
+    {
+        fileService.moveFile(request.getOldKey(), request.getNewKey(), containerUtility.getContainerIdFromToken(token));
+        return ResponseEntity.ok("OK.");
+    }
+
+    @PostMapping(value = "/folders/move")
+    public ResponseEntity<?> moveFolder(@RequestHeader(name="Authorization") String token, @RequestBody MoveRequest request)
     {
         fileService.moveFile(request.getOldKey(), request.getNewKey(), containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");

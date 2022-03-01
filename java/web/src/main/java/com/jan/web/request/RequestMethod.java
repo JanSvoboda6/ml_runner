@@ -10,7 +10,8 @@ public enum RequestMethod
     RUNNER_RESULT("/project/runner/result"),
     GET_FILES("/getfiles"),
     UPLOAD_FILES("/upload"),
-    MOVE_FILE("/files/move");
+    MOVE_FILE("/files/move"),
+    MOVE_FOLDER("/folders/move");
 
     private final String requestUrl;
 

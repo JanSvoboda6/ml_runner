@@ -72,7 +72,7 @@ describe('Renaming files and folders', () => {
         const oldKey = 'AAA/aaa.txt';
         const newKey = 'AAA/ccc.txt';
 
-        const remainingFiles = JSON.stringify(DatasetUtility.renameFile(existingFiles, oldKey, newKey));
+        const remainingFiles = JSON.stringify(DatasetUtility.moveFile(existingFiles, oldKey, newKey));
         expect(remainingFiles).toMatch('AAA/ccc.txt');
         expect(remainingFiles).not.toMatch('AAA/aaa.txt');
     })
@@ -86,7 +86,7 @@ describe('Renaming files and folders', () => {
         const oldKey = 'AAA/aaa.txt';
         const newKey = 'AAA/bbb.txt';
 
-        const remainingFiles = DatasetUtility.renameFile(existingFiles, oldKey, newKey);
+        const remainingFiles = DatasetUtility.moveFile(existingFiles, oldKey, newKey);
         expect(remainingFiles[0].modified).not.toBe(undefined);
     })
 
@@ -105,7 +105,7 @@ describe('Renaming files and folders', () => {
         const oldKey = 'AAA/aaa.txt';
         const newKey = 'AAA/ccc.txt';
 
-        const remainingFiles = JSON.stringify(DatasetUtility.renameFile(existingFiles, oldKey, newKey));
+        const remainingFiles = JSON.stringify(DatasetUtility.moveFile(existingFiles, oldKey, newKey));
         expect(remainingFiles).toMatch('AAA/aaa.txt');
         expect(remainingFiles).toMatch('AAA/bbb.txt');
         expect(remainingFiles).toMatch('AAA/ccc.txt');
@@ -120,7 +120,7 @@ describe('Renaming files and folders', () => {
         const oldKey = 'AAA/';
         const newKey = 'BBB/';
 
-        const remainingFiles = JSON.stringify(DatasetUtility.renameFolder(existingFiles, oldKey, newKey));
+        const remainingFiles = JSON.stringify(DatasetUtility.moveFolder(existingFiles, oldKey, newKey));
         expect(remainingFiles).toMatch('BBB/aaa.txt');
     })
 
@@ -142,7 +142,7 @@ describe('Renaming files and folders', () => {
         const oldKey = 'AAA/';
         const newKey = 'CCC/';
 
-        const remainingFiles = JSON.stringify(DatasetUtility.renameFolder(existingFiles, oldKey, newKey));
+        const remainingFiles = JSON.stringify(DatasetUtility.moveFolder(existingFiles, oldKey, newKey));
         expect(remainingFiles).toMatch('CCC/aaa.txt');
         expect(remainingFiles).toMatch('CCC/bbb.txt');
         expect(remainingFiles).toMatch('CCC/ccc.txt');
@@ -162,7 +162,7 @@ describe('Renaming files and folders', () => {
         const oldKey = 'AAA/';
         const newKey = 'BBB/';
 
-        const remainingFiles = JSON.stringify(DatasetUtility.renameFolder(existingFiles, oldKey, newKey));
+        const remainingFiles = JSON.stringify(DatasetUtility.moveFolder(existingFiles, oldKey, newKey));
         expect(remainingFiles).toMatch('AAA/aaa.txt');
         expect(remainingFiles).toMatch('BBB/bbb.txt');
     })
@@ -179,7 +179,7 @@ describe('Renaming files and folders', () => {
         const oldKey = 'AAA/';
         const newKey = 'BBB/';
 
-        const remainingFiles = DatasetUtility.renameFolder(existingFiles, oldKey, newKey);
+        const remainingFiles = DatasetUtility.moveFolder(existingFiles, oldKey, newKey);
         expect(remainingFiles[0].modified).not.toBe(undefined);
         expect(remainingFiles[1].modified).toBe(undefined);
     })

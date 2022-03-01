@@ -74,16 +74,18 @@ function Datasets(props)
         });
     }
 
-    const handleRenameFile = (oldKey: string, newKey: string) =>
+    const handleMoveFile = (oldKey: string, newKey: string) =>
     {
-        DatasetService.moveFile(oldKey, newKey).then( () => {
-            setFiles(DatasetUtility.renameFile(files, oldKey, newKey));
+        DatasetService.moveFile(oldKey, newKey).then(() => {
+            setFiles(DatasetUtility.moveFile(files, oldKey, newKey));
         })
     }
 
-    const handleRenameFolder = (oldKey: string, newKey: string) =>
+    const handleMoveFolder = (oldKey: string, newKey: string) =>
     {
-        setFiles(DatasetUtility.renameFolder(files, oldKey, newKey));
+        DatasetService.moveFolder(oldKey, newKey).then(() => {
+            setFiles(DatasetUtility.moveFolder(files, oldKey, newKey));
+        })
     }
 
     const handleDownloadFile = (keys: string[]) => {
@@ -136,10 +138,10 @@ function Datasets(props)
                         onCreateFolder={handleCreateFolder}
                         onCreateFiles={handleCreateFiles}
                         onSelectFolder={(folder) => handleFolderSelection(folder)}
-                        onMoveFolder={(oldKey, newKey) => handleRenameFolder(oldKey, newKey)}
-                        onMoveFile={(oldKey, newKey) => handleRenameFile(oldKey, newKey)}
-                        onRenameFolder={(oldKey, newKey) => handleRenameFolder(oldKey, newKey)}
-                        onRenameFile={(oldKey, newKey) => handleRenameFile(oldKey, newKey)}
+                        onMoveFolder={(oldKey, newKey) => handleMoveFolder(oldKey, newKey)}
+                        onMoveFile={(oldKey, newKey) => handleMoveFile(oldKey, newKey)}
+                        onRenameFolder={(oldKey, newKey) => handleMoveFolder(oldKey, newKey)}
+                        onRenameFile={(oldKey, newKey) => handleMoveFile(oldKey, newKey)}
                         onDeleteFolder={handleDeleteFolders}
                         onDeleteFile={handleDeleteFiles}
                         onDownloadFile={handleDownloadFile}

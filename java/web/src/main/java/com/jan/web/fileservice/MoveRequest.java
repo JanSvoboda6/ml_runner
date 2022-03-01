@@ -2,7 +2,7 @@ package com.jan.web.fileservice;
 
 import javax.validation.constraints.NotBlank;
 
-public class MoveFileRequest
+public class MoveRequest
 {
     @NotBlank
     private String oldKey;

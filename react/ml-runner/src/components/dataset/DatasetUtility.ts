@@ -47,7 +47,7 @@ const deleteSelectedFiles = (existingFiles: FileInformation[], keysOfFilesToBeDe
     return existingFiles.filter(file => !shouldBeFileDeleted(file.key, keysOfFilesToBeDeleted));
 }
 
-const renameFile = (existingFiles: FileInformation[], oldKey: string, newKey: string): FileInformation[] => {
+const moveFile = (existingFiles: FileInformation[], oldKey: string, newKey: string): FileInformation[] => {
     const unique = isFileKeyUnique(existingFiles, newKey);
     let updatedFiles: FileInformation[] = [];
     existingFiles.forEach(file => {
@@ -64,7 +64,7 @@ const renameFile = (existingFiles: FileInformation[], oldKey: string, newKey: st
     return updatedFiles;
 }
 
-const renameFolder = (existingFiles: FileInformation[], oldKey: string, newKey: string): FileInformation[] => {
+const moveFolder = (existingFiles: FileInformation[], oldKey: string, newKey: string): FileInformation[] => {
     const unique = isFolderKeyUnique(existingFiles, newKey);
     let updatedFiles: FileInformation[] = [];
     existingFiles.forEach(file => {
@@ -129,4 +129,4 @@ const shouldBeFileDeleted = (existingFileKey: string, keysOfFilesToBeDeleted: st
     return shouldDelete;
 }
 
-export default {getUniqueAddedFiles, deleteSelectedFolders, deleteSelectedFiles, renameFile, renameFolder};
+export default {getUniqueAddedFiles, deleteSelectedFolders, deleteSelectedFiles, moveFile, moveFolder};

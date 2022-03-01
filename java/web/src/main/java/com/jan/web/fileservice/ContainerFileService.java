@@ -132,7 +132,7 @@ public class ContainerFileService implements FileService
     }
 
     @Override
-    public void createDirectory(String key, long containerId)
+    public void createFolder(String key, long containerId)
     {
         try
         {
@@ -213,6 +213,29 @@ public class ContainerFileService implements FileService
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
                     container.getId(),
                     RequestMethod.MOVE_FILE,
+                    entity));
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void moveFolder(String oldKey, String newKey, long containerId)
+    {
+        try
+        {
+            JSONObject request = new JSONObject();
+            request.put("key", oldKey);
+            request.put("newKey", newKey);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
+
+            Optional<ContainerEntity> containerEntity = repository.findById(containerId);
+            containerEntity.ifPresent(container -> requestMaker.makePostRequest(
+                    container.getId(),
+                    RequestMethod.MOVE_FOLDER,
                     entity));
         } catch (JSONException e)
         {

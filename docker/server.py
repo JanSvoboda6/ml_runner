@@ -62,10 +62,18 @@ def batch_delete_folders():
 
 @app.route('/files/move', methods=['POST'])
 def move_file():
-    file_name = request.get_json()['key']
-    new_file_name = request.get_json()['newKey']
-    os.rename(os.path.join(ROOT_DIRECTORY, file_name), os.path.join(ROOT_DIRECTORY, new_file_name))
+    move(request.get_json()['key'], request.get_json()['newKey'])
     return ""
+
+
+@app.route('/folders/move', methods=['POST'])
+def move_folder():
+    move(request.get_json()['key'], request.get_json()['newKey'])
+    return ""
+
+
+def move(old_key, new_key):
+    os.rename(os.path.join(ROOT_DIRECTORY, old_key), os.path.join(ROOT_DIRECTORY, new_key))
 
 
 def walk_directory(root_directory):
