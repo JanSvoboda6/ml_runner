@@ -11,7 +11,8 @@ public enum RequestMethod
     GET_FILES("/getfiles"),
     UPLOAD_FILES("/upload"),
     MOVE_FILE("/files/move"),
-    MOVE_FOLDER("/folders/move");
+    MOVE_FOLDER("/folders/move"),
+    DOWNLOAD("/download");
 
     private final String requestUrl;
 

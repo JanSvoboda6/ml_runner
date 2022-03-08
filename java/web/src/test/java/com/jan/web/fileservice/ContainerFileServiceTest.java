@@ -21,6 +21,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -196,6 +198,25 @@ class ContainerFileServiceTest
         Assertions.assertThat(keys).contains(newFolderName);
         Assertions.assertThat(keys).contains(newFirstFileName);
         Assertions.assertThat(keys).contains(newSecondFileName);
+    }
+
+    @Test
+    public void whenFolderIsDownloaded_thenZipFileIsReturned()
+    {
+        final String folderName = "AAA/";
+        final String firstFileName =  folderName + "aaa.txt";
+        final String secondFileName =  folderName + "bbb.txt";
+
+        Keys fileKeys = new Keys();
+        fileKeys.setKeys(List.of(firstFileName, secondFileName));
+        List<MultipartFile> files = List.of(new MockMultipartFile(firstFileName, new byte[1]),
+                new MockMultipartFile(secondFileName, new byte[1]));
+
+        fileService.createFolder(folderName, CONTAINER_ID);
+        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+
+        fileService.download(List.of(folderName), CONTAINER_ID);
+        Assertions.assertThat(Files.exists(Path.of("test_zip_file.zip"))).isTrue();
     }
 
     @AfterEach

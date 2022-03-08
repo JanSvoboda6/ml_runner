@@ -89,11 +89,25 @@ function Datasets(props)
     }
 
     const handleDownloadFile = (keys: string[]) => {
-        console.log(keys);
+        DatasetService.download(keys).then(response => {
+            const type = response.headers['content-type']
+            const blob = new Blob([response.data], {type: type})
+            const link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = 'files.zip'
+            link.click()
+        });
     }
 
     const handleDownloadFolder = (keys: string[]) => {
-        console.log(keys);
+        DatasetService.download(keys).then(response => {
+            const type = response.headers['content-type']
+            const blob = new Blob([response.data], {type: type})
+            const link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = 'files.zip'
+            link.click()
+        });
     }
 
     const handleFolderSelection = (folder) =>

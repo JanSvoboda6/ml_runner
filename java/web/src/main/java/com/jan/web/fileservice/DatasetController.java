@@ -2,11 +2,15 @@ package com.jan.web.fileservice;
 
 import com.jan.web.docker.ContainerUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -71,7 +75,26 @@ public class DatasetController
     @PostMapping(value = "/folders/move")
     public ResponseEntity<?> moveFolder(@RequestHeader(name="Authorization") String token, @RequestBody MoveRequest request)
     {
-        fileService.moveFile(request.getOldKey(), request.getNewKey(), containerUtility.getContainerIdFromToken(token));
+        fileService.moveFolder(request.getOldKey(), request.getNewKey(), containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
+    }
+
+    @PostMapping(value = "/download", produces="application/zip")
+    public ResponseEntity<Resource> download(@RequestHeader(name="Authorization") String token, @RequestBody List<String> keys)
+    {
+        fileService.download(keys, containerUtility.getContainerIdFromToken(token));
+        FileSystemResource resource = new FileSystemResource("test_zip_file.zip");
+        MediaType mediaType = MediaTypeFactory
+                .getMediaType(resource)
+                .orElse(MediaType.APPLICATION_OCTET_STREAM);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(mediaType);
+        ContentDisposition disposition = ContentDisposition
+                .attachment()
+                .filename(resource.getFilename())
+                .build();
+        headers.setContentDisposition(disposition);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 }

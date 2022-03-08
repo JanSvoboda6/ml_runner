@@ -18,9 +18,11 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -237,6 +239,25 @@ public class ContainerFileService implements FileService
                     container.getId(),
                     RequestMethod.MOVE_FOLDER,
                     entity));
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void download(List<String> keys, long containerId)
+    {
+        try
+        {
+            JSONObject request = new JSONObject();
+            request.put("keys", keys);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
+
+            Optional<ContainerEntity> containerEntity = repository.findById(containerId);
+            requestMaker.downloadRequest(containerEntity.get().getId(), RequestMethod.DOWNLOAD, entity);
         } catch (JSONException e)
         {
             e.printStackTrace();

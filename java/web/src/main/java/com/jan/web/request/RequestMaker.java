@@ -8,4 +8,5 @@ import java.util.Map;
 public interface RequestMaker
 {
     ResponseEntity<String> makePostRequest(long portNumber, RequestMethod requestMethod, HttpEntity<String> requestEntity);
+    void downloadRequest(long portNumber, RequestMethod requestMethod, HttpEntity<String> requestEntity);
 }

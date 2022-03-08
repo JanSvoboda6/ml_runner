@@ -110,4 +110,19 @@ const moveFolder = (oldKey: string, newKey: string) => {
     );
 }
 
-export default { getFiles, createDirectory, uploadFiles, deleteFolders, deleteFiles, moveFile, moveFolder }
+const download = (keys: string[]) => {
+    return axios.post<any>(
+        API_URL + '/download',
+        keys,
+        {
+            headers:
+                {
+                    'Authorization': authorizationHeader()['Authorization'],
+                    'Content-type': 'application/json; charset=utf-8'
+                },
+            responseType: 'blob'
+        }
+    );
+}
+
+export default { getFiles, createDirectory, uploadFiles, deleteFolders, deleteFiles, moveFile, moveFolder, download }
