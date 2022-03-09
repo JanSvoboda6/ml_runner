@@ -89,17 +89,14 @@ function Datasets(props)
     }
 
     const handleDownloadFile = (keys: string[]) => {
-        DatasetService.download(keys).then(response => {
-            const type = response.headers['content-type']
-            const blob = new Blob([response.data], {type: type})
-            const link = document.createElement('a')
-            link.href = window.URL.createObjectURL(blob)
-            link.download = 'files.zip'
-            link.click()
-        });
+        download(keys);
     }
 
     const handleDownloadFolder = (keys: string[]) => {
+        download(keys);
+    }
+
+    const download = (keys: string[]) => {
         DatasetService.download(keys).then(response => {
             const type = response.headers['content-type']
             const blob = new Blob([response.data], {type: type})
