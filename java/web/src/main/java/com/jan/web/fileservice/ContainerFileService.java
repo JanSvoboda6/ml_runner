@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -245,7 +244,7 @@ public class ContainerFileService implements FileService
         }
     }
 
-    public void download(List<String> keys, long containerId)
+    public ResponseEntity<byte[]> download(List<String> keys, long containerId)
     {
         try
         {
@@ -256,12 +255,12 @@ public class ContainerFileService implements FileService
             headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
             org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
 
-            Optional<ContainerEntity> containerEntity = repository.findById(containerId);
-            requestMaker.downloadRequest(containerEntity.get().getId(), RequestMethod.DOWNLOAD, entity);
+            return requestMaker.downloadRequest(containerId, RequestMethod.DOWNLOAD, entity);
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
+        return null;
     }
 
     private String composeUrl(long port, String requestMethod)

@@ -17,9 +17,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -214,13 +216,18 @@ class ContainerFileServiceTest
 
         fileService.createFolder(folderName, CONTAINER_ID);
         fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        ResponseEntity<byte[]> downloadResponse = fileService.download(List.of(folderName), CONTAINER_ID);
 
-        fileService.download(List.of(folderName), CONTAINER_ID);
-        Assertions.assertThat(Files.exists(Path.of("test_zip_file.zip"))).isTrue();
+        Assertions.assertThat(downloadResponse.getBody()).isNotNull();
     }
 
     @AfterEach
     void after()
+    {
+        deleteContainer();
+    }
+
+    private void deleteContainer()
     {
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
         String idOfContainerCreatedInTest = "";
