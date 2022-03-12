@@ -16,7 +16,9 @@ jobs:
         with:
           java-version: 17
           distribution: 'adopt'     
+      - name: gradlew permissions
+        run: chmod +x ./java/web/gradlew
       - name: Tests
         run: |
           cd java/web
-          gradlew test
+          ./gradlew test
