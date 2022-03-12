@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Gradle tests
 
 on:
   push:
@@ -15,8 +15,10 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 17
-          distribution: 'adopt'     
-      - name: gradlew permissions
+          distribution: 'adopt'
+      - name: Set up Docker
+        uses: docker-practice/actions-setup-docker@master
+      - name: Set up gradlew permissions
         run: chmod +x ./java/web/gradlew
       - name: Tests
         run: |
