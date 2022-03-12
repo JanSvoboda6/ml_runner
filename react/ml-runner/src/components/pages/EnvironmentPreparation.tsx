@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import DockerService from "../../services/DockerService";
 import cubeMerging from '../../styles/cube_merging.gif'
 import HelperBox from "../navigation/HelperBox";
+import {Redirect} from "react-router-dom";
 
 function EnvironmentPreparation()
 {
@@ -22,7 +23,7 @@ function EnvironmentPreparation()
 
     if (isPrepared)
     {
-        setTimeout(() => history.push('/'), 2000)
+        setTimeout(() => {history.push('/')}, 2000)
     }
 
     return (

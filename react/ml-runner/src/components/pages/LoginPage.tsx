@@ -38,7 +38,7 @@ function Login()
 
         setIsLoading(true);
 
-        if (validateForm()) //TODO Jan: implement proper validation
+        if (validateForm())
         {
             var user = { username: username, password: password, accessToken: "" };
 
