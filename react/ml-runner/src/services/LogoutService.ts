@@ -1,11 +1,11 @@
 
-import { logout } from '../redux/UserSlice';
+import { logout as doLogout } from '../redux/UserSlice';
 import AuthenticationService from './AuthenticationService';
 
-function LogoutService(dispatch: any)
+const logout = (dispatch: any) =>
 {
     AuthenticationService.logout();
-    dispatch(logout());
+    dispatch(doLogout());
 }
 
-export default LogoutService;
+export default {logout};
