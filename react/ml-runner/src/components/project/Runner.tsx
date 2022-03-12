@@ -29,7 +29,7 @@ function Runner(props: any)
                 (res: AxiosResponse<any>) =>
                 {
                     setLoaded(true);
-                    setParameters({ gamma: res.data.gammaParameter, c: res.data.cparameter })
+                    setParameters({ gamma: res.data.gammaParameter, c: res.data.cParameter })
                     setFinished(res.data.finished);
 
                     if (res.data.finished)
@@ -84,10 +84,10 @@ function Runner(props: any)
 
     return (
         <div>
-            <p> RUNNER ID: {props.runnerId}</p>
+            <p>RUNNER ID: {props.runnerId}</p>
             <p>Gamma parameter: {parameters.gamma} </p>
             <p>C parameter: {parameters.c}</p>
-            <div className="running-indicator">{!isFinished && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_icon" />}</div>
+            <div className="running-indicator">{!isFinished && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}</div>
             {isFinished && firstLabelResult !== undefined && secondLabelResult !== undefined &&
                 <div>
                     <div className="text-confirm">Validation result of first label: {(firstLabelResult * 100).toFixed(2)}%</div>

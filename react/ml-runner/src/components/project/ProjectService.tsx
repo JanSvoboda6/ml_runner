@@ -5,10 +5,6 @@ const API_URL = "http://localhost:8080/api/project/saveproject";
 const save = (projectName: any, firstLabel: string, secondLabel: string, firstLabelFolder: string, secondLabelFolder: string, selectedModel: any) =>
 {
     return axios.post(API_URL, { projectName, firstLabel, secondLabel, firstLabelFolder, secondLabelFolder, selectedModel }, { headers: authorizationHeader() })
-        .then(res =>
-        {
-            console.log(res);
-        })
         .catch(error =>
         {
             var message = "";
@@ -24,7 +20,6 @@ const save = (projectName: any, firstLabel: string, secondLabel: string, firstLa
             {
                 message = error.toString();
             }
-            console.log(message);
         });
 }
 
