@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         cache: 'npm'
+        cache-dependency-path: react/ml-runner/package-lock.json
     - run: |
         cd react/ml-runner
         npm ci
