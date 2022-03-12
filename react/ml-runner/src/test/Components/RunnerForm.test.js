@@ -14,6 +14,11 @@ const submitForm = async () => {
     });
 }
 
+const mockWindowLocationReload = () => {
+    delete window.location;
+    window.location = Object.assign({'reload': jest.fn()});
+}
+
 describe('Run handling', () =>
 {
     test('When run button is clicked then RunnerService#run method is called', async() => {
@@ -28,8 +33,7 @@ describe('Run handling', () =>
     });
 
     test('When run button is clicked then window is reloaded', async() => {
-        delete window.location;
-        window.location = Object.assign({'reload': jest.fn()});
+        mockWindowLocationReload();
 
         RunnerService.run = jest.fn();
         await act(async () => {
