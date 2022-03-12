@@ -61,7 +61,6 @@ public class DockerService
         dockerClient.buildImageCmd()
                 .withDockerfile(new File(dockerFilePath))
                 .withPull(true)
-                .withNoCache(true)
                 .withTags(Set.of(dockerImageName))
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
