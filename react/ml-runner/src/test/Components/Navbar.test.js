@@ -1,7 +1,6 @@
 import {act} from "react-dom/test-utils";
 import {fireEvent, render, screen} from "@testing-library/react";
 import {Router} from "react-router";
-import LoginPage from "../../components/pages/LoginPage";
 import React from "react";
 import Navbar from "../../components/navigation/Navbar";
 import {createMemoryHistory} from "history";
