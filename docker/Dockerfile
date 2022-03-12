@@ -8,7 +8,7 @@ COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
 
-COPY ./files ./files
+RUN mkdir ./files
 COPY ./server.py ./server.py
 COPY ./svm.py ./models/svm.py
 
