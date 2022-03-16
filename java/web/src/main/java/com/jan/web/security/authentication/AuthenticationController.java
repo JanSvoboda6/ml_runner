@@ -43,7 +43,6 @@ public class AuthenticationController
     private final PasswordEncoder encoder;
     private final JsonWebTokenUtility jsonWebTokenUtility;
     private final UserCreator userCreator;
-    private final AuthenticationListener authenticationListener;
 
     @Autowired
     public AuthenticationController(
@@ -52,8 +51,7 @@ public class AuthenticationController
             RoleRepository roleRepository,
             PasswordEncoder encoder,
             JsonWebTokenUtility jsonWebTokenUtility,
-            UserCreator userCreator,
-            AuthenticationListener authenticationListener)
+            UserCreator userCreator)
     {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
@@ -61,7 +59,6 @@ public class AuthenticationController
         this.encoder = encoder;
         this.jsonWebTokenUtility = jsonWebTokenUtility;
         this.userCreator = userCreator;
-        this.authenticationListener = authenticationListener;
     }
 
     @PostMapping("/register")
@@ -77,13 +74,13 @@ public class AuthenticationController
         User user = userCreator.createUser(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
 
         Set<Role> roles = new HashSet<>();
-
-        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Role cannot be found."));
-        roles.add(userRole);
-
+        Optional<Role> userRole = roleRepository.findByName(RoleType.ROLE_USER);
+        if (userRole.isEmpty())
+        {
+            return ResponseEntity.badRequest().body(new MessageResponse("There is a problem on our side!"));
+        }
+        roles.add(userRole.get());
         user.setRoles(roles);
-
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

@@ -5,7 +5,6 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
-import com.jan.web.docker.DockerService;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.runner.Runner;
 import com.jan.web.runner.RunnerRepository;
@@ -46,14 +45,8 @@ import java.util.Set;
 public class ApiTest
 {
     private static final String BASE_URL = "http://localhost:";
-    public static final String TEST_USER = "test_user";
-    public static final String PASSWORD = "password";
-
-    private static final String CONTAINER_NAME = "container-user-";
-    private static final String CONTAINER_NAME_WITH_ADDED_SLASH = "/" + CONTAINER_NAME;
-
-    @Autowired
-    private DockerService dockerService;
+    private static final String TEST_USER = "user@email.com";
+    private static final String PASSWORD = "password";
 
     @LocalServerPort
     private int port;

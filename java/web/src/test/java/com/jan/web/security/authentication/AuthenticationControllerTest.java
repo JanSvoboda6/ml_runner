@@ -42,7 +42,6 @@ public class AuthenticationControllerTest
     private  JsonWebTokenUtility jsonWebTokenUtility;
     private AuthenticationController authenticationController;
     private UserCreator userCreator;
-    private AuthenticationListener authenticationListener;
 
     @BeforeEach
     public void before()
@@ -53,8 +52,7 @@ public class AuthenticationControllerTest
         encoder = Mockito.mock(PasswordEncoder.class);
         jsonWebTokenUtility = Mockito.mock(JsonWebTokenUtility.class);
         userCreator = Mockito.mock(UserCreator.class);
-        authenticationListener = Mockito.mock(AuthenticationListener.class);
-        authenticationController = new AuthenticationController(authenticationManager, userRepository, roleRepository, encoder, jsonWebTokenUtility, userCreator, authenticationListener);
+        authenticationController = new AuthenticationController(authenticationManager, userRepository, roleRepository, encoder, jsonWebTokenUtility, userCreator);
     }
 
     @Test
