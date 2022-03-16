@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AuthenticationControllerValidationTest
 {
-    private static final String BASE_URL = "http://localhost:";
     public static final String EMAIL = "user@email.com";
     public static final String INVALID_EMAIL = "user@@@email.com";
     public static final String PASSWORD = "TheStrongPassword_999";
@@ -64,5 +63,38 @@ public class AuthenticationControllerValidationTest
                         .content(json.toString()))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Length of the email must be between 5 to 128 characters!"));
+    }
+
+    @Test
+    public void whenLoginRequestAfterRegistrationWithBadCredentials_thenBadRequestResponseIsReturned() throws Exception
+    {
+        JSONObject registerRequestJson = new JSONObject();
+        registerRequestJson.put("username", EMAIL);
+        registerRequestJson.put("password", PASSWORD);
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(registerRequestJson.toString()));
+
+        JSONObject loginRequestJson = new JSONObject();
+        loginRequestJson.put("username", EMAIL);
+        loginRequestJson.put("password", "invalid_" + PASSWORD);
+        mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginRequestJson.toString()))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().string("Bad credentials!"));
+    }
+
+    @Test
+    public void whenLoginRequestBeforeRegistration_thenBadRequestResponseIsReturned() throws Exception
+    {
+        JSONObject json = new JSONObject();
+        json.put("username", EMAIL);
+        json.put("password", PASSWORD);
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json.toString()))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().string("Bad credentials!"));
     }
 }

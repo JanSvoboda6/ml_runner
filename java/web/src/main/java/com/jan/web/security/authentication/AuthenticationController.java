@@ -71,17 +71,15 @@ public class AuthenticationController
         {
             return ResponseEntity
                     .badRequest()
-                    .body("Error: Email is already taken!");
+                    .body("Email is already taken!");
         }
-
-        //TODO Jan: validate that fields are not empty and add test cases.
 
         User user = userCreator.createUser(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
 
         Set<Role> roles = new HashSet<>();
 
         Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                .orElseThrow(() -> new RuntimeException("Role cannot be found."));
         roles.add(userRole);
 
         user.setRoles(roles);
@@ -102,7 +100,7 @@ public class AuthenticationController
         {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Bad credentials!"));
+                    .body("Bad credentials!");
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
