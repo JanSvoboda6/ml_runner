@@ -13,7 +13,6 @@ import java.io.IOException;
 @RunWith(SpringRunner.class)
 public class AuthenticationEntryPointJwtTest
 {
-
     @Test
     public void whenCommenceMethodIsCalled_thenErrorWithUnauthorizedMessageIsSent() throws IOException
     {

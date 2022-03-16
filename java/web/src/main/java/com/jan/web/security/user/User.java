@@ -23,7 +23,7 @@ public class User
     private Long id;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 128)
     @Email
     private String username;
 

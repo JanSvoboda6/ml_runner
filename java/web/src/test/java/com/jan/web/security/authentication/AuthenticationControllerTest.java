@@ -175,7 +175,7 @@ public class AuthenticationControllerTest
 
     @Test
     @Ignore
-    public void whenUserIsSuccessfullySignedInWithPrepareEnvironentFlag_thenListenerWillBeCalled()
+    public void whenUserIsSuccessfullySignedInWithPreparedEnvironmentFlag_thenListenerWillBeCalled()
     {
         //TODO: Jan - implement test case
     }

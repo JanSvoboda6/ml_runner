@@ -263,6 +263,6 @@ class ContainerFileServiceTest
     private void buildDockerContainerAndWaitForTheServerToStart() throws InterruptedException
     {
         dockerService.buildDockerContainer(USER_ID);
-        Thread.sleep(500);
+        Thread.sleep(1000);
     }
 }
