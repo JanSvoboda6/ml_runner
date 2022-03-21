@@ -45,12 +45,11 @@ public class RunnerControllerTest
         requestValidator = Mockito.mock(RequestValidator.class);
         requestMaker = Mockito.mock(RequestMaker.class);
         projectRunner = Mockito.mock(ProjectRunner.class);
-        runnerService = new RunnerServiceImpl(runnerRepository, projectRunner);
         objectMapper = Mockito.mock(ObjectMapper.class);
         resultRepository = Mockito.mock(ResultRepository.class);
+        runnerService = new RunnerServiceImpl(runnerRepository, projectRunner, containerRepository, resultRepository, requestMaker, objectMapper);
         runnerController = new RunnerController(
                 runnerRepository,
-                containerRepository,
                 containerUtility,
                 runnerService,
                 requestValidator,
@@ -102,7 +101,7 @@ public class RunnerControllerTest
         Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
         Result result = Mockito.mock(Result.class);
-        Mockito.when(resultRepository.findByRunnerId(Mockito.anyLong())).thenReturn(result);
+        Mockito.when(resultRepository.findByRunnerId(Mockito.anyLong())).thenReturn(Optional.of(result));
         ResponseEntity<?> response = runnerController.getResult(RANDOM_JWT_TOKEN, PROJECT_ID, RUNNER_ID);
         Mockito.verifyZeroInteractions(requestMaker);
         Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();

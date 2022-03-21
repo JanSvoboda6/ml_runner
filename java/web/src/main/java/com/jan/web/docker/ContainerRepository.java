@@ -6,4 +6,5 @@ public interface ContainerRepository extends JpaRepository<ContainerEntity, Long
 {
     boolean existsByUserId(Long userId);
     ContainerEntity findByUserId(Long userId);
+    Long findIdByUserId(Long userId);
 }

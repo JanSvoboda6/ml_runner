@@ -26,7 +26,6 @@ import java.util.Optional;
 public class RunnerController
 {
     private final RunnerRepository runnerRepository;
-    private final ContainerRepository containerRepository;
     private final ContainerUtility containerUtility;
     private final RunnerService runnerService;
     private final RequestValidator requestValidator;
@@ -36,7 +35,6 @@ public class RunnerController
 
     @Autowired
     public RunnerController(RunnerRepository runnerRepository,
-                            ContainerRepository containerRepository,
                             ContainerUtility containerUtility,
                             RunnerService runnerService,
                             RequestValidator requestValidator,
@@ -44,7 +42,6 @@ public class RunnerController
                             ObjectMapper objectMapper, ResultRepository resultRepository)
     {
         this.runnerRepository = runnerRepository;
-        this.containerRepository = containerRepository;
         this.containerUtility = containerUtility;
         this.runnerService = runnerService;
         this.requestValidator = requestValidator;
@@ -79,13 +76,11 @@ public class RunnerController
         requestValidator.validateProject(projectId);
         requestValidator.validateRunner(runnerId);
 
-        if(isFinished(containerEntity.getId(), projectId, runnerId))
+        Optional<Result> result = runnerService.getResult(containerEntity.getId(), projectId, runnerId);
+        if(result.isPresent())
         {
-            JSONObject response = getResultResponse(projectId, runnerId, containerEntity);
-
-            return ResponseEntity.ok(response.toString());
+            return ResponseEntity.ok(prepareJsonResultResponse(result.get()));
         }
-
         return ResponseEntity.ok("Result cannot be obtained since project is still running!");
     }
 
@@ -97,91 +92,16 @@ public class RunnerController
         requestValidator.validateRunner(finishedRequest.getRunnerId());
 
         JSONObject response = new JSONObject();
-        response.put("isFinished", isFinished(containerEntity.getId(), finishedRequest.getProjectId(), finishedRequest.getRunnerId()));
+        response.put("isFinished", runnerService.isFinished(containerEntity.getId(), finishedRequest.getProjectId(), finishedRequest.getRunnerId()));
 
         return ResponseEntity.ok(response.toString());
     }
 
-    private boolean isFinished(long containerId, long projectId, long runnerId) throws JSONException, IOException
-    {
-        if (runnerRepository.findById(runnerId).isPresent())
-        {
-            boolean isFinished = runnerRepository.findById(runnerId).get().isFinished();
-            if (isFinished)
-            {
-                return true;
-            }
-        }
-
-        JSONObject request = new JSONObject();
-        request.put("projectId", projectId);
-        request.put("runnerId", runnerId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(
-                request.toString(),
-                headers);
-
-        Optional<ContainerEntity> containerEntity = containerRepository.findById(containerId);
-        if (containerEntity.isPresent())
-        {
-            ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
-                    containerEntity.get().getId(),
-                    com.jan.web.request.RequestMethod.IS_RUNNER_FINISHED,
-                    entity);
-
-            FinishedResponse finishedResponse = objectMapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
-
-            if (finishedResponse.isFinished)
-            {
-                if (runnerRepository.findById(runnerId).isPresent())
-                {
-                    Runner runnerToBeUpdated = runnerRepository.findById(runnerId).get();
-                    runnerToBeUpdated.setFinished(true);
-                    runnerRepository.save(runnerToBeUpdated);
-                }
-            }
-
-            return finishedResponse.isFinished;
-        }
-        return false;
-    }
-
-    private JSONObject getResultResponse(long projectId, long runnerId, ContainerEntity containerEntity) throws JSONException, IOException
+    private JSONObject prepareJsonResultResponse(Result result) throws JSONException
     {
         JSONObject response = new JSONObject();
-        Result result = resultRepository.findByRunnerId(runnerId);
-        if(result != null)
-        {
-            response.put("firstLabelResult", result.getFirstLabelResult());
-            response.put("secondLabelResult", result.getSecondLabelResult());
-            return response;
-        }
-        JSONObject resultRequest = new JSONObject();
-
-        resultRequest.put("projectId", projectId);
-        resultRequest.put("runnerId", runnerId);
-
-        HttpHeaders resultHeaders = new HttpHeaders();
-        resultHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> resultEntity = new HttpEntity<>(resultRequest.toString(), resultHeaders);
-
-        ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
-                containerEntity.getId(),
-                RequestMethod.RUNNER_RESULT,
-                resultEntity);
-
-        ResultResponse resultResponse = objectMapper.readValue(resultResponseFromContainer.getBody(), ResultResponse.class);
-
-        response.put("firstLabelResult", resultResponse.firstLabelResult);
-        response.put("secondLabelResult", resultResponse.secondLabelResult);
-
-        result = new Result();
-        result.setRunner(runnerRepository.findById(runnerId).get());
-        result.setFirstLabelResult(resultResponse.firstLabelResult);
-        result.setFirstLabelResult(resultResponse.secondLabelResult);
-        resultRepository.save(result);
-
+        response.put("firstLabelResult", result.getFirstLabelResult());
+        response.put("secondLabelResult", result.getSecondLabelResult());
         return response;
     }
 }

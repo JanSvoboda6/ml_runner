@@ -77,6 +77,7 @@ public class AuthenticationController
         Optional<Role> userRole = roleRepository.findByName(RoleType.ROLE_USER);
         if (userRole.isEmpty())
         {
+            //TODO Jan: Use MessageResponse or just String?
             return ResponseEntity.badRequest().body(new MessageResponse("There is a problem on our side!"));
         }
         roles.add(userRole.get());

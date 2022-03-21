@@ -48,12 +48,12 @@ public class DockerService
         this.dockerImageName = dockerImageName;
     }
 
-    public void buildDockerContainer(Long userId)
+    public long buildDockerContainer(Long userId)
     {
         if (containerHasBeenAlreadyBuilt(userId))
         {
             startContainerForTheUser(userId);
-            return;
+            return  containerRepository.findIdByUserId(userId);
         }
 
         ContainerEntity containerEntity = createContainerEntity(userId);
@@ -74,6 +74,7 @@ public class DockerService
                 .getId();
 
         dockerClient.startContainerCmd(containerId).exec();
+        return containerEntity.getId();
     }
 
     private ContainerEntity createContainerEntity(Long userId)

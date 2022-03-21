@@ -3,11 +3,10 @@ package com.jan.web.runner;
 import com.jan.web.project.Project;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.junit.Ignore;
 
 import java.util.Optional;
 
