@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.nio.file.FileSystems;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 class DockerServiceTest
@@ -82,6 +83,9 @@ class DockerServiceTest
     {
         DockerClient dockerClient = Mockito.mock(DockerClient.class);
         Mockito.when(containerRepository.existsByUserId(USER_ID)).thenReturn(true);
+        ContainerEntity container = Mockito.mock(ContainerEntity.class);
+        Mockito.when(container.getId()).thenReturn(999L);
+        Mockito.when(containerRepository.findByUserId(USER_ID)).thenReturn(Optional.of(container));
         DockerService dockerServiceWithMockedDockerClient = new DockerService(containerRepository,
                 userRepository,
                 dockerClient,
