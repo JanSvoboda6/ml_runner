@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface RunnerService
 {
    void runProject(RunRequest request, Project project, ContainerEntity containerEntity);
+   RunnerStatus getStatus(long containerId, long projectId, long runnerId) throws JSONException, IOException;
    boolean isFinished(long containerId, long projectId, long runnerId) throws IOException, JSONException;
    Optional<Result> getResult(long containerId, long projectId, long runnerId) throws IOException, JSONException;
 }

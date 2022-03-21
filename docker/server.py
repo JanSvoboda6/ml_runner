@@ -72,6 +72,7 @@ def move_folder():
     move(request.get_json()['key'], request.get_json()['newKey'])
     return ""
 
+
 @app.route('/download', methods=['POST'])
 def download():
     file_folder_keys = request.get_json()['keys']
@@ -150,8 +151,8 @@ def get_status():
     statuses = []
     with open(str(runner_id) + '_status.txt', 'r') as status_file:
         for line in status_file:
-            statuses.append(line)
-    return jsonify({'status': statuses[-1]})
+            statuses.append(line.replace('\n', ''))
+    return jsonify({'chronologicalStatuses': statuses})
 
 
 @app.route('/project/runner/finished', methods=['POST'])

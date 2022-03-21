@@ -141,6 +141,59 @@ public class RunningFlowTest
         Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId())).isPresent();
     }
 
+    @Test
+    @Timeout(value = 60)
+    public void whenRequestForRunningRunnerWithValidParameters_thenRunnerRunsAndAllStatusesHaveBeenExecuted() throws IOException, JSONException, InterruptedException
+    {
+        Optional<ContainerEntity> containerIdOptional = containerRepository.findByUserId(userRepository.findByUsername(EMAIL).get().getId());
+        if(containerIdOptional.isEmpty())
+        {
+            Assertions.fail("Container record has not been found in the DB!");
+        }
+        long containerId = containerIdOptional.get().getId();
+
+        containerFileService.createFolder("test_folder/", containerId);
+        containerFileService.createFolder("test_folder/first_class/", containerId);
+        containerFileService.createFolder("test_folder/second_class/", containerId);
+        MultipartFile firstFile = new MockMultipartFile("feature_vector_first_class.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_first_class.npy")));
+        MultipartFile secondFile = new MockMultipartFile("feature_vector_second_class.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class.npy")));
+
+        Keys keys = new Keys();
+        keys.setKeys(List.of("test_folder/first_class/feature_vector_first_class.npy", "test_folder/second_class/feature_vector_second_class.npy"));
+        containerFileService.uploadFiles(keys, List.of(firstFile, secondFile), containerId);
+
+        Project project = new Project(userRepository.findByUsername(EMAIL).get(),
+                "test_project",
+                "first_label",
+                "second_label",
+                "test_folder/first_class/",
+                "test_folder/second_class/",
+                "Support Vector Machines");
+
+        Long projectId = projectRepository.save(project).getId();
+
+        Runner runner = new Runner();
+        runner.setProject(project);
+        runner.setCParameter(1.0);
+        runner.setGammaParameter(10.0);
+        runnerRepository.save(runner);
+
+        containerProjectRunner.run(runner, containerId);
+
+        boolean isFinished = false;
+
+        while(!isFinished)
+        {
+            waiter.await(1, TimeUnit.SECONDS);
+            isFinished = runnerService.isFinished(containerId, projectId, runner.getId());
+            runnerService.getStatus(containerId, projectId, runner.getId());
+        }
+
+        Runner runnerAfterFlowExecution = runnerRepository.findById(runner.getId()).get();
+        Assertions.assertThat(runnerAfterFlowExecution.getChronologicalStatuses()).contains("PREPARING_DATA,TRAINING,PREDICTING,FINISHED");
+        Assertions.assertThat(runnerAfterFlowExecution.getStatus()).isEqualTo(RunnerStatus.FINISHED);
+    }
+
     private void buildDockerContainerAndWaitForTheServerToStart(long userId) throws InterruptedException
     {
         dockerService.buildDockerContainer(userId);

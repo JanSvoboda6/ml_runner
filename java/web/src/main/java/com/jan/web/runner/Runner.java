@@ -17,6 +17,7 @@ public class Runner
     private double cParameter;
     private boolean isFinished;
     private RunnerStatus status;
+    private String chronologicalStatuses;
 
     public Long getId()
     {
@@ -71,5 +72,15 @@ public class Runner
     public void setStatus(RunnerStatus status)
     {
         this.status = status;
+    }
+
+    public String getChronologicalStatuses()
+    {
+        return chronologicalStatuses;
+    }
+
+    public void setChronologicalStatuses(String chronologicalStatuses)
+    {
+        this.chronologicalStatuses = chronologicalStatuses;
     }
 }

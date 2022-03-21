@@ -1,8 +1,8 @@
 package com.jan.web.runner;
 
+import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.project.Project;
-import com.jan.web.docker.ContainerEntity;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
 import com.jan.web.result.Result;
@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -54,6 +55,34 @@ public class RunnerServiceImpl implements RunnerService
     }
 
     @Override
+    public RunnerStatus getStatus(long containerId, long projectId, long runnerId) throws JSONException, IOException
+    {
+        Runner runner = runnerRepository.findById(runnerId).get();
+        RunnerStatus status = runner.getStatus();
+        if (isEndState(status))
+        {
+            return status;
+        }
+        HttpEntity<String> statusEntity = prepareStatusEntity(runnerId);
+        Optional<ContainerEntity> containerEntity = containerRepository.findById(containerId);
+
+        if (containerEntity.isPresent())
+        {
+            ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
+                    containerEntity.get().getId(),
+                    RequestMethod.RUNNER_STATUS,
+                    statusEntity);
+
+            StatusResponse statusResponse = objectMapper.readValue(responseFromContainer.getBody(), StatusResponse.class);
+            List<String> statuses = statusResponse.chronologicalStatuses;
+            runner.setStatus(RunnerStatus.valueOf(statuses.get(statuses.size() - 1)));
+            runner.setChronologicalStatuses(String.join(",", statuses));
+            runnerRepository.save(runner);
+        }
+        return runner.getStatus();
+    }
+
+    @Override
     public boolean isFinished(long containerId, long projectId, long runnerId) throws IOException, JSONException
     {
         if (runnerRepository.findById(runnerId).isPresent())
@@ -66,15 +95,13 @@ public class RunnerServiceImpl implements RunnerService
         }
 
         HttpEntity<String> resultEntity = prepareRequestEntity(projectId, runnerId);
-
         Optional<ContainerEntity> containerEntity = containerRepository.findById(containerId);
         if (containerEntity.isPresent())
         {
             ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
                     containerEntity.get().getId(),
-                    com.jan.web.request.RequestMethod.IS_RUNNER_FINISHED,
+                    RequestMethod.IS_RUNNER_FINISHED,
                     resultEntity);
-
             FinishedResponse finishedResponse = objectMapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
 
             if (finishedResponse.isFinished)
@@ -134,6 +161,20 @@ public class RunnerServiceImpl implements RunnerService
         HttpHeaders resultHeaders = new HttpHeaders();
         resultHeaders.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(resultRequest.toString(), resultHeaders);
+    }
+
+    private HttpEntity<String> prepareStatusEntity (long runnerId) throws JSONException
+    {
+        JSONObject resultRequest = new JSONObject();
+        resultRequest.put("runnerId", runnerId);
+        HttpHeaders resultHeaders = new HttpHeaders();
+        resultHeaders.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(resultRequest.toString(), resultHeaders);
+    }
+
+    private boolean isEndState(RunnerStatus status)
+    {
+        return status == RunnerStatus.FINISHED || status == RunnerStatus.FAILED || status == RunnerStatus.CANCELLED;
     }
 
     private Runner mapRequestToRunner(RunRequest request, Project project)
