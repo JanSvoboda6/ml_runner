@@ -53,7 +53,7 @@ public class DockerService
         if (containerHasBeenAlreadyBuilt(userId))
         {
             startContainerForTheUser(userId);
-            return  containerRepository.findIdByUserId(userId);
+            return containerRepository.findByUserId(userId).get().getId();
         }
 
         ContainerEntity containerEntity = createContainerEntity(userId);
@@ -69,7 +69,7 @@ public class DockerService
                 .withName(provideContainerName(userId))
                 .withHostName(provideContainerName(userId))
                 .withExposedPorts(ExposedPort.tcp(PYTHON_SERVER_PORT))
-                .withHostConfig(new HostConfig().withPortBindings(portBindings))
+                .withHostConfig(new HostConfig().withPortBindings(portBindings).withNetworkMode("bridge"))
                 .exec()
                 .getId();
 

@@ -29,7 +29,15 @@ public class ContainerUtility
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent())
         {
-            return containerRepository.findByUserId(user.get().getId()).getId();
+            Optional<ContainerEntity> container = containerRepository.findByUserId(user.get().getId());
+            if (container.isPresent())
+            {
+                return container.get().getId();
+            }
+            else
+            {
+                throw new RuntimeException("No container found!");
+            }
         }
         throw new RuntimeException("No user found!");
     }

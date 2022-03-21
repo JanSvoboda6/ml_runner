@@ -1,7 +1,7 @@
 package com.jan.web.security.configuration;
 
-import com.jan.web.security.authentication.AuthorizationTokenFilter;
 import com.jan.web.security.authentication.AuthenticationEntryPointJwt;
+import com.jan.web.security.authentication.AuthorizationTokenFilter;
 import com.jan.web.security.user.UserDetailsServiceImpl;
 import com.jan.web.security.utility.JsonWebTokenUtility;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -18,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 @EnableWebSecurity
@@ -80,11 +79,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         //TODO Jan: These headers are just for accessing H2 console
         http.authorizeRequests().antMatchers("/console/**").permitAll();
         http.csrf().ignoringAntMatchers("/console/**");
+        http.authorizeRequests().antMatchers("/api/runner/**").permitAll();
+        http.csrf().ignoringAntMatchers("/api/runner/**");
         http.headers().frameOptions().sameOrigin();
 
         http.authorizeRequests().antMatchers("/api/**").permitAll();
         http.csrf().ignoringAntMatchers("/api/**");
-        
+
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

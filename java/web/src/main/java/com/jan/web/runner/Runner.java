@@ -16,6 +16,7 @@ public class Runner
     private double gammaParameter;
     private double cParameter;
     private boolean isFinished;
+    private RunnerStatus status;
 
     public Long getId()
     {
@@ -60,5 +61,15 @@ public class Runner
     public void setFinished(boolean finished)
     {
         isFinished = finished;
+    }
+
+    public RunnerStatus getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(RunnerStatus status)
+    {
+        this.status = status;
     }
 }
