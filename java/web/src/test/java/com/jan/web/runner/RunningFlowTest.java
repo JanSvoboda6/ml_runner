@@ -19,33 +19,23 @@ import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.json.JSONException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@TestPropertySource(properties = "server.port=8080")
+@SpringBootTest
 public class RunningFlowTest
 {
-    private static final String EMAIL = "user@email.com";
+    private String email;
     private static final String PASSWORD = "StrongPassword_999";
 
     @Autowired
@@ -84,18 +74,19 @@ public class RunningFlowTest
     public void before() throws InterruptedException
     {
         User user = new User();
-        user.setUsername(EMAIL);
+        email = "user" + new Random().nextInt() + "@email.com";
+        user.setUsername(email);
         user.setPassword(PASSWORD);
         user.setRoles(Set.of(roleRepository.findByName(RoleType.ROLE_USER).get()));
         userRepository.save(user);
-        buildDockerContainerAndWaitForTheServerToStart(userRepository.findByUsername(EMAIL).get().getId());
+        buildDockerContainerAndWaitForTheServerToStart(userRepository.findByUsername(email).get().getId());
     }
 
     @Test
     @Timeout(value = 60)
     public void whenRequestForRunningRunnerWithValidParameters_thenRunnerRunsAndReturnsResult() throws IOException, JSONException, InterruptedException
     {
-        Optional<ContainerEntity> containerIdOptional = containerRepository.findByUserId(userRepository.findByUsername(EMAIL).get().getId());
+        Optional<ContainerEntity> containerIdOptional = containerRepository.findByUserId(userRepository.findByUsername(email).get().getId());
         if(containerIdOptional.isEmpty())
         {
             Assertions.fail("Container record has not been found in the DB!");
@@ -112,7 +103,7 @@ public class RunningFlowTest
         keys.setKeys(List.of("test_folder/first_class/feature_vector_first_class.npy", "test_folder/second_class/feature_vector_second_class.npy"));
         containerFileService.uploadFiles(keys, List.of(firstFile, secondFile), containerId);
 
-        Project project = new Project(userRepository.findByUsername(EMAIL).get(),
+        Project project = new Project(userRepository.findByUsername(email).get(),
                 "test_project",
                 "first_label",
                 "second_label",
@@ -145,7 +136,7 @@ public class RunningFlowTest
     @Timeout(value = 60)
     public void whenRequestForRunningRunnerWithValidParameters_thenRunnerRunsAndAllStatusesHaveBeenExecuted() throws IOException, JSONException, InterruptedException
     {
-        Optional<ContainerEntity> containerIdOptional = containerRepository.findByUserId(userRepository.findByUsername(EMAIL).get().getId());
+        Optional<ContainerEntity> containerIdOptional = containerRepository.findByUserId(userRepository.findByUsername(email).get().getId());
         if(containerIdOptional.isEmpty())
         {
             Assertions.fail("Container record has not been found in the DB!");
@@ -162,7 +153,7 @@ public class RunningFlowTest
         keys.setKeys(List.of("test_folder/first_class/feature_vector_first_class.npy", "test_folder/second_class/feature_vector_second_class.npy"));
         containerFileService.uploadFiles(keys, List.of(firstFile, secondFile), containerId);
 
-        Project project = new Project(userRepository.findByUsername(EMAIL).get(),
+        Project project = new Project(userRepository.findByUsername(email).get(),
                 "test_project",
                 "first_label",
                 "second_label",
@@ -203,7 +194,7 @@ public class RunningFlowTest
     @AfterEach
     void after()
     {
-        deleteContainerOfUser(userRepository.findByUsername(EMAIL).get().getId());
+        deleteContainerOfUser(userRepository.findByUsername(email).get().getId());
     }
 
     private void deleteContainerOfUser(long userId)
