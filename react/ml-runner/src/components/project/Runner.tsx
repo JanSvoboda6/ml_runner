@@ -15,13 +15,15 @@ interface Parameters
 function Runner(props: any)
 {
     let intervalId: any;
-    const [isFinished, setFinished] = useState(false);
+    const [isInEndState, setEndState] = useState(false);
     const [status, setStatus] = useState("INITIAL");
     const [firstLabelResult, setFirstLabelResult] = useState<number | undefined>(undefined);
     const [secondLabelResult, setSecondLabelResult] = useState<number | undefined>(undefined);
     const [isLoaded, setLoaded] = useState(false);
     const [parameters, setParameters] = useState<Parameters>({ gamma: undefined, c: undefined });
     const FIVE_SECONDS = 5 * 1000;
+
+
 
     useEffect(() =>
     {
@@ -31,58 +33,42 @@ function Runner(props: any)
                 {
                     setLoaded(true);
                     setParameters({ gamma: res.data.gammaParameter, c: res.data.cparameter })
-                    setStatus(res.data.status);
-                    setFinished(res.data.finished);
-
-                    if (res.data.finished)
-                    {
-                        RunnerService.getStatus(props.runnerId).then((res) => setStatus(res.data.status));
-                        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
-                            .then((res: AxiosResponse<any>) =>
-                            {
-                                setFirstLabelResult(res.data.firstLabelResult);
-                                setSecondLabelResult(res.data.secondLabelResult);
-                            })
-                    }
-                    else
-                    {
-                        startRecurrentRequests();
-                    }
-                },
-                (error) =>
-                {
                 }
             )
+
+        RunnerService.getStatus(props.runnerId)
+            .then((res) =>
+            {
+                setStatus(res.data.status);
+                setEndState(res.data.isEndState);
+                res.data.isEndState ? showResults() : startRecurrentRequests();
+            });
+
     }, [])
+
+    const showResults = () => {
+        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
+            .then((res: AxiosResponse<any>) =>
+            {
+                setFirstLabelResult(res.data.firstLabelResult);
+                setSecondLabelResult(res.data.secondLabelResult);
+            })
+    }
 
     const startRecurrentRequests = () =>
     {
-        intervalId = setInterval(isRunningFinished, FIVE_SECONDS);
+        intervalId = setInterval(isRunnerInEndState, FIVE_SECONDS);
     }
 
-    const isRunningFinished = () =>
+    const isRunnerInEndState = () =>
     {
         RunnerService.getStatus(props.runnerId)
             .then(
             (res) =>
                 {
-                    console.log(res.data.status);
                     setStatus(res.data.status);
-                }
-            );
-        if(!isFinished)
-        {
-        // RunnerService.getStatus(props.runnerId).then(
-        //     (res) =>{
-        //         console.log(res);
-        //     }
-        // )
-        RunnerService.isFinished(props.projectId, props.runnerId)
-            .then(
-                (res) =>
-                {
-                    setFinished(res.data.isFinished);
-                    if (res.data.isFinished)
+                    setEndState(res.data.isEndState)
+                    if(res.data.isEndState)
                     {
                         axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
                             .then((res: AxiosResponse<any>) =>
@@ -94,8 +80,7 @@ function Runner(props: any)
                         clearInterval(intervalId);
                     }
                 }
-            )
-        }
+            );
     }
 
     return (
@@ -104,8 +89,8 @@ function Runner(props: any)
             <p>Gamma parameter: {parameters.gamma} </p>
             <p>C parameter: {parameters.c}</p>
             <p>Status: {status}</p>
-            <div className="running-indicator">{!isFinished && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}</div>
-            {isFinished && firstLabelResult !== undefined && secondLabelResult !== undefined &&
+            <div className="running-indicator">{!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}</div>
+            {isInEndState && firstLabelResult !== undefined && secondLabelResult !== undefined &&
                 <div>
                     <div className="text-confirm">Validation result of first label: {(firstLabelResult * 100).toFixed(2)}%</div>
                     <div className="text-confirm">Validation result of second label: {(secondLabelResult * 100).toFixed(2)}%</div>
