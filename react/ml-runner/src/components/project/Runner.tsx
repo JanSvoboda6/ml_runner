@@ -16,6 +16,7 @@ function Runner(props: any)
 {
     let intervalId: any;
     const [isFinished, setFinished] = useState(false);
+    const [status, setStatus] = useState("INITIAL");
     const [firstLabelResult, setFirstLabelResult] = useState<number | undefined>(undefined);
     const [secondLabelResult, setSecondLabelResult] = useState<number | undefined>(undefined);
     const [isLoaded, setLoaded] = useState(false);
@@ -29,7 +30,8 @@ function Runner(props: any)
                 (res: AxiosResponse<any>) =>
                 {
                     setLoaded(true);
-                    setParameters({ gamma: res.data.gammaParameter, c: res.data.cParameter })
+                    setParameters({ gamma: res.data.gammaParameter, c: res.data.cparameter })
+                    setStatus(res.data.status);
                     setFinished(res.data.finished);
 
                     if (res.data.finished)
@@ -61,6 +63,12 @@ function Runner(props: any)
     {
         if(!isFinished)
         {
+        // RunnerService.getStatus(props.runnerId).then(
+        //     (res) =>{
+        //         console.log(res);
+        //     }
+        // )
+        RunnerService.getStatus(props.runnerId).then((res) => setStatus(res.data.status));
         RunnerService.isFinished(props.projectId, props.runnerId)
             .then(
                 (res) =>
@@ -87,6 +95,7 @@ function Runner(props: any)
             <p>RUNNER ID: {props.runnerId}</p>
             <p>Gamma parameter: {parameters.gamma} </p>
             <p>C parameter: {parameters.c}</p>
+            <p>Status: {status}</p>
             <div className="running-indicator">{!isFinished && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}</div>
             {isFinished && firstLabelResult !== undefined && secondLabelResult !== undefined &&
                 <div>

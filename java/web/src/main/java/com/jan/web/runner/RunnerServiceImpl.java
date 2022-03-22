@@ -142,7 +142,7 @@ public class RunnerServiceImpl implements RunnerService
             Result result = new Result();
             result.setRunner(runnerRepository.findById(runnerId).get());
             result.setFirstLabelResult(resultResponse.firstLabelResult);
-            result.setFirstLabelResult(resultResponse.secondLabelResult);
+            result.setSecondLabelResult(resultResponse.secondLabelResult);
             resultRepository.save(result);
             return Optional.of(result);
         }
@@ -182,8 +182,9 @@ public class RunnerServiceImpl implements RunnerService
         Runner runner = new Runner();
         runner.setProject(project);
         runner.setGammaParameter(request.getGammaParameter());
-        runner.setCParameter(request.getcParameter());
+        runner.setCParameter(request.getCParameter());
         runner.setFinished(false);
+        runner.setStatus(RunnerStatus.INITIAL);
         runnerRepository.save(runner);
         return runner;
     }

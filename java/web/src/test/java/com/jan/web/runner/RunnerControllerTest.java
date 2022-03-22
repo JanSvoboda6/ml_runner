@@ -58,8 +58,7 @@ public class RunnerControllerTest
         Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
 
-        RunRequest runRequest = new RunRequest();
-        runRequest.setProjectId(PROJECT_ID);
+        RunRequest runRequest = new RunRequest(PROJECT_ID, 1.0, 1.0);
 
         runnerController.runProject(RANDOM_JWT_TOKEN, runRequest);
         Mockito.verify(runnerRepository, Mockito.times(1)).save(Mockito.any());

@@ -42,9 +42,9 @@ public class RunnerController
         this.requestValidator = requestValidator;
     }
 
-
+    //TODO: How are tokens validated? Try to run this request withou token in header from client
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Runner getRunner(@RequestParam long projectId, @RequestParam long runnerId)
+    public Runner getRunner(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId)
     {
         //TODO Jan: Why it has two 2 parameters? - we need just one parameter
         return runnerRepository.findRunnerByIdAndProjectId(runnerId, projectId);
@@ -61,7 +61,7 @@ public class RunnerController
     }
 
     //TODO: Jan - projectId is redundant
-    @GetMapping("/result")
+    @GetMapping(value = "/result", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getResult(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId) throws JSONException, IOException
     {
         ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
@@ -71,7 +71,7 @@ public class RunnerController
         Optional<Result> result = runnerService.getResult(containerEntity.getId(), projectId, runnerId);
         if(result.isPresent())
         {
-            return ResponseEntity.ok(prepareJsonResultResponse(result.get()));
+            return ResponseEntity.ok(prepareJsonResultResponse(result.get()).toString());
         }
         return ResponseEntity.ok("Result cannot be obtained since project is still running!");
     }
@@ -83,7 +83,7 @@ public class RunnerController
         requestValidator.validateRunner(runnerId);
         JSONObject response = new JSONObject();
         RunnerStatus status = runnerService.getStatus(containerEntity.getId(), runnerId);
-        response.put("status", status.toString());
+        response.put("status", "FINISHED");
         response.put("isEndState", status.isEndState());
         return ResponseEntity.ok(response.toString());
     }

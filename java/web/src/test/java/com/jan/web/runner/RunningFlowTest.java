@@ -130,6 +130,8 @@ public class RunningFlowTest
         }
 
         Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId())).isPresent();
+        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId()).get().getFirstLabelResult()).isNotNull();
+        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId()).get().getSecondLabelResult()).isNotNull();
     }
 
     @Test
@@ -167,6 +169,7 @@ public class RunningFlowTest
         runner.setProject(project);
         runner.setCParameter(1.0);
         runner.setGammaParameter(10.0);
+        runner.setStatus(RunnerStatus.INITIAL);
         runnerRepository.save(runner);
 
         containerProjectRunner.run(runner, containerId);
@@ -181,7 +184,7 @@ public class RunningFlowTest
         }
 
         Runner runnerAfterFlowExecution = runnerRepository.findById(runner.getId()).get();
-        Assertions.assertThat(runnerAfterFlowExecution.getChronologicalStatuses()).contains("PREPARING_DATA,TRAINING,PREDICTING,FINISHED");
+        Assertions.assertThat(runnerAfterFlowExecution.getChronologicalStatuses()).contains("INITIAL,PREPARING_DATA,TRAINING,PREDICTING,FINISHED");
         Assertions.assertThat(runnerAfterFlowExecution.getStatus()).isEqualTo(RunnerStatus.FINISHED);
     }
 

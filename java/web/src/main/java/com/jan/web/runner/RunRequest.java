@@ -2,18 +2,20 @@ package com.jan.web.runner;
 
 public class RunRequest
 {
-    private long projectId;
-    private double gammaParameter;
-    private double cParameter;
+    private final long projectId;
+    private final double gammaParameter;
+    private final double cParameter;
+
+    public RunRequest(long projectId, double gammaParameter, double cParameter)
+    {
+        this.projectId = projectId;
+        this.gammaParameter = gammaParameter;
+        this.cParameter = cParameter;
+    }
 
     public long getProjectId()
     {
         return projectId;
-    }
-
-    public void setProjectId(long projectId)
-    {
-        this.projectId = projectId;
     }
 
     public double getGammaParameter()
@@ -21,18 +23,8 @@ public class RunRequest
         return gammaParameter;
     }
 
-    public void setGammaParameter(double gammaParameter)
-    {
-        this.gammaParameter = gammaParameter;
-    }
-
-    public double getcParameter()
+    public double getCParameter()
     {
         return cParameter;
-    }
-
-    public void setcParameter(double cParameter)
-    {
-        this.cParameter = cParameter;
     }
 }

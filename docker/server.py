@@ -135,6 +135,10 @@ def run_project():
     runner = request.get_json()
 
     log_file = open(str(f"{runner['projectId']}") + '_' + str(f"{runner['runnerId']}") + '_log.txt', 'w')
+
+    with open(str(runner['runnerId']) + '_status.txt', 'w') as status_file:
+        status_file.write('INITIAL' + '\n')
+
     if runner['selectedModel'] == "Support Vector Machines":
         subprocess.Popen(['nohup', 'python3', 'models/svm.py', runner['name'], runner['firstLabel'],
                           runner['secondLabel'], runner['firstLabelFolder'], runner['secondLabelFolder'],

@@ -2,6 +2,7 @@ package com.jan.web.runner;
 
 public enum RunnerStatus
 {
+    INITIAL(false),
     PREPARING_DATA(false),
     TRAINING(false),
     PREDICTING(false),
