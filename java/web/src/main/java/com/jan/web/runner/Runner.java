@@ -16,6 +16,8 @@ public class Runner
     private double gammaParameter;
     private double cParameter;
     private boolean isFinished;
+
+    @Enumerated(EnumType.STRING)
     private RunnerStatus status;
     private String chronologicalStatuses;
 

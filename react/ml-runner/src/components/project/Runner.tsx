@@ -36,6 +36,7 @@ function Runner(props: any)
 
                     if (res.data.finished)
                     {
+                        RunnerService.getStatus(props.runnerId).then((res) => setStatus(res.data.status));
                         axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
                             .then((res: AxiosResponse<any>) =>
                             {
@@ -61,6 +62,14 @@ function Runner(props: any)
 
     const isRunningFinished = () =>
     {
+        RunnerService.getStatus(props.runnerId)
+            .then(
+            (res) =>
+                {
+                    console.log(res.data.status);
+                    setStatus(res.data.status);
+                }
+            );
         if(!isFinished)
         {
         // RunnerService.getStatus(props.runnerId).then(
@@ -68,7 +77,6 @@ function Runner(props: any)
         //         console.log(res);
         //     }
         // )
-        RunnerService.getStatus(props.runnerId).then((res) => setStatus(res.data.status));
         RunnerService.isFinished(props.projectId, props.runnerId)
             .then(
                 (res) =>

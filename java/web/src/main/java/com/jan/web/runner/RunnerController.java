@@ -83,7 +83,7 @@ public class RunnerController
         requestValidator.validateRunner(runnerId);
         JSONObject response = new JSONObject();
         RunnerStatus status = runnerService.getStatus(containerEntity.getId(), runnerId);
-        response.put("status", "FINISHED");
+        response.put("status", status.toString());
         response.put("isEndState", status.isEndState());
         return ResponseEntity.ok(response.toString());
     }

@@ -1,11 +1,9 @@
 import sys
-import time
 from glob import glob
 import numpy as np
 from sklearn import svm
 from sklearn.metrics import accuracy_score
 import math
-import requests
 
 ROOT_DIRECTORY = 'files/'
 
@@ -17,6 +15,7 @@ class Status:
     PREDICTING = 'PREDICTING'
     FINISHED = 'FINISHED'
     FAILED = 'FAILED'
+    CANCELLED = 'CANCELLED'
 
 
 def inform_on_status_change(runner_identifier, status):
