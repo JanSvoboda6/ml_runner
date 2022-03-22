@@ -76,6 +76,7 @@
   },
   "devDependencies": {
     "@types/react-burger-menu": "^2.8.2",
+    "cypress": "^9.5.2",
     "redux-devtools-extension": "^2.13.9"
   }
 }
