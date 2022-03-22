@@ -16,7 +16,6 @@ public enum RunnerStatus
         this.isEndState = isEndState;
     }
 
-
     public boolean isEndState()
     {
         return isEndState;

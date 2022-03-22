@@ -177,7 +177,7 @@ public class RunningFlowTest
         {
             waiter.await(1, TimeUnit.SECONDS);
             isFinished = runnerService.isFinished(containerId, projectId, runner.getId());
-            runnerService.getStatus(containerId, projectId, runner.getId());
+            runnerService.getStatus(containerId, runner.getId());
         }
 
         Runner runnerAfterFlowExecution = runnerRepository.findById(runner.getId()).get();

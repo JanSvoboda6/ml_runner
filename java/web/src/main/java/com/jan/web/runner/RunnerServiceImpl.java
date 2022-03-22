@@ -55,11 +55,11 @@ public class RunnerServiceImpl implements RunnerService
     }
 
     @Override
-    public RunnerStatus getStatus(long containerId, long projectId, long runnerId) throws JSONException, IOException
+    public RunnerStatus getStatus(long containerId, long runnerId) throws JSONException, IOException
     {
         Runner runner = runnerRepository.findById(runnerId).get();
         RunnerStatus status = runner.getStatus();
-        if (isEndState(status))
+        if (status.isEndState())
         {
             return status;
         }

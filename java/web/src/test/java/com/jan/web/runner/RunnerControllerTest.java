@@ -48,14 +48,7 @@ public class RunnerControllerTest
         objectMapper = Mockito.mock(ObjectMapper.class);
         resultRepository = Mockito.mock(ResultRepository.class);
         runnerService = new RunnerServiceImpl(runnerRepository, projectRunner, containerRepository, resultRepository, requestMaker, objectMapper);
-        runnerController = new RunnerController(
-                runnerRepository,
-                containerUtility,
-                runnerService,
-                requestValidator,
-                requestMaker,
-                objectMapper,
-                resultRepository);
+        runnerController = new RunnerController(runnerRepository, containerUtility, runnerService, requestValidator);
     }
 
     @Test

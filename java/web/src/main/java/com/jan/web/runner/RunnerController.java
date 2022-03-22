@@ -29,25 +29,17 @@ public class RunnerController
     private final ContainerUtility containerUtility;
     private final RunnerService runnerService;
     private final RequestValidator requestValidator;
-    private final RequestMaker requestMaker;
-    private final ObjectMapper objectMapper;
-    private final ResultRepository resultRepository;
 
     @Autowired
     public RunnerController(RunnerRepository runnerRepository,
                             ContainerUtility containerUtility,
                             RunnerService runnerService,
-                            RequestValidator requestValidator,
-                            RequestMaker requestMaker,
-                            ObjectMapper objectMapper, ResultRepository resultRepository)
+                            RequestValidator requestValidator)
     {
         this.runnerRepository = runnerRepository;
         this.containerUtility = containerUtility;
         this.runnerService = runnerService;
         this.requestValidator = requestValidator;
-        this.requestMaker = requestMaker;
-        this.objectMapper = objectMapper;
-        this.resultRepository = resultRepository;
     }
 
 
@@ -82,6 +74,18 @@ public class RunnerController
             return ResponseEntity.ok(prepareJsonResultResponse(result.get()));
         }
         return ResponseEntity.ok("Result cannot be obtained since project is still running!");
+    }
+
+    @GetMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getStatus(@RequestHeader(name="Authorization") String token, @RequestParam long runnerId) throws JSONException, IOException
+    {
+        ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
+        requestValidator.validateRunner(runnerId);
+        JSONObject response = new JSONObject();
+        RunnerStatus status = runnerService.getStatus(containerEntity.getId(), runnerId);
+        response.put("status", status.toString());
+        response.put("isEndState", status.isEndState());
+        return ResponseEntity.ok(response.toString());
     }
 
     @PostMapping(value = "/finished", produces = MediaType.APPLICATION_JSON_VALUE)
