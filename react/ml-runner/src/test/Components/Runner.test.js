@@ -5,6 +5,7 @@ import React from "react";
 import {createMemoryHistory} from "history";
 import axios from "axios";
 import Runner from "../../components/project/Runner";
+import RunnerService from "../../services/RunnerService";
 
 describe("Running a project", () =>{
     test('When project is in running state then running icon is shown', async () => {
@@ -13,7 +14,7 @@ describe("Running a project", () =>{
         const response = {
             'data': {
                 'gammaParameter': 1,
-                'cParameter': 1,
+                'cparameter': 1,
                 'finished': false
             }
         }
@@ -31,7 +32,7 @@ describe("Running a project", () =>{
         const response = {
             'data': {
                 'gammaParameter': 1,
-                'cParameter': 1,
+                'cparameter': 1,
                 'finished': true
             }
         }
@@ -49,7 +50,7 @@ describe("Running a project", () =>{
         const response = {
             'data': {
                 'gammaParameter': 1,
-                'cParameter': 1,
+                'cparameter': 1,
                 'finished': false
             }
         }
@@ -69,8 +70,43 @@ describe('Stop handling', () =>
     it.todo('When stop button is clicked then RunnerService#stop method is called');
 });
 
-describe('Result handling', () =>
+describe('Result and status handling', () =>
 {
+    test('When runner is successfully finished then results are shown', async() => {
+        jest.useFakeTimers();
+        jest.spyOn(global, 'setInterval');
+        const initialResponse = {
+            'data': {
+                'gammaParameter': 1,
+                'cparameter': 1,
+                'finished': true
+            }
+        };
+
+        const resultResponse = {
+            'data':{
+                'firstLabelResult': 0.7,
+                'secondLabelResult': 0.8
+            }
+        };
+
+        const statusResponse = {
+            'data':{
+                'status': 'FINISHED',
+                'isEndState': true
+            }
+        }
+
+        jest.spyOn(axios, 'get').mockResolvedValueOnce(initialResponse).mockResolvedValueOnce(resultResponse);
+        jest.spyOn(RunnerService, 'getStatus').mockResolvedValue(statusResponse);
+        await act(async () => {
+            render(<Router history={createMemoryHistory()}><Runner/></Router>);
+        });
+
+        expect(screen.getByText(/validation result of first label: 70.00%/i)).toBeInTheDocument();
+        expect(screen.getByText(/validation result of second label: 80.00%/i)).toBeInTheDocument();
+    });
+
     test('When runner is successfully finished then results are shown', async() => {
         jest.useFakeTimers();
         jest.spyOn(global, 'setInterval');
@@ -89,13 +125,20 @@ describe('Result handling', () =>
             }
         };
 
+        const statusResponse = {
+            'data':{
+                'status': 'FINISHED',
+                'isEndState': true
+            }
+        }
+
         jest.spyOn(axios, 'get').mockResolvedValueOnce(initialResponse).mockResolvedValueOnce(resultResponse);
+        jest.spyOn(RunnerService, 'getStatus').mockResolvedValue(statusResponse);
         await act(async () => {
             render(<Router history={createMemoryHistory()}><Runner/></Router>);
         });
-        //TODO: add result numeric values
-        expect(screen.getByText(/validation result of first label: 70.00%/i)).toBeInTheDocument();
-        expect(screen.getByText(/validation result of second label: 80.00%/i)).toBeInTheDocument();
+
+        expect(screen.getByText(/finished/i)).toBeInTheDocument();
     });
 
     it.todo('When there is a problem with running the project then error message is shown');
