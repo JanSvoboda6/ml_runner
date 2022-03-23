@@ -1,10 +1,12 @@
 package com.jan.web.runner;
 
+import com.jan.web.project.ClassificationLabel;
 import com.jan.web.project.ClassificationLabelJson;
 import com.jan.web.project.Project;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -58,15 +61,7 @@ public class ContainerProjectRunner implements ProjectRunner
         request.put("runnerId", runner.getId());
         request.put("gammaParameter", runner.getGammaParameter());
         request.put("cParameter", runner.getCParameter());
-        try
-        {
-            request.put("classificationLabels", new ObjectMapper().writeValueAsString(
-                    project.getClassificationLabels().stream().map(ClassificationLabelJson::fromClassificationLabel)
-                            .collect(Collectors.toList())));
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        request.put("classificationLabels", buildClassificationLabelsJson(project.getClassificationLabels()));
         return request;
     }
 
@@ -75,5 +70,21 @@ public class ContainerProjectRunner implements ProjectRunner
     {
         //not implemented
         return false;
+    }
+
+    private JSONArray buildClassificationLabelsJson(List<ClassificationLabel> classificationLabels)
+    {
+        JSONArray json = new JSONArray();
+        for(ClassificationLabel classificationLabel : classificationLabels)
+        {
+            try
+            {
+                json.put(new JSONObject().put("labelName", classificationLabel.getLabelName()).put("folderPath", classificationLabel.getFolderPath()));
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return json;
     }
 }

@@ -137,9 +137,8 @@ def run_project():
 
     Path('runners_info/' + str(runner['runnerId'])).mkdir(parents=True, exist_ok=True)
 
-    configuration = json.dumps(request.get_json()).replace('\\"', '"').replace('\"[', '[').replace(']\"', ']')
     with open('runners_info/' + str(runner['runnerId']) + '/configuration.json', 'w') as json_file:
-        json_file.write(configuration)
+        json.dump(runner, json_file)
 
     with open('runners_info/' + str(runner['runnerId']) + '/status.txt', 'w') as status_file:
         status_file.write('INITIAL' + '\n')
@@ -147,9 +146,7 @@ def run_project():
     log_file = open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'w')
 
     if runner['selectedModel'] == "Support Vector Machines":
-        subprocess.Popen(['nohup', 'python3', 'models/svm.py', runner['name'], runner['firstLabel'],
-                          runner['secondLabel'], runner['firstLabelFolder'], runner['secondLabelFolder'],
-                          str(runner['gammaParameter']), str(runner['cParameter']), str(runner['runnerId'])],
+        subprocess.Popen(['nohup', 'python3', 'models/svm.py', str(runner['runnerId'])],
                          stdout=log_file,
                          stderr=log_file,
                          preexec_fn=os.setpgrp)

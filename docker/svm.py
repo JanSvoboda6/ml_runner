@@ -1,9 +1,11 @@
 import sys
+import time
 from glob import glob
 import numpy as np
 from sklearn import svm
 from sklearn.metrics import accuracy_score
 import math
+import json
 
 ROOT_DIRECTORY = 'files/'
 
@@ -22,26 +24,21 @@ def inform_on_status_change(runner_identifier, status):
     with open('runners_info/' + str(runner_identifier) + '/status.txt', 'a') as status_file:
         status_file.write(status + '\n')
 
-    # print(status)
-    # request_json = '{"runnerId":' + str(runner_identifier) + ', "status":"' + status + '"}'
-    # print(request_json)
-    # requests.post("http://127.0.0.1/api/runner/status", headers={"Content-Type": "application/json"}, data=request_json)
-
-
 if __name__ == "__main__":
-    first_label_folder = sys.argv[4]
-    second_label_folder = sys.argv[5]
-    gamma = float(sys.argv[6])
-    c = float(sys.argv[7])
-    runner_id = int(sys.argv[8])
+    runner_id = int(sys.argv[1])
+    configuration = {}
+    with open('runners_info/' + str(runner_id) + '/configuration.json', 'r') as json_file:
+        configuration = json.load(json_file)
+
+    first_label_folder = configuration["firstLabelFolder"]
+    second_label_folder = configuration["secondLabelFolder"]
+    gamma = configuration['gammaParameter']
+    c = configuration['cParameter']
 
     inform_on_status_change(runner_id, Status.LOADING_DATA)
 
     first_class_samples = []
     second_class_samples = []
-
-    print(first_label_folder)
-    print(second_label_folder)
 
     for filename in glob(ROOT_DIRECTORY + first_label_folder + '*.npy'):
         sample = np.load(filename)

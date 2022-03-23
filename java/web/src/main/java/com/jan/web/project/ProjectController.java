@@ -61,7 +61,7 @@ public class ProjectController
         Optional<User> user = userRepository.findByUsername(username);
         if(user.isPresent())
         {
-            //List<ClassificationLabel> classificationLabels = labelRepository.saveAll(request.getClassificationLabels());
+            List<ClassificationLabel> classificationLabels = labelRepository.saveAll(request.getClassificationLabels());
             Project project = new Project(
                     user.get(),
                     request.getProjectName(),
@@ -70,7 +70,7 @@ public class ProjectController
                     request.getFirstLabelFolder(),
                     request.getSecondLabelFolder(),
                     request.getSelectedModel(),
-                    null
+                    classificationLabels
             );
             projectRepository.save(project);
             return ResponseEntity.ok("Project " + project.getName() + " saved!");
