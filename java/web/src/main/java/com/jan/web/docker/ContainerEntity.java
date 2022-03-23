@@ -5,7 +5,7 @@ import com.jan.web.security.user.User;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "containers")
+@Table(name = "container")
 public class ContainerEntity
 {
     @Id
