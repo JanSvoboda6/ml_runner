@@ -1,10 +1,9 @@
 package com.jan.web.api;
 
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
+import com.jan.web.project.ClassificationLabelJson;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.runner.Runner;
 import com.jan.web.runner.RunnerRepository;
@@ -18,6 +17,7 @@ import com.jan.web.security.utility.JsonWebTokenUtility;
 import org.assertj.core.api.Assertions;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
@@ -39,6 +39,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -78,14 +79,9 @@ public class ApiTest
     @Autowired
     private RunnerRepository runnerRepository;
 
-    @Autowired
-    private ContainerRepository containerRepository;
-
     private User user;
     private String jwtToken;
     private Runner runner;
-    private ContainerEntity containerEntity;
-    private DockerClient dockerClient;
 
     @BeforeEach
     public void before()
@@ -101,17 +97,12 @@ public class ApiTest
         jwtToken = jsonWebTokenUtility.generateJwtToken(authentication);
 
         DefaultDockerClientConfig.Builder config = DefaultDockerClientConfig.createDefaultConfigBuilder();
-        dockerClient = DockerClientBuilder.getInstance(config.build()).build();
+        DockerClientBuilder.getInstance(config.build()).build();
     }
 
     @AfterEach
     public void after()
     {
-        if(containerEntity != null)
-        {
-            containerRepository.delete(containerEntity);
-        }
-
         if(runner != null)
         {
             runnerRepository.delete(runner);
@@ -172,17 +163,26 @@ public class ApiTest
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
+
+        JSONArray classificationLabels = new JSONArray();
+        classificationLabels.put(new JSONObject().put("labelName", "Random Label Name").put("folderPath", "random/"));
+
         JSONObject json = new JSONObject();
-        json.put("projectName", "random name");
+        json.put("projectName", "Random Project Name");
+        json.put("firstLabel", "first");
+        json.put("secondLabel", "second");
+        json.put("firstLabelFolder", "first/");
+        json.put("secondLabelFolder", "second/");
+        json.put("selectedModel", "Support Vector Machines");
+        json.put("classificationLabels", classificationLabels);
         HttpEntity<String> request = new HttpEntity<>(json.toString(), headers);
 
-
-        restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, request, String.class);
+        restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, request, String.class).getBody();
         String body = restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, request, String.class).getBody();
 
         JsonNode jsonResponse = new ObjectMapper().readTree(body);
 
-        Assertions.assertThat(jsonResponse.get(0).get("name").toString()).contains("random name");
+        Assertions.assertThat(jsonResponse.get(0).get("name").toString()).contains("Random Project Name");
     }
 
     @Test
@@ -233,6 +233,7 @@ public class ApiTest
                 .isEqualTo("[ ]");
     }
 
+    //TODO Jan: Why the test is commented?
 //    @Test
 //    public void whenRequestForRunningProject_thenRunnerIsCreated() throws JSONException, IOException
 //    {
