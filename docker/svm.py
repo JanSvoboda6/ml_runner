@@ -19,7 +19,7 @@ class Status:
 
 
 def inform_on_status_change(runner_identifier, status):
-    with open(str(runner_identifier) + '_status.txt', 'a') as status_file:
+    with open('runners_info/' + str(runner_identifier) + '/status.txt', 'a') as status_file:
         status_file.write(status + '\n')
 
     # print(status)

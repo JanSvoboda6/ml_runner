@@ -6,6 +6,7 @@ import subprocess
 from shutil import rmtree
 import zipfile
 import io
+import json
 
 app = Flask(__name__)
 
@@ -134,10 +135,16 @@ def walk_directory(root_directory):
 def run_project():
     runner = request.get_json()
 
-    log_file = open(str(f"{runner['projectId']}") + '_' + str(f"{runner['runnerId']}") + '_log.txt', 'w')
+    Path('runners_info/' + str(runner['runnerId'])).mkdir(parents=True, exist_ok=True)
 
-    with open(str(runner['runnerId']) + '_status.txt', 'w') as status_file:
+    configuration = json.dumps(request.get_json()).replace('\\"', '"').replace('\"[', '[').replace(']\"', ']')
+    with open('runners_info/' + str(runner['runnerId']) + '/configuration.json', 'w') as json_file:
+        json_file.write(configuration)
+
+    with open('runners_info/' + str(runner['runnerId']) + '/status.txt', 'w') as status_file:
         status_file.write('INITIAL' + '\n')
+
+    log_file = open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'w')
 
     if runner['selectedModel'] == "Support Vector Machines":
         subprocess.Popen(['nohup', 'python3', 'models/svm.py', runner['name'], runner['firstLabel'],
@@ -153,7 +160,7 @@ def run_project():
 def get_status():
     runner_id = request.get_json()['runnerId']
     statuses = []
-    with open(str(runner_id) + '_status.txt', 'r') as status_file:
+    with open('runners_info/' + str(runner_id) + '/status.txt', 'r') as status_file:
         for line in status_file:
             statuses.append(line.replace('\n', ''))
     return jsonify({'chronologicalStatuses': statuses})
@@ -163,7 +170,7 @@ def get_status():
 def is_finished():
     runner = request.get_json()
     finished = False
-    with open(f"{runner['projectId']}" + '_' + f"{runner['runnerId']}" + '_log.txt', 'r') as log_file:
+    with open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'r') as log_file:
         for line in log_file:
             if 'FINISHED' in line.split():
                 finished = True
@@ -176,7 +183,7 @@ def get_result():
     runner = request.get_json()
     first_label_accuracy = 0
     second_label_accuracy = 0
-    with open(f"{runner['projectId']}" + '_' + f"{runner['runnerId']}" + '_log.txt', 'r') as log_file:
+    with open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'r') as log_file:
         for line in log_file:
             if 'FIRST_LABEL_ACCURACY:' in line.split():
                 first_label_accuracy = line.split()[1]
