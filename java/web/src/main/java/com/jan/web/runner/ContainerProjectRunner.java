@@ -1,14 +1,19 @@
 package com.jan.web.runner;
 
+import com.jan.web.project.ClassificationLabelJson;
 import com.jan.web.project.Project;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Component
 public class ContainerProjectRunner implements ProjectRunner
@@ -53,6 +58,15 @@ public class ContainerProjectRunner implements ProjectRunner
         request.put("runnerId", runner.getId());
         request.put("gammaParameter", runner.getGammaParameter());
         request.put("cParameter", runner.getCParameter());
+        try
+        {
+            request.put("classificationLabels", new ObjectMapper().writeValueAsString(
+                    project.getClassificationLabels().stream().map(ClassificationLabelJson::fromClassificationLabel)
+                            .collect(Collectors.toList())));
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         return request;
     }
 

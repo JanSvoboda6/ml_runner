@@ -4,7 +4,16 @@ const API_URL = "http://localhost:8080/api/project/saveproject";
 
 const save = (projectName: any, firstLabel: string, secondLabel: string, firstLabelFolder: string, secondLabelFolder: string, selectedModel: any) =>
 {
-    return axios.post(API_URL, { projectName, firstLabel, secondLabel, firstLabelFolder, secondLabelFolder, selectedModel }, { headers: authorizationHeader() })
+    const classificationLabels = [
+            {
+                "labelName": firstLabel,
+                "folderPath": firstLabelFolder
+            },
+            {
+                "labelName": secondLabel,
+                "folderPath": secondLabelFolder
+            }];
+    return axios.post(API_URL, { projectName, firstLabel, secondLabel, firstLabelFolder, secondLabelFolder, selectedModel, classificationLabels}, { headers: authorizationHeader() })
         .catch(error =>
         {
             var message = "";

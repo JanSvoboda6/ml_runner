@@ -1,8 +1,5 @@
 package com.jan.web.project;
 
-import com.jan.web.docker.ContainerRepository;
-import com.jan.web.docker.ContainerUtility;
-import com.jan.web.request.RequestMaker;
 import com.jan.web.runner.*;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
@@ -24,17 +21,20 @@ public class ProjectController
     private final JsonWebTokenUtility jsonWebTokenUtility;
     private final RunnerRepository runnerRepository;
     private final UserRepository userRepository;
+    private final ClassificationLabelRepository labelRepository;
 
     @Autowired
     public ProjectController(ProjectRepository projectRepository,
                              JsonWebTokenUtility jsonWebTokenUtility,
                              RunnerRepository runnerRepository,
-                             UserRepository userRepository)
+                             UserRepository userRepository,
+                             ClassificationLabelRepository labelRepository)
     {
         this.projectRepository = projectRepository;
         this.jsonWebTokenUtility = jsonWebTokenUtility;
         this.runnerRepository = runnerRepository;
         this.userRepository = userRepository;
+        this.labelRepository = labelRepository;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,6 +61,7 @@ public class ProjectController
         Optional<User> user = userRepository.findByUsername(username);
         if(user.isPresent())
         {
+            List<ClassificationLabel> classificationLabels = labelRepository.saveAll(request.getClassificationLabels());
             Project project = new Project(
                     user.get(),
                     request.getProjectName(),
@@ -68,7 +69,9 @@ public class ProjectController
                     request.getSecondLabel(),
                     request.getFirstLabelFolder(),
                     request.getSecondLabelFolder(),
-                    request.getSelectedModel());
+                    request.getSelectedModel(),
+                    classificationLabels
+            );
             projectRepository.save(project);
             return ResponseEntity.ok("Project " + project.getName() + " saved!");
         }

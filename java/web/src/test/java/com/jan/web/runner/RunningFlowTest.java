@@ -10,6 +10,7 @@ import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.DockerService;
 import com.jan.web.fileservice.ContainerFileService;
 import com.jan.web.fileservice.Keys;
+import com.jan.web.project.ClassificationLabel;
 import com.jan.web.project.Project;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.security.authentication.AuthenticationController;
@@ -109,7 +110,7 @@ public class RunningFlowTest
                 "second_label",
                 "test_folder/first_class/",
                 "test_folder/second_class/",
-                "Support Vector Machines");
+                "Support Vector Machines", null);
 
         Long projectId = projectRepository.save(project).getId();
 
@@ -161,7 +162,8 @@ public class RunningFlowTest
                 "second_label",
                 "test_folder/first_class/",
                 "test_folder/second_class/",
-                "Support Vector Machines");
+                "Support Vector Machines",
+                null); //TODO Jan: Add classification labels instance list
 
         Long projectId = projectRepository.save(project).getId();
 

@@ -1,12 +1,9 @@
 package com.jan.web.project;
 
 import com.jan.web.security.user.User;
-import org.springframework.lang.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Project
@@ -14,7 +11,7 @@ public class Project
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne
+    @ManyToOne
     private User user;
     private String name;
     private String firstLabel;
@@ -23,7 +20,10 @@ public class Project
     private String secondLabelFolder;
     private String selectedModel;
 
-    public Project(User user, String name, String firstLabel, String secondLabel, String firstLabelFolder, String secondLabelFolder, String selectedModel)
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<ClassificationLabel> classificationLabels;
+
+    public Project(User user, String name, String firstLabel, String secondLabel, String firstLabelFolder, String secondLabelFolder, String selectedModel, List<ClassificationLabel> classificationLabels)
     {
         this.user = user;
         this.name = name;
@@ -32,6 +32,7 @@ public class Project
         this.firstLabelFolder = firstLabelFolder;
         this.secondLabelFolder = secondLabelFolder;
         this.selectedModel = selectedModel;
+        this.classificationLabels = classificationLabels;
     }
 
     public Project()
@@ -76,5 +77,15 @@ public class Project
     public User getUser()
     {
         return user;
+    }
+
+    public List<ClassificationLabel> getClassificationLabels()
+    {
+        return classificationLabels;
+    }
+
+    public void setClassificationLabels(List<ClassificationLabel> classificationLabels)
+    {
+        this.classificationLabels = classificationLabels;
     }
 }

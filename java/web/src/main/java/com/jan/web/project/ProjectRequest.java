@@ -1,6 +1,7 @@
 package com.jan.web.project;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 public class ProjectRequest
 {
@@ -21,6 +22,9 @@ public class ProjectRequest
 
     @NotBlank
     private String selectedModel;
+
+    @NotBlank
+    private List<ClassificationLabel> classificationLabels;
 
 
     public String getProjectName()
@@ -81,5 +85,15 @@ public class ProjectRequest
     public void setSelectedModel(String selectedModel)
     {
         this.selectedModel = selectedModel;
+    }
+
+    public List<ClassificationLabel> getClassificationLabels()
+    {
+        return classificationLabels;
+    }
+
+    public void setClassificationLabels(List<ClassificationLabel> classificationLabels)
+    {
+        this.classificationLabels = classificationLabels;
     }
 }
