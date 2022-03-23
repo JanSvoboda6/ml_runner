@@ -26,17 +26,24 @@ describe("Running a project", () =>{
         expect(screen.getByAltText('loading_motion')).toBeInTheDocument();
     });
 
-    test('When project is in finished state then running icon is not shown', async () => {
+    test('When project is in end state then running icon is not shown', async () => {
         jest.useFakeTimers();
         jest.spyOn(global, 'setInterval');
-        const response = {
+        const runnerResponse = {
             'data': {
                 'gammaParameter': 1,
-                'cparameter': 1,
-                'finished': true
+                'cparameter': 1
             }
         }
-        jest.spyOn(axios, 'get').mockResolvedValue(response);
+        jest.spyOn(axios, 'get').mockResolvedValue(runnerResponse);
+
+        const statusResponse = {
+            'data': {
+                'status': 'FINISHED',
+                'isEndState': true
+            }
+        }
+        jest.spyOn(RunnerService, 'getStatus').mockResolvedValue(statusResponse)
         await act(async () => {
             render(<Router history={createMemoryHistory()}><Runner/></Router>);
         });
