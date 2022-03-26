@@ -1,7 +1,5 @@
 package com.jan.web.project;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -20,6 +18,16 @@ public class ClassificationLabel
 
     @NotBlank
     private String folderPath;
+
+    public ClassificationLabel()
+    {
+    }
+
+    public ClassificationLabel(String labelName, String folderPath)
+    {
+        this.labelName = labelName;
+        this.folderPath = folderPath;
+    }
 
     public Long getId()
     {

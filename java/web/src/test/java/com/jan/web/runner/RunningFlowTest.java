@@ -11,6 +11,7 @@ import com.jan.web.docker.DockerService;
 import com.jan.web.fileservice.ContainerFileService;
 import com.jan.web.fileservice.Keys;
 import com.jan.web.project.ClassificationLabel;
+import com.jan.web.project.ClassificationLabelRepository;
 import com.jan.web.project.Project;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.security.authentication.AuthenticationController;
@@ -19,7 +20,9 @@ import com.jan.web.security.role.RoleType;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,9 +41,6 @@ public class RunningFlowTest
 {
     private String email;
     private static final String PASSWORD = "StrongPassword_999";
-
-    @Autowired
-    private AuthenticationController authenticationController;
 
     @Autowired
     private DockerService dockerService;
@@ -68,6 +68,9 @@ public class RunningFlowTest
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ClassificationLabelRepository classificationLabelRepository;
 
     private final CountDownLatch waiter = new CountDownLatch(1);
 
@@ -104,13 +107,20 @@ public class RunningFlowTest
         keys.setKeys(List.of("test_folder/first_class/feature_vector_first_class.npy", "test_folder/second_class/feature_vector_second_class.npy"));
         containerFileService.uploadFiles(keys, List.of(firstFile, secondFile), containerId);
 
+        List<ClassificationLabel> classificationLabels = List.of(
+                new ClassificationLabel("first_label", "test_folder/first_class/"),
+                new ClassificationLabel("second_label", "test_folder/second_class/")
+        );
+        classificationLabelRepository.saveAll(classificationLabels);
+
         Project project = new Project(userRepository.findByUsername(email).get(),
                 "test_project",
                 "first_label",
                 "second_label",
                 "test_folder/first_class/",
                 "test_folder/second_class/",
-                "Support Vector Machines", null);
+                "Support Vector Machines",
+                classificationLabels);
 
         Long projectId = projectRepository.save(project).getId();
 
@@ -156,6 +166,12 @@ public class RunningFlowTest
         keys.setKeys(List.of("test_folder/first_class/feature_vector_first_class.npy", "test_folder/second_class/feature_vector_second_class.npy"));
         containerFileService.uploadFiles(keys, List.of(firstFile, secondFile), containerId);
 
+        List<ClassificationLabel> classificationLabels = List.of(
+                new ClassificationLabel("first_label", "test_folder/first_class/"),
+                new ClassificationLabel("second_label", "test_folder/second_class/")
+        );
+        classificationLabelRepository.saveAll(classificationLabels);
+
         Project project = new Project(userRepository.findByUsername(email).get(),
                 "test_project",
                 "first_label",
@@ -163,7 +179,7 @@ public class RunningFlowTest
                 "test_folder/first_class/",
                 "test_folder/second_class/",
                 "Support Vector Machines",
-                null); //TODO Jan: Add classification labels instance list
+                classificationLabels);
 
         Long projectId = projectRepository.save(project).getId();
 
