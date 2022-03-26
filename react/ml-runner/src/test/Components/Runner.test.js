@@ -54,14 +54,21 @@ describe("Running a project", () =>{
     test('When project is running then setInterval with recurrent requests is started', async() => {
         jest.useFakeTimers();
         jest.spyOn(global, 'setInterval');
-        const response = {
+        const runnerResponse = {
             'data': {
                 'gammaParameter': 1,
-                'cparameter': 1,
-                'finished': false
+                'cparameter': 1
             }
         }
-        jest.spyOn(axios, 'get').mockResolvedValue(response);
+        jest.spyOn(axios, 'get').mockResolvedValue(runnerResponse);
+
+        const statusResponse = {
+            'data': {
+                'status': 'RUNNING',
+                'isEndState': false
+            }
+        }
+        jest.spyOn(RunnerService, 'getStatus').mockResolvedValue(statusResponse)
         await act(async () => {
             render(<Router history={createMemoryHistory()}><Runner/></Router>);
         });
