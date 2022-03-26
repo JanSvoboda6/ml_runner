@@ -191,8 +191,19 @@ public class ApiTest
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
+
+        JSONArray classificationLabels = new JSONArray();
+        classificationLabels.put(new JSONObject().put("labelName", "Random Label Name").put("folderPath", "random/"));
+
         JSONObject projectRequestJson = new JSONObject();
-        projectRequestJson.put("projectName", "random name");
+        projectRequestJson.put("projectName", "Random Project Name");
+        projectRequestJson.put("firstLabel", "first");
+        projectRequestJson.put("secondLabel", "second");
+        projectRequestJson.put("firstLabelFolder", "first/");
+        projectRequestJson.put("secondLabelFolder", "second/");
+        projectRequestJson.put("selectedModel", "Support Vector Machines");
+        projectRequestJson.put("classificationLabels", classificationLabels);
+        HttpEntity<String> request = new HttpEntity<>(projectRequestJson.toString(), headers);
 
         HttpEntity<String> projectRequest = new HttpEntity<>(projectRequestJson.toString(), headers);
         restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, projectRequest, String.class);
@@ -218,8 +229,19 @@ public class ApiTest
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
+
+        JSONArray classificationLabels = new JSONArray();
+        classificationLabels.put(new JSONObject().put("labelName", "Random Label Name").put("folderPath", "random/"));
+
         JSONObject projectRequestJson = new JSONObject();
-        projectRequestJson.put("projectName", "random name");
+        projectRequestJson.put("projectName", "Random Project Name");
+        projectRequestJson.put("firstLabel", "first");
+        projectRequestJson.put("secondLabel", "second");
+        projectRequestJson.put("firstLabelFolder", "first/");
+        projectRequestJson.put("secondLabelFolder", "second/");
+        projectRequestJson.put("selectedModel", "Support Vector Machines");
+        projectRequestJson.put("classificationLabels", classificationLabels);
+        HttpEntity<String> request = new HttpEntity<>(projectRequestJson.toString(), headers);
 
         HttpEntity<String> projectRequest = new HttpEntity<>(projectRequestJson.toString(), headers);
         restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, projectRequest, String.class);
