@@ -37,7 +37,7 @@ class DockerServiceTest
 
         containerRepository = Mockito.mock(ContainerRepository.class);
         userRepository = Mockito.mock(UserRepository.class);
-        String dockerFilePath = FileSystems.getDefault().getPath("../../docker/Dockerfile").normalize().toAbsolutePath().toString();
+        String dockerFilePath = FileSystems.getDefault().getPath("../../docker/Dockerfile_python").normalize().toAbsolutePath().toString();
 
         dockerService = new DockerService(containerRepository,
                 userRepository,
