@@ -1,0 +1,32 @@
+name: AWS - Docker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:  
+  Deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: AWS deployment
+        env:
+          AWS_EC2_PEM: ${{ secrets.AWS_EC2_PEM  }}
+          AWS_EC2_PUBLIC_IP: ${{ secrets.AWS_EC2_PUBLIC_IP  }}
+          AWS_EC2_USERNAME: ${{ secrets.AWS_EC2_USERNAME  }}
+        run: |
+          pwd
+          echo "$AWS_EC2_PEM" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${AWS_EC2_USERNAME}@${AWS_EC2_PUBLIC_IP} '
+            cd /app &&
+            git checkout main &&
+            git fetch --all &&
+            git reset --hard origin/main &&
+            git pull origin main &&
+            cd ml_runner/docker
+            docker-compose up -d --build
+            '
