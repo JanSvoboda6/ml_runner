@@ -51,7 +51,7 @@ public class RunnerServiceImpl implements RunnerService
     @Override
     public void runProject(RunRequest request, Project project, ContainerEntity containerEntity)
     {
-        projectRunner.run(mapRequestToRunner(request, project), containerEntity.getId());
+        projectRunner.run(mapRequestToRunner(request, project), containerEntity);
     }
 
     @Override
@@ -64,12 +64,12 @@ public class RunnerServiceImpl implements RunnerService
             return status;
         }
         HttpEntity<String> statusEntity = prepareStatusEntity(runnerId);
-        Optional<ContainerEntity> containerEntity = containerRepository.findById(containerId);
+        Optional<ContainerEntity> containerEntityOptional = containerRepository.findById(containerId);
 
-        if (containerEntity.isPresent())
+        if (containerEntityOptional.isPresent())
         {
             ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
-                    containerEntity.get().getId(),
+                    containerEntityOptional.get().getConnectionString(),
                     RequestMethod.RUNNER_STATUS,
                     statusEntity);
 
@@ -95,11 +95,11 @@ public class RunnerServiceImpl implements RunnerService
         }
 
         HttpEntity<String> resultEntity = prepareRequestEntity(projectId, runnerId);
-        Optional<ContainerEntity> containerEntity = containerRepository.findById(containerId);
-        if (containerEntity.isPresent())
+        Optional<ContainerEntity> containerEntityOptional = containerRepository.findById(containerId);
+        if (containerEntityOptional.isPresent())
         {
             ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
-                    containerEntity.get().getId(),
+                    containerEntityOptional.get().getConnectionString(),
                     RequestMethod.IS_RUNNER_FINISHED,
                     resultEntity);
             FinishedResponse finishedResponse = objectMapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
@@ -133,7 +133,7 @@ public class RunnerServiceImpl implements RunnerService
             HttpEntity<String> resultEntity = prepareRequestEntity(projectId, runnerId);
 
             ResponseEntity<String> resultResponseFromContainer = requestMaker.makePostRequest(
-                    containerId,
+                    containerRepository.findById(containerId).get().getConnectionString(),
                     RequestMethod.RUNNER_RESULT,
                     resultEntity);
 

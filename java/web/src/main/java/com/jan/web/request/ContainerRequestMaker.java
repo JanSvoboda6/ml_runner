@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ContainerRequestMaker implements RequestMaker
 {
-    public static final String CONTAINER_BASE_URL = "http://localhost:";
+    public static final String CONTAINER_BASE_URL = "http://172.17.0.2:";
     private final RestTemplate restTemplate;
 
     public ContainerRequestMaker(RestTemplate restTemplate)
@@ -18,24 +18,23 @@ public class ContainerRequestMaker implements RequestMaker
     }
 
     @Override
-    public ResponseEntity<String> makePostRequest(long portNumber, RequestMethod requestMethod, HttpEntity<String> requestEntity)
+    public ResponseEntity<String> makePostRequest(String connectionString, RequestMethod requestMethod, HttpEntity<String> requestEntity)
     {
         return restTemplate.exchange(
-                composeUrl(portNumber, requestMethod.getRequestUrl()),
+                composeUrl(connectionString, requestMethod.getRequestUrl()),
                 HttpMethod.POST,
                 requestEntity,
                 String.class);
     }
 
     @Override
-    public ResponseEntity<byte[]> downloadRequest(long portNumber, RequestMethod requestMethod, HttpEntity<String> requestEntity){
-        return restTemplate.exchange(composeUrl(portNumber, requestMethod.getRequestUrl()), HttpMethod.POST, requestEntity, byte[].class);
-//            Files.write(Paths.get("test_zip_file.zip"), Objects.requireNonNull(response.getBody()));
+    public ResponseEntity<byte[]> downloadRequest(String connectionString, RequestMethod requestMethod, HttpEntity<String> requestEntity){
+        return restTemplate.exchange(composeUrl(connectionString, requestMethod.getRequestUrl()), HttpMethod.POST, requestEntity, byte[].class);
     }
 
-    private String composeUrl(long portNumber, String requestUrl)
+    private String composeUrl(String connectionString, String requestUrl)
     {
-        return CONTAINER_BASE_URL + portNumber + requestUrl;
+        return connectionString + requestUrl;
     }
 
 }

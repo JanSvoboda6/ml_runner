@@ -3,6 +3,7 @@ package com.jan.web.docker;
 import com.jan.web.security.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "container")
@@ -15,6 +16,9 @@ public class ContainerEntity
 
     @OneToOne
     private User user;
+
+    @NotBlank
+    private String connectionString;
 
     public ContainerEntity()
     {
@@ -39,5 +43,15 @@ public class ContainerEntity
     public User getUser()
     {
         return user;
+    }
+
+    public String getConnectionString()
+    {
+        return connectionString;
+    }
+
+    public void setConnectionString(String connectionString)
+    {
+        this.connectionString = connectionString;
     }
 }

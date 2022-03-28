@@ -1,7 +1,8 @@
 import axios from "axios";
 import { FileInformation } from "../types";
 import authorizationHeader from "../services/AuthorizationHeader";
-const API_URL = "http://localhost:8080/api/docker";
+import {BACKEND_URL} from "../helpers/url";
+const API_URL = BACKEND_URL + "/api/docker";
 
 const prepareContainer = () =>
 {

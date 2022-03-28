@@ -36,7 +36,7 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-@SpringBootTest
+@SpringBootTest(properties = { "jan.bindContainerToLocalhost=true" , "jan.containerLocalhostPort=9999"})
 public class RunningFlowTest
 {
     private String email;
@@ -90,12 +90,12 @@ public class RunningFlowTest
     @Timeout(value = 60)
     public void whenRequestForRunningRunnerWithValidParameters_thenRunnerRunsAndReturnsResult() throws IOException, JSONException, InterruptedException
     {
-        Optional<ContainerEntity> containerIdOptional = containerRepository.findByUserId(userRepository.findByUsername(email).get().getId());
-        if(containerIdOptional.isEmpty())
+        Optional<ContainerEntity> containerOptional = containerRepository.findByUserId(userRepository.findByUsername(email).get().getId());
+        if(containerOptional.isEmpty())
         {
             Assertions.fail("Container record has not been found in the DB!");
         }
-        long containerId = containerIdOptional.get().getId();
+        long containerId = containerOptional.get().getId();
 
         containerFileService.createFolder("test_folder/", containerId);
         containerFileService.createFolder("test_folder/first_class/", containerId);
@@ -130,7 +130,7 @@ public class RunningFlowTest
         runner.setGammaParameter(10.0);
         runnerRepository.save(runner);
 
-        containerProjectRunner.run(runner, containerId);
+        containerProjectRunner.run(runner, containerOptional.get());
 
         boolean isFinished = false;
 
@@ -149,12 +149,12 @@ public class RunningFlowTest
     @Timeout(value = 60)
     public void whenRequestForRunningRunnerWithValidParameters_thenRunnerRunsAndAllStatusesHaveBeenExecuted() throws IOException, JSONException, InterruptedException
     {
-        Optional<ContainerEntity> containerIdOptional = containerRepository.findByUserId(userRepository.findByUsername(email).get().getId());
-        if(containerIdOptional.isEmpty())
+        Optional<ContainerEntity> containerOptional = containerRepository.findByUserId(userRepository.findByUsername(email).get().getId());
+        if(containerOptional.isEmpty())
         {
             Assertions.fail("Container record has not been found in the DB!");
         }
-        long containerId = containerIdOptional.get().getId();
+        long containerId = containerOptional.get().getId();
 
         containerFileService.createFolder("test_folder/", containerId);
         containerFileService.createFolder("test_folder/first_class/", containerId);
@@ -190,7 +190,7 @@ public class RunningFlowTest
         runner.setStatus(RunnerStatus.INITIAL);
         runnerRepository.save(runner);
 
-        containerProjectRunner.run(runner, containerId);
+        containerProjectRunner.run(runner, containerOptional.get());
 
         boolean isFinished = false;
 

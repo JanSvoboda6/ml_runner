@@ -29,11 +29,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@SpringBootTest
+@SpringBootTest(properties = { "jan.bindContainerToLocalhost=true" })
 class ContainerFileServiceTest
 {
     private final long USER_ID = 999L;
     private final long CONTAINER_ID = 15000L;
+    private final int CONTAINER_LOCALHOST_PORT = 9999;
     String CONTAINER_NAME = "container-user-" + USER_ID;
     String CONTAINER_NAME_WITH_ADDED_SLASH = "/" + CONTAINER_NAME;
     private DockerService dockerService;
@@ -41,6 +42,9 @@ class ContainerFileServiceTest
 
     @Autowired
     private ContainerRequestMaker requestMaker;
+
+    @Autowired
+    private ContainerRepository containerRepository;
 
     private ContainerFileService fileService;
 
@@ -58,12 +62,13 @@ class ContainerFileServiceTest
         Mockito.when(userRepository.getById(USER_ID)).thenReturn(user);
 
         ContainerEntity containerEntity = new ContainerEntity(CONTAINER_ID, user);
+        containerEntity.setConnectionString("http://localhost:" + CONTAINER_LOCALHOST_PORT);
 
         Mockito.when(containerRepository.save(Mockito.any())).thenReturn(containerEntity);
         Mockito.when(containerRepository.findById(CONTAINER_ID)).thenReturn(Optional.of(containerEntity));
 
         String dockerFilePath = FileSystems.getDefault().getPath("../../python/Dockerfile").normalize().toAbsolutePath().toString();
-        dockerService = new DockerService(containerRepository, userRepository, dockerClient, dockerFilePath, "python_server");
+        dockerService = new DockerService(containerRepository, userRepository, dockerClient, dockerFilePath, "python_server", true, CONTAINER_LOCALHOST_PORT);
         fileService = new ContainerFileService(containerRepository, requestMaker);
 
         buildDockerContainerAndWaitForTheServerToStart();

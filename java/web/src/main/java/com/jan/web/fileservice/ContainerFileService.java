@@ -54,7 +54,7 @@ public class ContainerFileService implements FileService
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             if(containerEntity.isPresent())
             {
-                URL url = new URL(composeUrl(containerEntity.get().getId(), RequestMethod.GET_FILES.getRequestUrl()));
+                URL url = new URL(containerEntity.get().getConnectionString() + RequestMethod.GET_FILES.getRequestUrl());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())))
@@ -98,7 +98,7 @@ public class ContainerFileService implements FileService
         Optional<ContainerEntity> containerEntity = repository.findById(containerId);
         if(containerEntity.isPresent())
         {
-            HttpPost uploadFile = new HttpPost(composeUrl(containerEntity.get().getId(), RequestMethod.UPLOAD_FILES.getRequestUrl()));
+            HttpPost uploadFile = new HttpPost(containerEntity.get().getConnectionString() + RequestMethod.UPLOAD_FILES.getRequestUrl());
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             try
             {
@@ -145,7 +145,7 @@ public class ContainerFileService implements FileService
 
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
-                    container.getId(),
+                    container.getConnectionString(),
                     RequestMethod.CREATE_DIRECTORY,
                     entity));
         } catch (JSONException e)
@@ -167,7 +167,7 @@ public class ContainerFileService implements FileService
 
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
-                    container.getId(),
+                    container.getConnectionString(),
                     RequestMethod.BATCH_DELETE_FOLDERS,
                     entity));
         } catch (JSONException e)
@@ -189,7 +189,7 @@ public class ContainerFileService implements FileService
 
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
-                    container.getId(),
+                    container.getConnectionString(),
                     RequestMethod.BATCH_DELETE_FILES,
                     entity));
         } catch (JSONException e)
@@ -212,7 +212,7 @@ public class ContainerFileService implements FileService
 
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
-                    container.getId(),
+                    container.getConnectionString(),
                     RequestMethod.MOVE_FILE,
                     entity));
         } catch (JSONException e)
@@ -235,7 +235,7 @@ public class ContainerFileService implements FileService
 
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
-                    container.getId(),
+                    container.getConnectionString(),
                     RequestMethod.MOVE_FOLDER,
                     entity));
         } catch (JSONException e)
@@ -255,16 +255,12 @@ public class ContainerFileService implements FileService
             headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
             org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
 
-            return requestMaker.downloadRequest(containerId, RequestMethod.DOWNLOAD, entity);
+            Optional<ContainerEntity> containerEntity = repository.findById(containerId);
+            return requestMaker.downloadRequest(containerEntity.get().getConnectionString(), RequestMethod.DOWNLOAD, entity);
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private String composeUrl(long port, String requestMethod)
-    {
-        return ContainerRequestMaker.CONTAINER_BASE_URL + port + requestMethod;
     }
 }

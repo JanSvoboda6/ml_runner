@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { User } from "../types";
-
-const API_URL = "http://localhost:8080/api/auth";
+import {BACKEND_URL} from "../helpers/url";
+const API_URL = BACKEND_URL + "/api/auth";
 
 class AuthenticationService
 {

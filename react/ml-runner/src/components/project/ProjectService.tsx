@@ -1,6 +1,7 @@
 import axios from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
-const API_URL = "http://localhost:8080/api/project/saveproject";
+import {BACKEND_URL} from "../../helpers/url";
+const API_URL = BACKEND_URL + "/api/project/saveproject";
 
 const save = (projectName: any, firstLabel: string, secondLabel: string, firstLabelFolder: string, secondLabelFolder: string, selectedModel: any) =>
 {

@@ -1,6 +1,7 @@
 import axios from "axios";
 import authorizationHeader from "../services/AuthorizationHeader";
-const API_URL = "http://localhost:8080/api";
+import {BACKEND_URL} from "../helpers/url";
+const API_URL = BACKEND_URL + "/api";
 
 const run = (projectId: number, gammaParameter: number, cParameter: number) =>
 {

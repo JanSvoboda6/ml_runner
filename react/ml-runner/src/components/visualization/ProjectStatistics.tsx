@@ -6,8 +6,8 @@ import authorizationHeader from "../../services/AuthorizationHeader";
 import Heatmap from "./Heatmap";
 import { Legend } from "@visx/legend";
 import Example from "./Legend";
-
-const API_URL = "http://localhost:8080/api/project";
+import {BACKEND_URL} from "../../helpers/url";
+const API_URL = BACKEND_URL + "/api/project";
 
 interface Runner
 {

@@ -8,9 +8,13 @@ import com.github.dockerjava.core.DockerClientBuilder;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import org.junit.jupiter.api.*;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.nio.file.FileSystems;
 import java.util.List;
@@ -20,7 +24,9 @@ import java.util.Optional;
 class DockerServiceTest
 {
     private static final long USER_ID = 999L;
-    private static final long HOST_PORT = 15000L;
+    //private static final long HOST_PORT = 15000L;
+    private static final long CONTAINER_ID = 777L;
+    private static final int CONTAINER_LOCALHOST_PORT = 9999;
     private static final String CONTAINER_NAME = "container-user-" + USER_ID;
     private static final String CONTAINER_NAME_WITH_ADDED_SLASH = "/" + CONTAINER_NAME;
     private DockerService dockerService;
@@ -43,7 +49,9 @@ class DockerServiceTest
                 userRepository,
                 dockerClient,
                 dockerFilePath,
-                "python_server");
+                "python_server",
+                true,
+                CONTAINER_LOCALHOST_PORT);
     }
 
     @Test
@@ -52,7 +60,9 @@ class DockerServiceTest
         Mockito.when(containerRepository.existsByUserId(USER_ID)).thenReturn(false);
         User user = new User(USER_ID, "user@domain.com", "password");
         Mockito.when(userRepository.getById(USER_ID)).thenReturn(user);
-        Mockito.when(containerRepository.save(Mockito.any())).thenReturn(new ContainerEntity(HOST_PORT, user));
+        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
+        Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
+        Mockito.when(containerRepository.save(Mockito.any())).thenReturn(containerEntity);
 
         dockerService.buildDockerContainer(USER_ID);
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
@@ -79,7 +89,7 @@ class DockerServiceTest
     }
 
     @Test
-    public void whenContainerHasBeenAlreadyBuilt_thenContainerWillBeStarted()
+    public void  whenContainerHasBeenAlreadyBuilt_thenContainerWillBeStarted()
     {
         DockerClient dockerClient = Mockito.mock(DockerClient.class);
         Mockito.when(containerRepository.existsByUserId(USER_ID)).thenReturn(true);
@@ -90,7 +100,9 @@ class DockerServiceTest
                 userRepository,
                 dockerClient,
                 "Random path to docker file",
-                "Random name of Docker image");
+                "Random name of Docker image",
+                true,
+                9999);
 
         dockerServiceWithMockedDockerClient.buildDockerContainer(USER_ID);
 

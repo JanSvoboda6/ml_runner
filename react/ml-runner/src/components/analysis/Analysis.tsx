@@ -10,9 +10,8 @@ import Navbar from "../navigation/Navbar";
 import XyChart from "./XyChart";
 import FadeIn from "react-fade-in";
 import SimpleGraph from "./SimpleGraph";
-
-
-const API_URL = "http://localhost:8080/api/project";
+import {BACKEND_URL} from "../../helpers/url";
+const API_URL = BACKEND_URL + "/api/project";
 
 function Analysis(props)
 {

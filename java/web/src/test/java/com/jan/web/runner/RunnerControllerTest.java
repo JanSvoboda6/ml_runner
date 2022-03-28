@@ -69,11 +69,14 @@ public class RunnerControllerTest
     {
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
         Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
+        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
+        Mockito.when(containerRepository.findById(CONTAINER_ID)).thenReturn(Optional.of(containerEntity));
+
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
 
         ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(responseEntity.getBody()).thenReturn("");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyLong(), Mockito.any(), Mockito.any())).thenReturn(responseEntity);
+        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(responseEntity);
 
         ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
         Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
@@ -83,7 +86,7 @@ public class RunnerControllerTest
         Mockito.when(runnerRepository.findById(RUNNER_ID)).thenReturn(Optional.of(runner));
 
         runnerController.getResult(RANDOM_JWT_TOKEN, PROJECT_ID, RUNNER_ID);
-        Mockito.verify(requestMaker, Mockito.times(1)).makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any());
+        Mockito.verify(requestMaker, Mockito.times(1)).makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any());
     }
 
     @Test
@@ -103,12 +106,15 @@ public class RunnerControllerTest
     public void whenRequestForResultForFinishedRunnerForFirstTime_thenResultIsPersisted() throws JSONException, IOException
     {
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
+        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
+        Mockito.when(containerRepository.findById(CONTAINER_ID)).thenReturn(Optional.of(containerEntity));
+
         Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
 
         ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(responseEntity.getBody()).thenReturn("");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyLong(), Mockito.any(), Mockito.any())).thenReturn(responseEntity);
+        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(responseEntity);
 
         ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
         Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
@@ -133,18 +139,20 @@ public class RunnerControllerTest
     {
         FinishedRequest finishedRequest = Mockito.mock(FinishedRequest.class);
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
+        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
+
         Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
         Mockito.when(containerUtility.getContainerIdFromToken(RANDOM_JWT_TOKEN)).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(CONTAINER_ID)).thenReturn(containerEntity);
 
         ResponseEntity<String> finishedResponseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(finishedResponseEntity.getBody()).thenReturn("A random body of finished response.");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
+        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
                 .thenReturn(finishedResponseEntity);
 
         ResponseEntity<String> resultResponseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(finishedResponseEntity.getBody()).thenReturn("A random body of result response.");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any())).thenReturn(resultResponseEntity);
+        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any())).thenReturn(resultResponseEntity);
 
         FinishedResponse finishedResponse = Mockito.mock(FinishedResponse.class);
         finishedResponse.isFinished = false;
@@ -152,7 +160,7 @@ public class RunnerControllerTest
 
         runnerController.isFinished(RANDOM_JWT_TOKEN, finishedRequest);
         Mockito.verify(requestMaker, Mockito.times(1))
-                .makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any());
+                .makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any());
     }
 
     @Test
@@ -160,6 +168,7 @@ public class RunnerControllerTest
     {
         FinishedRequest finishedRequest = Mockito.mock(FinishedRequest.class);
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
+        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
         Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
         Runner runner = Mockito.mock(Runner.class);
         Mockito.when(runner.isFinished()).thenReturn(true);
@@ -181,6 +190,7 @@ public class RunnerControllerTest
     {
         FinishedRequest finishedRequest = Mockito.mock(FinishedRequest.class);
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
+        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
         Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
         FinishedResponse finishedResponse = Mockito.mock(FinishedResponse.class);
         finishedResponse.isFinished = true;
@@ -192,10 +202,10 @@ public class RunnerControllerTest
 
         ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(responseEntity.getBody()).thenReturn("A random body.");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
+        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
                         .thenReturn(responseEntity);
 
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any()))
+        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any()))
                 .thenReturn(responseEntity);
 
         ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
@@ -215,6 +225,7 @@ public class RunnerControllerTest
     {
         FinishedRequest finishedRequest = Mockito.mock(FinishedRequest.class);
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
+        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
         Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
         FinishedResponse finishedResponse = Mockito.mock(FinishedResponse.class);
         finishedResponse.isFinished = false;
@@ -226,10 +237,10 @@ public class RunnerControllerTest
 
         ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(responseEntity.getBody()).thenReturn("A random body.");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
+        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
                 .thenReturn(responseEntity);
 
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyLong(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any()))
+        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any()))
                 .thenReturn(responseEntity);
 
         ResultResponse resultResponse = Mockito.mock(ResultResponse.class);

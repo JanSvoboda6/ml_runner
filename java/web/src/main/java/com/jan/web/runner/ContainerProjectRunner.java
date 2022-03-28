@@ -1,5 +1,6 @@
 package com.jan.web.runner;
 
+import com.jan.web.docker.ContainerEntity;
 import com.jan.web.project.ClassificationLabel;
 import com.jan.web.project.ClassificationLabelJson;
 import com.jan.web.project.Project;
@@ -30,7 +31,7 @@ public class ContainerProjectRunner implements ProjectRunner
     }
 
     @Override
-    public void run(Runner runner, long containerId)
+    public void run(Runner runner, ContainerEntity container)
     {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -39,7 +40,7 @@ public class ContainerProjectRunner implements ProjectRunner
             org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(
                     assembleRequest(runner).toString(),
                     headers);
-            requestMaker.makePostRequest(containerId, RequestMethod.RUN_PROJECT, entity);
+            requestMaker.makePostRequest(container.getConnectionString(), RequestMethod.RUN_PROJECT, entity);
 
         } catch (Exception exception)
         {

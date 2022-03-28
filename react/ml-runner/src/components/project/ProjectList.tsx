@@ -6,7 +6,8 @@ import authorizationHeader from "../../services/AuthorizationHeader";
 import { Link } from 'react-router-dom';
 import FadeIn from 'react-fade-in/lib/FadeIn';
 
-const API_URL = "http://localhost:8080/api";
+import {BACKEND_URL} from "../../helpers/url";
+const API_URL = BACKEND_URL + "/api";
 
 interface Project
 {

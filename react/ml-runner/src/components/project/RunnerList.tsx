@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import FadeIn from "react-fade-in";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import Runner from "./Runner";
-
-const API_URL = "http://localhost:8080/api/project";
+import {BACKEND_URL} from "../../helpers/url";
+const API_URL = BACKEND_URL + "api/project";
 
 interface Runner
 {

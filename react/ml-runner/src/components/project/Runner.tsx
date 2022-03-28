@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import RunnerService from "../../services/RunnerService";
 import loadingAnimation from '../../styles/loading_graphics.gif';
 import authorizationHeader from "../../services/AuthorizationHeader";
-
-const API_URL = "http://localhost:8080/api/project";
+import {BACKEND_URL} from "../../helpers/url";
+const API_URL = BACKEND_URL + "/api/project";
 
 interface Parameters
 {
