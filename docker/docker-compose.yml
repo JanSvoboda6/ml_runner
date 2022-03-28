@@ -1,0 +1,35 @@
+version: '3'
+services:
+  backend:  
+    container_name: backend
+    image: java-backend
+    build:
+      context: ../
+      dockerfile: ./java/Dockerfile
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - "8080:8080"
+    networks:
+      - frontend
+      - runner_agents
+  
+  frontend:
+    container_name: frontend
+    image: react-frontend
+    stdin_open: true
+    volumes:
+      - ./react/ml-runner/src:/bbb/src:ro
+    build:
+      context: ../
+      dockerfile: ./react/Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend
+
+networks:
+  frontend:
+  runner_agents:
+    name: runner_agents
+    internal: true

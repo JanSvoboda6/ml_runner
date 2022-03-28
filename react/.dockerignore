@@ -1,0 +1,4 @@
+./ml-runner/node_modules
+./build
+Dockerfile
+.git
