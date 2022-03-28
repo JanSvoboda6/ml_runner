@@ -22,11 +22,11 @@ jobs:
           pwd
           echo "$AWS_EC2_PEM" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${AWS_EC2_USERNAME}@${AWS_EC2_PUBLIC_IP} '
-            cd {/app} &&
+            cd /app &&
             git checkout main &&
             git fetch --all &&
             git reset --hard origin/main &&
             git pull origin main &&
-            cd {ml_runner/docker}
+            cd ml_runner/docker
             docker-compose up -d --build
             '
