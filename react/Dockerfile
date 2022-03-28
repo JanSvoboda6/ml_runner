@@ -1,8 +1,8 @@
-FROM node:16
+FROM node:17
 WORKDIR /app
 COPY ./react/ml-runner/package.json /app
 COPY ./react/ml-runner/package-lock.json /app
-RUN npm ci --production
+RUN yarn install
 COPY ./react/ml-runner/build /app/build
 COPY ./react/ml-runner/public /app/public
 COPY ./react/ml-runner/src /app/src
