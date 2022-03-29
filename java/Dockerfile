@@ -1,5 +1,5 @@
 FROM gradle:jdk17-alpine AS build
-COPY --chown=gradle:gradle ./java/web /home/gradle/src
+COPY --chown=gradle:gradle ./web /home/gradle/src
 WORKDIR /home/gradle/src
 RUN ./gradlew build --no-daemon -x test 
 
@@ -10,7 +10,7 @@ RUN mkdir /app
 RUN mkdir /app/web
 RUN mkdir /app/web/java
 RUN mkdir /app/python
-COPY ./python /app/python
+COPY ./java/resources /app/python
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/web/java/application.jar
 
