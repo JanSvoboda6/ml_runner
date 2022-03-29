@@ -1,7 +1,7 @@
 FROM gradle:jdk17-alpine AS build
 COPY --chown=gradle:gradle ./web /home/gradle/src
 WORKDIR /home/gradle/src
-RUN ./gradlew build --no-daemon -x test 
+RUN ./gradlew build
 
 FROM openjdk:17
 EXPOSE 8080
