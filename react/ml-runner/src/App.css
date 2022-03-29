@@ -703,7 +703,7 @@ input[type="file"]
   top: -30px;
   left: -60px;
   grid-area: c;
-  opacity: 90%;
+  opacity: 0.9;
   height: 260px;
   mix-blend-mode:lighten;
   image-rendering: -webkit-optimize-contrast;
