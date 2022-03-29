@@ -10,7 +10,7 @@ RUN mkdir /app
 RUN mkdir /app/web
 RUN mkdir /app/web/java
 RUN mkdir /app/python
-COPY ./web/resources/python_runner_aggent /app/python
+COPY ./web/resources/python_runner_agent /app/python
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/web/java/application.jar
 
