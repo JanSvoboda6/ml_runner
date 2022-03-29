@@ -39,7 +39,7 @@ body {
 
 
 body {
-  background: linear-gradient(rgba(7, 16, 16, 0.67), rgba(7, 16, 16, 0.67)), url("./styles/background-dark.svg");
+  background: linear-gradient(rgba(7, 16, 16, 0.67), rgba(7, 16, 16, 0.67)), url("../public/styles/background-dark.svg");
   image-rendering: -webkit-optimize-contrast;
   background-size: cover;
 }

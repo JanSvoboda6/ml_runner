@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import LogoutService from "../../services/LogoutService";
-import logo from '../../styles/vut_simple_logo.png'
+import logo from '../../../public/styles/vut_simple_logo.png'
 
 function Navbar(props: any)
 {

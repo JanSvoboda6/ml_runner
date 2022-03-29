@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import loadingAnimation from '../../styles/loading_graphics.gif';
+import loadingAnimation from '../../../public/styles/loading_graphics.gif';
 import ProjectQuickView from './ProjectQuickView';
 import authorizationHeader from "../../services/AuthorizationHeader";
 import { Link } from 'react-router-dom';
