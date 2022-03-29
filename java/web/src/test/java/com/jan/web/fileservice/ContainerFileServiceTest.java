@@ -67,7 +67,7 @@ class ContainerFileServiceTest
         Mockito.when(containerRepository.save(Mockito.any())).thenReturn(containerEntity);
         Mockito.when(containerRepository.findById(CONTAINER_ID)).thenReturn(Optional.of(containerEntity));
 
-        String dockerFilePath = FileSystems.getDefault().getPath("../../python/Dockerfile").normalize().toAbsolutePath().toString();
+        String dockerFilePath = FileSystems.getDefault().getPath("./resources/python_runner_agent/Dockerfile").normalize().toAbsolutePath().toString();
         dockerService = new DockerService(containerRepository, userRepository, dockerClient, dockerFilePath, "python_server", true, CONTAINER_LOCALHOST_PORT);
         fileService = new ContainerFileService(containerRepository, requestMaker);
 
