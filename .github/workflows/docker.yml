@@ -1,0 +1,56 @@
+name: Publish images to Docker hub
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Wait for backend tests
+      uses: lewagon/wait-on-check-action@v1.0.0
+      with:
+        ref: ${{ github.ref }}
+        check-name: 'gradle-tests'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 180
+
+    
+    - name: Wait for frontend tests
+      uses: lewagon/wait-on-check-action@v1.0.0
+      with:
+        ref: ${{ github.ref }}
+        check-name: 'react-tests'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 60 
+
+    - uses: actions/checkout@v3
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: ./java
+        push: true
+        tags: jansvoboda596/ml-runner:java-backend
+
+        - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: ./react
+        push: true
+        tags: jansvoboda596/ml-runner:react-frontend
