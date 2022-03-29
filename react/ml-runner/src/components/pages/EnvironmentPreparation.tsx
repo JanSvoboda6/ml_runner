@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import FadeIn from 'react-fade-in';
 import { useHistory } from "react-router";
 import DockerService from "../../services/DockerService";
-import cubeMerging from '../../../public/styles/cube_merging.gif'
+import cubeMerging from '../../styles/cube_merging.gif'
 import HelperBox from "../navigation/HelperBox";
 import {Redirect} from "react-router-dom";
 

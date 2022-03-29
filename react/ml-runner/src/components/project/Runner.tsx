@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import RunnerService from "../../services/RunnerService";
-import loadingAnimation from '../../../public/styles/loading_graphics.gif';
+import loadingAnimation from '../../styles/loading_graphics.gif';
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
 const API_URL = BACKEND_URL + "/api/project";

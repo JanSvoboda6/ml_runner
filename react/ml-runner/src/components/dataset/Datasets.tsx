@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import FileBrowser, {Icons} from 'react-keyed-file-browser';
 import Moment from 'moment';
-import '../../../public/styles/Datasets.css';
+import '../../styles/Datasets.css';
 import 'font-awesome/css/font-awesome.min.css';
 import {AxiosResponse} from 'axios';
 import {FileInformation} from '../../types';
 import DatasetService from './DatasetService';
-import loadingAnimation from "../../../public/styles/loading_graphics.gif";
+import loadingAnimation from "../../styles/loading_graphics.gif";
 import FadeIn from 'react-fade-in';
 import DatasetUtility from "./DatasetUtility";
 
