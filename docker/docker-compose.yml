@@ -23,5 +23,4 @@ services:
 networks:
   frontend:
   runner_agents:
-    name: runner_agents
     internal: true
