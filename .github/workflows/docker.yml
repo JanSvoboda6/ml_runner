@@ -16,7 +16,7 @@ jobs:
         ref: ${{ github.ref }}
         check-name: 'gradle-tests'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        wait-interval: 180
+        wait-interval: 10
 
     
     - name: Wait for frontend tests
@@ -25,7 +25,7 @@ jobs:
         ref: ${{ github.ref }}
         check-name: 'react-tests'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        wait-interval: 60 
+        wait-interval: 10 
 
     - uses: actions/checkout@v3
 
