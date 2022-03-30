@@ -4,16 +4,16 @@ import Datasets from "./Datasets";
 
 function SelectableDataset(props)
 {
-    const [folder, setFolder] = useState("");
+    const [folderPath, setFolderPath] = useState("");
 
     const handleFolderSelection = (folder) =>
     {
-        setFolder(folder.key);
+        setFolderPath(folder.key);
     }
 
     return (
         <div>
-            <button className="choose-data-folder-button" onClick={() => props.handleFolderSelection(folder)}>Choose Folder</button>
+            <button className="choose-data-folder-button" onClick={() => props.handleFolderSelection(folderPath)}>Choose Folder</button>
             <Datasets handleFolderSelection={(folder) => handleFolderSelection(folder)} />
         </div>
     )

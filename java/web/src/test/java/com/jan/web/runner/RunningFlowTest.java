@@ -115,10 +115,6 @@ public class RunningFlowTest
 
         Project project = new Project(userRepository.findByUsername(email).get(),
                 "test_project",
-                "first_label",
-                "second_label",
-                "test_folder/first_class/",
-                "test_folder/second_class/",
                 "Support Vector Machines",
                 classificationLabels);
 
@@ -174,10 +170,6 @@ public class RunningFlowTest
 
         Project project = new Project(userRepository.findByUsername(email).get(),
                 "test_project",
-                "first_label",
-                "second_label",
-                "test_folder/first_class/",
-                "test_folder/second_class/",
                 "Support Vector Machines",
                 classificationLabels);
 

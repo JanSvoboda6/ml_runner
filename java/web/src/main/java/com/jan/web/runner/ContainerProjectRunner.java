@@ -54,10 +54,6 @@ public class ContainerProjectRunner implements ProjectRunner
         JSONObject request = new JSONObject();
         request.put("projectId", project.getId());
         request.put("name", project.getName());
-        request.put("firstLabel", project.getFirstLabel());
-        request.put("secondLabel", project.getSecondLabel());
-        request.put("firstLabelFolder", project.getFirstLabelFolder());
-        request.put("secondLabelFolder", project.getSecondLabelFolder());
         request.put("selectedModel", project.getSelectedModel());
         request.put("runnerId", runner.getId());
         request.put("gammaParameter", runner.getGammaParameter());

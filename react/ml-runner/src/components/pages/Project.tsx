@@ -9,6 +9,8 @@ import Datasets from "../dataset/Datasets";
 import "../../styles/Project.css";
 import SelectableDataset from "../dataset/SelectableDataset";
 import FadeIn from "react-fade-in";
+import LabelSelector from "./LabelSelector";
+import {Label} from "../../types";
 
 function Project()
 {
@@ -19,6 +21,7 @@ function Project()
     const [secondLabelFolder, setSecondLabelFolder] = useState("");
     const [selectedModel, setSelectedModel] = useState("Support Vector Machines");
     const [isSuccessfullySaved, setSuccessfullySaved] = useState(false);
+    const [labels, setLabels] = useState<Label[]>([{id: 0, name: "", folderPath: ""}, {id: 1, name: "", folderPath: ""}]);
 
     const handleNameChange = (e: any) =>
     {
@@ -26,28 +29,18 @@ function Project()
         setProjectName(e.target.value);
     }
 
-    const handleFirstLabelChange = (e: any) =>
-    {
-        e.preventDefault();
-        setFirstLabelName(e.target.value);
-    }
 
-    const handleSecondLabelChange = (e: any) =>
-    {
-        e.preventDefault();
-        setSecondLabelName(e.target.value);
-    }
+    const handleLabelChange = (id:number, labelName: string, folderPath:string) => {
+        const label: Label = {
+            id: id,
+            name: labelName,
+            folderPath: folderPath
+        };
 
-    const handleFirstLabelFolderSelection = (folder) =>
-    {
-        console.log(folder);
-        setFirstLabelFolder(folder);
-    }
-
-    const handleSecondLabelFolderSelection = (folder) =>
-    {
-        console.log(folder);
-        setSecondLabelFolder(folder);
+       const indexOfLabel = labels.findIndex(label => label.id === id);
+       labels[indexOfLabel] = label;
+       console.log(labels);
+       setLabels(labels);
     }
 
     const handleModelSelection = (e: any) =>
@@ -56,15 +49,29 @@ function Project()
         setSelectedModel(e.target.value);
     }
 
+    const addLabel = () => {
+        const label: Label = {
+            id: labels.length,
+            name: "",
+            folderPath: ""
+        }
+        setLabels(previousLabels => [...previousLabels, label]);
+    }
+
+    const removeLastLabel = () => {
+        let purgedLabels = labels.filter(label => label.id !== labels.length - 1);
+        console.log(purgedLabels);
+        setLabels(purgedLabels);
+    }
+
     const handleProjectSaving = (e: any) =>
     {
         e.preventDefault();
-        ProjectService.save(projectName, firstLabel, secondLabel, firstLabelFolder, secondLabelFolder, selectedModel)
+        ProjectService.save(projectName, selectedModel, labels)
             .then(() =>
             {
                 setSuccessfullySaved(true);
-            }
-            );
+            });
     }
 
     if (isSuccessfullySaved)
@@ -77,27 +84,22 @@ function Project()
             <Navbar start="start-at-new-project" />
             <FadeIn>
                 <div className="project-form">
+                    <div className="project-form-block"> <h3>New Project</h3> </div>
                     <div className="project-form-block"> <input type="text" onChange={handleNameChange} placeholder="Project Name" /> </div>
-                    <div className="project-form-block project-form-block-data">
-                        <input className="label-name" type="text" onChange={handleFirstLabelChange} placeholder="First label" />
-                        <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center" modal>
-                            {close => (
-                                <SelectableDataset handleFolderSelection={(folder) => { handleFirstLabelFolderSelection(folder); close(); }} />
-                            )
-                            }
-                        </Popup>
-                        {firstLabelFolder && <div className="text-confirm">Selected: {firstLabelFolder}</div>}
+                    <div>
+                        {labels.map(label => {
+                            return(
+                                <div key={label.id} className="project-form-block project-form-block-data">
+                                    <LabelSelector id={label.id} handleChange={(id, labelName, folderPath) => handleLabelChange(id, labelName, folderPath)}/>
+                                </div>
+                            )})}
                     </div>
+
                     <div className="project-form-block project-form-block-data">
-                        <input className="label-name" type="text" onChange={handleSecondLabelChange} placeholder="Second label" />
-                        <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center" modal>
-                            {close => (
-                                <SelectableDataset handleFolderSelection={(folder) => { handleSecondLabelFolderSelection(folder); close(); }} />
-                            )
-                            }
-                        </Popup>
-                        {secondLabelFolder && <div className="text-confirm">Selected: {secondLabelFolder}</div>}
+                     <button className="standard-button" onClick={addLabel}>Add Label</button>
+                       <button className="standard-button" onClick={removeLastLabel} disabled={labels.length === 2}>Remove Last Label</button>
                     </div>
+
                     <div className="project-form-block">
                         <div className="model-select-text">Choose algorithm: </div>
                         <select name="model-select" onChange={handleModelSelection}>

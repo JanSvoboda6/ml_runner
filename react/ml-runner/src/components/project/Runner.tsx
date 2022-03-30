@@ -23,8 +23,6 @@ function Runner(props: any)
     const [parameters, setParameters] = useState<Parameters>({ gamma: undefined, c: undefined });
     const FIVE_SECONDS = 5 * 1000;
 
-
-
     useEffect(() =>
     {
         axios.get(API_URL + '/runner?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, { headers: authorizationHeader() })

@@ -65,10 +65,6 @@ public class ProjectController
             Project project = new Project(
                     user.get(),
                     request.getProjectName(),
-                    request.getFirstLabel(),
-                    request.getSecondLabel(),
-                    request.getFirstLabelFolder(),
-                    request.getSecondLabelFolder(),
                     request.getSelectedModel(),
                     classificationLabels
             );

@@ -17,3 +17,10 @@ export interface FileInformation
     modified?: number,
     data?: File
 }
+
+export interface Label
+{
+    id: number
+    name: string,
+    folderPath: string
+}

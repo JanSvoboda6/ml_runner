@@ -30,8 +30,8 @@ if __name__ == "__main__":
     with open('runners_info/' + str(runner_id) + '/configuration.json', 'r') as json_file:
         configuration = json.load(json_file)
 
-    first_label_folder = configuration["firstLabelFolder"]
-    second_label_folder = configuration["secondLabelFolder"]
+    first_label_folder = configuration['classificationLabels'][0]['folderPath']
+    second_label_folder = configuration['classificationLabels'][1]['folderPath']
     gamma = configuration['gammaParameter']
     c = configuration['cParameter']
 

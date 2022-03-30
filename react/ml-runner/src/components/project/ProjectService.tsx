@@ -1,20 +1,17 @@
 import axios from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
+import {Label} from "../../types";
 const API_URL = BACKEND_URL + "/api/project/saveproject";
 
-const save = (projectName: any, firstLabel: string, secondLabel: string, firstLabelFolder: string, secondLabelFolder: string, selectedModel: any) =>
+const save = (projectName: any, selectedModel: any, labels: Label[], ) =>
 {
-    const classificationLabels = [
-            {
-                "labelName": firstLabel,
-                "folderPath": firstLabelFolder
-            },
-            {
-                "labelName": secondLabel,
-                "folderPath": secondLabelFolder
-            }];
-    return axios.post(API_URL, { projectName, firstLabel, secondLabel, firstLabelFolder, secondLabelFolder, selectedModel, classificationLabels}, { headers: authorizationHeader() })
+    let classificationLabels: any[] = [];
+    labels.forEach(label => {
+        classificationLabels.push({"labelName": label.name, "folderPath": label.folderPath});
+    })
+    console.log(classificationLabels);
+    return axios.post(API_URL, { projectName, selectedModel, classificationLabels}, { headers: authorizationHeader() })
         .catch(error =>
         {
             var message = "";

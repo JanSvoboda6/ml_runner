@@ -116,6 +116,12 @@ ul {
   cursor:pointer;
 }
 
+.standard-button:disabled{
+  opacity: 0.2;
+  cursor: default;
+  border: 0.16em solid rgba(255, 255, 255, 0);
+}
+
 .standard-form{
   
 }
@@ -290,7 +296,7 @@ width: 7rem;
   transition: all 0.2s;
   display: block;
   margin: 0 auto;
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .project-create-new-button:hover {
@@ -314,7 +320,8 @@ width: 7rem;
   margin: 3px 70px;
   position: relative;
   top: -10px;
-  font-size: 15px;
+  left: 40px;
+  font-size: 16px;
   width: 500px;
 }
 
@@ -516,7 +523,7 @@ nav a:nth-child(5):hover~.upper-navbar-animation
 
 /* #region PROJECT FORM */
 .project-form{
-  width: 83vh;
+  width: 91vh;
   height: 50vh;
   margin-top: 5rem;
   margin-left: auto;
@@ -532,7 +539,6 @@ nav a:nth-child(5):hover~.upper-navbar-animation
 .project-form-block{
   text-align: center;
   width: 80%;
-  height: 10vh;
   margin-top: 1rem;
   margin-left: auto;
   margin-right: auto;
