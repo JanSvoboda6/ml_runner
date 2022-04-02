@@ -1,11 +1,12 @@
 import axios from "axios";
 import authorizationHeader from "../services/AuthorizationHeader";
 import {BACKEND_URL} from "../helpers/url";
+import {HyperParameter} from "../types";
 const API_URL = BACKEND_URL + "/api";
 
-const run = (projectId: number, gammaParameter: number, cParameter: number) =>
+const run = (projectId: number, hyperParameters: HyperParameter[]) =>
 {
-    return axios.post<any>(API_URL + '/project/runner/run', { projectId: projectId, gammaParameter: gammaParameter, cParameter: cParameter }, { headers: authorizationHeader() });
+    return axios.post<any>(API_URL + '/project/runner/run', { projectId: projectId, hyperParameters: hyperParameters }, { headers: authorizationHeader() });
 }
 
 const stop = (projectId: number, runnerId: number) =>

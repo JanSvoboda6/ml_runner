@@ -31,8 +31,8 @@ def run():
     with open('runners_info/' + str(runner_id) + '/configuration.json', 'r') as json_file:
         configuration = json.load(json_file)
 
-    gamma = configuration['gammaParameter']
-    c = configuration['cParameter']
+    gamma =  float(get_hyper_parameter_value(configuration['hyperParameters'], 'gamma'))
+    c =  float(get_hyper_parameter_value(configuration['hyperParameters'], 'c'))
 
     inform_on_status_change(runner_id, Status.LOADING_DATA)
 
@@ -68,6 +68,10 @@ def run():
     inform_on_status_change(runner_id, Status.FINISHED)
     print('FINISHED')
 
+def get_hyper_parameter_value(hyper_parameters, hyper_parameter_name):
+    for hyper_parameter in hyper_parameters:
+        if hyper_parameter['name'] == hyper_parameter_name:
+            return hyper_parameter['value']
 
 if __name__ == "__main__":
     try:

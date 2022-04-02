@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import RunnerService from "../../services/RunnerService";
+import {HyperParameter} from "../../types";
 
 function RunnerForm(props: any)
 {
@@ -21,7 +22,17 @@ function RunnerForm(props: any)
     const handleRunButton = (e: any) =>
     {
         e.preventDefault();
-        RunnerService.run(props.projectId, gammaParameter, cParameter);
+        const gamma: HyperParameter = {
+            name: 'gamma',
+            value: gammaParameter.toString()
+        }
+
+        const c: HyperParameter = {
+            name: 'c',
+            value: cParameter.toString()
+        }
+
+        RunnerService.run(props.projectId, [gamma, c]);
         window.location.reload();
     }
 

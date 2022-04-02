@@ -24,3 +24,9 @@ export interface Label
     name: string,
     folderPath: string
 }
+
+export interface HyperParameter
+{
+    name: string,
+    value: string
+}

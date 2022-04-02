@@ -1,16 +1,20 @@
 package com.jan.web.runner;
 
+import java.util.List;
+
 public class RunRequest
 {
     private final long projectId;
     private final double gammaParameter;
     private final double cParameter;
+    private final List<HyperParameter> hyperParameters;
 
-    public RunRequest(long projectId, double gammaParameter, double cParameter)
+    public RunRequest(long projectId, double gammaParameter, double cParameter, List<HyperParameter> hyperParameters)
     {
         this.projectId = projectId;
         this.gammaParameter = gammaParameter;
         this.cParameter = cParameter;
+        this.hyperParameters = hyperParameters;
     }
 
     public long getProjectId()
@@ -26,5 +30,10 @@ public class RunRequest
     public double getCParameter()
     {
         return cParameter;
+    }
+
+    public List<HyperParameter> getHyperParameters()
+    {
+        return hyperParameters;
     }
 }

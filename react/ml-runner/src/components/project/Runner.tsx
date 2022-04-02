@@ -4,13 +4,8 @@ import RunnerService from "../../services/RunnerService";
 import loadingAnimation from '../../styles/loading_graphics.gif';
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
+import {HyperParameter} from "../../types";
 const API_URL = BACKEND_URL + "/api/project";
-
-interface Parameters
-{
-    gamma: number | undefined,
-    c: number | undefined
-}
 
 function Runner(props: any)
 {
@@ -20,7 +15,7 @@ function Runner(props: any)
     const [firstLabelResult, setFirstLabelResult] = useState<number | undefined>(undefined);
     const [secondLabelResult, setSecondLabelResult] = useState<number | undefined>(undefined);
     const [isLoaded, setLoaded] = useState(false);
-    const [parameters, setParameters] = useState<Parameters>({ gamma: undefined, c: undefined });
+    const [parameters, setParameters] = useState<HyperParameter[]>([]);
     const FIVE_SECONDS = 5 * 1000;
 
     useEffect(() =>
@@ -29,8 +24,9 @@ function Runner(props: any)
             .then(
                 (res: AxiosResponse<any>) =>
                 {
+                    console.log(res)
                     setLoaded(true);
-                    setParameters({ gamma: res.data.gammaParameter, c: res.data.cparameter })
+                    setParameters(res.data.hyperParameters)
                 }
             )
 
@@ -83,9 +79,10 @@ function Runner(props: any)
 
     return (
         <div>
-            <p>RUNNER ID: {props.runnerId}</p>
-            <p>Gamma parameter: {parameters.gamma} </p>
-            <p>C parameter: {parameters.c}</p>
+            <p>Runner Id: {props.runnerId}</p>
+            <div>Hyper Parameters: {parameters.map((parameter, index) => {
+                return(<div key={index}>{parameter.name}: {parameter.value}</div>)
+            })} </div>
             <p>Status: {status}</p>
             <div className="running-indicator">{!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}</div>
             {isInEndState && firstLabelResult !== undefined && secondLabelResult !== undefined &&

@@ -3,6 +3,7 @@ package com.jan.web.result;
 import com.jan.web.runner.Runner;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Result
@@ -16,6 +17,10 @@ public class Result
 
     private double firstLabelResult;
     private double secondLabelResult;
+    private double accuracy;
+//    private ClassificationReport classificationReport;
+//    private ConfusionMatrix confusionMatrix;
+//    private List<ClassAccuracy> accuracyPerClass;
 
     public Long getId()
     {

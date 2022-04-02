@@ -58,6 +58,7 @@ public class ContainerProjectRunner implements ProjectRunner
         request.put("runnerId", runner.getId());
         request.put("gammaParameter", runner.getGammaParameter());
         request.put("cParameter", runner.getCParameter());
+        request.put("hyperParameters", buildHyperParametersJson(runner.getHyperParameters()));
         request.put("classificationLabels", buildClassificationLabelsJson(project.getClassificationLabels()));
         return request;
     }
@@ -67,6 +68,22 @@ public class ContainerProjectRunner implements ProjectRunner
     {
         //not implemented
         return false;
+    }
+
+    private JSONArray buildHyperParametersJson(List<HyperParameter> hyperParameters)
+    {
+        JSONArray json = new JSONArray();
+        for(HyperParameter hyperParameter: hyperParameters)
+        {
+            try
+            {
+                json.put(new JSONObject().put("name", hyperParameter.getName()).put("value", hyperParameter.getValue()));
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return json;
     }
 
     private JSONArray buildClassificationLabelsJson(List<ClassificationLabel> classificationLabels)

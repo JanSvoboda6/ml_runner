@@ -11,6 +11,7 @@ public class Project
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     private User user;
     private String name;

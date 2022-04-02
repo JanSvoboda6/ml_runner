@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,7 @@ public class RunnerServiceImpl implements RunnerService
     ProjectRunner projectRunner;
     private final ContainerRepository containerRepository;
     private final ResultRepository resultRepository;
+    private final HyperParameterRepository hyperParameterRepository;
     private final RequestMaker requestMaker;
     private final ObjectMapper objectMapper;
 
@@ -37,6 +39,7 @@ public class RunnerServiceImpl implements RunnerService
                              ProjectRunner projectRunner,
                              ContainerRepository containerRepository,
                              ResultRepository resultRepository,
+                             HyperParameterRepository hyperParameterRepository,
                              RequestMaker requestMaker,
                              ObjectMapper objectMapper)
     {
@@ -44,6 +47,7 @@ public class RunnerServiceImpl implements RunnerService
         this.projectRunner = projectRunner;
         this.containerRepository = containerRepository;
         this.resultRepository = resultRepository;
+        this.hyperParameterRepository = hyperParameterRepository;
         this.requestMaker = requestMaker;
         this.objectMapper = objectMapper;
     }
@@ -179,8 +183,10 @@ public class RunnerServiceImpl implements RunnerService
 
     private Runner mapRequestToRunner(RunRequest request, Project project)
     {
+
         Runner runner = new Runner();
         runner.setProject(project);
+        runner.setHyperParameters(hyperParameterRepository.saveAll(request.getHyperParameters()));
         runner.setGammaParameter(request.getGammaParameter());
         runner.setCParameter(request.getCParameter());
         runner.setFinished(false);

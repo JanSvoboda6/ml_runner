@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public class RunnerControllerTest
@@ -35,6 +36,7 @@ public class RunnerControllerTest
     private ProjectRunner projectRunner;
     private ObjectMapper objectMapper;
     private ResultRepository resultRepository;
+    private HyperParameterRepository hyperParameterRepository;
 
     @BeforeEach
     public void before()
@@ -47,7 +49,14 @@ public class RunnerControllerTest
         projectRunner = Mockito.mock(ProjectRunner.class);
         objectMapper = Mockito.mock(ObjectMapper.class);
         resultRepository = Mockito.mock(ResultRepository.class);
-        runnerService = new RunnerServiceImpl(runnerRepository, projectRunner, containerRepository, resultRepository, requestMaker, objectMapper);
+        hyperParameterRepository = Mockito.mock(HyperParameterRepository.class);
+        runnerService = new RunnerServiceImpl(runnerRepository,
+                projectRunner,
+                containerRepository,
+                resultRepository,
+                hyperParameterRepository,
+                requestMaker,
+                objectMapper);
         runnerController = new RunnerController(runnerRepository, containerUtility, runnerService, requestValidator);
     }
 
@@ -58,7 +67,7 @@ public class RunnerControllerTest
         Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
 
-        RunRequest runRequest = new RunRequest(PROJECT_ID, 1.0, 1.0);
+        RunRequest runRequest = new RunRequest(PROJECT_ID, 1.0, 1.0, List.of(new HyperParameter("gamma", "10")));
 
         runnerController.runProject(RANDOM_JWT_TOKEN, runRequest);
         Mockito.verify(runnerRepository, Mockito.times(1)).save(Mockito.any());

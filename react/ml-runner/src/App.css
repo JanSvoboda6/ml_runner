@@ -319,7 +319,6 @@ width: 7rem;
   max-height: 3em;
   margin: 3px 70px;
   position: relative;
-  top: -10px;
   left: 40px;
   font-size: 16px;
   width: 500px;
@@ -862,10 +861,9 @@ input[type="file"]
   padding-bottom: 10%;
   border-style: solid;
   border-color: var(--bg-secondary);
+  background-color: var(--bg-secondary);
   border-width: 2px;
   border-radius: 10px;
-  background-color: var(--bg-secondary);
-  opacity: var(--opacity);
 }
 
 .project-loading-message{
@@ -979,7 +977,7 @@ input[type="file"]
   padding-top: 5px;
   padding-bottom: 15px;
   border-color: #cfb5b550;
-  background-color: #000000;
+  background-color: var(--bg-third);
 }
 
 .loading-runner-icon{
