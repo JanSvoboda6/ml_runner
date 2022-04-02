@@ -1,10 +1,11 @@
-import axios, { AxiosResponse } from "axios";
+import axios, {AxiosResponse} from "axios";
 import React from "react";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import FadeIn from "react-fade-in";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import Runner from "./Runner";
 import {BACKEND_URL} from "../../helpers/url";
+
 const API_URL = BACKEND_URL + "/api/project";
 
 interface Runner
@@ -21,7 +22,7 @@ function RunnerList(props: any)
 
     useEffect(() =>
     {
-        axios.get(API_URL + "/runners?projectId=" + props.projectId, { headers: authorizationHeader()})
+        axios.get(API_URL + "/runners?projectId=" + props.projectId, {headers: authorizationHeader()})
             .then(
                 (res: AxiosResponse<any>) =>
                 {
@@ -29,7 +30,7 @@ function RunnerList(props: any)
                     const runners: Array<Runner> = [];
                     res.data.forEach(runner =>
                     {
-                        runners.push({ projectId: runner.project.id, runnerId: runner.id })
+                        runners.push({projectId: runner.project.id, runnerId: runner.id})
                     });
                     setRunners(runners.reverse());
                 },
@@ -52,11 +53,30 @@ function RunnerList(props: any)
         <div>
             <ul className="runner-list-inside">
                 <FadeIn delay={25}>
-                {runners.map(runner => (
-                    <li key={runner.runnerId} className="runner-item">        
-                            <Runner projectName={props.projectName} projectId={runner.projectId} runnerId={runner.runnerId} />
-                    </li>
-                ))}
+                    <div className="runner-list-table">
+                        <p className="runner-list-table-header-text">Runner Id</p>
+                        <p className="runner-list-table-header-text">Parameters</p>
+                        <p className="runner-list-table-header-text">Time</p>
+                        <p className="runner-list-table-header-text">Status</p>
+                        <p className="runner-list-table-header-text">Accuracy</p>
+                    </div>
+                    {runners.length == 0 ?
+                        <div>
+                            <hr className="grey-horizontal"/>
+                            <p className="runner-list-initial-message">No Runs have been yet created.</p>
+                        </div> :
+                        <div>{
+                            runners.map(runner => (
+                                <>
+                                    <hr className="grey-horizontal"/>
+                                    <li key={runner.runnerId} className="runner-item">
+                                        <Runner projectName={props.projectName} projectId={runner.projectId}
+                                                runnerId={runner.runnerId}/>
+                                    </li>
+                                </>
+                            ))
+                        } </div>
+                    }
                 </FadeIn>
             </ul>
         </div>

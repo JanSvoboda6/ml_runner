@@ -4,7 +4,7 @@
   font-size: 19px;
   --text-primary: #fcf4f4;
   --bg-primary: #221c1c;
-  --bg-secondary: #0e0d0d;
+  --bg-secondary: #100f0f;
   --bg-third: #070707;
   --accent: rgb(15, 81, 224);
   --alert-color: #d33636;
@@ -56,11 +56,11 @@ p{
     margin-block-end: 5px;
 }
 
-hr{
-  border-color: var(--bg-accent);
-  background-color: var(--bg-accent);
-  height: 1px;
-}
+/*hr{*/
+/*  border-color: var(--bg-accent);*/
+/*  background-color: var(--bg-accent);*/
+/*  height: 1px;*/
+/*}*/
 
 a{
   color: inherit;
@@ -259,9 +259,37 @@ width: 7rem;
 }
 
 .project-name{
-  margin-top: 10px;
+  margin-left: 10px;
   color: var(--text-primary);
   opacity: 90%;
+  font-family: Roboto Mono;
+  font-style: normal;
+  font-weight: 100;
+  font-size: 17px;
+  line-height: 50px;
+  letter-spacing: 0.3em;
+}
+
+.project-control-panel-controls{
+  display: flex;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.runner-list-initial-message{
+  margin: 20px 0px 20px 0px;
+}
+
+
+.runner-list-table{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 20%;
+  padding: 0px 10px 0px 10px;
+}
+
+.runner-list-table-header-text{
+  opacity: 0.5;
 }
 
 .save-button{
@@ -843,7 +871,7 @@ input[type="file"]
 
 /* #region PROJECTS */
 .project-list{
-  width: 50vh;
+  width: 90vh;
   margin-top: 5rem;
   margin-left: auto;
   margin-right: auto;
@@ -858,10 +886,12 @@ input[type="file"]
 .project-item{
   margin-top: 1.5rem;
   text-align: center;
-  padding-bottom: 10%;
   border-style: solid;
   border-color: var(--bg-secondary);
-  background-color: var(--bg-secondary);
+  /*background-color: var(--bg-primary);*/
+  border-width: 0px 0px 2px 0px;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(5px);
   border-width: 2px;
   border-radius: 10px;
 }
@@ -875,7 +905,7 @@ input[type="file"]
   display: flex; 
   flex-direction: row;
   align-items: left;
-  background-color: var(--bg-third);
+  background-color: var(--bg-secondary);
   border-bottom: 3px solid;
   border-color: var(--border-color);
 }
@@ -968,28 +998,32 @@ input[type="file"]
 
 .runner-item{
   text-align: center;
-  width: 80%;
   margin-top: 1rem;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 10px;
+  margin-right: 10px;
   border-radius: 10px;
   color: white;
   padding-top: 5px;
   padding-bottom: 15px;
   border-color: #cfb5b550;
-  background-color: var(--bg-third);
+  /*background-color: var(--bg-third);*/
 }
 
 .loading-runner-icon{
-  margin-top: 15px;
-  position: relative;
-  width: 150px;
+  margin: auto;
+  margin-top: -17px;
+  width: 80px;
+}
+
+.grey-horizontal{
+  border: 1px solid var(--text-primary);
+  opacity: 0.1;
 }
 /* #endregion RUNNER*/
 
 /* #region STATISTICS */
 .average-number{
-  font-size: 30;
+  font-size: 30px;
   animation: ease-in 2s;
 }
 
