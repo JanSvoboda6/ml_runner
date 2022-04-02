@@ -971,22 +971,21 @@ input[type="file"]
 .runner-item{
   text-align: center;
   width: 80%;
-  height: 15vh;
   margin-top: 1rem;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
   color: white;
-  padding: 10px;
+  padding-top: 5px;
+  padding-bottom: 15px;
   border-color: #cfb5b550;
   background-color: #000000;
 }
 
 .loading-runner-icon{
+  margin-top: 15px;
   position: relative;
-  top: -115px;
-  left: 205px;
-  width: 115px;
+  width: 150px;
 }
 /* #endregion RUNNER*/
 

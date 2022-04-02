@@ -17,7 +17,7 @@ const ProjectQuickView = (props: any) =>
             <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal>
                 {close => (<RunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => close()} />)}
             </Popup>
-            <button className="project-control-panel-button" onClick={redirectToAnalysisPage}>Statistics</button>
+            <button className="project-control-panel-button" onClick={redirectToAnalysisPage}>Analysis</button>
         </div>
         <div className="project-name">
             <h2>{props.name}</h2>
