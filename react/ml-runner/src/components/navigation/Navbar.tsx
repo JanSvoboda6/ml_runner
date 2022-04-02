@@ -21,7 +21,7 @@ function Navbar(props: any)
                 <Link to="/projects" className="upper-navbar-item" >Projects</Link>
                 <Link to="/datasets" className="upper-navbar-item">Datasets</Link>
                 <Link to="/analysis" className="upper-navbar-item">Analysis</Link>
-                <Link to="/newproject" className="upper-navbar-item">Add New Project</Link>
+                <Link to="/newproject" className="upper-navbar-item">New Project</Link>
                 <a className="upper-navbar-item-logout"><button className="upper-navbar-logout-button" onClick={handleLogout}><Link to="/logout">Logout</Link></button></a>
             </nav>
         </div >)

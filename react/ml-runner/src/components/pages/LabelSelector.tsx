@@ -19,7 +19,7 @@ function LabelSelector(props: any)
 
     return (
         <>
-            <input className="label-name" type="text" onChange={handleLabelNameChange} placeholder="Label Name"/>
+            <input className="project-label-field" type="text" onChange={handleLabelNameChange} placeholder="Label Name"/>
             <Popup trigger={<button className="data-folder-button"> Choose Folder</button>} position="right center"
                    modal>
                 {close => (

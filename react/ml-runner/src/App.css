@@ -523,7 +523,7 @@ nav a:nth-child(5):hover~.upper-navbar-animation
 
 /* #region PROJECT FORM */
 .project-form{
-  width: 91vh;
+  width: 60vh;
   height: 50vh;
   margin-top: 5rem;
   margin-left: auto;
@@ -559,9 +559,17 @@ nav a:nth-child(5):hover~.upper-navbar-animation
   font-size: 17px;
 }
 
-.label-name{
+.project-name-field{
   color: var(--text-primary);
-  height: 2.5vh;
+  height: 2.2vh;
+  padding-left: 10px;
+  margin-bottom: 35px;
+}
+
+.project-label-field{
+  color: var(--text-primary);
+  height: 2.2vh;
+  padding-left: 10px;
   margin-left: 10%;
 }
 

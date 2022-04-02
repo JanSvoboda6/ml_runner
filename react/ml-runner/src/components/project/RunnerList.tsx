@@ -5,7 +5,7 @@ import FadeIn from "react-fade-in";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import Runner from "./Runner";
 import {BACKEND_URL} from "../../helpers/url";
-const API_URL = BACKEND_URL + "api/project";
+const API_URL = BACKEND_URL + "/api/project";
 
 interface Runner
 {
@@ -35,6 +35,7 @@ function RunnerList(props: any)
                 },
                 (error) =>
                 {
+                    console.log(error);
                     setLoaded(true);
                     setErrorMessage(error.message);
                 }

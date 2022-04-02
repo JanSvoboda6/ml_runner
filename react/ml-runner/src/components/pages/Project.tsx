@@ -84,8 +84,8 @@ function Project()
             <Navbar start="start-at-new-project" />
             <FadeIn>
                 <div className="project-form">
-                    <div className="project-form-block"> <h3>New Project</h3> </div>
-                    <div className="project-form-block"> <input type="text" onChange={handleNameChange} placeholder="Project Name" /> </div>
+                    <div className="project-form-block"> <h3>Create New Project</h3> </div>
+                    <div className="project-form-block"> <input className="project-name-field" type="text" onChange={handleNameChange} placeholder="Project Name" /> </div>
                     <div>
                         {labels.map(label => {
                             return(
