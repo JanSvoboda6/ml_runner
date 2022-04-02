@@ -106,6 +106,7 @@ public class RunnerController
         JSONObject response = new JSONObject();
         response.put("firstLabelResult", result.getFirstLabelResult());
         response.put("secondLabelResult", result.getSecondLabelResult());
+        response.put("accuracy", result.getAccuracy());
         return response;
     }
 }

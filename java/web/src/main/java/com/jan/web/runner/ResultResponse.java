@@ -9,4 +9,7 @@ public class ResultResponse
 
     @JsonProperty("secondLabelResult")
     public double secondLabelResult;
+
+    @JsonProperty("accuracy")
+    public double accuracy;
 }
