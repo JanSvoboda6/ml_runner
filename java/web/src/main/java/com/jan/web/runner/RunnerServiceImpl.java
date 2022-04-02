@@ -147,6 +147,7 @@ public class RunnerServiceImpl implements RunnerService
             result.setRunner(runnerRepository.findById(runnerId).get());
             result.setFirstLabelResult(resultResponse.firstLabelResult);
             result.setSecondLabelResult(resultResponse.secondLabelResult);
+            result.setAccuracy(resultResponse.accuracy);
             resultRepository.save(result);
             return Optional.of(result);
         }

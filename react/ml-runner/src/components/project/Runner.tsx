@@ -1,10 +1,12 @@
-import axios, { AxiosResponse } from "axios";
-import React, { useEffect, useState } from "react";
+import axios, {AxiosResponse} from "axios";
+import React, {useEffect, useState} from "react";
 import RunnerService from "../../services/RunnerService";
-import loadingAnimation from '../../styles/loading_graphics.gif';
+import loadingAnimation from '../../styles/cube_animation.gif';
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
 import {HyperParameter} from "../../types";
+import moment from "moment";
+
 const API_URL = BACKEND_URL + "/api/project";
 
 function Runner(props: any)
@@ -14,6 +16,7 @@ function Runner(props: any)
     const [status, setStatus] = useState("INITIAL");
     const [firstLabelResult, setFirstLabelResult] = useState<number | undefined>(undefined);
     const [secondLabelResult, setSecondLabelResult] = useState<number | undefined>(undefined);
+    const [accuracy, setAccuracy] = useState<number | undefined>(undefined);
     const [isLoaded, setLoaded] = useState(false);
     const [parameters, setParameters] = useState<HyperParameter[]>([]);
     const FIVE_SECONDS = 5 * 1000;
@@ -46,6 +49,7 @@ function Runner(props: any)
             {
                 setFirstLabelResult(res.data.firstLabelResult);
                 setSecondLabelResult(res.data.secondLabelResult);
+                setAccuracy(res.data.accuracy);
             })
     }
 
@@ -69,6 +73,7 @@ function Runner(props: any)
                             {
                                 setFirstLabelResult(res.data.firstLabelResult);
                                 setSecondLabelResult(res.data.secondLabelResult);
+                                setAccuracy(res.data.accuracy)
                             })
 
                         clearInterval(intervalId);
@@ -76,22 +81,25 @@ function Runner(props: any)
                 }
             );
     }
-
+    if(!isLoaded)
+    {
+        return <div>"Loading"</div>;
+    }
     return (
-        <div>
-            <p>Runner Id: {props.runnerId}</p>
-            <div>Hyper Parameters: {parameters.map((parameter, index) => {
+        <div className="runner-list-table">
+            <p>#{props.runnerId}</p>
+            <div>{parameters.map((parameter, index) => {
                 return(<div key={index}>{parameter.name}: {parameter.value}</div>)
             })} </div>
-            <p>Status: {status}</p>
-            <div className="running-indicator">{!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}</div>
-            {isInEndState && firstLabelResult !== undefined && secondLabelResult !== undefined &&
+            <p>{moment().format("DD/MM/YYYY")}</p>
+            <p className={status == 'FINISHED' ? "text-confirm" : ""}>{status}</p>
+            {!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}
+            {isInEndState && firstLabelResult !== undefined && secondLabelResult !== undefined && accuracy !== undefined &&
                 <div>
-                    <div className="text-confirm">Validation result of first label: {(firstLabelResult * 100).toFixed(2)}%</div>
-                    <div className="text-confirm">Validation result of second label: {(secondLabelResult * 100).toFixed(2)}%</div>
+                    {status == 'FAILED'? <div>-</div> : <div> {(accuracy * 100).toFixed(2)}%</div>}
                 </div>
             }
-        </div >
+    </div>
     )
 }
 

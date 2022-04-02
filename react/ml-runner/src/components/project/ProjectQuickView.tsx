@@ -12,20 +12,23 @@ const ProjectQuickView = (props: any) =>
         history.push('/analysis');
     }
 
-    return (<div className="project-quick-view">
-        <div className="control-panel">
-            <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal>
-                {close => (<RunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => close()} />)}
-            </Popup>
-            <button className="project-control-panel-button" onClick={redirectToAnalysisPage}>Analysis</button>
+    return (
+        <div className="project-quick-view">
+            <div className="control-panel">
+                <div className="project-name">
+                    <h2>{props.name}</h2>
+                </div>
+                <div className="project-control-panel-controls">
+                    <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal>
+                        {close => (<RunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => close()} />)}
+                    </Popup>
+                    <button className="project-control-panel-button" onClick={redirectToAnalysisPage}>Analysis</button>
+                </div>
+            </div>
+            <div className="runner-list">
+                <RunnerList projectId={props.id} />
+            </div>
         </div>
-        <div className="project-name">
-            <h2>{props.name}</h2>
-        </div>
-        <div className="runner-list">
-            <RunnerList projectId={props.id} />
-        </div>
-    </div>
     )
 }
 

@@ -56,4 +56,14 @@ public class Result
     {
         this.secondLabelResult = secondLabelResult;
     }
+
+    public double getAccuracy()
+    {
+        return accuracy;
+    }
+
+    public void setAccuracy(double accuracy)
+    {
+        this.accuracy = accuracy;
+    }
 }

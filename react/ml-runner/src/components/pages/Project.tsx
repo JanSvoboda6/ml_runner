@@ -29,7 +29,6 @@ function Project()
         setProjectName(e.target.value);
     }
 
-
     const handleLabelChange = (id:number, labelName: string, folderPath:string) => {
         const label: Label = {
             id: id,

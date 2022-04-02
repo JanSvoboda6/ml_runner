@@ -3,6 +3,7 @@ package com.jan.web.runner;
 import com.jan.web.project.Project;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Runner
@@ -20,6 +21,9 @@ public class Runner
     @Enumerated(EnumType.STRING)
     private RunnerStatus status;
     private String chronologicalStatuses;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<HyperParameter> hyperParameters;
 
     public Long getId()
     {
@@ -84,5 +88,15 @@ public class Runner
     public void setChronologicalStatuses(String chronologicalStatuses)
     {
         this.chronologicalStatuses = chronologicalStatuses;
+    }
+
+    public List<HyperParameter> getHyperParameters()
+    {
+        return hyperParameters;
+    }
+
+    public void setHyperParameters(List<HyperParameter> hyperParameters)
+    {
+        this.hyperParameters = hyperParameters;
     }
 }
