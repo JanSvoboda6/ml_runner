@@ -3,6 +3,7 @@ package com.jan.web.runner;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.ContainerUtility;
+import com.jan.web.project.ProjectRepository;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
 import com.jan.web.result.Result;
@@ -37,6 +38,8 @@ public class RunnerControllerTest
     private ObjectMapper objectMapper;
     private ResultRepository resultRepository;
     private HyperParameterRepository hyperParameterRepository;
+    private ProjectRepository projectRepository;
+    private RunnerQueueRepository runnerQueueRepository;
 
     @BeforeEach
     public void before()
@@ -50,11 +53,15 @@ public class RunnerControllerTest
         objectMapper = Mockito.mock(ObjectMapper.class);
         resultRepository = Mockito.mock(ResultRepository.class);
         hyperParameterRepository = Mockito.mock(HyperParameterRepository.class);
+        projectRepository = Mockito.mock(ProjectRepository.class);
+        runnerQueueRepository = Mockito.mock(RunnerQueueRepository.class);
         runnerService = new RunnerServiceImpl(runnerRepository,
+                projectRepository,
                 projectRunner,
                 containerRepository,
                 resultRepository,
                 hyperParameterRepository,
+                runnerQueueRepository,
                 requestMaker,
                 objectMapper);
         runnerController = new RunnerController(runnerRepository, containerUtility, runnerService, requestValidator);

@@ -17,7 +17,7 @@ public class Project
     private String name;
     private String selectedModel;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     private List<ClassificationLabel> classificationLabels;
 
     public Project(User user, String name, String selectedModel, List<ClassificationLabel> classificationLabels)

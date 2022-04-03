@@ -8,7 +8,8 @@ public enum RunnerStatus
     PREDICTING(false),
     FINISHED(true),
     FAILED(true),
-    CANCELLED(true);
+    CANCELLED(true),
+    SCHEDULED(false);
 
     private final boolean isEndState;
 

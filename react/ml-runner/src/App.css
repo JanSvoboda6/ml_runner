@@ -164,10 +164,11 @@ width: 7rem;
 
 .logo-simple{
   image-rendering: -webkit-optimize-contrast;
-  width: 50px;
+  width: 49px;
   margin-top: 5px;
-  margin-left: 4px;
+  margin-left: 5px;
   margin-right: 3.7rem;
+  opacity: 0.9;
   -webkit-filter: invert(1);
   filter: invert(1);
 }
@@ -550,7 +551,7 @@ nav a:nth-child(5):hover~.upper-navbar-animation
 
 /* #region PROJECT FORM */
 .project-form{
-  width: 60vh;
+  width: 1200px;
   height: 50vh;
   margin-top: 5rem;
   margin-left: auto;

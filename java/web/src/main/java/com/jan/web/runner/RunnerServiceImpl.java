@@ -3,10 +3,12 @@ package com.jan.web.runner;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.project.Project;
+import com.jan.web.project.ProjectRepository;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
 import com.jan.web.result.Result;
 import com.jan.web.result.ResultRepository;
+import com.jan.web.security.user.User;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,27 +29,33 @@ import java.util.Optional;
 public class RunnerServiceImpl implements RunnerService
 {
     RunnerRepository runnerRepository;
+    private final ProjectRepository projectRepository;
     ProjectRunner projectRunner;
     private final ContainerRepository containerRepository;
     private final ResultRepository resultRepository;
     private final HyperParameterRepository hyperParameterRepository;
+    private final RunnerQueueRepository runnerQueueRepository;
     private final RequestMaker requestMaker;
     private final ObjectMapper objectMapper;
 
     @Autowired
     public RunnerServiceImpl(RunnerRepository runnerRepository,
+                             ProjectRepository projectRepository,
                              ProjectRunner projectRunner,
                              ContainerRepository containerRepository,
                              ResultRepository resultRepository,
                              HyperParameterRepository hyperParameterRepository,
+                             RunnerQueueRepository runnerQueueRepository,
                              RequestMaker requestMaker,
                              ObjectMapper objectMapper)
     {
         this.runnerRepository = runnerRepository;
+        this.projectRepository = projectRepository;
         this.projectRunner = projectRunner;
         this.containerRepository = containerRepository;
         this.resultRepository = resultRepository;
         this.hyperParameterRepository = hyperParameterRepository;
+        this.runnerQueueRepository = runnerQueueRepository;
         this.requestMaker = requestMaker;
         this.objectMapper = objectMapper;
     }
@@ -55,7 +63,36 @@ public class RunnerServiceImpl implements RunnerService
     @Override
     public void runProject(RunRequest request, Project project, ContainerEntity containerEntity)
     {
-        projectRunner.run(mapRequestToRunner(request, project), containerEntity);
+        Runner runner = mapRequestToRunner(request, project);
+        if (isAnyRunnerRunning(containerEntity.getUser()))
+        {
+            runner.setStatus(RunnerStatus.SCHEDULED);
+            runnerRepository.save(runner);
+            runnerQueueRepository.save(new RunnerQueueEntity(containerEntity.getUser(), runner));
+            return;
+        } else
+        {
+            runner.setStatus(RunnerStatus.INITIAL);
+        }
+        projectRunner.run(runnerRepository.save(runner), containerEntity);
+    }
+
+    @Override
+    public boolean isAnyRunnerRunning(User user)
+    {
+        List<Project> projects = projectRepository.findAllByUser(user);
+        for(Project individualProject : projects)
+        {
+            List<Runner> runners = runnerRepository.findAllByProjectIdAndStatusIsNot(individualProject.getId(), RunnerStatus.SCHEDULED);
+            for(Runner runner : runners)
+            {
+                if(!runner.getStatus().isEndState())
+                {
+                    return true;
+                }
+            }
+        }
+        return  false;
     }
 
     @Override
@@ -63,7 +100,7 @@ public class RunnerServiceImpl implements RunnerService
     {
         Runner runner = runnerRepository.findById(runnerId).get();
         RunnerStatus status = runner.getStatus();
-        if (status.isEndState())
+        if (status.isEndState() || status == RunnerStatus.SCHEDULED)
         {
             return status;
         }
@@ -150,14 +187,13 @@ public class RunnerServiceImpl implements RunnerService
             result.setAccuracy(resultResponse.accuracy);
             resultRepository.save(result);
             return Optional.of(result);
-        }
-        else
+        } else
         {
             return Optional.empty();
         }
     }
 
-    private HttpEntity<String> prepareRequestEntity ( long projectId, long runnerId) throws JSONException
+    private HttpEntity<String> prepareRequestEntity(long projectId, long runnerId) throws JSONException
     {
         JSONObject resultRequest = new JSONObject();
         resultRequest.put("projectId", projectId);
@@ -168,7 +204,7 @@ public class RunnerServiceImpl implements RunnerService
         return new HttpEntity<>(resultRequest.toString(), resultHeaders);
     }
 
-    private HttpEntity<String> prepareStatusEntity (long runnerId) throws JSONException
+    private HttpEntity<String> prepareStatusEntity(long runnerId) throws JSONException
     {
         JSONObject resultRequest = new JSONObject();
         resultRequest.put("runnerId", runnerId);
@@ -177,22 +213,15 @@ public class RunnerServiceImpl implements RunnerService
         return new HttpEntity<>(resultRequest.toString(), resultHeaders);
     }
 
-    private boolean isEndState(RunnerStatus status)
-    {
-        return status == RunnerStatus.FINISHED || status == RunnerStatus.FAILED || status == RunnerStatus.CANCELLED;
-    }
-
     private Runner mapRequestToRunner(RunRequest request, Project project)
     {
-
         Runner runner = new Runner();
         runner.setProject(project);
         runner.setHyperParameters(hyperParameterRepository.saveAll(request.getHyperParameters()));
         runner.setGammaParameter(request.getGammaParameter());
         runner.setCParameter(request.getCParameter());
         runner.setFinished(false);
-        runner.setStatus(RunnerStatus.INITIAL);
-        runnerRepository.save(runner);
+        runner.setTimestamp(Instant.now().getEpochSecond());
         return runner;
     }
 }

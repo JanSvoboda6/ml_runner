@@ -22,8 +22,10 @@ public class Runner
     private RunnerStatus status;
     private String chronologicalStatuses;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     private List<HyperParameter> hyperParameters;
+
+    private long timestamp;
 
     public Long getId()
     {
@@ -98,5 +100,15 @@ public class Runner
     public void setHyperParameters(List<HyperParameter> hyperParameters)
     {
         this.hyperParameters = hyperParameters;
+    }
+
+    public long getTimestamp()
+    {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp)
+    {
+        this.timestamp = timestamp;
     }
 }
