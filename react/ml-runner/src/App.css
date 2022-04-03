@@ -667,7 +667,7 @@ input[type="file"]
 .landing-page-information-text{
   position: relative;
   top: 20px;
-  left: 47%;
+  left: 17%;
   width: 295px;
   font-family: Roboto Mono;
   font-style: normal;
@@ -742,11 +742,11 @@ input[type="file"]
 
 .cube-animation{
   position: relative;
-  top: -30px;
-  left: -60px;
   grid-area: c;
   opacity: 0.9;
-  height: 260px;
+  top: 30px;
+  left: -15%;
+  height: 150px;
   mix-blend-mode:lighten;
   image-rendering: -webkit-optimize-contrast;
 }
