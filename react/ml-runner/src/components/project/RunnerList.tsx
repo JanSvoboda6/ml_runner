@@ -67,13 +67,13 @@ function RunnerList(props: any)
                         </div> :
                         <div>{
                             runners.map(runner => (
-                                <>
+                                <div key={runner.runnerId}>
                                     <hr className="grey-horizontal"/>
-                                    <li key={runner.runnerId} className="runner-item">
+                                    <li className="runner-item">
                                         <Runner projectName={props.projectName} projectId={runner.projectId}
                                                 runnerId={runner.runnerId}/>
                                     </li>
-                                </>
+                                </div>
                             ))
                         } </div>
                     }

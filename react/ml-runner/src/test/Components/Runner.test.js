@@ -7,18 +7,32 @@ import axios from "axios";
 import Runner from "../../components/project/Runner";
 import RunnerService from "../../services/RunnerService";
 
-describe("Running a project", () =>{
+describe("Running a project", () => {
     test('When project is in running state then running icon is shown', async () => {
         jest.useFakeTimers();
         jest.spyOn(global, 'setInterval');
         const response = {
             'data': {
-                'gammaParameter': 1,
-                'cparameter': 1,
-                'finished': false
+                'parameters': [{
+                    'name': 'gamma',
+                    'value': '1'
+                },
+                {
+                    'name': 'c',
+                    'value': '1'
+                }]
             }
         }
         jest.spyOn(axios, 'get').mockResolvedValue(response);
+
+        const statusResponse = {
+            'data': {
+                'status': 'INITIAL',
+                'isEndState': false
+            }
+        }
+        jest.spyOn(RunnerService, 'getStatus').mockResolvedValue(statusResponse)
+
         await act(async () => {
             render(<Router history={createMemoryHistory()}><Runner/></Router>);
         });
@@ -31,8 +45,14 @@ describe("Running a project", () =>{
         jest.spyOn(global, 'setInterval');
         const runnerResponse = {
             'data': {
-                'gammaParameter': 1,
-                'cparameter': 1
+                'parameters': [{
+                    'name': 'gamma',
+                    'value': '1'
+                },
+                    {
+                        'name': 'c',
+                        'value': '1'
+                    }]
             }
         }
         jest.spyOn(axios, 'get').mockResolvedValue(runnerResponse);
@@ -51,13 +71,19 @@ describe("Running a project", () =>{
         expect(screen.queryByAltText('loading_motion')).not.toBeInTheDocument();
     });
 
-    test('When project is running then setInterval with recurrent requests is started', async() => {
+    test('When project is running then setInterval with recurrent requests is started', async () => {
         jest.useFakeTimers();
         jest.spyOn(global, 'setInterval');
         const runnerResponse = {
             'data': {
-                'gammaParameter': 1,
-                'cparameter': 1
+                'parameters': [{
+                    'name': 'gamma',
+                    'value': '1'
+                },
+                    {
+                        'name': 'c',
+                        'value': '1'
+                    }]
             }
         }
         jest.spyOn(axios, 'get').mockResolvedValue(runnerResponse);
@@ -86,26 +112,30 @@ describe('Stop handling', () =>
 
 describe('Result and status handling', () =>
 {
-    test('When runner is successfully finished then results are shown', async() => {
+    test('When runner is successfully finished then results are shown', async () => {
         jest.useFakeTimers();
         jest.spyOn(global, 'setInterval');
         const initialResponse = {
             'data': {
-                'gammaParameter': 1,
-                'cparameter': 1,
-                'finished': true
+                'parameters': [{
+                    'name': 'gamma',
+                    'value': '1'
+                },
+                    {
+                        'name': 'c',
+                        'value': '1'
+                    }]
             }
-        };
+        }
 
         const resultResponse = {
-            'data':{
-                'firstLabelResult': 0.7,
-                'secondLabelResult': 0.8
+            'data': {
+                'accuracy': 0.7
             }
         };
 
         const statusResponse = {
-            'data':{
+            'data': {
                 'status': 'FINISHED',
                 'isEndState': true
             }
@@ -117,11 +147,10 @@ describe('Result and status handling', () =>
             render(<Router history={createMemoryHistory()}><Runner/></Router>);
         });
 
-        expect(screen.getByText(/validation result of first label: 70.00%/i)).toBeInTheDocument();
-        expect(screen.getByText(/validation result of second label: 80.00%/i)).toBeInTheDocument();
+        expect(screen.getByText(/70.00%/i)).toBeInTheDocument();
     });
 
-    test('When runner is successfully finished then results are shown', async() => {
+    test('When runner is successfully finished then finished state is shown', async () => {
         jest.useFakeTimers();
         jest.spyOn(global, 'setInterval');
         const initialResponse = {
@@ -133,14 +162,13 @@ describe('Result and status handling', () =>
         };
 
         const resultResponse = {
-            'data':{
-                'firstLabelResult': 0.7,
-                'secondLabelResult': 0.8
+            'data': {
+                'accuracy': 0.7
             }
         };
 
         const statusResponse = {
-            'data':{
+            'data': {
                 'status': 'FINISHED',
                 'isEndState': true
             }

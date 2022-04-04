@@ -27,7 +27,6 @@ function Runner(props: any)
             .then(
                 (res: AxiosResponse<any>) =>
                 {
-                    console.log(res)
                     setLoaded(true);
                     setParameters(res.data.hyperParameters)
                 }
@@ -88,13 +87,13 @@ function Runner(props: any)
     return (
         <div className="runner-list-table">
             <p>#{props.runnerId}</p>
-            <div>{parameters.map((parameter, index) => {
+            <div>{parameters && parameters.map((parameter, index) => {
                 return(<div key={index}>{parameter.name}: {parameter.value}</div>)
             })} </div>
             <p>{moment().format("DD/MM/YYYY")}</p>
             <p className={status == 'FINISHED' ? "text-confirm" : ""}>{status}</p>
             {!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}
-            {isInEndState && firstLabelResult !== undefined && secondLabelResult !== undefined && accuracy !== undefined &&
+            {isInEndState && accuracy !== undefined &&
                 <div>
                     {status == 'FAILED'? <div>-</div> : <div> {(accuracy * 100).toFixed(2)}%</div>}
                 </div>
