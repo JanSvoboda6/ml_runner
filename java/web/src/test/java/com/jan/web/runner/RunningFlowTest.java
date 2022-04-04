@@ -75,6 +75,9 @@ public class RunningFlowTest
     @Autowired
     private ClassificationLabelRepository classificationLabelRepository;
 
+    @Autowired
+    private HyperParameterRepository hyperParameterRepository;
+
     private final CountDownLatch waiter = new CountDownLatch(1);
 
     @BeforeEach
@@ -133,10 +136,13 @@ public class RunningFlowTest
 
         Long projectId = projectRepository.save(project).getId();
 
+        HyperParameter cParameter = new HyperParameter("c", "1");
+        HyperParameter gammaParameter = new HyperParameter("gamma", "10");
+
         Runner runner = new Runner();
         runner.setProject(project);
-        runner.setCParameter(1.0);
-        runner.setGammaParameter(10.0);
+        runner.setHyperParameters(List.of(hyperParameterRepository.save(cParameter), hyperParameterRepository.save(gammaParameter)));
+        runner.setStatus(RunnerStatus.INITIAL);
         runnerRepository.save(runner);
 
         containerProjectRunner.run(runner, containerOptional.get());
@@ -198,10 +204,12 @@ public class RunningFlowTest
 
         Long projectId = projectRepository.save(project).getId();
 
+        HyperParameter cParameter = new HyperParameter("c", "1");
+        HyperParameter gammaParameter = new HyperParameter("gamma", "10");
+
         Runner runner = new Runner();
         runner.setProject(project);
-        runner.setCParameter(1.0);
-        runner.setGammaParameter(10.0);
+        runner.setHyperParameters(List.of(hyperParameterRepository.save(cParameter), hyperParameterRepository.save(gammaParameter)));
         runner.setStatus(RunnerStatus.INITIAL);
         runnerRepository.save(runner);
 
