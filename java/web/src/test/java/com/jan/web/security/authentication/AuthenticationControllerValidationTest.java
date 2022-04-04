@@ -89,7 +89,7 @@ public class AuthenticationControllerValidationTest
     public void whenLoginRequestBeforeRegistration_thenBadRequestResponseIsReturned() throws Exception
     {
         JSONObject json = new JSONObject();
-        json.put("username", EMAIL);
+        json.put("username", EMAIL + "_NOT_REGISTERED");
         json.put("password", PASSWORD);
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
