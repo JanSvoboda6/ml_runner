@@ -7,6 +7,7 @@ function HelperBox(props: any)
     const handleClose = () =>
     {
         setHidden(true);
+        props.onClose();
     }
 
     if (isHidden)
@@ -17,7 +18,7 @@ function HelperBox(props: any)
     return (
         <div className="helper-box" >
             <div className="left-item" />
-            <div className="helper-box-text">{props.content}</div>
+            <div className={props.warning? "helper-box-text-warning" : "helper-box-text-confirm"}>{props.content}</div>
             <div className="helper-box-button-container">
                 <button className="helper-box-button" onClick={handleClose}>X</button>
             </div> 

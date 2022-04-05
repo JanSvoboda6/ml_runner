@@ -48,6 +48,7 @@ function Datasets(props)
 
     const handleCreateFolder = (key: string) =>
     {
+        console.log(key);
         setLoaded(false);
         const folder: FileInformation = {key: key};
         setFiles(folders => [...folders, folder]);
@@ -56,6 +57,12 @@ function Datasets(props)
 
     const handleCreateFiles = (addedFiles: File[], prefix: string) =>
     {
+        if(addedFiles[0].type == "")
+        {
+            props.onWarning("Drag & Drop folder functionality is not yet supported. You can upload multiple files by dragging them on already created folder.");
+            return;
+        }
+        console.log("here");
         const uniqueAddedFiles: FileInformation[] = DatasetUtility.getUniqueAddedFiles(files, addedFiles, prefix);
         DatasetService.uploadFiles(uniqueAddedFiles).then(() => setFiles(existingFiles => [...existingFiles, ...uniqueAddedFiles]));
     }

@@ -74,7 +74,7 @@ ul {
 }
 
 .wrapper{
-  height: 5px;
+  height: 1px;
 }
 
 .input-text{
@@ -530,13 +530,20 @@ nav a:nth-child(5):hover~.upper-navbar-animation
 .helper-box{
   text-align: center;
   background-color: var(--bg-third);
-  color: var(--confirm-color);
   height: 37px;
   padding-top: 3px;
   font-size: 17px;
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.helper-box-text-confirm{
+  color: var(--confirm-color);
+}
+
+.helper-box-text-warning{
+  color: var(--alert-color);
 }
 
 .left-item{
