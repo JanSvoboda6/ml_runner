@@ -9,6 +9,8 @@ import DatasetService from './DatasetService';
 import loadingAnimation from "../../styles/loading_graphics.gif";
 import FadeIn from 'react-fade-in';
 import DatasetUtility from "./DatasetUtility";
+// import { DndProvider } from 'react-dnd'
+// import { HTML5Backend } from 'react-dnd-html5-backend'
 
 function Datasets(props)
 {
@@ -48,6 +50,7 @@ function Datasets(props)
 
     const handleCreateFolder = (key: string) =>
     {
+        console.log(key);
         setLoaded(false);
         const folder: FileInformation = {key: key};
         setFiles(folders => [...folders, folder]);
@@ -56,6 +59,8 @@ function Datasets(props)
 
     const handleCreateFiles = (addedFiles: File[], prefix: string) =>
     {
+        console.log(prefix);
+        console.log(addedFiles);
         const uniqueAddedFiles: FileInformation[] = DatasetUtility.getUniqueAddedFiles(files, addedFiles, prefix);
         DatasetService.uploadFiles(uniqueAddedFiles).then(() => setFiles(existingFiles => [...existingFiles, ...uniqueAddedFiles]));
     }
@@ -127,6 +132,7 @@ function Datasets(props)
         <div>
             <FadeIn>
                 <div className="file-editor-wrapper">
+                    {/*<DndProvider backend={HTML5Backend}>*/}
                     <FileBrowser
                         files={files.map(file =>
                         {
@@ -158,6 +164,7 @@ function Datasets(props)
                         onDownloadFile={handleDownloadFile}
                         onDownloadFolder={handleDownloadFolder}
                     />
+                    {/*</DndProvider>*/}
                 </div>
             </FadeIn>
         </div>
