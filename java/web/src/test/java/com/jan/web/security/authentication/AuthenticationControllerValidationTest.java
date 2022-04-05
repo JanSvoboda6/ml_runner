@@ -96,7 +96,6 @@ public class AuthenticationControllerValidationTest
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.toString()))
-                .andExpect(status().is4xxClientError())
-                .andExpect(content().string("Bad credentials!"));
+                .andExpect(status().is4xxClientError());
     }
 }
