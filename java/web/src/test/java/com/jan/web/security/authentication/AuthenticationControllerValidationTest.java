@@ -27,7 +27,6 @@ public class AuthenticationControllerValidationTest
     @Autowired
     private MockMvc mockMvc;
 
-    @Disabled
     @Test
     public void whenValidEmailAndPasswordIsPassedDuringRegistration_thenUserWillBeRegistered() throws Exception
     {
@@ -40,7 +39,6 @@ public class AuthenticationControllerValidationTest
                 .andExpect(status().isOk());
     }
 
-    @Disabled
     @Test
     public void whenInvalidEmailIsPassedDuringRegistration_thenUserWillNotBeRegistered() throws Exception
     {
@@ -55,7 +53,6 @@ public class AuthenticationControllerValidationTest
                 .andExpect(content().string("Email is not in a valid format!"));
     }
 
-    @Disabled
     @Test
     public void whenBlankEmailIsPassedDuringRegistration_thenUserWillNotBeRegistered_mvc() throws Exception
     {
@@ -70,7 +67,6 @@ public class AuthenticationControllerValidationTest
                 .andExpect(content().string("Length of the email must be between 5 to 128 characters!"));
     }
 
-    @Disabled
     @Test
     public void whenLoginRequestAfterRegistrationWithBadCredentials_thenBadRequestResponseIsReturned() throws Exception
     {
@@ -91,8 +87,6 @@ public class AuthenticationControllerValidationTest
                 .andExpect(content().string("Bad credentials!"));
     }
 
-    //TODO Jan: Investigate
-    @Disabled
     @Test
     public void whenLoginRequestBeforeRegistration_thenBadRequestResponseIsReturned() throws Exception
     {
