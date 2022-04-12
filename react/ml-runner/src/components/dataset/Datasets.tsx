@@ -48,10 +48,9 @@ function Datasets(props)
 
     const handleCreateFolder = (key: string) =>
     {
-        setLoaded(false);
         const folder: FileInformation = {key: key};
         setFiles(folders => [...folders, folder]);
-        DatasetService.createDirectory(folder).then(() => setLoaded(true));
+        DatasetService.createDirectory(folder);
     }
 
     const handleCreateFiles = (addedFiles: File[], prefix: string) =>

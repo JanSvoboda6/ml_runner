@@ -1084,3 +1084,12 @@ input[type="file"]
   margin-left: 6rem;
 }
 /* #endregion STATISTICS */
+
+.nivo-heatmap{
+  width: 500px;
+  height: 500px;
+}
+
+.result-text{
+  white-space: pre-wrap;
+}

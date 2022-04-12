@@ -14,8 +14,6 @@ function Runner(props: any)
     let intervalId: any;
     const [isInEndState, setEndState] = useState(false);
     const [status, setStatus] = useState("INITIAL");
-    const [firstLabelResult, setFirstLabelResult] = useState<number | undefined>(undefined);
-    const [secondLabelResult, setSecondLabelResult] = useState<number | undefined>(undefined);
     const [accuracy, setAccuracy] = useState<number | undefined>(undefined);
     const [isLoaded, setLoaded] = useState(false);
     const [parameters, setParameters] = useState<HyperParameter[]>([]);
@@ -46,8 +44,6 @@ function Runner(props: any)
         axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
             .then((res: AxiosResponse<any>) =>
             {
-                setFirstLabelResult(res.data.firstLabelResult);
-                setSecondLabelResult(res.data.secondLabelResult);
                 setAccuracy(res.data.accuracy);
             })
     }
@@ -70,8 +66,6 @@ function Runner(props: any)
                         axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
                             .then((res: AxiosResponse<any>) =>
                             {
-                                setFirstLabelResult(res.data.firstLabelResult);
-                                setSecondLabelResult(res.data.secondLabelResult);
                                 setAccuracy(res.data.accuracy)
                             })
 

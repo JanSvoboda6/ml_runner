@@ -104,8 +104,7 @@ public class RunnerController
     private JSONObject prepareJsonResultResponse(Result result) throws JSONException
     {
         JSONObject response = new JSONObject();
-        response.put("firstLabelResult", result.getFirstLabelResult());
-        response.put("secondLabelResult", result.getSecondLabelResult());
+        response.put("resultText", result.getResultText());
         response.put("accuracy", result.getAccuracy());
         return response;
     }

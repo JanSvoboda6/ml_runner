@@ -178,19 +178,16 @@ def is_finished():
 @app.route('/project/runner/result', methods=['POST'])
 def get_result():
     runner = request.get_json()
-    first_label_accuracy = 0
-    second_label_accuracy = 0
     accuracy = 0
     with open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'r') as log_file:
         for line in log_file:
-            if 'FIRST_LABEL_ACCURACY:' in line.split():
-                first_label_accuracy = line.split()[1]
-            elif 'SECOND_LABEL_ACCURACY:' in line.split():
-                second_label_accuracy = line.split()[1]
-            elif 'ACCURACY:' in line.split():
+            if 'ACCURACY:' in line.split():
                 accuracy = line.split()[1]
 
-    return jsonify({'firstLabelResult': first_label_accuracy, 'secondLabelResult': second_label_accuracy, 'accuracy': accuracy})
+    with open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'r') as log_file:
+        result_text = log_file.read()
+
+    return jsonify({'resultText': result_text, 'accuracy': accuracy})
 
 
 if __name__ == "__main__":

@@ -28,7 +28,7 @@ function EnvironmentPreparation()
 
     return (
         <div>
-            <HelperBox content="You have been successfully logged in!" />
+            <HelperBox content="You have been successfully logged in!" onClose={() => null}/>
             <FadeIn delay={200}>
                 <div className="preparing-box">
                     <div className="preparing-text-wrapper">

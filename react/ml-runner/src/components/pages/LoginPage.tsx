@@ -97,7 +97,7 @@ function Login()
     return (
             <>
             <div className="wrapper">
-                {showPopup == 't' && <HelperBox content="Thanks for registration. Now you can login!" />}
+                {showPopup == 't' && <HelperBox content="Thanks for registration. Now you can login!" onClose={() => null}/>}
             </div>
             <div className="landing-page-wrapper">
                 <div className="landing-page-content">

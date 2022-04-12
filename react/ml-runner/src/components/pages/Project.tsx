@@ -15,10 +15,6 @@ import {Label} from "../../types";
 function Project()
 {
     const [projectName, setProjectName] = useState("");
-    const [firstLabel, setFirstLabelName] = useState("");
-    const [secondLabel, setSecondLabelName] = useState("");
-    const [firstLabelFolder, setFirstLabelFolder] = useState("");
-    const [secondLabelFolder, setSecondLabelFolder] = useState("");
     const [selectedModel, setSelectedModel] = useState("Support Vector Machines");
     const [isSuccessfullySaved, setSuccessfullySaved] = useState(false);
     const [labels, setLabels] = useState<Label[]>([{id: 0, name: "", folderPath: ""}, {id: 1, name: "", folderPath: ""}]);

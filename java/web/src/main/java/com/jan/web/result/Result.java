@@ -15,9 +15,11 @@ public class Result
     @OneToOne
     private Runner runner;
 
-    private double firstLabelResult;
-    private double secondLabelResult;
     private double accuracy;
+
+    @Column(length = 2000)
+    private String resultText;
+
 //    private ClassificationReport classificationReport;
 //    private ConfusionMatrix confusionMatrix;
 //    private List<ClassAccuracy> accuracyPerClass;
@@ -37,25 +39,6 @@ public class Result
         this.runner = runner;
     }
 
-    public double getFirstLabelResult()
-    {
-        return firstLabelResult;
-    }
-
-    public void setFirstLabelResult(double firstLabelResult)
-    {
-        this.firstLabelResult = firstLabelResult;
-    }
-
-    public double getSecondLabelResult()
-    {
-        return secondLabelResult;
-    }
-
-    public void setSecondLabelResult(double secondLabelResult)
-    {
-        this.secondLabelResult = secondLabelResult;
-    }
 
     public double getAccuracy()
     {
@@ -65,5 +48,15 @@ public class Result
     public void setAccuracy(double accuracy)
     {
         this.accuracy = accuracy;
+    }
+
+    public String getResultText()
+    {
+        return resultText;
+    }
+
+    public void setResultText(String resultText)
+    {
+        this.resultText = resultText;
     }
 }
