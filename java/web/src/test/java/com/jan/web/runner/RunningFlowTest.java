@@ -156,8 +156,7 @@ public class RunningFlowTest
         }
 
         Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId())).isPresent();
-        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId()).get().getFirstLabelResult()).isNotNull();
-        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId()).get().getSecondLabelResult()).isNotNull();
+        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId()).get().getAccuracy()).isNotNull();
     }
 
     @Test

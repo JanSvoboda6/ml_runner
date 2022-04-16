@@ -11,6 +11,8 @@ import XyChart from "./XyChart";
 import FadeIn from "react-fade-in";
 import SimpleGraph from "./SimpleGraph";
 import {BACKEND_URL} from "../../helpers/url";
+import NivoHeatmap from "../visualization/NivoHeatmap";
+import data from "../visualization/data";
 const API_URL = BACKEND_URL + "/api/project";
 
 function Analysis(props)
@@ -32,6 +34,7 @@ function Analysis(props)
     return (
         <div>
             <Navbar start="start-at-projects" />
+
             <div className="summary-list">
                 <div className="summary-list-item">
                     <div className="total-list">
@@ -43,6 +46,7 @@ function Analysis(props)
                     </div>
                 </div>
             </div>
+
             <FadeIn>
                 <div className="heatmap-names">
                     <h3>Label #1 Accuracy</h3>
@@ -50,14 +54,6 @@ function Analysis(props)
                     <h3>Average Accuracy</h3>
                 </div>
                 <div className="heatmap-wrapper">
-                    <div className="analysis-heatmap">
-                        <Heatmap width={800} height={480} />
-                        <LegendChart />
-                    </div>
-                    <div className="analysis-heatmap">
-                        <Heatmap width={800} height={480} />
-                        <LegendChart />
-                    </div>
                     <div className="analysis-heatmap">
                         <Heatmap width={800} height={480} />
                         <LegendChart />

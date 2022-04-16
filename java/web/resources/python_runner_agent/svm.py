@@ -60,12 +60,14 @@ def run():
     accuracy = accuracy_score(testing_labels, predicted_labels)
 
     print('ACCURACY: ' + str(accuracy))
+    print()
 
     print('CLASSIFICATION REPORT:')
     print(classification_report(testing_labels, predicted_labels))
 
     print('CONFUSION MATRIX: ')
     print_cm(confusion_matrix(y_true=testing_labels, y_pred=predicted_labels, labels=[0, 1]), ['first', 'second'])
+    print()
 
     inform_on_status_change(runner_id, Status.FINISHED)
     print('FINISHED')

@@ -36,7 +36,6 @@ body {
   height: 400px;
 }
 
-
 body {
   background: linear-gradient(rgba(7, 16, 16, 0.67), rgba(7, 16, 16, 0.67)), url("styles/background-dark.svg");
   image-rendering: -webkit-optimize-contrast;
@@ -1090,6 +1089,36 @@ input[type="file"]
   height: 500px;
 }
 
+.underlined-link{
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+
+
+.result-box{
+  margin-top: 100px;
+  width: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.result-text-header{
+  color: var(--text-primary);
+  opacity: 0.85;
+  display: flex;
+  align-content: space-around;
+}
+
 .result-text{
+  padding: 30px 100px 30px 100px;
+  background-color: var(--bg-secondary);
+}
+
+.result-text-information{
+  margin-top: 20px;
   white-space: pre-wrap;
+  opacity: 0.85;
+  font-size: 17px;
 }

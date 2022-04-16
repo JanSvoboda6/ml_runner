@@ -6,6 +6,7 @@ import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
 import {HyperParameter} from "../../types";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const API_URL = BACKEND_URL + "/api/project";
 
@@ -89,7 +90,10 @@ function Runner(props: any)
             {!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}
             {isInEndState && accuracy !== undefined &&
                 <div>
-                    {status == 'FAILED'? <div>-</div> : <div> {(accuracy * 100).toFixed(2)}%</div>}
+                    {status == 'FAILED' ? <div>-</div> : <div className='underlined-link'><Link to={{
+                        'pathname': '/runner/result',
+                        'search': '?project=' + props.projectId +'&runner=' + props.runnerId,
+                    }}> {(accuracy * 100).toFixed(2)}% </Link></div>}
                 </div>
             }
     </div>
