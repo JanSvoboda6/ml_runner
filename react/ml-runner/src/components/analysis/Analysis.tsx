@@ -1,18 +1,11 @@
-import axios, { AxiosResponse } from "axios";
-import React from "react";
-import { useEffect, useState } from "react";
-import ScatterGraph from "../visualization/ScatterChart";
-import authorizationHeader from "../../services/AuthorizationHeader";
+import React, {useEffect, useState} from "react";
 import Heatmap from "../visualization/Heatmap";
-import { Legend } from "@visx/legend";
 import LegendChart from "../visualization/Legend";
 import Navbar from "../navigation/Navbar";
 import XyChart from "./XyChart";
 import FadeIn from "react-fade-in";
-import SimpleGraph from "./SimpleGraph";
 import {BACKEND_URL} from "../../helpers/url";
-import NivoHeatmap from "../visualization/NivoHeatmap";
-import data from "../visualization/data";
+
 const API_URL = BACKEND_URL + "/api/project";
 
 function Analysis(props)
