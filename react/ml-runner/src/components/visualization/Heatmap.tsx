@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Group } from '@visx/group';
 import genBins, { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
 import { scaleLinear } from '@visx/scale';
+import { AxisBottom, AxisLeft, AxisTop } from '@visx/axis';
 import { HeatmapCircle, HeatmapRect } from '@visx/heatmap';
 import { getSeededRandom } from '@visx/mock-data';
 import { Axis } from '@visx/axis';
 import DefaultAxis from '../analysis/DefaultAxis';
 import { FunctionTypeNode } from 'typescript';
+import {Grid, GridColumns, GridRows} from "@visx/grid";
 
 
 // const hot1 = '#77312f';
@@ -15,7 +17,7 @@ const hot1 = '#122549';
 const hot2 = '#b4fbde';
 export const background = '#221c1c';
 
-const binData = genBins(/* length = */ 7, /* height = */ 7);
+const binData = genBins(/* length = */ 10, /* height = */ 10);
 
 function max<Datum>(data: Datum[], value: (d: Datum) => number): number
 {
@@ -36,6 +38,11 @@ const bucketSizeMax = max(binData, d => bins(d).length);
 const xScale = scaleLinear < number > ({
     domain: [0, binData.length],
 });
+
+const axisScale = scaleLinear < number > ({
+    domain: [0, binData.length],
+});
+
 const yScale = scaleLinear < number > ({
     domain: [0, bucketSizeMax],
 });
@@ -60,7 +67,7 @@ export type HeatmapProps = {
     events?: boolean;
 };
 
-const defaultMargin = { top: 100, left: 50, right: 50, bottom: 50 };
+const defaultMargin = { top: 50, left: 50, right: 50, bottom: 50 };
 
 export default ({
     width,
@@ -78,24 +85,27 @@ export default ({
         setValueOfSelectedBin(bin.bin.count);
     };
     // bounds
-    const size =
-        width > margin.left + margin.right ? width - margin.left - margin.right - separation : width;
-    const xMax = size / 2;
-    const yMax = height - margin.bottom - margin.top;
+    const size = 500;
+    const xMax = size - margin.bottom - margin.top;
+    const yMax = size - margin.bottom - margin.top;
 
     const binWidth = xMax / binData.length;
     const binHeight = yMax / bucketSizeMax;
     const radius = min([binWidth, binHeight], d => d) / 2;
 
     xScale.range([0, xMax]);
+    axisScale.range([0, xMax]);
     yScale.range([yMax, 0]);
 
+    const formatXAxis = (tickItem) => {
+        return tickItem.toString();
+    }
     return width < 10 ? null : (
         <div className='heatmap-box'>
             <p className='selected-value'>Selected Value: {valueOfSelectedBin.toFixed(3)}&#37;</p>
-        <svg width={ width/2 } height={ height }>
+        <svg width={ width } height={ height }>
            
-            <g transform={`translate(${margin.left + 30},${margin.top - 150})`}>
+            <g width={width/2} height={height/2} transform={'translate(220, -20)'}>
                 <HeatmapRect
                     data={ binData }
                     xScale={ xScale }
@@ -133,13 +143,43 @@ export default ({
                         )
                     }
                 </HeatmapRect>
-                </g>
+                {/*<Grid*/}
+                {/*    top={margin.top}*/}
+                {/*    left={margin.left}*/}
+                {/*    xScale={xScale}*/}
+                {/*    yScale={yScale}*/}
+                {/*    width={xMax}*/}
+                {/*    height={yMax}*/}
+                {/*    stroke="black"*/}
+                {/*    strokeOpacity={0.1}*/}
+                {/*    xOffset={0}*/}
+                {/*/>*/}
 
-            <g transform={'translate(21, -110)'}>
-                <DefaultAxis width={width / 2.25} height={height} values={[0.001, 0.01, 0.1, 1, 10, 100, 1000].reverse()} orientation="left" margin={{ top: 30, right: 25, bottom: 350, left: 50 }} dyTickLabel='0.3em' dxTickLabel='-1.5em' />
+                {/*<GridRows scale={xScale} width={xMax} height={yMax} stroke="#e0e0e0" />*/}
+                {/*<GridColumns scale={yScale} width={xMax} height={yMax} stroke="#e0e0e0" />*/}
             </g>
+            <g transform={'translate(' + width/4 + ', 0)'}>
+            <AxisTop     top={20}
+                            scale={axisScale}
+                            tickValues={[1,2,3,4,5,6,7,8,9,10]}
+                            tickFormat={formatXAxis}
+                            tickLabelProps={() => ({
+                                fill: 'white',
+                                fontSize: 11,
+                                textAnchor: 'middle',
+                            })}/>
+            <AxisLeft
+                scale={axisScale}
+                tickFormat={formatXAxis}
+                tickLabelProps={() => ({
+                    fill: 'white',
+                    fontSize: 11,
+                    textAnchor: 'middle',
+                })}/>
+            </g>
+            {/*<g transform={'translate(21, -110)'}>*/}
+            {/*</g>*/}
             <g transform={'translate(50, -113)'}>
-                <DefaultAxis width={width / 2.2} height={height} values={[0.001, 0.01, 0.1, 1, 10, 100, 1000]} orientation="bottom"/>
             </g>
         </svg>
         </div>
