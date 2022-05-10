@@ -88,12 +88,15 @@ function Runner(props: any)
             <p>{moment().format("DD/MM/YYYY")}</p>
             <p className={status == 'FINISHED' ? "text-confirm" : ""}>{status}</p>
             {!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}
-            {isInEndState && accuracy !== undefined &&
+            {isInEndState &&
                 <div>
-                    {status == 'FAILED' ? <div>-</div> : <div className='underlined-link'><Link to={{
+                    {status == 'FAILED' ? <div>-</div> :
+                        accuracy !== undefined ?
+                        <div className='underlined-link'><Link to={{
                         'pathname': '/runner/result',
                         'search': '?project=' + props.projectId +'&runner=' + props.runnerId,
-                    }}> {(accuracy * 100).toFixed(2)}% </Link></div>}
+                    }}> {(accuracy * 100).toFixed(2)}% </Link></div> :
+                            <></>}
                 </div>
             }
     </div>

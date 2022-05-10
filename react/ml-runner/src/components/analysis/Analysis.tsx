@@ -13,6 +13,8 @@ import {HyperParameter} from "../../types";
 import runner from "../project/Runner";
 import {useLocation} from "react-router";
 import queryString from "query-string";
+import SimpleGraph from "./SimpleGraph";
+import SimpleChart from "./SimpleChart";
 
 const API_URL = BACKEND_URL + "/api/project";
 
@@ -120,7 +122,7 @@ function Analysis(props)
                 }
             });
         });
-        return hyperParameterValues.sort();
+        return hyperParameterValues.sort(new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'}).compare);
     }
 
     const addToResults = (resultToAdd:IndividualResult, tickValuesX: Array<string>, tickValuesY: Array<string>, results) => {
@@ -202,16 +204,22 @@ function Analysis(props)
                     {/*    <h3>Average Accuracy</h3>*/}
                     {/*</div>*/}
                     <div className="heatmap-wrapper">
-                        <select name="hyperParameters" value={firstHyperParameter} onChange={handleFirstHyperParameterSelection}>
-                            {hyperParameterSelector.map((parameter, key) => {
-                                return <option key={key} value={parameter} disabled={parameter === secondHyperParameter}>{parameter}</option>;
-                            })}
-                        </select>
-                        <select name="hyperParameters2" value={secondHyperParameter} onChange={handleSecondHyperParameterSelection}>
-                            {hyperParameterSelector.map((parameter, key) => {
-                                return <option key={key} value={parameter} disabled={parameter === firstHyperParameter}>{parameter}</option>;
-                            })}
-                        </select>
+                        <div className="hyper-parameter-selector">
+                            <p>X axis: </p>
+                            <select name="model-select" value={firstHyperParameter} onChange={handleFirstHyperParameterSelection}>
+                                {hyperParameterSelector.map((parameter, key) => {
+                                    return <option key={key} value={parameter} disabled={parameter === secondHyperParameter}>{parameter}</option>;
+                                })}
+                            </select>
+                        </div>
+                        <div className="hyper-parameter-selector">
+                            <p>Y axis: </p>
+                            <select name="hyperParameters2" value={secondHyperParameter} onChange={handleSecondHyperParameterSelection}>
+                                {hyperParameterSelector.map((parameter, key) => {
+                                    return <option key={key} value={parameter} disabled={parameter === firstHyperParameter}>{parameter}</option>;
+                                })}
+                            </select>
+                        </div>
                         <div className="analysis-heatmap">
                             <Heatmap bins={generatedBins} tickValuesX={tickValuesX} tickValuesY={tickValuesY}
                                      width={600} height={600} xAxisLabel={firstHyperParameter + " [-]"}
@@ -219,12 +227,20 @@ function Analysis(props)
                             <LegendChart/>
                         </div>
                     </div>
+
                     <div className="graph-wrapper">
                         <div className="analysis-graph">
                             <h3 className="underlined-text">Accuracy over time</h3>
-                            <XyChart width={500} height={700}/>
+                            <SimpleChart/>
                         </div>
                     </div>
+
+                    {/*<div className="graph-wrapper">*/}
+                    {/*    <div className="analysis-graph">*/}
+                    {/*        <h3 className="underlined-text">Accuracy over time</h3>*/}
+                    {/*        <XyChart width={500} height={700}/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </FadeIn>
             </div>
         )

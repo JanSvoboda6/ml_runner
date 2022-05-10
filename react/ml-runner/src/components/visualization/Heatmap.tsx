@@ -138,7 +138,7 @@ export default ({
                                     x={ bin.x }
                                     y={ bin.y }
                                     fill={getColorBasedOnCountValue(bin.count)}
-                                    fillOpacity={ bin.opacity }
+                                    fillOpacity={ 0.8}
                                     onClick={ () =>
                                     {
                                         const { row, column } = bin;

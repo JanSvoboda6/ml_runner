@@ -1036,12 +1036,14 @@ input[type="file"]
 
 .heatmap-wrapper{
   position: relative;
-  left: 40px;
   display: flex; 
   justify-content: center;
   flex-direction: row;
   align-items: center;
-  background-color: transparent;
+  width: 1200px;
+  margin: auto;
+  margin-bottom: 100px;
+  background-color: var(--bg-secondary);
 }
 
 .graph-wrapper{
@@ -1081,6 +1083,7 @@ input[type="file"]
 
 .selected-value{
   margin-left: 6rem;
+  margin-bottom: 50px;
 }
 /* #endregion STATISTICS */
 
@@ -1121,4 +1124,17 @@ input[type="file"]
   white-space: pre-wrap;
   opacity: 0.85;
   font-size: 17px;
+}
+
+.heatmap-wrapper select{
+  margin-top: 10px;
+  background-color: var(--form-input-color);
+  color: var(--text-primary);
+  font-size: 17px;
+}
+
+.hyper-parameter-selector {
+  margin: 20px;
+  position: relative;
+  top: -30px;
 }
