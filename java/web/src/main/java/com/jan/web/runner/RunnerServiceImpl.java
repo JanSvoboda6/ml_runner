@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Component
+@Service
 public class RunnerServiceImpl implements RunnerService
 {
     RunnerRepository runnerRepository;
@@ -60,6 +61,7 @@ public class RunnerServiceImpl implements RunnerService
         this.objectMapper = objectMapper;
     }
 
+    //TODO Jan: callWithHyperparameters
     @Override
     public void runProject(RunRequest request, Project project, ContainerEntity containerEntity)
     {

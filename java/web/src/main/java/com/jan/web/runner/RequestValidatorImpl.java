@@ -25,6 +25,7 @@ public class RequestValidatorImpl implements RequestValidator
         this.runnerRepository = runnerRepository;
     }
 
+    //TODO Jan: Validate whether project is owned by a user
     @Override
     public Project validateProject(long projectId)
     {

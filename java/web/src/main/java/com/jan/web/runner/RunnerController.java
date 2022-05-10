@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -42,7 +43,6 @@ public class RunnerController
         this.requestValidator = requestValidator;
     }
 
-    //TODO: How are tokens validated? Try to run this request withou token in header from client
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Runner getRunner(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId)
     {
@@ -51,7 +51,7 @@ public class RunnerController
     }
 
     @PostMapping("/run")
-    public ResponseEntity<?> runProject(@RequestHeader(name = "Authorization") String token, @RequestBody RunRequest request)
+    public ResponseEntity<?> runProject(@RequestHeader(name = "Authorization") String token, @Valid @RequestBody RunRequest request)
     {
         runnerService.runProject(request,
                 requestValidator.validateProject(request.getProjectId()),

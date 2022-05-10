@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
-@RunWith(SpringRunner.class)
 public class AuthorizationTokenFilterTest
 {
     public static final String PASSWORD = "password";

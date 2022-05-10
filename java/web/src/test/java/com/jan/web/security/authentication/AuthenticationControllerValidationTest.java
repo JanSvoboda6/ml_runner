@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @AutoConfigureMockMvc
 public class AuthenticationControllerValidationTest
 {
@@ -54,7 +54,7 @@ public class AuthenticationControllerValidationTest
     }
 
     @Test
-    public void whenBlankEmailIsPassedDuringRegistration_thenUserWillNotBeRegistered_mvc() throws Exception
+    public void whenBlankEmailIsPassedDuringRegistration_thenUserWillNotBeRegistered() throws Exception
     {
         JSONObject json = new JSONObject();
         json.put("username", Strings.EMPTY);
