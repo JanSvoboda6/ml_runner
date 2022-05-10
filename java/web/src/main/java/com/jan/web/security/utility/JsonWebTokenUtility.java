@@ -2,6 +2,7 @@ package com.jan.web.security.utility;
 
 import java.util.Date;
 
+import com.jan.web.security.ValidationException;
 import com.jan.web.security.user.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,36 +53,25 @@ public class JsonWebTokenUtility
         {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
-        } catch (SignatureException e)
+        } catch (Exception e)
         {
-            logger.error("Invalid JWT signature: {}", e.getMessage());
-        } catch (MalformedJwtException e)
-        {
-            logger.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e)
-        {
-            logger.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e)
-        {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e)
-        {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            logger.error("Problem with JWT validation: {}", e.getMessage());
         }
-
         return false;
     }
 
     public String parseJwt(HttpServletRequest request)
     {
         String headerAuth = request.getHeader("Authorization");
-
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(BEARER_))
+        if (StringUtils.hasText(headerAuth))
         {
+            if(!headerAuth.startsWith(BEARER_))
+            {
+                throw new ValidationException("There is no Bearer part of the HTTP header!");
+            }
             return headerAuth.substring(BEARER_.length());
         }
 
         return null;
     }
-
 }

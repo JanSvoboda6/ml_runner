@@ -54,12 +54,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         return new RestTemplate();
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception
-    {
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception
@@ -90,7 +84,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
