@@ -204,12 +204,12 @@ function Analysis(props)
                     <div className="heatmap-wrapper">
                         <select name="hyperParameters" value={firstHyperParameter} onChange={handleFirstHyperParameterSelection}>
                             {hyperParameterSelector.map((parameter, key) => {
-                                return <option key={key} value={parameter}>{parameter}</option>;
+                                return <option key={key} value={parameter} disabled={parameter === secondHyperParameter}>{parameter}</option>;
                             })}
                         </select>
                         <select name="hyperParameters2" value={secondHyperParameter} onChange={handleSecondHyperParameterSelection}>
                             {hyperParameterSelector.map((parameter, key) => {
-                                return <option key={key} value={parameter}>{parameter}</option>;
+                                return <option key={key} value={parameter} disabled={parameter === firstHyperParameter}>{parameter}</option>;
                             })}
                         </select>
                         <div className="analysis-heatmap">
