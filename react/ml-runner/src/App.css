@@ -1041,8 +1041,7 @@ input[type="file"]
   flex-direction: row;
   align-items: center;
   width: 1200px;
-  margin: auto;
-  margin-bottom: 100px;
+  margin: auto auto 70px;
   background-color: var(--bg-secondary);
 }
 
@@ -1051,13 +1050,15 @@ input[type="file"]
   display: flex; 
   justify-content: center;
   align-items: center;
-  background-color: transparent;
+  background-color: var(--bg-secondary);
+  width: 1200px;
+  margin: auto;
 }
 
 .underlined-text{
   text-decoration: underline;
   text-underline-offset: 7px;
-  margin-bottom: 10px;
+  margin: 5px 10px;
 }
 
 .analysis-heatmap{

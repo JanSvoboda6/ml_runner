@@ -222,7 +222,7 @@ function Analysis(props)
                         </div>
                         <div className="analysis-heatmap">
                             <Heatmap bins={generatedBins} tickValuesX={tickValuesX} tickValuesY={tickValuesY}
-                                     width={600} height={600} xAxisLabel={firstHyperParameter + " [-]"}
+                                     width={600} height={500} xAxisLabel={firstHyperParameter + " [-]"}
                                      yAxisLabel={secondHyperParameter + " [-]"}/>
                             <LegendChart/>
                         </div>

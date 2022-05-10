@@ -83,7 +83,10 @@ function Runner(props: any)
         <div className="runner-list-table">
             <p>#{props.runnerId}</p>
             <div>{parameters && parameters.map((parameter, index) => {
-                return(<div key={index}>{parameter.name}: {parameter.value}</div>)
+                if(index < 2)
+                {
+                    return (<div key={index}>{parameter.name}: {parameter.value}</div>)
+                }
             })} </div>
             <p>{moment().format("DD/MM/YYYY")}</p>
             <p className={status == 'FINISHED' ? "text-confirm" : ""}>{status}</p>
