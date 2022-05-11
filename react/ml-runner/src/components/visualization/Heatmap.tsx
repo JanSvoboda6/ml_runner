@@ -117,7 +117,6 @@ export default ({
 
     return width < 10 ? null : (
         <div className='heatmap-box'>
-            <p className='selected-value'>Selected Value: {valueOfSelectedBin}</p>
         <svg width={ width } height={ height }>
             <g width={width/2} height={height/2} transform={'translate(' + width/4 + ',' + offset + ')'}>
                 <HeatmapRect
@@ -204,6 +203,7 @@ export default ({
                 })}/>
             </g>
         </svg>
+            <p className='selected-value'>Selected Value: {valueOfSelectedBin}</p>
         </div>
     );
 };

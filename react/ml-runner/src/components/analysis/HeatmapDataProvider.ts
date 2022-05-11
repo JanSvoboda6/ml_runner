@@ -14,4 +14,4 @@ const constructBins = (values: number[][]) => {
     return bins;
 }
 
-export default {constructBins};
+export default {constructHeatMapBins: constructBins};

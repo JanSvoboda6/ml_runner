@@ -14,7 +14,7 @@ import runner from "../project/Runner";
 import {useLocation} from "react-router";
 import queryString from "query-string";
 import SimpleGraph from "./SimpleGraph";
-import SimpleChart from "./SimpleChart";
+import SimpleChart, {Data} from "./SimpleChart";
 
 const API_URL = BACKEND_URL + "/api/project";
 
@@ -81,27 +81,32 @@ function Analysis(props)
 
     async function constructRunnersWithResult(runners: any[])
     {
-        const runnersResult: Array<Runner> = [];
-        for(let i = 0; i < runners.length; i++)
-        {
-            await axios.get(API_URL + '/runner/result?projectId=' + projectId + '&' + 'runnerId=' + runners[i].id, {headers: authorizationHeader()})
-                .then((res: AxiosResponse<any>) =>
-                {
-                    runnersResult.push({id: runners[i].id, accuracy: res.data.accuracy, hyperParameters: runners[i].hyperParameters})
-                })
-        }
-        return runnersResult;
-        // return [
-        //     {id: 1, accuracy: 0.5, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1"}]},
-        //     {id: 2, accuracy: 0.6, hyperParameters: [{name: "gamma", value: "2"}, {name: "c", value:"3"}]},
-        //     {id: 3, accuracy: 0.7, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"2"}]},
-        //     {id: 4, accuracy: 0.8, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"3"}]},
-        //     // {id: 4, accuracy: 0.8, hyperParameters: [{name: "gamma", value: "0.000002"}, {name: "c", value:"2"}]},
-        //     // {id: 4, accuracy: 0.8, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.000002"}]},
-        //     // {id: 5, accuracy: 0.9, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}]},
-        //     // {id: 5, accuracy: 0.9, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}]},
-        //     // {id: 5, accuracy: 0.9, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"}]},
-        // ];
+        // const runnersResult: Array<Runner> = [];
+        // for(let i = 0; i < runners.length; i++)
+        // {
+        //     await axios.get(API_URL + '/runner/result?projectId=' + projectId + '&' + 'runnerId=' + runners[i].id, {headers: authorizationHeader()})
+        //         .then((res: AxiosResponse<any>) =>
+        //         {
+        //             runnersResult.push({id: runners[i].id, accuracy: res.data.accuracy, hyperParameters: runners[i].hyperParameters})
+        //         })
+        // }
+        // return runnersResult;
+        return [
+            {id: 1, accuracy: 0.8, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1"}]},
+            {id: 2, accuracy: 0.66, hyperParameters: [{name: "gamma", value: "2"}, {name: "c", value:"3"}]},
+            {id: 3, accuracy: 0.7, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"2"}]},
+            {id: 4, accuracy: 0.76, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"3"}]},
+            {id: 5, accuracy: 0.8, hyperParameters: [{name: "gamma", value: "0.000002"}, {name: "c", value:"2"}]},
+            {id: 6, accuracy: 0.82, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.000002"}]},
+            {id: 7, accuracy: 0.96, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}]},
+            {id: 8, accuracy: 0.87, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}]},
+            {id: 9, accuracy: 0.67, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"}]},
+            {id: 10, accuracy: 0.81, hyperParameters: [{name: "gamma", value: "0.000002"}, {name: "c", value:"2"}]},
+            {id: 11, accuracy: 0.83, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.000002"}]},
+            {id: 12, accuracy: 0.77, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}]},
+            {id: 13, accuracy: 1, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}]},
+            {id: 14, accuracy: 0.75, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"}]}
+        ];
     }
 
     function updateDisplayedValue(value: any)
@@ -130,7 +135,7 @@ function Analysis(props)
         return results;
     }
 
-    const fillResults = (results: number[][], runners: Runner[], xHyperParameter: string, yHyperParameter: string, tickValuesX: Array<string>, tickValuesY: Array<string>) =>
+    const fillHeatMapResults = (results: number[][], runners: Runner[], xHyperParameter: string, yHyperParameter: string, tickValuesX: Array<string>, tickValuesY: Array<string>) =>
     {
         runners.forEach(runner => {
             const result = runner.accuracy;
@@ -150,12 +155,6 @@ function Analysis(props)
         return results;
     };
 
-
-    if(isInErrorState)
-    {
-        return <p>ERROR!</p>;
-    }
-
     const handleFirstHyperParameterSelection = (event: any) =>{
         setFirstHyperParameter(event.target.value);
     }
@@ -164,19 +163,31 @@ function Analysis(props)
         setSecondHyperParameter(event.target.value);
     }
 
+    const constructGraphData = (runners: Runner[]) => {
+        let data: Data[] = [];
+        runners.forEach(runner => {
+            data.push({x: runner.id, y: runner.accuracy * 100});
+        })
+
+        return data;
+    }
+
+    if(isInErrorState)
+    {
+        return <p>ERROR!</p>;
+    }
+
 
     if(isLoaded)
     {
-
-        console.log(firstHyperParameter);
         const tickValuesX = getHyperParameterValues(runners, firstHyperParameter);
         const tickValuesY = getHyperParameterValues(runners,  secondHyperParameter);
 
-        let results = Array(tickValuesX.length).fill(0).map(() => Array(tickValuesY.length));
+        let heatMapResults = Array(tickValuesX.length).fill(0).map(() => Array(tickValuesY.length));
+        heatMapResults = fillHeatMapResults(heatMapResults, runners, firstHyperParameter, secondHyperParameter, tickValuesX, tickValuesY);
+        const heatMapBins = HeatmapDataProvider.constructHeatMapBins(heatMapResults);
 
-        results = fillResults(results, runners, firstHyperParameter, secondHyperParameter, tickValuesX, tickValuesY);
-
-        const generatedBins = HeatmapDataProvider.constructBins(results);
+        const graphData = constructGraphData(runners);
 
         return (
             <div>
@@ -198,11 +209,9 @@ function Analysis(props)
                 </div>
 
                 <FadeIn>
-                    {/*<div className="heatmap-names">*/}
-                    {/*    <h3>Label #1 Accuracy</h3>*/}
-                    {/*    <h3>Label #2 Accuracy</h3>*/}
-                    {/*    <h3>Average Accuracy</h3>*/}
-                    {/*</div>*/}
+                    <div className="heatmap-names">
+                        <h3>Average Accuracy</h3>
+                    </div>
                     <div className="heatmap-wrapper">
                         <div className="hyper-parameter-selector">
                             <p>X axis: </p>
@@ -221,7 +230,7 @@ function Analysis(props)
                             </select>
                         </div>
                         <div className="analysis-heatmap">
-                            <Heatmap bins={generatedBins} tickValuesX={tickValuesX} tickValuesY={tickValuesY}
+                            <Heatmap bins={heatMapBins} tickValuesX={tickValuesX} tickValuesY={tickValuesY}
                                      width={600} height={500} xAxisLabel={firstHyperParameter + " [-]"}
                                      yAxisLabel={secondHyperParameter + " [-]"}/>
                             <LegendChart/>
@@ -231,7 +240,7 @@ function Analysis(props)
                     <div className="graph-wrapper">
                         <div className="analysis-graph">
                             <h3 className="underlined-text">Accuracy over time</h3>
-                            <SimpleChart/>
+                            <SimpleChart data={graphData}/>
                         </div>
                     </div>
 

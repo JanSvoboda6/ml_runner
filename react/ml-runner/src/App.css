@@ -920,7 +920,6 @@ input[type="file"]
 
 .total-number{
   margin-top: 0.5rem;
-  color: var(--confirm-color);
   text-align: center;
   font-weight: bold;
 }
@@ -1058,7 +1057,6 @@ input[type="file"]
 .underlined-text{
   text-decoration: underline;
   text-underline-offset: 7px;
-  margin: 5px 10px;
 }
 
 .analysis-heatmap{
@@ -1069,6 +1067,9 @@ input[type="file"]
 }
 
 .analysis-graph{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   background-color: transparent;
 }
 
@@ -1078,12 +1079,13 @@ input[type="file"]
 }
 
 .heatmap-box{
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
 }
 
 .selected-value{
-  margin-left: 6rem;
+  margin-left: 230px;
   margin-bottom: 50px;
 }
 /* #endregion STATISTICS */
