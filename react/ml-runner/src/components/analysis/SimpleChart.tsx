@@ -57,9 +57,8 @@ const accessors = {
 function SimpleChart(props: Props)
 {
     return (
-        <svg height={440} width={1240}>
-            <g transform={'translate(40)'}>
         <XYChart height={400} width={1200} xScale={{type: 'band'}} yScale={{type: 'radial'}}>
+            <AnimatedGrid columns={true} numTicks={5} rows={true} lineStyle={{stroke: "rgb(80,80,80)"}}/>
             <AnimatedAxis
                 orientation="bottom"
                 label={"Id [-]"}
@@ -82,7 +81,7 @@ function SimpleChart(props: Props)
                 orientation="left"
                 label={"Accuracy [%]"}
                 labelProps={{
-                    y: -38,
+                    y: 20,
                     fill: '#fff',
                     fontSize: 15,
                     strokeWidth: 0,
@@ -97,7 +96,6 @@ function SimpleChart(props: Props)
                     x: -15
                 })}
             />
-            <AnimatedGrid columns={true} numTicks={5}/>
             {/*<AnimatedLineSeries dataKey="Line 1" data={data1} {...accessors} />*/}
             {/*<AnimatedLineSeries dataKey="Line 2" data={data2} {...accessors} />*/}
             {/*<AnimatedLineSeries dataKey="Line 3" data={data3} {...accessors} />*/}
@@ -121,7 +119,6 @@ function SimpleChart(props: Props)
             {/*    {...accessors}*/}
             {/*    fillOpacity={ 0.3 }*/}
             {/*/>*/}
-
             <Tooltip
                 snapTooltipToDatumX
                 snapTooltipToDatumY
@@ -138,8 +135,6 @@ function SimpleChart(props: Props)
                 )}
             />
         </XYChart>
-            </g>
-        </svg>
     );
 }
 

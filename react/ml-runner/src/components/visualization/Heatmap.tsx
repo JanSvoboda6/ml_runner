@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 import {scaleLinear} from '@visx/scale';
 import {AxisLeft, AxisTop} from '@visx/axis';
 import {HeatmapRect} from '@visx/heatmap';
-import {Bins} from "../analysis/Analysis";
+import {Bins} from "../analysis/Analysis"
+import Gradient from "javascript-color-gradient";
+
 
 export type HeatmapProps = {
     bins: Bins[];
@@ -18,6 +20,8 @@ export type HeatmapProps = {
 };
 
 const defaultMargin = { top: 50, left: 50, right: 50, bottom: 50 };
+
+const gradientArray = new Gradient().setColorGradient("#122549", "#b4fbde").setMidpoint(51).getColors();
 
 export default ({
     bins,
@@ -40,10 +44,10 @@ export default ({
             return;
         }
         const percentageValue = bin.bin.count * 100;
-        setValueOfSelectedBin(percentageValue.toString() + "%");
+        setValueOfSelectedBin(percentageValue.toFixed(2).toString() + "%");
     };
 
-    const size = 500;
+    const size = 510;
     const xMax = size - margin.bottom - margin.top;
     const yMax = size - margin.bottom - margin.top;
     const gap = 5;
@@ -86,33 +90,11 @@ export default ({
 }
 
     const getColorBasedOnCountValue = (count: number | null | undefined) => {
-        if(count === undefined || count === null)
+        if(count === undefined || count === null || count <= 0.5)
         {
-            return '#122549';
+            return gradientArray[0];
         }
-
-        if(count < 0.6)
-        {
-            return 'rgb(26,44,78)';
-        }
-
-        if(count < 0.7)
-        {
-            return 'rgb(37,59,82)';
-        }
-
-        if(count < 0.8)
-        {
-            return 'rgb(66,101,113)';
-        }
-        if(count < 0.9)
-        {
-            return 'rgb(84,127,131)';
-        }
-        else
-        {
-            return '#b4fbde';
-        }
+        return gradientArray[((count*100) - 50).toFixed()];
     }
 
     return width < 10 ? null : (
@@ -203,7 +185,7 @@ export default ({
                 })}/>
             </g>
         </svg>
-            <p className='selected-value'>Selected Value: {valueOfSelectedBin}</p>
+            <p className='selected-value'>Selected Accuracy: {valueOfSelectedBin}</p>
         </div>
     );
 };

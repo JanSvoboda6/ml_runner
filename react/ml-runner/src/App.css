@@ -1033,17 +1033,6 @@ input[type="file"]
   cursor: pointer;
 }
 
-.heatmap-wrapper{
-  position: relative;
-  display: flex; 
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  width: 1200px;
-  margin: auto auto 70px;
-  background-color: var(--bg-secondary);
-}
-
 .graph-wrapper{
   flex-direction: column;
   display: flex; 
@@ -1071,6 +1060,7 @@ input[type="file"]
   align-items: center;
   flex-direction: column;
   background-color: transparent;
+  margin-left: 20px;
 }
 
 .legends{
@@ -1129,8 +1119,27 @@ input[type="file"]
   font-size: 17px;
 }
 
-.heatmap-wrapper select{
-  margin-top: 10px;
+.heatmap-wrapper {
+  margin: auto auto 50px;
+  width: 1200px;
+  background-color: var(--bg-secondary);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.heatmap-structure-wrapper{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  margin: auto;
+}
+
+.heatmap-structure-wrapper select{
+  margin-top: 5px;
   background-color: var(--form-input-color);
   color: var(--text-primary);
   font-size: 17px;
