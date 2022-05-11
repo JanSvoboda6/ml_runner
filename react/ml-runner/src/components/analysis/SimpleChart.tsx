@@ -63,7 +63,7 @@ function SimpleChart(props: Props)
                 orientation="bottom"
                 label={"Id [-]"}
                 labelProps={{
-                    y: 40,
+                    y: 35,
                     fill: '#fff',
                     fontSize: 15,
                     strokeWidth: 0,

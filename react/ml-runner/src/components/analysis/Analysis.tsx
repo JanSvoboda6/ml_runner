@@ -81,32 +81,39 @@ function Analysis(props)
 
     async function constructRunnersWithResult(runners: any[])
     {
-        const runnersResult: Array<Runner> = [];
-        for(let i = 0; i < runners.length; i++)
-        {
-            await axios.get(API_URL + '/runner/result?projectId=' + projectId + '&' + 'runnerId=' + runners[i].id, {headers: authorizationHeader()})
-                .then((res: AxiosResponse<any>) =>
-                {
-                    runnersResult.push({id: runners[i].id, accuracy: res.data.accuracy, hyperParameters: runners[i].hyperParameters})
-                })
-        }
-        return runnersResult;
-        // return [
-        //     {id: 1, accuracy: 0.4999, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1"}]},
-        //     {id: 2, accuracy: 0.500023, hyperParameters: [{name: "gamma", value: "2"}, {name: "c", value:"3"}]},
-        //     {id: 3, accuracy: 0.51, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"2"}]},
-        //     {id: 4, accuracy: 0.7, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"3"}]},
-        //     {id: 5, accuracy: 0.845, hyperParameters: [{name: "gamma", value: "0.2"}, {name: "c", value:"2"}]},
-        //     {id: 6, accuracy: 0.8768, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.2"}]},
-        //     {id: 7, accuracy: 0.81, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}]},
-        //     {id: 8, accuracy: 0.999, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}]},
-        //     {id: 9, accuracy: 0.7999, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"}]},
-        //     {id: 10, accuracy: 0.80015, hyperParameters: [{name: "gamma", value: "0.2"}, {name: "c", value:"2"}]},
-        //     {id: 11, accuracy: 0.8543, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.2"}]},
-        //     {id: 12, accuracy: 0.937, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}]},
-        //     {id: 13, accuracy: 1, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}]},
-        //     {id: 14, accuracy: 0.75, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"}]}
-        // ];
+        // const runnersResult: Array<Runner> = [];
+        // for(let i = 0; i < runners.length; i++)
+        // {
+        //     if(runners[i].status === "FINISHED")
+        //     {
+        //         await axios.get(API_URL + '/runner/result?projectId=' + projectId + '&' + 'runnerId=' + runners[i].id, {headers: authorizationHeader()})
+        //             .then((res: AxiosResponse<any>) =>
+        //             {
+        //                 runnersResult.push({
+        //                     id: runners[i].id,
+        //                     accuracy: res.data.accuracy,
+        //                     hyperParameters: runners[i].hyperParameters
+        //                 })
+        //             })
+        //     }
+        // }
+        // return runnersResult;
+        return [
+            {id: 1, accuracy: 0.4999, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1"}, {name: "kernel", value:"rbf"}]},
+            {id: 2, accuracy: 0.500023, hyperParameters: [{name: "gamma", value: "2"}, {name: "c", value:"3"}, {name: "kernel", value:"rbf"}]},
+            {id: 3, accuracy: 0.51, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"2"}, {name: "kernel", value:"rbf"}]},
+            {id: 4, accuracy: 0.7, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"3"},{name: "kernel", value:"linear"}]},
+            {id: 5, accuracy: 0.845, hyperParameters: [{name: "gamma", value: "0.2"}, {name: "c", value:"2"}, {name: "kernel", value:"linear"}]},
+            {id: 6, accuracy: 0.8768, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.2"}, {name: "kernel", value:"poly"}]},
+            {id: 7, accuracy: 0.81, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
+            {id: 8, accuracy: 0.999, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
+            {id: 9, accuracy: 0.7999, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"}, {name: "kernel", value:"linear"}]},
+            {id: 10, accuracy: 0.80015, hyperParameters: [{name: "gamma", value: "0.2"}, {name: "c", value:"2"}, {name: "kernel", value:"rbf"}]},
+            {id: 11, accuracy: 0.8543, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.2"}, {name: "kernel", value:"linear"}]},
+            {id: 12, accuracy: 0.937, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}, {name: "kernel", value:"poly"}]},
+            {id: 13, accuracy: 1, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}, {name: "kernel", value:"poly"}]},
+            {id: 14, accuracy: 0.75, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"},{name: "kernel", value:"linear"}]}
+        ];
     }
 
     const getHyperParameterValues = (runners: Runner[], hyperParameter) => {
@@ -173,9 +180,12 @@ function Analysis(props)
         return <p>ERROR!</p>;
     }
 
-
     if(isLoaded)
     {
+        if(runners.length < 2)
+        {
+            return <p>Dear user, please run the project at least two times to see the analysis of the aggregated results.</p>;
+        }
         const tickValuesX = getHyperParameterValues(runners, firstHyperParameter);
         const tickValuesY = getHyperParameterValues(runners,  secondHyperParameter);
 
@@ -192,7 +202,7 @@ function Analysis(props)
                 <div className="summary-list">
                     <div className="summary-list-item">
                         <div className="total-list">
-                            <div className="total">Total Runs: <div className="total-number">27</div>
+                            <div className="total">Total Runs: <div className="total-number">{runners.length}</div>
                                 <div className="total ">Average Validation Accuracy:</div>
                                 {averageValidationResult > 0 ?
                                     <div className="total-number slow "> {averageValidationResult.toFixed(7)}</div>
@@ -237,7 +247,7 @@ function Analysis(props)
 
                     <div className="graph-wrapper">
                         <div className="analysis-graph">
-                            <h3 className="underlined-text">Accuracy over time</h3>
+                            <h3 className="underlined-text">Accuracy</h3>
                             <SimpleChart data={graphData}/>
                         </div>
                     </div>
