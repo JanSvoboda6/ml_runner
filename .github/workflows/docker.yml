@@ -35,22 +35,30 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         
-    - name: Build and push
+    - name: BACKEND - Build and push
       uses: docker/build-push-action@v2
       with:
         context: ./java
         push: true
         tags: jansvoboda596/ml-runner:java-backend
-
-    - name: Login to DockerHub
-      uses: docker/login-action@v1 
-      with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
         
-    - name: Build and push
+    - name: FRONTEND - Build and push
       uses: docker/build-push-action@v2
       with:
         context: ./react
         push: true
         tags: jansvoboda596/ml-runner:react-frontend
+        
+    - name: NGINX - Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: ./nginx
+        push: true
+        tags: jansvoboda596/ml-runner:nginx    
+        
+    - name: DATABASE - Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: ./database
+        push: true
+        tags: jansvoboda596/ml-runner:database          
