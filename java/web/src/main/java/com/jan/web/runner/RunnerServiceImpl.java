@@ -17,7 +17,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -126,46 +125,9 @@ public class RunnerServiceImpl implements RunnerService
     }
 
     @Override
-    public boolean isFinished(long containerId, long projectId, long runnerId) throws IOException, JSONException
-    {
-        if (runnerRepository.findById(runnerId).isPresent())
-        {
-            boolean isFinished = runnerRepository.findById(runnerId).get().isFinished();
-            if (isFinished)
-            {
-                return true;
-            }
-        }
-
-        HttpEntity<String> resultEntity = prepareRequestEntity(projectId, runnerId);
-        Optional<ContainerEntity> containerEntityOptional = containerRepository.findById(containerId);
-        if (containerEntityOptional.isPresent())
-        {
-            ResponseEntity<String> responseFromContainer = requestMaker.makePostRequest(
-                    containerEntityOptional.get().getConnectionString(),
-                    RequestMethod.IS_RUNNER_FINISHED,
-                    resultEntity);
-            FinishedResponse finishedResponse = objectMapper.readValue(responseFromContainer.getBody(), FinishedResponse.class);
-
-            if (finishedResponse.isFinished)
-            {
-                if (runnerRepository.findById(runnerId).isPresent())
-                {
-                    Runner runnerToBeUpdated = runnerRepository.findById(runnerId).get();
-                    runnerToBeUpdated.setFinished(true);
-                    runnerRepository.save(runnerToBeUpdated);
-                }
-            }
-
-            return finishedResponse.isFinished;
-        }
-        return false;
-    }
-
-    @Override
     public Optional<Result> getResult(long containerId, long projectId, long runnerId) throws IOException, JSONException
     {
-        if (isFinished(containerId, projectId, runnerId))
+        if (getStatus(containerId, runnerId).isEndState())
         {
             Optional<Result> alreadyPresentResult = resultRepository.findByRunnerId(runnerId);
             if (alreadyPresentResult.isPresent())

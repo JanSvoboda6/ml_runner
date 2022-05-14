@@ -149,12 +149,11 @@ public class RunningFlowTest
 
         containerProjectRunner.run(runner, containerOptional.get());
 
-        boolean isFinished = false;
-
-        while(!isFinished)
+        boolean isEndState = false;
+        while(!isEndState)
         {
             waiter.await(1, TimeUnit.SECONDS);
-            isFinished = runnerService.isFinished(containerId, projectId, runner.getId());
+            isEndState = runnerService.getStatus(containerId, runner.getId()).isEndState();
         }
 
         Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId())).isPresent();
@@ -218,13 +217,11 @@ public class RunningFlowTest
 
         containerProjectRunner.run(runner, containerOptional.get());
 
-        boolean isFinished = false;
-
-        while(!isFinished)
+        boolean isEndState = false;
+        while(!isEndState)
         {
             waiter.await(1, TimeUnit.SECONDS);
-            isFinished = runnerService.isFinished(containerId, projectId, runner.getId());
-            runnerService.getStatus(containerId, runner.getId());
+            isEndState = runnerService.getStatus(containerId, runner.getId()).isEndState();
         }
 
         Runner runnerAfterFlowExecution = runnerRepository.findById(runner.getId()).get();

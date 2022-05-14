@@ -5,7 +5,6 @@ import com.jan.web.docker.ContainerRepository;
 import com.jan.web.docker.ContainerUtility;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.request.RequestMaker;
-import com.jan.web.request.RequestMethod;
 import com.jan.web.result.Result;
 import com.jan.web.result.ResultRepository;
 import org.assertj.core.api.Assertions;
@@ -18,7 +17,6 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 public class RunnerControllerTest
@@ -67,43 +65,6 @@ public class RunnerControllerTest
         runnerController = new RunnerController(runnerRepository, containerUtility, runnerService, requestValidator);
     }
 
-    @Test
-    public void whenRequestForRunningProject_thenRunnerIsPersisted()
-    {
-        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
-        Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
-
-        RunRequest runRequest = new RunRequest(PROJECT_ID, 1.0, 1.0, List.of(new HyperParameter("gamma", "10")));
-
-        runnerController.runProject(RANDOM_JWT_TOKEN, runRequest);
-        Mockito.verify(runnerRepository, Mockito.times(1)).save(Mockito.any());
-    }
-
-    @Test
-    public void whenRequestForResultForFinishedRunnerForFirstTime_thenResultIsObtainedFromContainer() throws JSONException, IOException
-    {
-        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
-        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
-        Mockito.when(containerRepository.findById(CONTAINER_ID)).thenReturn(Optional.of(containerEntity));
-
-        Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
-
-        ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
-        Mockito.when(responseEntity.getBody()).thenReturn("");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(responseEntity);
-
-        ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
-        Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
-
-        Runner runner = Mockito.mock(Runner.class);
-        Mockito.when(runner.isFinished()).thenReturn(true);
-        Mockito.when(runnerRepository.findById(RUNNER_ID)).thenReturn(Optional.of(runner));
-
-        runnerController.getResult(RANDOM_JWT_TOKEN, PROJECT_ID, RUNNER_ID);
-        Mockito.verify(requestMaker, Mockito.times(1)).makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any());
-    }
 
     @Test
     public void whenRequestForResultForFinishedRunnerForSecondTime_thenResultIsObtainedFromLocalSource() throws JSONException, IOException
@@ -119,154 +80,9 @@ public class RunnerControllerTest
     }
 
     @Test
-    public void whenRequestForResultForFinishedRunnerForFirstTime_thenResultIsPersisted() throws JSONException, IOException
-    {
-        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
-        Mockito.when(containerRepository.findById(CONTAINER_ID)).thenReturn(Optional.of(containerEntity));
-
-        Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
-        Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
-
-        ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
-        Mockito.when(responseEntity.getBody()).thenReturn("");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(responseEntity);
-
-        ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
-        Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
-
-        Runner runner = Mockito.mock(Runner.class);
-        Mockito.when(runner.isFinished()).thenReturn(true);
-        Mockito.when(runnerRepository.findById(RUNNER_ID)).thenReturn(Optional.of(runner));
-
-        runnerController.getResult(RANDOM_JWT_TOKEN, PROJECT_ID, RUNNER_ID);
-        Mockito.verify(resultRepository, Mockito.times(1)).save(Mockito.any());
-    }
-
-    @Test
     @Ignore
     public void whenRequestForResultForUnfinishedRunner_thenMessageInReturned()
     {
         //TODO: Jan - implement test case
-    }
-
-    @Test
-    public void whenRequestForFinished_thenInformationIsObtainedFromContainer() throws JSONException, IOException
-    {
-        FinishedRequest finishedRequest = Mockito.mock(FinishedRequest.class);
-        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
-
-        Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
-        Mockito.when(containerUtility.getContainerIdFromToken(RANDOM_JWT_TOKEN)).thenReturn(CONTAINER_ID);
-        Mockito.when(requestValidator.validateContainerEntity(CONTAINER_ID)).thenReturn(containerEntity);
-
-        ResponseEntity<String> finishedResponseEntity = Mockito.mock(ResponseEntity.class);
-        Mockito.when(finishedResponseEntity.getBody()).thenReturn("A random body of finished response.");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
-                .thenReturn(finishedResponseEntity);
-
-        ResponseEntity<String> resultResponseEntity = Mockito.mock(ResponseEntity.class);
-        Mockito.when(finishedResponseEntity.getBody()).thenReturn("A random body of result response.");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any())).thenReturn(resultResponseEntity);
-
-        FinishedResponse finishedResponse = Mockito.mock(FinishedResponse.class);
-        finishedResponse.isFinished = false;
-        Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(FinishedResponse.class))).thenReturn(finishedResponse);
-
-        runnerController.isFinished(RANDOM_JWT_TOKEN, finishedRequest);
-        Mockito.verify(requestMaker, Mockito.times(1))
-                .makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any());
-    }
-
-    @Test
-    public void whenRequestForFinishedForAlreadyFinishedRunner_thenInformationIsObtainedFromLocalSource() throws JSONException, IOException
-    {
-        FinishedRequest finishedRequest = Mockito.mock(FinishedRequest.class);
-        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
-        Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
-        Runner runner = Mockito.mock(Runner.class);
-        Mockito.when(runner.isFinished()).thenReturn(true);
-
-        Mockito.when(runnerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(runner));
-
-        Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
-        Mockito.when(containerUtility.getContainerIdFromToken(RANDOM_JWT_TOKEN)).thenReturn(CONTAINER_ID);
-        Mockito.when(requestValidator.validateContainerEntity(CONTAINER_ID)).thenReturn(containerEntity);
-
-        ResponseEntity<?> response = runnerController.isFinished(RANDOM_JWT_TOKEN, finishedRequest);
-        Mockito.verifyZeroInteractions(requestMaker);
-        Mockito.verify(runner, Mockito.times(1)).isFinished();
-        Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-    }
-
-    @Test
-    public void whenRunnerIsFinished_thenFinishedInformationIsPersisted() throws IOException, JSONException
-    {
-        FinishedRequest finishedRequest = Mockito.mock(FinishedRequest.class);
-        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
-        Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
-        FinishedResponse finishedResponse = Mockito.mock(FinishedResponse.class);
-        finishedResponse.isFinished = true;
-
-        Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(FinishedResponse.class))).thenReturn(finishedResponse);
-        Runner runner = Mockito.mock(Runner.class);
-        Mockito.when(runner.isFinished()).thenReturn(false);
-        Mockito.when(runnerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(runner));
-
-        ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
-        Mockito.when(responseEntity.getBody()).thenReturn("A random body.");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
-                        .thenReturn(responseEntity);
-
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any()))
-                .thenReturn(responseEntity);
-
-        ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
-        Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
-
-        Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
-        Mockito.when(containerUtility.getContainerIdFromToken(RANDOM_JWT_TOKEN)).thenReturn(CONTAINER_ID);
-        Mockito.when(requestValidator.validateContainerEntity(CONTAINER_ID)).thenReturn(containerEntity);
-
-        runnerController.isFinished(RANDOM_JWT_TOKEN, finishedRequest);
-        Mockito.verify(runner, Mockito.times(1)).setFinished(true);
-        Mockito.verify(runnerRepository, Mockito.times(1)).save(runner);
-    }
-
-    @Test
-    public void whenRunnerIsNotFinished_thenNotFinishedInformationIsPersisted() throws IOException, JSONException
-    {
-        FinishedRequest finishedRequest = Mockito.mock(FinishedRequest.class);
-        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
-        Mockito.when(containerEntity.getConnectionString()).thenReturn("http://random:9999");
-        Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
-        FinishedResponse finishedResponse = Mockito.mock(FinishedResponse.class);
-        finishedResponse.isFinished = false;
-
-        Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(FinishedResponse.class))).thenReturn(finishedResponse);
-        Runner runner = Mockito.mock(Runner.class);
-        Mockito.when(runner.isFinished()).thenReturn(false);
-        Mockito.when(runnerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(runner));
-
-        ResponseEntity<String> responseEntity = Mockito.mock(ResponseEntity.class);
-        Mockito.when(responseEntity.getBody()).thenReturn("A random body.");
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.IS_RUNNER_FINISHED), Mockito.any()))
-                .thenReturn(responseEntity);
-
-        Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.eq(RequestMethod.RUNNER_RESULT), Mockito.any()))
-                .thenReturn(responseEntity);
-
-        ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
-        Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
-
-        Mockito.when(containerRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(containerEntity));
-        Mockito.when(containerUtility.getContainerIdFromToken(RANDOM_JWT_TOKEN)).thenReturn(CONTAINER_ID);
-        Mockito.when(requestValidator.validateContainerEntity(CONTAINER_ID)).thenReturn(containerEntity);
-
-        runnerController.isFinished(RANDOM_JWT_TOKEN, finishedRequest);
-        Mockito.verify(runner, Mockito.times(0)).setFinished(true);
     }
 }
