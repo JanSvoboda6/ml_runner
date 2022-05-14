@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 public class Result
 {
-    public static final int RESULT_TEXT_LENGTH = 5000;
+    public static final int RESULT_TEXT_MAXIMUM_LENGTH = 5000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Result
 
     private double accuracy;
 
-    @Column(length = RESULT_TEXT_LENGTH)
+    @Column(length = RESULT_TEXT_MAXIMUM_LENGTH)
     private String resultText;
 
     public Long getId()

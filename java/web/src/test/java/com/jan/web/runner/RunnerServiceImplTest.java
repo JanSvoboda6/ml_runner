@@ -2,7 +2,6 @@ package com.jan.web.runner;
 
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
-import com.jan.web.docker.ContainerUtility;
 import com.jan.web.project.Project;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.request.RequestMaker;
@@ -11,7 +10,6 @@ import com.jan.web.result.Result;
 import com.jan.web.result.ResultRepository;
 import org.assertj.core.api.Assertions;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,6 +83,7 @@ public class RunnerServiceImplTest
         Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(responseEntity);
 
         ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
+        resultResponse.resultText = "Random result text";
         Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
 
         Runner runner = Mockito.mock(Runner.class);
@@ -108,6 +107,7 @@ public class RunnerServiceImplTest
         Mockito.when(requestMaker.makePostRequest(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(responseEntity);
 
         ResultResponse resultResponse = Mockito.mock(ResultResponse.class);
+        resultResponse.resultText = "Random result text";
         Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.eq(ResultResponse.class))).thenReturn(resultResponse);
 
         Runner runner = Mockito.mock(Runner.class);

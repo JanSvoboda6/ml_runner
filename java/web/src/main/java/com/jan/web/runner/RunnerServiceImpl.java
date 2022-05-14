@@ -24,7 +24,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.jan.web.result.Result.RESULT_TEXT_LENGTH;
+import static com.jan.web.result.Result.RESULT_TEXT_MAXIMUM_LENGTH;
 
 
 @Service
@@ -148,7 +148,7 @@ public class RunnerServiceImpl implements RunnerService
 
             Result result = new Result();
             result.setRunner(runnerRepository.findById(runnerId).get());
-            result.setResultText(resultResponse.resultText.substring(0, RESULT_TEXT_LENGTH - 1));
+            result.setResultText(getCroppedMessage(resultResponse.resultText));
             result.setAccuracy(resultResponse.accuracy);
             resultRepository.save(result);
             return Optional.of(result);
@@ -188,5 +188,10 @@ public class RunnerServiceImpl implements RunnerService
         runner.setFinished(false);
         runner.setTimestamp(Instant.now().getEpochSecond());
         return runner;
+    }
+
+    private String getCroppedMessage(String resultText)
+    {
+        return resultText.length() > RESULT_TEXT_MAXIMUM_LENGTH ? resultText.substring(0, RESULT_TEXT_MAXIMUM_LENGTH - 1) : resultText;
     }
 }
