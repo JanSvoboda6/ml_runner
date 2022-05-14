@@ -1,7 +1,7 @@
 version: '3'
 services:
   database:
-      container_name: database
+      container_name: database_local
       image: mysql-database
       build:  
         context: ../database
@@ -19,7 +19,7 @@ services:
         mysqld --init-file="/tmp/database/init.sql"   
   
   backend:
-    container_name: backend
+    container_name: backend_local
     image: backend
     build:  
       context: ../java
@@ -37,7 +37,7 @@ services:
       - database
 
   frontend:
-    container_name: frontend
+    container_name: frontend_local
     image: frontend
     build:  
       context: ../react
@@ -49,7 +49,7 @@ services:
       - frontend     
 
   nginx:
-    container_name: nginx
+    container_name: nginx_local
     image: nginx-reverse-proxy
     build:  
       context: ../nginx

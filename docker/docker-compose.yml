@@ -1,26 +1,54 @@
 version: '3'
 services:
-  backend:  
+  database:
+      container_name: database
+      image: jansvoboda596/ml-runner:database
+      ports:
+        - "3306:3306"  
+      environment:
+        - MYSQL_ROOT_PASSWORD=mysql
+        - MYSQL_DATABASE=machine_learning_database
+      volumes:
+        - ~/database_test:/var/lib/mysql
+      networks:
+        - database
+      command: 
+        mysqld --init-file="/tmp/database/init.sql"   
+  
+  backend:
     container_name: backend
     image: jansvoboda596/ml-runner:java-backend
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-    ports:
-      - "8080:8080"
+    restart: 
+      unless-stopped  
     networks:
       - frontend
       - runner_agents
-  
+      - backend
+      - database
+
   frontend:
     container_name: frontend
     image: jansvoboda596/ml-runner:react-frontend
     stdin_open: true
+    networks:
+      - frontend     
+
+  nginx:
+    container_name: nginx
+    image: jansvoboda596/ml-runner:nginx
+    stdin_open: true
     ports:
-      - "3000:3000"
+      - "80:80"
     networks:
       - frontend
-
+      - backend      
+  
 networks:
   frontend:
+  backend:
+  database:
   runner_agents:
     internal: true
+ 
