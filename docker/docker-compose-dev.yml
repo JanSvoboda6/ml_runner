@@ -1,19 +1,40 @@
 version: '3'
 services:
+  database:
+      container_name: database
+      image: mysql-database
+      build:  
+        context: ../database
+        dockerfile: Dockerfile
+      ports:
+        - "3306:3306"  
+      environment:
+        - MYSQL_ROOT_PASSWORD=mysql
+        - MYSQL_DATABASE=machine_learning_database
+      volumes:
+        - ~/database_test:/var/lib/mysql
+      networks:
+        - database
+      command: 
+        mysqld --init-file="/tmp/database/init.sql"   
+  
   backend:
     container_name: backend
     image: backend
     build:  
       context: ../java
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     ports:
       - "8080:8080"
+    restart: 
+      unless-stopped  
     networks:
       - frontend
       - runner_agents
       - backend
+      - database
 
   frontend:
     container_name: frontend
@@ -32,16 +53,17 @@ services:
     image: nginx-reverse-proxy
     build:  
       context: ../nginx
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     stdin_open: true
     ports:
       - "80:80"
     networks:
       - frontend
-      - backend     
+      - backend      
   
 networks:
   frontend:
   backend:
+  database:
   runner_agents:
     internal: true

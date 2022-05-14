@@ -10,10 +10,10 @@ RUN mkdir /app
 RUN mkdir /app/web
 RUN mkdir /app/web/java
 RUN mkdir /app/python
+COPY ./web/src/main/resources/import-prod.sql /app/web/java
 COPY ./web/resources/ /app/web/java/resources/
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/web/java/application.jar
 
-
 WORKDIR /app/web/java
-ENTRYPOINT ["java", "-jar", "/app/web/java/application.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "/app/web/java/application.jar"]

@@ -8,7 +8,7 @@ COPY ./ml-runner/src /app/src
 COPY ./ml-runner/tsconfig.json /app/tsconfig.json
 COPY ./ml-runner/.env /app/.env
 RUN npm install --only=production
-RUN npm run build-ec2
+RUN npm run build
 
 FROM node:16-alpine
 WORKDIR /app
