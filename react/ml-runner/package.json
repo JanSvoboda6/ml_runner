@@ -58,8 +58,7 @@
   },
   "scripts": {
     "start": "REACT_APP_BACKEND_URL='http://localhost:8080' react-scripts start",
-    "build": "REACT_APP_BACKEND_URL='http://localhost:8080' react-scripts build",
-    "build-ec2": "REACT_APP_BACKEND_URL='http://52.28.126.88:8080' react-scripts build",
+    "build": "REACT_APP_BACKEND_URL='http://localhost:80' react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },

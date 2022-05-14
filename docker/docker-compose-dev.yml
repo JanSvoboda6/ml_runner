@@ -1,0 +1,47 @@
+version: '3'
+services:
+  backend:
+    container_name: backend
+    image: backend
+    build:  
+      context: ../java
+      dockerfile: Dockerfile.dev
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - "8080:8080"
+    networks:
+      - frontend
+      - runner_agents
+      - backend
+
+  frontend:
+    container_name: frontend
+    image: frontend
+    build:  
+      context: ../react
+      dockerfile: Dockerfile.dev
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend     
+
+  nginx:
+    container_name: nginx
+    image: nginx-reverse-proxy
+    build:  
+      context: ../nginx
+      dockerfile: Dockerfile.dev
+    stdin_open: true
+    ports:
+      - "80:80"
+    networks:
+      - frontend
+      - backend     
+  
+networks:
+  frontend:
+  backend:
+  runner_agents:
+    internal: true
