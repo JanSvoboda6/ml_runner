@@ -24,6 +24,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import static com.jan.web.result.Result.RESULT_TEXT_LENGTH;
+
 
 @Service
 public class RunnerServiceImpl implements RunnerService
@@ -146,7 +148,7 @@ public class RunnerServiceImpl implements RunnerService
 
             Result result = new Result();
             result.setRunner(runnerRepository.findById(runnerId).get());
-            result.setResultText(resultResponse.resultText);
+            result.setResultText(resultResponse.resultText.substring(0, RESULT_TEXT_LENGTH - 1));
             result.setAccuracy(resultResponse.accuracy);
             resultRepository.save(result);
             return Optional.of(result);

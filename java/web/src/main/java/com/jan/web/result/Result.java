@@ -3,11 +3,12 @@ package com.jan.web.result;
 import com.jan.web.runner.Runner;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Result
 {
+    public static final int RESULT_TEXT_LENGTH = 5000;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,7 +18,7 @@ public class Result
 
     private double accuracy;
 
-    @Column(length = 5000)
+    @Column(length = RESULT_TEXT_LENGTH)
     private String resultText;
 
     public Long getId()
@@ -34,7 +35,6 @@ public class Result
     {
         this.runner = runner;
     }
-
 
     public double getAccuracy()
     {
