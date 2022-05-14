@@ -3,7 +3,7 @@ import {fireEvent, render, screen} from "@testing-library/react";
 import {Router} from "react-router";
 import React from "react";
 import {createMemoryHistory} from "history";
-import RunnerForm from "../../components/project/RunnerForm";
+import RunnerForm from "../../components/project/RandomForestRunnerForm";
 import RunnerService from "../../services/RunnerService";
 
 const submitForm = async () => {

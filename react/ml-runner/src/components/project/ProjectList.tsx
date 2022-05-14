@@ -12,7 +12,8 @@ const API_URL = BACKEND_URL + "/api";
 interface Project
 {
   id: number,
-  name: string
+  name: string,
+  selectedModel: string
 }
 
 function ProjectList()
@@ -27,13 +28,13 @@ function ProjectList()
       .then(
         (res) =>
         {
-          setLoaded(true);
-          setProjects(res.data.reverse());
+            setProjects(res.data.reverse());
+            setLoaded(true);
         },
         (error) =>
         {
-          setLoaded(true);
-          setErrorMessage(error.message);
+            setErrorMessage(error.message);
+            setLoaded(true);
         }
       )
   }, [])
@@ -60,7 +61,7 @@ function ProjectList()
       <ul className="project-list">
         {projects.map(project => (
           <li key={project.id} className="project-item">
-            <ProjectQuickView id={project.id} name={project.name} />
+            <ProjectQuickView id={project.id} name={project.name} selectedModel={project.selectedModel}/>
           </li>
         ))}
       </ul>

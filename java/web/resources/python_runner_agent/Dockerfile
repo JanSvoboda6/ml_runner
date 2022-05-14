@@ -13,5 +13,6 @@ RUN mkdir -p runners_info
 
 COPY ./server.py ./server.py
 COPY ./svm.py ./models/svm.py
+COPY ./random_forest.py ./models/random_forest.py
 
 CMD ["python3", "server.py"]

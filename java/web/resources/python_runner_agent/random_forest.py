@@ -4,7 +4,7 @@ import traceback
 from glob import glob
 
 import numpy as np
-from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
 
@@ -30,9 +30,9 @@ def run():
     with open('runners_info/' + str(runner_id) + '/configuration.json', 'r') as json_file:
         configuration = json.load(json_file)
 
-    gamma = float(get_hyper_parameter_value(configuration['hyperParameters'], 'gamma'))
-    c = float(get_hyper_parameter_value(configuration['hyperParameters'], 'c'))
-    kernel = get_hyper_parameter_value(configuration['hyperParameters'], 'kernel')
+    criterion = get_hyper_parameter_value(configuration['hyperParameters'], 'criterion')
+    n_estimators = int(get_hyper_parameter_value(configuration['hyperParameters'], 'numberOfEstimators'))
+    max_depth = int(get_hyper_parameter_value(configuration['hyperParameters'], 'maximumDepth'))
 
     inform_on_status_change(runner_id, Status.LOADING_DATA)
 
@@ -53,7 +53,7 @@ def run():
     training_samples, testing_samples, training_labels, testing_labels = train_test_split(samples, labels,
                                                                                           test_size=0.2)
     inform_on_status_change(runner_id, Status.TRAINING)
-    classifier = svm.SVC(verbose=0, gamma=gamma, C=c, kernel=kernel)
+    classifier = RandomForestClassifier(verbose=0, criterion=criterion, n_estimators=n_estimators, max_depth=max_depth)
     classifier.fit(training_samples, training_labels)
 
     inform_on_status_change(runner_id, Status.PREDICTING)

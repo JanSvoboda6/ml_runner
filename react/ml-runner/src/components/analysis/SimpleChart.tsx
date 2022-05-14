@@ -58,7 +58,7 @@ function SimpleChart(props: Props)
 {
     return (
         <XYChart height={400} width={1200} xScale={{type: 'band'}} yScale={{type: 'radial'}}>
-            <AnimatedGrid columns={true} numTicks={5} rows={true} lineStyle={{stroke: "rgb(80,80,80)"}}/>
+            <AnimatedGrid columns={true} numTicks={10} rows={true} lineStyle={{stroke: "rgb(80,80,80)"}}/>
             <AnimatedAxis
                 orientation="bottom"
                 label={"Id [-]"}

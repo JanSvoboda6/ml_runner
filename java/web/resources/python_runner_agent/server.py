@@ -150,6 +150,12 @@ def run_project():
                          stdout=log_file,
                          stderr=log_file,
                          preexec_fn=os.setpgrp)
+
+    elif runner['selectedModel'] == 'Random Forest':
+        subprocess.Popen(['nohup', 'python3', 'models/random_forest.py', str(runner['runnerId'])],
+                         stdout=log_file,
+                         stderr=log_file,
+                         preexec_fn=os.setpgrp)
     return ''
 
 

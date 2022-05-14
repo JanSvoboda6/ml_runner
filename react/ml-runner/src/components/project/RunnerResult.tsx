@@ -27,7 +27,7 @@ function RunnerResult({projectId, runnerId}: RunnerResultProps)
         <>
             <div className="result-box">
                 <div className="result-text">
-                    <p className="result-text-header">Result log</p>
+                    <p className="result-text-header">Runner #{runnerId} - Result Log</p>
                     <p>------------------------------------------------</p>
                     <div className="result-text-information">
                         {resultText}

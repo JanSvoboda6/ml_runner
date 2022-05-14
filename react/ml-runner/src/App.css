@@ -909,19 +909,21 @@ input[type="file"]
   border-color: var(--border-color);
   background-color: var(--bg-secondary);
   border-radius: 15px;
-  
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .total{
   font-size: 20px;
-  margin: 1rem;
+  margin: 10px;
   text-align: center;
 }
 
 .total-number{
-  margin-top: 0.5rem;
   text-align: center;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
 /* #endregion SUMMARY */
@@ -1018,13 +1020,13 @@ input[type="file"]
   }
 }
 
-.heatmap-names{
+.heatmap-title{
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 365px;
   text-decoration: underline;
   text-underline-offset: 7px;
+  margin-top: 5px;
 }
 .heatmap-bin{
   color: var(--text-primary);
@@ -1046,6 +1048,7 @@ input[type="file"]
 .underlined-text{
   text-decoration: underline;
   text-underline-offset: 7px;
+  margin-top: 5px;
 }
 
 .analysis-heatmap{

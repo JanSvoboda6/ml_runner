@@ -63,11 +63,17 @@ function Analysis(props)
 
                         let hyperParametersName: string[] = [];
                         runnersResult[0].hyperParameters.forEach(parameter => hyperParametersName.push(parameter.name));
-                        console.log(hyperParametersName);
                         setHyperParameterSelector(hyperParametersName);
                         setFirstHyperParameter(hyperParametersName[0]);
                         setSecondHyperParameter(hyperParametersName[1]);
                         setRunners(runnersResult);
+
+                        let averageAccuracy = 0;
+                        runnersResult.forEach(result => {
+                            averageAccuracy += result.accuracy;
+                        })
+                        setAverageValidationResult(averageAccuracy/runnersResult.length);
+
                         setLoaded(true);
                     });
                 },
@@ -81,39 +87,39 @@ function Analysis(props)
 
     async function constructRunnersWithResult(runners: any[])
     {
-        // const runnersResult: Array<Runner> = [];
-        // for(let i = 0; i < runners.length; i++)
-        // {
-        //     if(runners[i].status === "FINISHED")
-        //     {
-        //         await axios.get(API_URL + '/runner/result?projectId=' + projectId + '&' + 'runnerId=' + runners[i].id, {headers: authorizationHeader()})
-        //             .then((res: AxiosResponse<any>) =>
-        //             {
-        //                 runnersResult.push({
-        //                     id: runners[i].id,
-        //                     accuracy: res.data.accuracy,
-        //                     hyperParameters: runners[i].hyperParameters
-        //                 })
-        //             })
-        //     }
-        // }
-        // return runnersResult;
-        return [
-            {id: 1, accuracy: 0.4999, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1"}, {name: "kernel", value:"rbf"}]},
-            {id: 2, accuracy: 0.500023, hyperParameters: [{name: "gamma", value: "2"}, {name: "c", value:"3"}, {name: "kernel", value:"rbf"}]},
-            {id: 3, accuracy: 0.51, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"2"}, {name: "kernel", value:"rbf"}]},
-            {id: 4, accuracy: 0.7, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"3"},{name: "kernel", value:"linear"}]},
-            {id: 5, accuracy: 0.845, hyperParameters: [{name: "gamma", value: "0.2"}, {name: "c", value:"2"}, {name: "kernel", value:"linear"}]},
-            {id: 6, accuracy: 0.8768, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.2"}, {name: "kernel", value:"poly"}]},
-            {id: 7, accuracy: 0.81, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
-            {id: 8, accuracy: 0.999, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
-            {id: 9, accuracy: 0.7999, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"}, {name: "kernel", value:"linear"}]},
-            {id: 10, accuracy: 0.80015, hyperParameters: [{name: "gamma", value: "0.2"}, {name: "c", value:"2"}, {name: "kernel", value:"rbf"}]},
-            {id: 11, accuracy: 0.8543, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.2"}, {name: "kernel", value:"linear"}]},
-            {id: 12, accuracy: 0.937, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}, {name: "kernel", value:"poly"}]},
-            {id: 13, accuracy: 1, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}, {name: "kernel", value:"poly"}]},
-            {id: 14, accuracy: 0.75, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"},{name: "kernel", value:"linear"}]}
-        ];
+        const runnersResult: Array<Runner> = [];
+        for(let i = 0; i < runners.length; i++)
+        {
+            if(runners[i].status === "FINISHED")
+            {
+                await axios.get(API_URL + '/runner/result?projectId=' + projectId + '&' + 'runnerId=' + runners[i].id, {headers: authorizationHeader()})
+                    .then((res: AxiosResponse<any>) =>
+                    {
+                        runnersResult.push({
+                            id: runners[i].id,
+                            accuracy: res.data.accuracy,
+                            hyperParameters: runners[i].hyperParameters
+                        })
+                    })
+            }
+        }
+        return runnersResult;
+        // return [
+        //     {id: 1, accuracy: 0.4999, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1"}, {name: "kernel", value:"rbf"}]},
+        //     {id: 2, accuracy: 0.500023, hyperParameters: [{name: "gamma", value: "2"}, {name: "c", value:"3"}, {name: "kernel", value:"rbf"}]},
+        //     {id: 3, accuracy: 0.51, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"2"}, {name: "kernel", value:"rbf"}]},
+        //     {id: 4, accuracy: 0.7, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"3"},{name: "kernel", value:"linear"}]},
+        //     {id: 5, accuracy: 0.845, hyperParameters: [{name: "gamma", value: "0.2"}, {name: "c", value:"2"}, {name: "kernel", value:"linear"}]},
+        //     {id: 6, accuracy: 0.8768, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.2"}, {name: "kernel", value:"poly"}]},
+        //     {id: 7, accuracy: 0.81, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
+        //     {id: 8, accuracy: 0.999, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
+        //     {id: 9, accuracy: 0.7999, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"}, {name: "kernel", value:"linear"}]},
+        //     {id: 10, accuracy: 0.80015, hyperParameters: [{name: "gamma", value: "0.2"}, {name: "c", value:"2"}, {name: "kernel", value:"rbf"}]},
+        //     {id: 11, accuracy: 0.8543, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"0.2"}, {name: "kernel", value:"linear"}]},
+        //     {id: 12, accuracy: 0.937, hyperParameters: [{name: "gamma", value: "3"}, {name: "c", value:"1"}, {name: "kernel", value:"poly"}]},
+        //     {id: 13, accuracy: 1, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"1"}, {name: "kernel", value:"poly"}]},
+        //     {id: 14, accuracy: 0.75, hyperParameters: [{name: "gamma", value: "4"}, {name: "c", value:"4"},{name: "kernel", value:"linear"}]}
+        // ];
     }
 
     const getHyperParameterValues = (runners: Runner[], hyperParameter) => {
@@ -202,21 +208,17 @@ function Analysis(props)
                 <div className="summary-list">
                     <div className="summary-list-item">
                         <div className="total-list">
-                            <div className="total">Total Runs: <div className="total-number">{runners.length}</div>
-                                <div className="total ">Average Validation Accuracy:</div>
-                                {averageValidationResult > 0 ?
-                                    <div className="total-number slow "> {averageValidationResult.toFixed(7)}</div>
-                                    : <div className="total">
-                                        <div className="total-number"> {75.916}&#37;</div>
-                                    </div>}
-                            </div>
+                            <div className="total">Total Runs: </div>
+                                <div className="total-number slow">{runners.length}</div>
+                                <div className="total ">Average Validation Accuracy [%]:</div>
+                            <div className="total-number slow "> {(averageValidationResult * 100).toFixed(3)}</div>
                         </div>
                     </div>
                 </div>
 
                 <FadeIn>
                     <div className="heatmap-wrapper">
-                        <div className="heatmap-names">
+                        <div className="heatmap-title">
                             <h3>Parameters Heat Map</h3>
                         </div>
                         <div className="heatmap-structure-wrapper">

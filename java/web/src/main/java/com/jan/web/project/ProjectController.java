@@ -49,6 +49,7 @@ public class ProjectController
         return Collections.emptyList();
     }
 
+    //TODO Jan: Add validation
     @GetMapping("/{id}")
     public Project getProject(@PathVariable Long id) {
         return projectRepository.findById(id).orElseThrow(RuntimeException::new);

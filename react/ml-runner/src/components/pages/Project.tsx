@@ -99,7 +99,7 @@ function Project()
                         <div className="model-select-text">Choose algorithm: </div>
                         <select name="model-select" onChange={handleModelSelection}>
                             <option value="Support Vector Machines">Support Vector Machines</option>
-                            <option value="Support Vector Machines">More models will be added in the future...</option>
+                            <option value="Random Forest">Random Forest</option>
                         </select>
                     </div>
                     {/* <div className="project-form-block"><button className="open-dataset-button" onClick={handleDatasetOpening}>Open</button></div> */}

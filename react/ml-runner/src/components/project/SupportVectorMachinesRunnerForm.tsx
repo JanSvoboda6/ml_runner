@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import RunnerService from "../../services/RunnerService";
 import {HyperParameter} from "../../types";
+import ProjectService from "./ProjectService";
+import axios from "axios";
+import authorizationHeader from "../../services/AuthorizationHeader";
 
-function RunnerForm(props: any)
+import {BACKEND_URL} from "../../helpers/url";
+const API_URL = BACKEND_URL + "/api";
+
+function SupportVectorMachinesRunnerForm(props: any)
 {
+
     const [gammaParameter, setGammaParameter] = useState(0);
     const [cParameter, setCParameter] = useState(0);
     const [kernelParameter, setKernelParameter] = useState("");
@@ -59,4 +66,4 @@ function RunnerForm(props: any)
     )
 }
 
-export default RunnerForm;
+export default SupportVectorMachinesRunnerForm;

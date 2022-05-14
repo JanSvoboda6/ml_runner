@@ -1,8 +1,13 @@
 import React from "react";
-import {useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import Popup from "reactjs-popup";
-import RunnerForm from "./RunnerForm";
 import RunnerList from "./RunnerList";
+
+import {BACKEND_URL} from "../../helpers/url";
+import SupportVectorMachinesRunnerForm from "./SupportVectorMachinesRunnerForm";
+import RandomForestRunnerForm from "./RandomForestRunnerForm";
+
+const API_URL = BACKEND_URL + "/api";
 
 const ProjectQuickView = (props: any) =>
 {
@@ -11,6 +16,16 @@ const ProjectQuickView = (props: any) =>
     {
         history.push('/analysis?projectId=' + props.id);
     }
+
+    const renderRunnerForm = (popupClosingAction: Function) =>
+    {
+        switch (props.selectedModel)
+        {
+            case "Support Vector Machines": return <SupportVectorMachinesRunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => popupClosingAction()}/>
+            case "Random Forest": return <RandomForestRunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => popupClosingAction()}/>
+        }
+    }
+
     return (
         <div className="project-quick-view">
             <div className="control-panel">
@@ -19,7 +34,7 @@ const ProjectQuickView = (props: any) =>
                 </div>
                 <div className="project-control-panel-controls">
                     <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal>
-                        {close => (<RunnerForm projectName={props.name} projectId={props.id} handleRunButton={() => close()} />)}
+                        {close => renderRunnerForm(close)}
                     </Popup>
                     <button className="project-control-panel-button" onClick={redirectToAnalysisPage}>Analysis</button>
                 </div>

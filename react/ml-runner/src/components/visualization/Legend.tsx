@@ -36,7 +36,7 @@ const linearScale = scaleLinear<string>({
 });
 
 const thresholdScale = scaleThreshold<number, string>({
-    domain: [50, 60,70, 80 ,90],
+    domain: [50, 60, 70, 80 ,90],
     range: ['#122549', 'rgb(26,44,78)', 'rgb(37,59,82)', 'rgb(66,101,113)', 'rgb(84,127,131)', '#b4fbde'],
 });
 
@@ -50,7 +50,7 @@ const ordinalColor2Scale = scaleOrdinal<string, string>({
     range: ['#fae856', '#f29b38', '#e64357', '#8386f7'],
 });
 
-const legendGlyphSize = 15;
+const legendGlyphSize = 20;
 
 export default function LegendChart({ events = false }: { events?: boolean })
 {
@@ -202,7 +202,7 @@ function LegendDemo({ title, children }: { title: string; children: React.ReactN
         .legend {
           line-height: 0.9em;
           color: #efefef;
-          font-size: 10px;
+          font-size: 13px;
           font-family: arial;
           padding: 10px 10px;
           float: left;
