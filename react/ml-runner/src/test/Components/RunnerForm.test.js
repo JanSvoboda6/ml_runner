@@ -3,13 +3,14 @@ import {fireEvent, render, screen} from "@testing-library/react";
 import {Router} from "react-router";
 import React from "react";
 import {createMemoryHistory} from "history";
-import RunnerForm from "../../components/project/RandomForestRunnerForm";
+import RunnerForm from "../../components/project/SupportVectorMachinesRunnerForm";
 import RunnerService from "../../services/RunnerService";
 
 const submitForm = async () => {
     await act(async () => {
-        fireEvent.change(screen.getByPlaceholderText(/gamma parameter/i), {target: {value: '1'}});
-        fireEvent.change(screen.getByPlaceholderText(/c parameter/i), {target: {value: '1'}});
+        fireEvent.change(screen.getByTestId(/gamma/i), {target: {value: '1'}});
+        fireEvent.change(screen.getByTestId(/c/i), {target: {value: '1'}});
+        fireEvent.change(screen.getByTestId(/kernel/i), {target: {value: 'rbf'}});
         fireEvent.click(screen.getByText('Save & Run'));
     });
 }

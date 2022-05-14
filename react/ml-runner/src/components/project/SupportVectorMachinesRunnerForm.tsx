@@ -58,16 +58,16 @@ function SupportVectorMachinesRunnerForm(props: any)
             <div className="runner-form-block"> <h2>{props.projectName} </h2></div>
             <div className="runner-form-block">
                 <p>Gamma parameter</p>
-                <input type="input-text" className="input-text" onChange={handleGammaParameterChange} placeholder="Gamma parameter" value={gammaParameter}/>
+                <input type="input-text" className="input-text" data-testid="gamma" onChange={handleGammaParameterChange} placeholder="Gamma parameter" value={gammaParameter}/>
             </div>
 
             <div className="runner-form-block">
                 <p>C parameter</p>
-                <input type="text" className="input-text" onChange={handleCParameterChange} placeholder="C parameter" value={cParameter} />
+                <input type="text" className="input-text" data-testid="c" onChange={handleCParameterChange} placeholder="C parameter" value={cParameter} />
             </div>
             <div className="runner-form-block">
                 <p>Kernel parameter</p>
-                <input type="text" className="input-text" onChange={handleKernelParameterChange} placeholder="Kernel parameter" value={kernelParameter}/>
+                <input type="text" className="input-text" data-testid="kernel" onChange={handleKernelParameterChange} placeholder="Kernel parameter" value={kernelParameter}/>
             </div>
 
             <div className="runner-form-block">
