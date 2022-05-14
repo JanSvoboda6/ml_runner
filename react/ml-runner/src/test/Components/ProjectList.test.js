@@ -5,6 +5,7 @@ import {act} from 'react-dom/test-utils';
 import {Router} from "react-router";
 import ProjectList from "../../components/project/ProjectList";
 import {createMemoryHistory} from "history";
+import RunnerService from "../../services/RunnerService";
 
 describe('Rendering', () =>
 {
@@ -51,15 +52,35 @@ describe('Rendering', () =>
                     }
                 }
             ]
+        }).mockResolvedValue({
+            'data': {
+                'hyperParameters': [{
+                    'name': 'gamma',
+                    'value': '1'
+                },
+                    {
+                        'name': 'c',
+                        'value': '1'
+                    }]
+            }
         });
+
+        const statusResponse = {
+            'data': {
+                'status': 'INITIAL',
+                'isEndState': true
+            }
+        }
+
+        jest.spyOn(RunnerService, 'getStatus').mockResolvedValue(statusResponse);
 
         await act(async () => {
                 render(<Router history={createMemoryHistory()}><ProjectList/></Router>);
             }
         );
 
-        expect(screen.getByText('A first project')).toBeInTheDocument();
-        expect(screen.getByText('A second project')).toBeInTheDocument();
+        expect(screen.getByText(/A first project/i)).toBeInTheDocument();
+        expect(screen.getByText(/A second project/i)).toBeInTheDocument();
     });
 
     test('When data has not been fetched yet from the server then loading animation is shown', async () => {
