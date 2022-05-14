@@ -61,8 +61,7 @@ public class AuthenticationControllerValidationTest
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.toString()))
-                .andExpect(status().is4xxClientError())
-                .andExpect(content().string("Length of the email must be between 5 to 128 characters!"));
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -79,8 +78,8 @@ public class AuthenticationControllerValidationTest
         loginRequestJson.put("username", EMAIL);
         loginRequestJson.put("password", "invalid_" + PASSWORD);
         mockMvc.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(loginRequestJson.toString()))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(loginRequestJson.toString()))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Bad credentials!"));
     }
