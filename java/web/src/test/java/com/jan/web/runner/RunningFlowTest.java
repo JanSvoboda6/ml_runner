@@ -138,10 +138,12 @@ public class RunningFlowTest
 
         HyperParameter cParameter = new HyperParameter("c", "1");
         HyperParameter gammaParameter = new HyperParameter("gamma", "10");
+        HyperParameter kernelParameter = new HyperParameter("kernel", "rbf");
+        List<HyperParameter> hyperParameters = List.of(cParameter, gammaParameter, kernelParameter);
 
         Runner runner = new Runner();
         runner.setProject(project);
-        runner.setHyperParameters(List.of(hyperParameterRepository.save(cParameter), hyperParameterRepository.save(gammaParameter)));
+        runner.setHyperParameters(hyperParameterRepository.saveAll(hyperParameters));
         runner.setStatus(RunnerStatus.INITIAL);
         runnerRepository.save(runner);
 
@@ -205,10 +207,12 @@ public class RunningFlowTest
 
         HyperParameter cParameter = new HyperParameter("c", "1");
         HyperParameter gammaParameter = new HyperParameter("gamma", "10");
+        HyperParameter kernelParameter = new HyperParameter("kernel", "rbf");
+        List<HyperParameter> hyperParameters = List.of(cParameter, gammaParameter, kernelParameter);
 
         Runner runner = new Runner();
         runner.setProject(project);
-        runner.setHyperParameters(List.of(hyperParameterRepository.save(cParameter), hyperParameterRepository.save(gammaParameter)));
+        runner.setHyperParameters(hyperParameterRepository.saveAll(hyperParameters));
         runner.setStatus(RunnerStatus.INITIAL);
         runnerRepository.save(runner);
 
