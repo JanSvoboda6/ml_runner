@@ -88,19 +88,6 @@ public class RunnerController
         return ResponseEntity.ok(response.toString());
     }
 
-//    @PostMapping(value = "/finished", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> isFinished(@RequestHeader(name="Authorization") String token, @RequestBody FinishedRequest finishedRequest) throws JSONException, IOException
-//    {
-//        ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
-//        requestValidator.validateProject(finishedRequest.getProjectId());
-//        requestValidator.validateRunner(finishedRequest.getRunnerId());
-//
-//        JSONObject response = new JSONObject();
-//        response.put("isFinished", runnerService.isFinished(containerEntity.getId(), finishedRequest.getProjectId(), finishedRequest.getRunnerId()));
-//
-//        return ResponseEntity.ok(response.toString());
-//    }
-
     private JSONObject prepareJsonResultResponse(Result result) throws JSONException
     {
         JSONObject response = new JSONObject();

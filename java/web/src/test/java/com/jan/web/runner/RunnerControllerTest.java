@@ -25,64 +25,59 @@ public class RunnerControllerTest
     public static final long CONTAINER_ID = 999L;
     public static final long RUNNER_ID = 999L;
     public static final int PROJECT_ID = 999;
+    public static final String RANDOM_RESULT_TEXT = "Random result text";
+    public static final double ACCURACY = 0.99;
+
     private RunnerController runnerController;
     private RunnerRepository runnerRepository;
-    private ContainerRepository containerRepository;
-    private ContainerUtility containerUtility;
     private RunnerService runnerService;
     private RequestValidator requestValidator;
-    private RequestMaker requestMaker;
-    private ProjectRunner projectRunner;
-    private ObjectMapper objectMapper;
     private ResultRepository resultRepository;
-    private HyperParameterRepository hyperParameterRepository;
-    private ProjectRepository projectRepository;
-    private RunnerQueueRepository runnerQueueRepository;
+    private ContainerUtility containerUtility;
 
     @BeforeEach
     public void before()
     {
         runnerRepository = Mockito.mock(RunnerRepository.class);
-        containerRepository = Mockito.mock(ContainerRepository.class);
         containerUtility = Mockito.mock(ContainerUtility.class);
         requestValidator = Mockito.mock(RequestValidator.class);
-        requestMaker = Mockito.mock(RequestMaker.class);
-        projectRunner = Mockito.mock(ProjectRunner.class);
-        objectMapper = Mockito.mock(ObjectMapper.class);
         resultRepository = Mockito.mock(ResultRepository.class);
-        hyperParameterRepository = Mockito.mock(HyperParameterRepository.class);
-        projectRepository = Mockito.mock(ProjectRepository.class);
-        runnerQueueRepository = Mockito.mock(RunnerQueueRepository.class);
-        runnerService = new RunnerServiceImpl(runnerRepository,
-                projectRepository,
-                projectRunner,
-                containerRepository,
-                resultRepository,
-                hyperParameterRepository,
-                runnerQueueRepository,
-                requestMaker,
-                objectMapper);
+        runnerService = Mockito.mock(RunnerService.class);
         runnerController = new RunnerController(runnerRepository, containerUtility, runnerService, requestValidator);
     }
 
 
     @Test
-    public void whenRequestForResultForFinishedRunnerForSecondTime_thenResultIsObtainedFromLocalSource() throws JSONException, IOException
+    public void whenRequestForResultForRunnerInEndState_thenResultIsReturned() throws JSONException, IOException
     {
         ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
         Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
         Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
+
         Result result = Mockito.mock(Result.class);
-        Mockito.when(resultRepository.findByRunnerId(Mockito.anyLong())).thenReturn(Optional.of(result));
+        Mockito.when(result.getResultText()).thenReturn(RANDOM_RESULT_TEXT);
+        Mockito.when(result.getAccuracy()).thenReturn(ACCURACY);
+
+        Mockito.when(runnerService.getResult(CONTAINER_ID, PROJECT_ID, RUNNER_ID)).thenReturn(Optional.of(result));
         ResponseEntity<?> response = runnerController.getResult(RANDOM_JWT_TOKEN, PROJECT_ID, RUNNER_ID);
-        Mockito.verifyZeroInteractions(requestMaker);
+
         Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        Assertions.assertThat(response.getBody().toString()).contains(RANDOM_RESULT_TEXT);
+        Assertions.assertThat(response.getBody().toString()).contains(String.valueOf(ACCURACY));
     }
 
     @Test
     @Ignore
-    public void whenRequestForResultForUnfinishedRunner_thenMessageInReturned()
+    public void whenRequestForResultForUnfinishedRunner_thenMessageInReturned() throws JSONException, IOException
     {
-        //TODO: Jan - implement test case
+        ContainerEntity containerEntity = Mockito.mock(ContainerEntity.class);
+        Mockito.when(containerEntity.getId()).thenReturn(CONTAINER_ID);
+        Mockito.when(requestValidator.validateContainerEntity(Mockito.anyLong())).thenReturn(containerEntity);
+
+        Mockito.when(runnerService.getResult(CONTAINER_ID, PROJECT_ID, RUNNER_ID)).thenReturn(Optional.empty());
+        ResponseEntity<?> response = runnerController.getResult(RANDOM_JWT_TOKEN, PROJECT_ID, RUNNER_ID);
+
+        Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        Assertions.assertThat(response.getBody().toString()).contains("Result cannot be obtained since project is still running!");
     }
 }
