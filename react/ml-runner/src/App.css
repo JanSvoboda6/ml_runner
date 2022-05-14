@@ -86,6 +86,8 @@ ul {
   font-size: 19px;
   padding: 0rem 0.5rem 0rem 0.5rem;
   width: 15rem;
+  color: var(--text-primary);
+  background-color: var(--form-input-color);
 }
 
 ::placeholder {
@@ -256,6 +258,38 @@ width: 7rem;
 .project-control-panel-button:hover{
   color: var(--confirm-color);
   cursor:pointer;
+}
+
+.parameters-button{
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  background-color: transparent;
+  color: #ffffff;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+  opacity: 0.9;
+  margin-top: 5px;
+  outline: none;
+  font-size: 16px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.parameters-button:hover{
+  cursor:pointer;
+}
+
+.parameters-list{
+  width: 300px;
+  margin: 30px auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.parameter-item{
+  margin-top: 10px;
 }
 
 .project-name{
@@ -963,13 +997,10 @@ input[type="file"]
 .runner-form-block{
   text-align: center;
   width: 80%;
-  height: 8vh;
-  margin-top: 1rem;
+  margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
-  border-color: var(--border-color);
-  background-color: var(--bg-secondary);
 }
 
 .runner-item{
@@ -1152,4 +1183,8 @@ input[type="file"]
   margin: 20px;
   position: relative;
   top: -30px;
+}
+
+.hyper-parameter-select{
+  max-width: 150px;
 }

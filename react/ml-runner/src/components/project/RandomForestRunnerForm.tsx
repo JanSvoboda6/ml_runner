@@ -1,15 +1,13 @@
 import React, {useState} from "react";
 
-import {BACKEND_URL} from "../../helpers/url";
 import {HyperParameter} from "../../types";
 import RunnerService from "../../services/RunnerService";
 
 function RandomForestRunnerForm(props: any)
 {
-
-    const [criterionParameter, setCriterion] = useState(0);
-    const [numberOfEstimatorsParameter, setNumberOfEstimators] = useState(0);
-    const [maximumDepthParameter, setMaximumDepth] = useState(0);
+    const [criterionParameter, setCriterion] = useState("gini");
+    const [numberOfEstimatorsParameter, setNumberOfEstimators] = useState(100);
+    const [maximumDepthParameter, setMaximumDepth] = useState(100);
 
     const handleCriterionChange = (e: any) =>
     {
@@ -54,10 +52,21 @@ function RandomForestRunnerForm(props: any)
     return (
         <div className="runner-form">
             <div className="runner-form-block"> <h2>{props.projectName} </h2></div>
-            <div className="runner-form-block"> <input type="text" onChange={handleCriterionChange} placeholder="Criterion parameter" /> </div>
-            <div className="runner-form-block"> <input type="text" onChange={handleNumberOfEstimatorsChange} placeholder="Number of estimators parameter" /> </div>
-            <div className="runner-form-block"> <input type="text" onChange={handleMaximumDepthChange} placeholder="Maximum depth parameter" /> </div>
-            <button className="runner-form-run-button" onClick={(e) => { handleRunButton(e); props.handleRunButton() }}>Save &amp; Run</button>
+            <div className="runner-form-block">
+                <p>Criterion parameter</p>
+                <input type="text" className="input-text" onChange={handleCriterionChange} placeholder="Criterion parameter" value={criterionParameter}/>
+            </div>
+            <div className="runner-form-block">
+                <p>Number of estimators (trees)</p>
+                <input type="text" className="input-text" onChange={handleNumberOfEstimatorsChange} placeholder="Number of estimators" value={numberOfEstimatorsParameter}/>
+            </div>
+            <div className="runner-form-block">
+                <p>Maximum depth parameter</p>
+                <input type="text" className="input-text" onChange={handleMaximumDepthChange} placeholder="Maximum depth parameter" value={maximumDepthParameter}/>
+            </div>
+            <div className="runner-form-block">
+                <button className="runner-form-run-button" onClick={(e) => { handleRunButton(e); props.handleRunButton() }}>Save &amp; Run</button>
+            </div>
         </div>
     )
 }

@@ -10,7 +10,6 @@ const save = (projectName: any, selectedModel: any, labels: Label[], ) =>
     labels.forEach(label => {
         classificationLabels.push({"labelName": label.name, "folderPath": label.folderPath});
     })
-    console.log(classificationLabels);
     return axios.post(API_URL, { projectName, selectedModel, classificationLabels}, { headers: authorizationHeader() })
         .catch(error =>
         {

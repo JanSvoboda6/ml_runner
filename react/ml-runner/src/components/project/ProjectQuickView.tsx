@@ -3,11 +3,10 @@ import {useHistory} from "react-router-dom";
 import Popup from "reactjs-popup";
 import RunnerList from "./RunnerList";
 
-import {BACKEND_URL} from "../../helpers/url";
 import SupportVectorMachinesRunnerForm from "./SupportVectorMachinesRunnerForm";
 import RandomForestRunnerForm from "./RandomForestRunnerForm";
 
-const API_URL = BACKEND_URL + "/api";
+const POPUP_DIMENSIONS = {"width": "700px", "min-height": "500px"};
 
 const ProjectQuickView = (props: any) =>
 {
@@ -30,17 +29,17 @@ const ProjectQuickView = (props: any) =>
         <div className="project-quick-view">
             <div className="control-panel">
                 <div className="project-name">
-                    <h2>{props.name}</h2>
+                    <h2>{props.name} - {props.selectedModel}</h2>
                 </div>
                 <div className="project-control-panel-controls">
-                    <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal>
+                    <Popup trigger={<button className="project-control-panel-button">Run</button>} position="right center" modal {...{contentStyle: POPUP_DIMENSIONS}}>
                         {close => renderRunnerForm(close)}
                     </Popup>
                     <button className="project-control-panel-button" onClick={redirectToAnalysisPage}>Analysis</button>
                 </div>
             </div>
             <div className="runner-list">
-                <RunnerList projectId={props.id} />
+                <RunnerList projectId={props.id} selectedModel={props.selectedModel}/>
             </div>
         </div>
     )

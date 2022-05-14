@@ -211,7 +211,7 @@ function Analysis(props)
                             <div className="total">Total Runs: </div>
                                 <div className="total-number slow">{runners.length}</div>
                                 <div className="total ">Average Validation Accuracy [%]:</div>
-                            <div className="total-number slow "> {(averageValidationResult * 100).toFixed(3)}</div>
+                            <div className="total-number slow "> {(averageValidationResult * 100).toFixed(2)}</div>
                         </div>
                     </div>
                 </div>
@@ -224,7 +224,7 @@ function Analysis(props)
                         <div className="heatmap-structure-wrapper">
                             <div className="hyper-parameter-selector">
                                 <p>X axis: </p>
-                                <select name="model-select" value={firstHyperParameter} onChange={handleFirstHyperParameterSelection}>
+                                <select value={firstHyperParameter} onChange={handleFirstHyperParameterSelection} className={"hyper-parameter-select"}>
                                     {hyperParameterSelector.map((parameter, key) => {
                                         return <option key={key} value={parameter} disabled={parameter === secondHyperParameter}>{parameter}</option>;
                                     })}
@@ -232,7 +232,7 @@ function Analysis(props)
                             </div>
                             <div className="hyper-parameter-selector">
                                 <p>Y axis: </p>
-                                <select name="hyperParameters2" value={secondHyperParameter} onChange={handleSecondHyperParameterSelection}>
+                                <select value={secondHyperParameter} onChange={handleSecondHyperParameterSelection} className={"hyper-parameter-select"}>
                                     {hyperParameterSelector.map((parameter, key) => {
                                         return <option key={key} value={parameter} disabled={parameter === firstHyperParameter}>{parameter}</option>;
                                     })}

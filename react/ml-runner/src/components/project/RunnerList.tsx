@@ -71,7 +71,7 @@ function RunnerList(props: any)
                                     <hr className="grey-horizontal"/>
                                     <li className="runner-item">
                                         <Runner projectName={props.projectName} projectId={runner.projectId}
-                                                runnerId={runner.runnerId}/>
+                                                runnerId={runner.runnerId} selectedModel={props.selectedModel}/>
                                     </li>
                                 </div>
                             ))

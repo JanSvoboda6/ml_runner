@@ -7,8 +7,10 @@ import {BACKEND_URL} from "../../helpers/url";
 import {HyperParameter} from "../../types";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import Popup from "reactjs-popup";
 
 const API_URL = BACKEND_URL + "/api/project";
+const POPUP_DIMENSIONS = {"width": "700px", "min-height": "700px"};
 
 function Runner(props: any)
 {
@@ -82,12 +84,13 @@ function Runner(props: any)
     return (
         <div className="runner-list-table">
             <p>#{props.runnerId}</p>
-            <div>{parameters && parameters.map((parameter, index) => {
-                if(index < 2)
-                {
-                    return (<div key={index}>{parameter.name}: {parameter.value}</div>)
-                }
-            })} </div>
+            <Popup trigger={<button className={"parameters-button"}>Parameters</button>} position="right center" modal {...{ contentStyle: POPUP_DIMENSIONS }}>
+                Runner #{props.runnerId} - {props.selectedModel}
+                <div className={"parameters-list"}>{parameters && parameters.map((parameter, index) => {
+                   return <div className={"parameter-item"} key={index}>{parameter.name}: {parameter.value}</div>
+                })} </div>
+            </Popup>
+
             <p>{moment().format("DD/MM/YYYY")}</p>
             <p className={status == 'FINISHED' ? "text-confirm" : ""}>{status}</p>
             {!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}

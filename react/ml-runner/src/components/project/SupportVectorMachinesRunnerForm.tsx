@@ -6,14 +6,12 @@ import axios from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
 
 import {BACKEND_URL} from "../../helpers/url";
-const API_URL = BACKEND_URL + "/api";
 
 function SupportVectorMachinesRunnerForm(props: any)
 {
-
-    const [gammaParameter, setGammaParameter] = useState(0);
-    const [cParameter, setCParameter] = useState(0);
-    const [kernelParameter, setKernelParameter] = useState("");
+    const [gammaParameter, setGammaParameter] = useState(100);
+    const [cParameter, setCParameter] = useState(10);
+    const [kernelParameter, setKernelParameter] = useState("rbf");
 
     const handleGammaParameterChange = (e: any) =>
     {
@@ -58,10 +56,23 @@ function SupportVectorMachinesRunnerForm(props: any)
     return (
         <div className="runner-form">
             <div className="runner-form-block"> <h2>{props.projectName} </h2></div>
-            <div className="runner-form-block"> <input type="text" onChange={handleGammaParameterChange} placeholder="Gamma parameter" /> </div>
-            <div className="runner-form-block"> <input type="text" onChange={handleCParameterChange} placeholder="C parameter" /> </div>
-            <div className="runner-form-block"> <input type="text" onChange={handleKernelParameterChange} placeholder="Kernel" /> </div>
-            <button className="runner-form-run-button" onClick={(e) => { handleRunButton(e); props.handleRunButton() }}>Save &amp; Run</button>
+            <div className="runner-form-block">
+                <p>Gamma parameter</p>
+                <input type="input-text" className="input-text" onChange={handleGammaParameterChange} placeholder="Gamma parameter" value={gammaParameter}/>
+            </div>
+
+            <div className="runner-form-block">
+                <p>C parameter</p>
+                <input type="text" className="input-text" onChange={handleCParameterChange} placeholder="C parameter" value={cParameter} />
+            </div>
+            <div className="runner-form-block">
+                <p>Kernel parameter</p>
+                <input type="text" className="input-text" onChange={handleKernelParameterChange} placeholder="Kernel parameter" value={kernelParameter}/>
+            </div>
+
+            <div className="runner-form-block">
+                <button className="runner-form-run-button" onClick={(e) => { handleRunButton(e); props.handleRunButton() }}>Save &amp; Run</button>
+            </div>
         </div>
     )
 }

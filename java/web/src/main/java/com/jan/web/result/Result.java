@@ -17,12 +17,8 @@ public class Result
 
     private double accuracy;
 
-    @Column(length = 2000)
+    @Column(length = 5000)
     private String resultText;
-
-//    private ClassificationReport classificationReport;
-//    private ConfusionMatrix confusionMatrix;
-//    private List<ClassAccuracy> accuracyPerClass;
 
     public Long getId()
     {
