@@ -2,8 +2,6 @@ package com.jan.web.security.authentication;
 
 import org.apache.logging.log4j.util.Strings;
 import org.json.JSONObject;
-import org.junit.Ignore;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,7 +29,7 @@ public class AuthenticationControllerValidationTest
     public void whenValidEmailAndPasswordIsPassedDuringRegistration_thenUserWillBeRegistered() throws Exception
     {
         JSONObject json = new JSONObject();
-        json.put("username", EMAIL);
+        json.put("username", "user1@email.com");
         json.put("password", PASSWORD);
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -91,11 +89,12 @@ public class AuthenticationControllerValidationTest
     public void whenLoginRequestBeforeRegistration_thenBadRequestResponseIsReturned() throws Exception
     {
         JSONObject json = new JSONObject();
-        json.put("username", EMAIL + "_NOT_REGISTERED");
+        json.put("username", "user2@email.com");
         json.put("password", PASSWORD);
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.toString()))
                 .andExpect(status().is4xxClientError());
     }
+
 }
