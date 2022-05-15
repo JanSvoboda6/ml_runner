@@ -99,13 +99,13 @@ public class AuthenticationController
 
         if (verificationService.isUserVerificationServiceActivated())
         {
+            userRepository.save(user);
             sendVerificationEmailToUser(user);
         } else
         {
             user.setVerified(true);
+            userRepository.save(user);
         }
-
-        userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
