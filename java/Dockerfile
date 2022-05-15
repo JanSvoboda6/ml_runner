@@ -11,6 +11,7 @@ RUN mkdir /app/web
 RUN mkdir /app/web/java
 RUN mkdir /app/python
 COPY ./web/src/main/resources/import-prod.sql /app/web/java
+COPY ./web/src/main/resources/email/templates/verification.html /app/web/java/src/main/resources/email/templates/verification.html 
 COPY ./web/resources/ /app/web/java/resources/
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/web/java/application.jar
