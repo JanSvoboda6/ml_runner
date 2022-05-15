@@ -28,8 +28,8 @@ function Runner(props: any)
             .then(
                 (res: AxiosResponse<any>) =>
                 {
-                    setLoaded(true);
                     setParameters(res.data.hyperParameters)
+                    setLoaded(true);
                 }
             )
 

@@ -42,7 +42,7 @@ button.deleting:hover{
 input[type=search]{
   background-color: black;
   color: white;
-  opacity: 90%;
+  opacity: 0.9;
   font-size:'Roboto Mono', monospace;
   font-size: 19px;
 }
