@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -15,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest
+@TestPropertySource(properties = {"web.user.verification.active=false"})
 @AutoConfigureMockMvc
 public class AuthenticationControllerValidationTest
 {
@@ -81,7 +83,7 @@ public class AuthenticationControllerValidationTest
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(loginRequestJson.toString()))
                 .andExpect(status().is4xxClientError())
-                .andExpect(content().string("Bad credentials!"));
+                .andExpect(content().string("Email or password is invalid!"));
     }
 
     @Test
@@ -95,5 +97,4 @@ public class AuthenticationControllerValidationTest
                         .content(json.toString()))
                 .andExpect(status().is4xxClientError());
     }
-
 }

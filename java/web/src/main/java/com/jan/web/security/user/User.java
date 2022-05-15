@@ -2,6 +2,7 @@ package com.jan.web.security.user;
 
 
 import com.jan.web.security.role.Role;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "user",
+@Table(name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username")
         })
@@ -28,11 +29,13 @@ public class User
     private String username;
 
     @NotBlank
-    @Size(max = 120)
     private String password;
 
+    @ColumnDefault("false")
+    private boolean isVerified;
+
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
@@ -87,5 +90,15 @@ public class User
     public void setRoles(Set<Role> roles)
     {
         this.roles = roles;
+    }
+
+    public boolean isVerified()
+    {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified)
+    {
+        isVerified = verified;
     }
 }

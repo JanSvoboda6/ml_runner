@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .message-container {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="message-container">
+    <p>Thank you for the registration. Please activate your account by clicking on the link.</p>
+    <a th:href="${link}"  th:ext="${link}">Activation Link</a>
+</div>
+</body>
+</html>

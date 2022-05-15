@@ -3,6 +3,7 @@ package com.jan.web.security.verification;
 import com.jan.web.security.user.User;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.keygen.BytesKeyGenerator;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class VerificationService
     private static final Charset US_ASCII = Charset.forName("US-ASCII");
 
     private VerificationTokenRepository repository;
+
+    @Value("${web.user.verification.active}")
+    private boolean isUserVerificationActive;
 
     @Autowired
     public VerificationService(VerificationTokenRepository repository)
@@ -43,5 +47,10 @@ public class VerificationService
             return tokenOptional.get().getExpiration().isAfter(LocalDateTime.now());
         };
         return false;
+    }
+
+    public boolean isUserVerificationServiceActivated()
+    {
+        return isUserVerificationActive;
     }
 }

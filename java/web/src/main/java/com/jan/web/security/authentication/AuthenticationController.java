@@ -5,8 +5,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.jan.web.security.ValidationException;
 import com.jan.web.security.request.LoginRequest;
-import com.jan.web.security.request.SignupRequest;
+import com.jan.web.security.request.RegisterRequest;
 import com.jan.web.security.response.JwtResponse;
 import com.jan.web.security.response.MessageResponse;
 import com.jan.web.security.role.Role;
@@ -17,20 +18,22 @@ import com.jan.web.security.user.UserCreator;
 import com.jan.web.security.user.UserDetailsImpl;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
+import com.jan.web.security.verification.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -43,6 +46,15 @@ public class AuthenticationController
     private final PasswordEncoder encoder;
     private final JsonWebTokenUtility jsonWebTokenUtility;
     private final UserCreator userCreator;
+    private final VerificationService verificationService;
+    private final VerificationTokenRepository verificationTokenRepository;
+    private final EmailService emailService;
+
+    @Value("${spring.mail.username}")
+    private String FROM_EMAIL;
+
+    @Value("${web.backend.api}")
+    private String BACKEND_API;
 
     @Autowired
     public AuthenticationController(
@@ -51,7 +63,10 @@ public class AuthenticationController
             RoleRepository roleRepository,
             PasswordEncoder encoder,
             JsonWebTokenUtility jsonWebTokenUtility,
-            UserCreator userCreator)
+            UserCreator userCreator,
+            VerificationService verificationService,
+            VerificationTokenRepository verificationTokenRepository,
+            EmailService emailService)
     {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
@@ -59,29 +74,37 @@ public class AuthenticationController
         this.encoder = encoder;
         this.jsonWebTokenUtility = jsonWebTokenUtility;
         this.userCreator = userCreator;
+        this.verificationService = verificationService;
+        this.verificationTokenRepository = verificationTokenRepository;
+        this.emailService = emailService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest signUpRequest)
     {
         if (userRepository.existsByUsername(signUpRequest.getUsername()))
         {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Email is already taken!");
+            throw new ValidationException("Email is already taken!");
         }
 
         User user = userCreator.createUser(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
 
         Set<Role> roles = new HashSet<>();
-        Optional<Role> userRole = roleRepository.findByName(RoleType.ROLE_USER);
-        if (userRole.isEmpty())
-        {
-            //TODO Jan: Use MessageResponse or just String?
-            return ResponseEntity.badRequest().body(new MessageResponse("There is a problem on our side!"));
-        }
-        roles.add(userRole.get());
+        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
+                .orElseThrow(() -> new ValidationException("Role cannot be found!"));
+
+        roles.add(userRole);
         user.setRoles(roles);
+        user.setVerified(false);
+
+        if (verificationService.isUserVerificationServiceActivated())
+        {
+            sendVerificationEmailToUser(user);
+        } else
+        {
+            user.setVerified(true);
+        }
+
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
@@ -94,11 +117,19 @@ public class AuthenticationController
         try
         {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        } catch (AuthenticationException exception) //TODO Jan: Test this case
+        } catch (AuthenticationException exception)
         {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Bad credentials!");
+            if (exception instanceof DisabledException)
+            {
+                throw new ValidationException("The user account is not verified!");
+            }
+            throw new ValidationException("Email or password is invalid!");
+        }
+
+        Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
+        if(!user.get().isVerified())
+        {
+            throw new ValidationException("The user account is not verified!");
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -112,10 +143,41 @@ public class AuthenticationController
         return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getId(), userDetails.getUsername(), roles));
     }
 
+    @GetMapping("/verification")
+    public ResponseEntity<?> verifyUserAccount(@RequestParam("token") String token)
+    {
+        if(verificationService.isVerificationTokenValid(token))
+        {
+            Optional<VerificationToken> verificationTokenOptional = verificationTokenRepository.findByToken(token);
+            if(verificationTokenOptional.isPresent())
+            {
+                User user = verificationTokenOptional.get().getUser();
+                user.setVerified(true);
+                userRepository.save(user);
+                return ResponseEntity.ok("The user account has been verified!");
+            }
+        }
+        return ResponseEntity.badRequest().body("The user account cannot be verified! Please check validity of a token.");
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException exception)
     {
         return ResponseEntity.badRequest().body(exception.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+    }
+
+    private void sendVerificationEmailToUser(User user)
+    {
+        VerificationToken verificationToken = verificationService.createVerificationToken(user);
+        EmailContext emailContext = new EmailContext();
+        emailContext.setFrom(FROM_EMAIL);
+        emailContext.setTo(user.getUsername());
+        emailContext.setTemplateLocation("verification");
+        Context context = new Context();
+        context.setVariable("link", BACKEND_API + "/api/auth/verification?token=" + verificationToken.getToken());
+        emailContext.setContext(context);
+        emailContext.setSubject("Dear user, please activate your account.");
+        emailService.sendEmail(emailContext);
     }
 }
