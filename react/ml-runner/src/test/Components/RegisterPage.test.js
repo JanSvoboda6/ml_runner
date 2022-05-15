@@ -49,7 +49,7 @@ describe('Submitting', () => {
 
         let message = 'A problem occurred';
         const error = {response: {data: message}};
-        
+
         jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
         history.replace = jest.fn();
 
@@ -117,7 +117,7 @@ describe('Submitting', () => {
         };
 
         let message = 'A problem occurred';
-        const error = {response: {data: {message: message}}}
+        const error = {response: {data: message}}
 
         jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
         history.replace = jest.fn();
