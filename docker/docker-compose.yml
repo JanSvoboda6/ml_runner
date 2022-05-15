@@ -18,8 +18,11 @@ services:
   backend:
     container_name: backend
     image: jansvoboda596/ml-runner:java-backend
+    environment:
+      EMAIL: ${EMAIL}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/run/docker.sock:/var/run/docker.sock"  
     restart: 
       unless-stopped  
     networks:
