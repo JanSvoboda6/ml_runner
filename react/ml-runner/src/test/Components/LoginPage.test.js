@@ -18,13 +18,13 @@ describe('Rendering', () => {
 
     test('When there is a login popup parameter then pop window with successful registration is displayed', () => {
         jest.spyOn(redux, 'useDispatch').mockReturnValue(jest.fn());
-        const url = "http://random-url.com/?popup=t";
+        const url = 'http://random-url.com/?popup=t';
         Object.defineProperty(window, "location", {
             value: new URL(url)
         });
 
         render(<Router history={createMemoryHistory()}><LoginPage/></Router>);
-        const popupMessage = screen.getByText("Thanks for registration. Now you can login!");
+        const popupMessage = screen.getByText('Thank you for the registration. We have sent you an activation email.');
         expect(popupMessage).toBeInTheDocument();
     })
 });
@@ -93,7 +93,7 @@ describe('Login', () => {
         const history = createMemoryHistory();
 
         let message = 'A problem occurred';
-        const error = {response: {data: {message: message}}}
+        const error = {response: {data: message}};
 
         jest.spyOn(LoginService, 'login').mockRejectedValue(error);
         history.replace = jest.fn();
@@ -222,14 +222,14 @@ describe('Validation', () => {
             fireEvent.click(loginButton);
         });
 
-        const errorMessage = screen.getByText("Password is not valid!");
+        const errorMessage = screen.getByText('Password cannot be empty!');
         expect(errorMessage).toBeInTheDocument();
     });
 
     test('When email has maximum length of 128 characters then validation is successful', async () => {
         jest.spyOn(redux, 'useDispatch').mockReturnValue(jest.fn());
         const history = createMemoryHistory();
-
+        jest.spyOn(LoginService, 'login').mockResolvedValue('Login successful.');
         history.replace = jest.fn();
 
         await act(async () => {
@@ -237,7 +237,7 @@ describe('Validation', () => {
         });
 
         let name = 'n'.repeat(64);
-        let domain = 'd'.repeat(63);
+        let domain = 'd'.repeat(59);
         let emailAddressWithNameAndDomainLengthOf127 = name + '@' + domain + '.com';
 
         const email = screen.getByPlaceholderText(/email/i);
@@ -253,7 +253,7 @@ describe('Validation', () => {
             fireEvent.click(loginButton);
         });
 
-        const errorMessage = screen.queryByText("Email format is not valid!");
+        const errorMessage = screen.queryByText('Email cannot have more than 128 characters!');
         expect(errorMessage).not.toBeInTheDocument();
 
     });
@@ -285,7 +285,7 @@ describe('Validation', () => {
             fireEvent.click(loginButton);
         });
 
-        const errorMessage = screen.getByText("Email format is not valid!");
+        const errorMessage = screen.getByText('Email cannot have more than 128 characters!');
         expect(errorMessage).toBeInTheDocument();
 
     });
@@ -316,7 +316,7 @@ describe('Validation', () => {
             fireEvent.click(loginButton);
         });
 
-        const errorMessage = screen.queryByText("Password is not valid!");
+        const errorMessage = screen.queryByText('Password cannot have more than 50 character!');
         expect(errorMessage).not.toBeInTheDocument()
     });
 
@@ -344,7 +344,7 @@ describe('Validation', () => {
             fireEvent.click(loginButton);
         });
 
-        const errorMessage = screen.getByText("Password is not valid!");
+        const errorMessage = screen.getByText('Password cannot have more than 50 character!');
         expect(errorMessage).toBeInTheDocument()
     });
 });

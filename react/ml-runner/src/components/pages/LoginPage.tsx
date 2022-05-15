@@ -53,21 +53,7 @@ function Login()
                         setLoggedIn(false);
                         setIsLoading(false);
 
-                        var message = "";
-                        if (error && error.response && error.response.data.message)
-                        {
-                            message = error.response.data.message;
-                        }
-                        else if (error.message)
-                        {
-                            message = error.message;
-                        }
-                        else if (error.toString())
-                        {
-                            message = error.toString();
-                        }
-
-                        setMessage(message);
+                        setMessage(error.response.data);
                     });
         } else
         {
@@ -75,17 +61,27 @@ function Login()
         }
     }
 
-    const validateForm = ():boolean => {
-        if (!Validator.isEmail(username, {ignore_max_length: false})){
+    const validateForm = (): boolean => {
+        if(username.length > 128)
+        {
+            setMessage("Email cannot have more than 128 characters!");
+            return false;
+        }
+        if (!Validator.isEmail(username, {ignore_max_length: false}))
+        {
             setMessage("Email format is not valid!");
             return false;
         }
-
-        if(!Validator.isLength(password, {min:8, max: 50}) || !Validator.isStrongPassword(password)){
-            setMessage("Password is not valid!");
-            return  false;
+        if(password.length === 0)
+        {
+            setMessage("Password cannot be empty!");
+            return false;
         }
-
+        if(password.length > 50)
+        {
+            setMessage("Password cannot have more than 50 character!");
+            return false;
+        }
         return  true;
     }
 
@@ -97,7 +93,7 @@ function Login()
     return (
             <>
             <div className="wrapper">
-                {showPopup == 't' && <HelperBox content="Thanks for registration. Now you can login!" onClose={() => null}/>}
+                {showPopup == 't' && <HelperBox content="Thank you for the registration. We have sent you an activation email." onClose={() => null}/>}
             </div>
             <div className="landing-page-wrapper">
                 <div className="landing-page-content">

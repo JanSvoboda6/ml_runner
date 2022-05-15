@@ -47,7 +47,10 @@ describe('Submitting', () => {
             password: 'Thisisarandompassword_999'
         };
 
-        jest.spyOn(RegisterService, 'register').mockRejectedValue("An error occurred!");
+        let message = 'A problem occurred';
+        const error = {response: {data: message}};
+        
+        jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
         history.replace = jest.fn();
 
         await act(async () => {
@@ -79,7 +82,7 @@ describe('Submitting', () => {
         };
 
         let message = 'A problem occurred';
-        const error = {response: {data: {message: message}}}
+        const error = {response: {data: message}}
 
         jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
         history.replace = jest.fn();
@@ -155,7 +158,7 @@ describe('Validation', () =>
         };
 
         let message = 'A problem occurred';
-        const error = {response: {data: {message: message}}}
+        const error = {response: {data: message}}
 
         jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
         history.replace = jest.fn();
@@ -195,7 +198,7 @@ describe('Validation', () =>
         };
 
         let message = 'A problem occurred';
-        const error = {response: {data: {message: message}}}
+        const error = {response: {data: message}}
 
         jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
         history.replace = jest.fn();
@@ -221,7 +224,7 @@ describe('Validation', () =>
         expect(errorMessage).toBeInTheDocument()
     });
 
-    test('When password is longer than maximum length then the warning message is displayed', async() =>{
+    test('When password is longer than 50 character then the warning message is displayed', async() =>{
         jest.spyOn(Validator, "isEmail").mockReturnValue(true);
         jest.spyOn(Validator, "isLength").mockReturnValue(false);
         jest.spyOn(Validator, "isStrongPassword").mockReturnValue(true);
@@ -234,7 +237,7 @@ describe('Validation', () =>
         };
 
         let message = 'A problem occurred';
-        const error = {response: {data: {message: message}}}
+        const error = {response: {data: message}};
 
         jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
         history.replace = jest.fn();
@@ -256,7 +259,7 @@ describe('Validation', () =>
             fireEvent.click(signUpButton);
         });
 
-        const errorMessage = screen.getByText("Password is not valid!");
+        const errorMessage = screen.getByText('Password is not strong enough.', {exact: false});
         expect(errorMessage).toBeInTheDocument();
     });
 
@@ -273,7 +276,7 @@ describe('Validation', () =>
         };
 
         let message = 'A problem occurred';
-        const error = {response: {data: {message: message}}}
+        const error = {response: {data: message}};
 
         jest.spyOn(RegisterService, 'register').mockRejectedValue(error);
         history.replace = jest.fn();
@@ -295,7 +298,7 @@ describe('Validation', () =>
             fireEvent.click(signUpButton);
         });
 
-        const errorMessage = screen.getByText("Password is not valid!");
+        const errorMessage = screen.getByText('Password is not strong enough.', {exact: false});
         expect(errorMessage).toBeInTheDocument();
     });
 });
