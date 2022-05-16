@@ -1089,6 +1089,10 @@ input[type="file"]
   background-color: transparent;
 }
 
+.analysis-heatmap-legend{
+  top: 30px;
+  position: relative;
+}
 .analysis-graph{
   display: flex;
   align-items: center;

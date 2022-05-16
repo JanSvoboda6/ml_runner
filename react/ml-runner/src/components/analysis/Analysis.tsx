@@ -15,6 +15,7 @@ import {useLocation} from "react-router";
 import queryString from "query-string";
 import SimpleGraph from "./SimpleGraph";
 import SimpleChart, {Data} from "./SimpleChart";
+import fromExponential from 'from-exponential';
 
 const API_URL = BACKEND_URL + "/api/project";
 
@@ -122,6 +123,8 @@ function Analysis(props)
         // ];
     }
 
+    function sortFloat(a,b) { return a - b; }
+
     const getHyperParameterValues = (runners: Runner[], hyperParameter) => {
         let hyperParameterValues: Array<string> = [];
 
@@ -136,7 +139,19 @@ function Analysis(props)
                 }
             });
         });
-        return hyperParameterValues.sort(new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'}).compare);
+        let hasNumber = /\d/;
+        if (hasNumber.test(hyperParameterValues[0])) {
+            let hyperParameterValuesNumber: number[] = [];
+            hyperParameterValues.forEach(parameter => hyperParameterValuesNumber.push(Number((parameter))));
+            console.log(hyperParameterValues);
+            hyperParameterValuesNumber.sort(sortFloat);
+            console.log(hyperParameterValuesNumber);
+            hyperParameterValues = []
+            hyperParameterValuesNumber.forEach(number => hyperParameterValues.push(fromExponential(number)))
+            console.log(hyperParameterValues);
+            return hyperParameterValues;
+        }
+        return hyperParameterValues.sort();
     }
 
     const addToResults = (resultToAdd:IndividualResult, tickValuesX: Array<string>, tickValuesY: Array<string>, results) => {
@@ -240,9 +255,11 @@ function Analysis(props)
                             </div>
                             <div className="analysis-heatmap">
                                 <Heatmap bins={heatMapBins} tickValuesX={tickValuesX} tickValuesY={tickValuesY}
-                                         width={600} height={500} xAxisLabel={firstHyperParameter + " [-]"}
+                                         width={600} height={520} xAxisLabel={firstHyperParameter + " [-]"}
                                          yAxisLabel={secondHyperParameter + " [-]"}/>
-                                <LegendChart/>
+                                <div className="analysis-heatmap-legend">
+                                    <LegendChart/>
+                                </div>
                             </div>
                         </div>
                     </div>

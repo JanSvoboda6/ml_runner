@@ -83,11 +83,11 @@ export default ({
         return tickValuesX[tickItem];
     }
 
-    const offset = 50;
+    const offset = 90;
 
     const formatYAxis = (tickItem) => {
     return tickValuesY[tickItem];
-}
+    }
 
     const getColorBasedOnCountValue = (count: number | null | undefined) => {
         if(count === undefined || count === null || count <= 0.5)
@@ -122,7 +122,6 @@ export default ({
                                     fillOpacity={ 0.8}
                                     onClick={ () =>
                                     {
-                                        const { row, column } = bin;
                                         if(bin.bin)
                                         {                 
                                             onBinClick(bin);
@@ -145,10 +144,10 @@ export default ({
                 tickStroke={'#fff'}
                 label={xAxisLabel}
                 labelProps={{
-                    y: -32,
+                    y: -60,
                     fill: '#fff',
                     fontSize: 15,
-                    strokeWidth: 0,
+                    strokeWidth: 1,
                     stroke: '#fff',
                     paintOrder: 'stroke',
                     textAnchor: 'middle',
@@ -156,8 +155,9 @@ export default ({
                 tickLabelProps={() => ({
                     fill: 'white',
                     fontSize: 13,
-                    textAnchor: 'middle',
-                    y: -15
+                    textAnchor: 'start',
+                    y: -15,
+                    angle: -90
                 })}/>
             </g>
 
@@ -173,8 +173,10 @@ export default ({
                 labelProps={{
                     fill: '#fff',
                     fontSize: 15,
+                    stroke: '#fff',
+                    strokeWidth: 1,
                     textAnchor: 'middle',
-                    y: -50
+                    y: -60
                 }}
                 tickStroke={'#fff'}
                 tickLabelProps={() => ({
