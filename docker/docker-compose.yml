@@ -14,6 +14,7 @@ services:
     container_name: backend
     image: jansvoboda596/ml-runner:java-backend
     environment:
+      - JWT_SECRET
       - EMAIL
       - EMAIL_PASSWORD
       - MYSQL_DATABASE
