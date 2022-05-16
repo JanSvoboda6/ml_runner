@@ -1,26 +1,24 @@
 version: '3'
 services:
-  database:
-      container_name: database
-      image: jansvoboda596/ml-runner:database
-      ports:
-        - "3306:3306"  
-      environment:
-        - MYSQL_ROOT_PASSWORD=mysql
-        - MYSQL_DATABASE=machine_learning_database
-      volumes:
-        - ~/database:/var/lib/mysql
-      networks:
-        - database
-      command: 
-        mysqld --init-file="/tmp/database/init.sql"   
-  
+  nginx:
+    container_name: nginx
+    image: jansvoboda596/ml-runner:nginx
+    stdin_open: true
+    ports:
+      - "80:80"
+    networks:
+      - frontend
+      - backend  
+
   backend:
     container_name: backend
     image: jansvoboda596/ml-runner:java-backend
     environment:
       - EMAIL
       - EMAIL_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"  
     restart: 
@@ -36,17 +34,22 @@ services:
     image: jansvoboda596/ml-runner:react-frontend
     stdin_open: true
     networks:
-      - frontend     
-
-  nginx:
-    container_name: nginx
-    image: jansvoboda596/ml-runner:nginx
-    stdin_open: true
-    ports:
-      - "80:80"
-    networks:
       - frontend
-      - backend      
+
+  database: 
+    container_name: database
+    image: mysql
+    ports:
+      - "3306:3306"  
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+    volumes:
+      - ~/database:/var/lib/mysql
+    networks:
+      - database
   
 networks:
   frontend:
