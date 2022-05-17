@@ -51,7 +51,7 @@ def run():
     labels = np.array(labels)
 
     training_samples, testing_samples, training_labels, testing_labels = train_test_split(samples, labels,
-                                                                                          test_size=0.2)
+                                                                                          test_size=0.2, random_state=1)
     inform_on_status_change(runner_id, Status.TRAINING)
     classifier = svm.SVC(verbose=0, gamma=gamma, C=c, kernel=kernel)
     classifier.fit(training_samples, training_labels)
