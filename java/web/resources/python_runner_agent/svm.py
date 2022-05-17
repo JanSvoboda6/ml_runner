@@ -43,7 +43,7 @@ def run():
     labels = []
     for idx, label in enumerate(classification_labels):
         for file in glob(ROOT_DIRECTORY + label['folderPath'] + '*.npy'):
-            sample = np.load(file)
+            sample = np.load(file, allow_pickle=True)
             samples.append(sample)
             labels.append(label['labelName'])
 
