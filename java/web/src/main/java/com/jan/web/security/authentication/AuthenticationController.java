@@ -1,10 +1,5 @@
 package com.jan.web.security.authentication;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
 import com.jan.web.security.ValidationException;
 import com.jan.web.security.request.LoginRequest;
 import com.jan.web.security.request.RegisterRequest;
@@ -15,7 +10,6 @@ import com.jan.web.security.role.RoleRepository;
 import com.jan.web.security.role.RoleType;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserCreator;
-import com.jan.web.security.user.UserDetailsImpl;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
 import com.jan.web.security.verification.*;
@@ -23,16 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.context.Context;
+
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

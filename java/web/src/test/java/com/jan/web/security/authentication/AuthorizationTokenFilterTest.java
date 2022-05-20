@@ -1,25 +1,16 @@
 package com.jan.web.security.authentication;
 
-import com.jan.web.security.role.Role;
-import com.jan.web.security.role.RoleType;
-import com.jan.web.security.user.User;
-import com.jan.web.security.user.UserDetailsImpl;
 import com.jan.web.security.utility.JsonWebTokenUtility;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Set;
 
 public class AuthorizationTokenFilterTest
 {
@@ -29,22 +20,13 @@ public class AuthorizationTokenFilterTest
     public static final String USER_NOT_FOUND = "User not found!";
 
     private JsonWebTokenUtility jsonWebTokenUtility;
-    private UserDetailsService userDetailsService;
     private AuthorizationTokenFilter authorizationTokenFilter;
 
     @BeforeEach
     public void before()
     {
         jsonWebTokenUtility = Mockito.mock(JsonWebTokenUtility.class);
-        userDetailsService = Mockito.mock(UserDetailsService.class);
-        authorizationTokenFilter = new AuthorizationTokenFilter(jsonWebTokenUtility, userDetailsService);
-        SecurityContextHolder.getContext().setAuthentication(null);
-    }
-
-    @AfterEach
-    public void after()
-    {
-        SecurityContextHolder.getContext().setAuthentication(null);
+        authorizationTokenFilter = new AuthorizationTokenFilter(jsonWebTokenUtility);
     }
 
     @Test
@@ -71,7 +53,7 @@ public class AuthorizationTokenFilterTest
 
         authorizationTokenFilter.doFilterInternal(request, response, filterChain);
 
-        Mockito.verify(jsonWebTokenUtility, Mockito.times(0)).validateJwtToken(Mockito.anyString()));
+        Mockito.verify(jsonWebTokenUtility, Mockito.times(0)).validateJwtToken(Mockito.anyString());
     }
 
     @Test
@@ -113,7 +95,5 @@ public class AuthorizationTokenFilterTest
 
         Assertions.assertThatThrownBy(() -> authorizationTokenFilter.doFilterInternal(request, response, filterChain))
                 .hasMessage("Invalid JWT token supplied!");
-
     }
-
 }

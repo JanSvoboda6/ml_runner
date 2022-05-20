@@ -8,7 +8,6 @@ import com.jan.web.security.role.RoleRepository;
 import com.jan.web.security.role.RoleType;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserCreator;
-import com.jan.web.security.user.UserDetailsImpl;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
 import com.jan.web.security.verification.*;
@@ -19,9 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 

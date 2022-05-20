@@ -2,11 +2,10 @@ package com.jan.web.api;
 
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.jan.web.docker.ContainerRepository;
-import com.jan.web.project.ClassificationLabelJson;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.runner.Runner;
 import com.jan.web.runner.RunnerRepository;
+import com.jan.web.security.authentication.AuthenticationManager;
 import com.jan.web.security.role.Role;
 import com.jan.web.security.role.RoleRepository;
 import com.jan.web.security.role.RoleType;
@@ -31,15 +30,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -66,9 +60,6 @@ public class ApiTest
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JsonWebTokenUtility jsonWebTokenUtility;
