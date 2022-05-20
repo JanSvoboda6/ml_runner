@@ -2,6 +2,8 @@ package com.jan.web.api;
 
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.jan.web.docker.ContainerEntity;
+import com.jan.web.docker.ContainerRepository;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.runner.Runner;
 import com.jan.web.runner.RunnerRepository;
@@ -81,9 +83,8 @@ public class ApiTest
         Role userRole = roleRepository.findByName(RoleType.ROLE_USER).orElseThrow();
         roles.add(userRole);
         user.setRoles(roles);
-        userRepository.save(user);
+        user = userRepository.save(user);
         jwtToken = jsonWebTokenUtility.generateJwtToken(user);
-
         DefaultDockerClientConfig.Builder config = DefaultDockerClientConfig.createDefaultConfigBuilder();
         DockerClientBuilder.getInstance(config.build()).build();
     }
@@ -222,33 +223,4 @@ public class ApiTest
         Assertions.assertThat(restTemplate.exchange(BASE_URL + port + "/api/project/runners?projectId=" + projectId, HttpMethod.GET, runnerRequest, String.class).getBody())
                 .isEqualTo("[ ]");
     }
-
-    //TODO Jan: Why the test is commented?
-//    @Test
-//    public void whenRequestForRunningProject_thenRunnerIsCreated() throws JSONException, IOException
-//    {
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Authorization", "Bearer " + jwtToken);
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        JSONObject projectRequestJson = new JSONObject();
-//        projectRequestJson.put("projectName", "random name");
-//
-//        HttpEntity<String> projectRequest = new HttpEntity<>(projectRequestJson.toString(), headers);
-//        restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, projectRequest, String.class);
-//        String projectResponseBody = restTemplate.exchange(BASE_URL + port + "/api/project", HttpMethod.GET, projectRequest, String.class).getBody();
-//
-//        JsonNode projectJson = new ObjectMapper().readTree(projectResponseBody);
-//        long projectId = Long.parseLong(projectJson.get(0).get("id").toString());
-//
-//        JSONObject runRequestJson = new JSONObject();
-//        runRequestJson.put("projectId", projectId);
-//
-//        HttpEntity<String> runRequest = new HttpEntity<>(runRequestJson.toString(), headers);
-//        String runnerResponseBody = restTemplate.exchange(BASE_URL + port + "/api/project/runner/run", HttpMethod.POST, runRequest, String.class).getBody();
-//        JsonNode runnerJson = new ObjectMapper().readTree(runnerResponseBody);
-//
-//        containerEntity = containerRepository.findById(Long.parseLong(runnerJson.get(0).get("id").toString())).get();
-//
-//        Assertions.assertThat(runnerRepository.findAllByProjectId(projectId).get(0)).isNotNull();
-//    }
 }

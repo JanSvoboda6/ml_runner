@@ -62,7 +62,6 @@ public class RunnerServiceImpl implements RunnerService
         this.objectMapper = objectMapper;
     }
 
-    //TODO Jan: callWithHyperparameters
     @Override
     public void runProject(List<HyperParameter> hyperParameters, Project project, ContainerEntity containerEntity)
     {

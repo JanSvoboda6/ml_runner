@@ -34,7 +34,6 @@ public class DatasetController
     @PostMapping(value = "createdirectory") //TODO Jan: rename to directory
     public ResponseEntity<?> createDirectory(@RequestHeader(name="Authorization") String token, @RequestBody Key directoryKey) //TODO Jan: is Key needed?
     {
-        //TODO Jan: Filter keys with parent directory symbols ..
         fileService.createFolder(directoryKey.getKey(), containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }

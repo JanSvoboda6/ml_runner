@@ -71,8 +71,8 @@ public class ProjectController
                 request.getSelectedModel(),
                 classificationLabels
         );
-        projectRepository.save(project);
-        return ResponseEntity.ok("Project " + project.getName() + " saved!");
+        Project savedProject = projectRepository.save(project);
+        return ResponseEntity.ok().body(Collections.singletonMap("id", savedProject.getId()));
     }
 
     @GetMapping(value = "/runners", produces = MediaType.APPLICATION_JSON_VALUE)

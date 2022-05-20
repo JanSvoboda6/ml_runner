@@ -1,5 +1,7 @@
 package com.jan.web.security.role;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 
 @Entity
