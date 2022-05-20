@@ -31,20 +31,17 @@ public class DatasetController
         return fileService.getAllFiles(containerUtility.getContainerIdFromToken(token));
     }
 
-    @PostMapping(value = "createdirectory") //TODO Jan: rename to directory
-    public ResponseEntity<?> createDirectory(@RequestHeader(name="Authorization") String token, @RequestBody Key directoryKey) //TODO Jan: is Key needed?
+    @PostMapping(value = "/createdirectory")
+    public ResponseEntity<?> createFolder(@RequestHeader(name="Authorization") String token, @RequestBody Key directoryKey) //TODO Jan: is Key needed?
     {
         fileService.createFolder(directoryKey.getKey(), containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFiles(
-            @RequestHeader(name="Authorization") String token,
-            @RequestPart("keys") Keys keys, //TODO Jan: Are Keys needed?
-            @RequestPart("files") List<MultipartFile> files)
+    public ResponseEntity<?> uploadFiles(@RequestHeader(name="Authorization") String token, @RequestBody UploadRequest request)
     {
-        fileService.uploadFiles(keys, files, containerUtility.getContainerIdFromToken(token));
+        fileService.uploadFiles(request.getKeys(), request.getFiles(), containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 

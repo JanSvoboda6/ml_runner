@@ -112,15 +112,14 @@ public class RunningFlowTest
         MultipartFile secondLabelFile2 = new MockMultipartFile("feature_vector_second_class_2.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_2.npy")));
         MultipartFile secondLabelFile3 = new MockMultipartFile("feature_vector_second_class_3.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_3.npy")));
 
-        Keys keys = new Keys();
-        keys.setKeys(List.of("test_folder/first_class/feature_vector_first_class_1.npy",
+        List<String> folderKeys = List.of("test_folder/first_class/feature_vector_first_class_1.npy",
                 "test_folder/first_class/feature_vector_first_class_2.npy",
                 "test_folder/first_class/feature_vector_first_class_3.npy",
                 "test_folder/second_class/feature_vector_second_class_1.npy",
                 "test_folder/second_class/feature_vector_second_class_2.npy",
-                "test_folder/second_class/feature_vector_second_class_3.npy"));
+                "test_folder/second_class/feature_vector_second_class_3.npy");
 
-        containerFileService.uploadFiles(keys, List.of(firstLabelFile1, firstLabelFile2, firstLabelFile3, secondLabelFile1, secondLabelFile2, secondLabelFile3), containerId);
+        containerFileService.uploadFiles(folderKeys, List.of(firstLabelFile1, firstLabelFile2, firstLabelFile3, secondLabelFile1, secondLabelFile2, secondLabelFile3), containerId);
 
         List<ClassificationLabel> classificationLabels = List.of(
                 new ClassificationLabel("first_label", "test_folder/first_class/"),
@@ -181,15 +180,14 @@ public class RunningFlowTest
         MultipartFile secondLabelFile2 = new MockMultipartFile("feature_vector_second_class_2.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_2.npy")));
         MultipartFile secondLabelFile3 = new MockMultipartFile("feature_vector_second_class_3.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_3.npy")));
 
-        Keys keys = new Keys();
-        keys.setKeys(List.of("test_folder/first_class/feature_vector_first_class_1.npy",
+        List<String> folderKeys = List.of("test_folder/first_class/feature_vector_first_class_1.npy",
                 "test_folder/first_class/feature_vector_first_class_2.npy",
                 "test_folder/first_class/feature_vector_first_class_3.npy",
                 "test_folder/second_class/feature_vector_second_class_1.npy",
                 "test_folder/second_class/feature_vector_second_class_2.npy",
-                "test_folder/second_class/feature_vector_second_class_3.npy"));
+                "test_folder/second_class/feature_vector_second_class_3.npy");
 
-        containerFileService.uploadFiles(keys, List.of(firstLabelFile1, firstLabelFile2, firstLabelFile3, secondLabelFile1, secondLabelFile2, secondLabelFile3), containerId);
+        containerFileService.uploadFiles(folderKeys, List.of(firstLabelFile1, firstLabelFile2, firstLabelFile3, secondLabelFile1, secondLabelFile2, secondLabelFile3), containerId);
 
         List<ClassificationLabel> classificationLabels = List.of(
                 new ClassificationLabel("first_label", "test_folder/first_class/"),
@@ -249,15 +247,14 @@ public class RunningFlowTest
         MultipartFile secondLabelFile2 = new MockMultipartFile("feature_vector_second_class_2.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_2.npy")));
         MultipartFile secondLabelFile3 = new MockMultipartFile("feature_vector_second_class_3.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_3.npy")));
 
-        Keys keys = new Keys();
-        keys.setKeys(List.of("test_folder/first_class/feature_vector_first_class_1.npy",
+        List<String> folderKeys = List.of("test_folder/first_class/feature_vector_first_class_1.npy",
                 "test_folder/first_class/feature_vector_first_class_2.npy",
                 "test_folder/first_class/feature_vector_first_class_3.npy",
                 "test_folder/second_class/feature_vector_second_class_1.npy",
                 "test_folder/second_class/feature_vector_second_class_2.npy",
-                "test_folder/second_class/feature_vector_second_class_3.npy"));
+                "test_folder/second_class/feature_vector_second_class_3.npy");
 
-        containerFileService.uploadFiles(keys, List.of(firstLabelFile1, firstLabelFile2, firstLabelFile3, secondLabelFile1, secondLabelFile2, secondLabelFile3), containerId);
+        containerFileService.uploadFiles(folderKeys, List.of(firstLabelFile1, firstLabelFile2, firstLabelFile3, secondLabelFile1, secondLabelFile2, secondLabelFile3), containerId);
 
         List<ClassificationLabel> classificationLabels = List.of(
                 new ClassificationLabel("first_label", "test_folder/first_class/"),

@@ -100,11 +100,9 @@ class ContainerFileServiceTest
     public void whenUploadingFiles_thenFilesAreStoredInContainer()
     {
         final String fileName = "test_file.txt";
-        Keys keys = new Keys();
-        keys.setKeys(List.of(fileName));
         List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]));
 
-        fileService.uploadFiles(keys, files, CONTAINER_ID);
+        fileService.uploadFiles(List.of(fileName), files, CONTAINER_ID);
         List<FileInformation> uploadedFiles = fileService.getAllFiles(CONTAINER_ID);
         Assertions.assertThat(uploadedFiles.get(0).getKey()).isEqualTo(fileName);
     }
@@ -114,12 +112,10 @@ class ContainerFileServiceTest
     {
         final String folderName = "AAA/";
         final String fileName = folderName + "aaa.txt";
-        Keys keys = new Keys();
-        keys.setKeys(List.of(fileName));
         List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]));
 
         fileService.createFolder(folderName, CONTAINER_ID);
-        fileService.uploadFiles(keys, files, CONTAINER_ID);
+        fileService.uploadFiles(List.of(fileName), files, CONTAINER_ID);
         List<FileInformation> uploadedFiles = fileService.getAllFiles(CONTAINER_ID);
         Assertions.assertThat(uploadedFiles.get(1).getKey()).isEqualTo(fileName);
     }
@@ -129,14 +125,11 @@ class ContainerFileServiceTest
     {
         final String folderName = "AAA/";
         final String fileName =  folderName + "test_file.txt";
-
-        Keys fileKeys = new Keys();
-        fileKeys.setKeys(List.of(fileName));
         List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]));
 
         fileService.createFolder(folderName, CONTAINER_ID);
         fileService.createFolder(folderName + "BBB/", CONTAINER_ID);
-        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.uploadFiles(List.of(fileName), files, CONTAINER_ID);
         fileService.deleteFolders(List.of(folderName), CONTAINER_ID);
 
         Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID)).isEmpty();
@@ -148,14 +141,11 @@ class ContainerFileServiceTest
         final String folderName = "AAA/";
         final String firstFileName =  folderName + "aaa.txt";
         final String secondFileName =  folderName + "bbb.txt";
-
-        Keys fileKeys = new Keys();
-        fileKeys.setKeys(List.of(firstFileName, secondFileName));
         List<MultipartFile> files = List.of(new MockMultipartFile(firstFileName, new byte[1]),
                 new MockMultipartFile(secondFileName, new byte[1]));
 
         fileService.createFolder(folderName, CONTAINER_ID);
-        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.uploadFiles(List.of(firstFileName, secondFileName), files, CONTAINER_ID);
         fileService.deleteFiles(List.of(firstFileName, secondFileName), CONTAINER_ID);
         Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).size()).isEqualTo(1);
         Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).get(0).getKey()).isEqualTo(folderName);
@@ -167,14 +157,11 @@ class ContainerFileServiceTest
         final String folderName = "AAA/";
         final String fileName =  folderName + "aaa.txt";
         final String renamedFile =  folderName + "bbb.txt";
-
-        Keys fileKeys = new Keys();
-        fileKeys.setKeys(List.of(fileName, renamedFile));
         List<MultipartFile> files = List.of(new MockMultipartFile(fileName, new byte[1]),
                 new MockMultipartFile(renamedFile, new byte[1]));
 
         fileService.createFolder(folderName, CONTAINER_ID);
-        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.uploadFiles(List.of(fileName, renamedFile), files, CONTAINER_ID);
         fileService.moveFile(fileName, renamedFile, CONTAINER_ID);
         Assertions.assertThat(fileService.getAllFiles(CONTAINER_ID).get(1).getKey()).isEqualTo(renamedFile);
     }
@@ -186,14 +173,11 @@ class ContainerFileServiceTest
         final String newFolderName = "BBB/";
         final String firstFileName =  folderName + "aaa.txt";
         final String secondFileName =  folderName + "bbb.txt";
-
-        Keys fileKeys = new Keys();
-        fileKeys.setKeys(List.of(firstFileName, secondFileName));
         List<MultipartFile> files = List.of(new MockMultipartFile(firstFileName, new byte[1]),
                 new MockMultipartFile(secondFileName, new byte[1]));
 
         fileService.createFolder(folderName, CONTAINER_ID);
-        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.uploadFiles(List.of(firstFileName, secondFileName), files, CONTAINER_ID);
         fileService.moveFolder(folderName, newFolderName, CONTAINER_ID);
 
         final String newFirstFileName =  newFolderName + "aaa.txt";
@@ -213,14 +197,11 @@ class ContainerFileServiceTest
         final String folderName = "AAA/";
         final String firstFileName =  folderName + "aaa.txt";
         final String secondFileName =  folderName + "bbb.txt";
-
-        Keys fileKeys = new Keys();
-        fileKeys.setKeys(List.of(firstFileName, secondFileName));
         List<MultipartFile> files = List.of(new MockMultipartFile(firstFileName, new byte[1]),
                 new MockMultipartFile(secondFileName, new byte[1]));
 
         fileService.createFolder(folderName, CONTAINER_ID);
-        fileService.uploadFiles(fileKeys, files, CONTAINER_ID);
+        fileService.uploadFiles(List.of(firstFileName, secondFileName), files, CONTAINER_ID);
         ResponseEntity<byte[]> downloadResponse = fileService.download(List.of(folderName), CONTAINER_ID);
 
         Assertions.assertThat(downloadResponse.getBody()).isNotNull();

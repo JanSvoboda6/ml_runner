@@ -4,7 +4,6 @@ import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
-import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -15,6 +14,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -87,46 +87,42 @@ public class ContainerFileService implements FileService
         return fileInformationList;
     }
 
-    public void uploadFiles(Keys keys, List<MultipartFile> files, long containerId)
+    public void uploadFiles(List<String> keys, List<MultipartFile> files, long containerId)
     {
-        if(keys.getKeys().size() != files.size())
+        if(keys.size() != files.size())
         {
-            return;
+            throw new RuntimeException("Keys and files size are not equal!");
         }
-        CloseableHttpClient httpClient = HttpClients.createDefault();
         Optional<ContainerEntity> containerEntity = repository.findById(containerId);
         if(containerEntity.isPresent())
         {
-            HttpPost uploadFile = new HttpPost(containerEntity.get().getConnectionString() + RequestMethod.UPLOAD_FILES.getRequestUrl());
+            HttpPost uploadFileToContainerRequest = new HttpPost(containerEntity.get().getConnectionString() + RequestMethod.UPLOAD_FILES.getRequestUrl());
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             try
             {
-                for (int i = 0; i < keys.getKeys().size(); i++)
+                for (int i = 0; i < keys.size(); i++)
                 {
                     builder.addBinaryBody(
-                            keys.getKeys().get(i),
+                            keys.get(i),
                             files.get(i).getBytes(),
                             ContentType.DEFAULT_BINARY,
                             files.get(i).getName());
                 }
-            } catch (FileNotFoundException e)
+            }
+            catch (Exception exception)
             {
-                e.printStackTrace();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
+                throw new RuntimeException(exception);
             }
 
-            HttpEntity multipart = builder.build();
-            uploadFile.setEntity(multipart);
-
-            CloseableHttpResponse response = null;
+            uploadFileToContainerRequest.setEntity(builder.build());
+            CloseableHttpClient httpClient = HttpClients.createDefault();
             try
             {
-                response = httpClient.execute(uploadFile);
-            } catch (IOException e)
+                httpClient.execute(uploadFileToContainerRequest);
+            }
+            catch (IOException exception)
             {
-                e.printStackTrace();
+                throw new RuntimeException(exception);
             }
         }
     }
@@ -158,12 +154,7 @@ public class ContainerFileService implements FileService
     {
         try
         {
-            JSONObject request = new JSONObject();
-            request.put("keys", keys);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
-
+            HttpEntity<String> entity = constructHttpEntity(keys);
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
                     container.getConnectionString(),
@@ -180,12 +171,7 @@ public class ContainerFileService implements FileService
     {
         try
         {
-            JSONObject request = new JSONObject();
-            request.put("keys", keys);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
-
+            HttpEntity<String> entity = constructHttpEntity(keys);
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
                     container.getConnectionString(),
@@ -195,6 +181,15 @@ public class ContainerFileService implements FileService
         {
             e.printStackTrace();
         }
+    }
+
+    private HttpEntity<String> constructHttpEntity(List<String> keys) throws JSONException
+    {
+        JSONObject request = new JSONObject();
+        request.put("keys", keys);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(request.toString(), headers);
     }
 
     @Override
