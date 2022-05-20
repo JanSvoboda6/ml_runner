@@ -36,7 +36,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApiTest
+public class ProjectApiTest
 {
     private static final String BASE_URL = "http://localhost:";
     private static final String TEST_USER = "user@email.com";
