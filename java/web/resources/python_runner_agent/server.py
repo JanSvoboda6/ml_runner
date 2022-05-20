@@ -120,16 +120,7 @@ def walk_directory(root_directory):
 @app.route('/runner/execute', methods=['POST'])
 def execute_runner():
     runner = request.get_json()
-
-    Path('runners_info/' + str(runner['runnerId'])).mkdir(parents=True, exist_ok=True)
-
-    with open('runners_info/' + str(runner['runnerId']) + '/configuration.json', 'w') as json_file:
-        json.dump(runner, json_file)
-
-    with open('runners_info/' + str(runner['runnerId']) + '/status.txt', 'w') as status_file:
-        status_file.write('INITIAL' + '\n')
-
-    log_file = open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'w')
+    log_file = prepare_runner_configuration_files(runner)
 
     if runner['selectedModel'] == 'Support Vector Machines':
         subprocess.Popen(['nohup', 'python3', 'models/svm_old.py', str(runner['runnerId'])],
@@ -168,6 +159,17 @@ def get_result():
         result_text = log_file.read()
 
     return jsonify({'resultText': result_text, 'accuracy': accuracy})
+
+
+def prepare_runner_configuration_files(runner):
+    destination_folder = 'runners_info/' + str(runner['runnerId'])
+    Path(destination_folder).mkdir(parents=True, exist_ok=True)
+    with open(destination_folder + '/configuration.json', 'w') as json_file:
+        json.dump(runner, json_file)
+    with open(destination_folder + '/status.txt', 'w') as status_file:
+        status_file.write('INITIAL' + '\n')
+    log_file = open(destination_folder + '/log.txt', 'w')
+    return log_file
 
 
 if __name__ == "__main__":
