@@ -2,18 +2,18 @@ package com.jan.web.request;
 
 public enum RequestMethod
 {
-    RUN_PROJECT("/runproject"),
-    RUNNER_STATUS("/project/runner/status"),
-    CREATE_DIRECTORY("/createdirectory"),
+    EXECUTE_RUNNER("/runner/execute"),
+    RUNNER_STATUS("/runner/status"),
+    CREATE_FOLDER("/folders/create"),
     BATCH_DELETE_FOLDERS("/folders/delete"),
     BATCH_DELETE_FILES("/files/delete"),
-    IS_RUNNER_FINISHED("/project/runner/finished"),
-    RUNNER_RESULT("/project/runner/result"),
-    GET_FILES("/getfiles"),
+    RUNNER_RESULT("/runner/result"),
+    GET_FILES("/files"),
     UPLOAD_FILES("/upload"),
     MOVE_FILE("/files/move"),
     MOVE_FOLDER("/folders/move"),
     DOWNLOAD("/download");
+
     private final String requestUrl;
 
     RequestMethod(String requestUrl)

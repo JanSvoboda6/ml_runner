@@ -139,7 +139,7 @@ public class ContainerFileService implements FileService
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
                     container.getConnectionString(),
-                    RequestMethod.CREATE_DIRECTORY,
+                    RequestMethod.CREATE_FOLDER,
                     entity));
         } catch (JSONException e)
         {

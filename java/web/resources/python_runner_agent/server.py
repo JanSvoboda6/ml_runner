@@ -23,27 +23,17 @@ def upload():
     return ""
 
 
-@app.route('/createdirectory', methods=['POST'])
-def create_directory():
+@app.route('/folders/create', methods=['POST'])
+def create_folder():
     directory_name = request.get_json()['key']
     Path(ROOT_DIRECTORY + directory_name).mkdir(parents=True, exist_ok=True)
     return ""
 
 
-@app.route('/getfiles')
+@app.route('/files')
 def get_files():
     directories, files = walk_directory(ROOT_DIRECTORY)
     return jsonify({'directories': directories, 'files': files})
-
-
-# @app.route('/files<key>', methods=['DELETE'])
-# def delete_file(key):
-#     os.remove(ROOT_DIRECTORY + key)
-#
-#
-# @app.route('/folders<key>', methods=['DELETE'])
-# def delete_folder(key):
-#     rmtree(ROOT_DIRECTORY + key)
 
 
 @app.route('/files/delete', methods=['POST'])
@@ -93,9 +83,7 @@ def download():
     with zipfile.ZipFile(archive, 'w') as zip_file:
         for file_to_zip in files_to_zip:
             zip_file.write(os.path.join(ROOT_DIRECTORY, file_to_zip))
-
     archive.seek(0)
-
     return Response(archive.getvalue(),
                     mimetype='application/zip',
                     headers={'Content-Disposition': 'attachment;filename=files.zip'})
@@ -123,16 +111,14 @@ def walk_directory(root_directory):
         for file in files:
             file_information = {'key': os.path.join(shifted_root_directory, file),
                                 'size': os.path.getsize(os.path.join(top, file)),
-                                'modified': math.floor(os.path.getmtime(os.path.join(top, file)))
-                                }
-
+                                'modified': math.floor(os.path.getmtime(os.path.join(top, file)))}
             files_list.append(file_information)
 
     return directories_list, files_list
 
 
-@app.route('/runproject', methods=['POST'])
-def run_project():
+@app.route('/runner/execute', methods=['POST'])
+def execute_runner():
     runner = request.get_json()
 
     Path('runners_info/' + str(runner['runnerId'])).mkdir(parents=True, exist_ok=True)
@@ -159,7 +145,7 @@ def run_project():
     return ''
 
 
-@app.route('/project/runner/status', methods=['POST'])
+@app.route('/runner/status', methods=['POST'])
 def get_status():
     runner_id = request.get_json()['runnerId']
     statuses = []
@@ -169,19 +155,7 @@ def get_status():
     return jsonify({'chronologicalStatuses': statuses})
 
 
-@app.route('/project/runner/finished', methods=['POST'])
-def is_finished():
-    runner = request.get_json()
-    finished = False
-    with open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'r') as log_file:
-        for line in log_file:
-            if 'FINISHED' in line.split():
-                finished = True
-
-    return jsonify({'isFinished': finished})
-
-
-@app.route('/project/runner/result', methods=['POST'])
+@app.route('/runner/result', methods=['POST'])
 def get_result():
     runner = request.get_json()
     accuracy = 0

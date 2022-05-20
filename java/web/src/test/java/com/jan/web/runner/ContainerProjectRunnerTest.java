@@ -38,6 +38,6 @@ public class ContainerProjectRunnerTest
         projectRunner.run(runner, container);
 
         Mockito.verify(requestMaker, Mockito.times(1))
-                .makePostRequest(Mockito.eq(CONNECTION_STRING), Mockito.eq(RequestMethod.RUN_PROJECT), Mockito.any());
+                .makePostRequest(Mockito.eq(CONNECTION_STRING), Mockito.eq(RequestMethod.EXECUTE_RUNNER), Mockito.any());
     }
 }

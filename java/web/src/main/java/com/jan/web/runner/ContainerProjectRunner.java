@@ -2,23 +2,18 @@ package com.jan.web.runner;
 
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.project.ClassificationLabel;
-import com.jan.web.project.ClassificationLabelJson;
 import com.jan.web.project.Project;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ContainerProjectRunner implements ProjectRunner
@@ -41,7 +36,7 @@ public class ContainerProjectRunner implements ProjectRunner
             org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(
                     assembleRequest(runner).toString(),
                     headers);
-            requestMaker.makePostRequest(container.getConnectionString(), RequestMethod.RUN_PROJECT, entity);
+            requestMaker.makePostRequest(container.getConnectionString(), RequestMethod.EXECUTE_RUNNER, entity);
 
         } catch (Exception exception)
         {
