@@ -29,7 +29,6 @@ public class RunnerControllerTest
     public static final double ACCURACY = 0.99;
 
     private RunnerController runnerController;
-    private RunnerRepository runnerRepository;
     private RunnerService runnerService;
     private RequestValidator requestValidator;
     private ResultRepository resultRepository;
@@ -38,12 +37,11 @@ public class RunnerControllerTest
     @BeforeEach
     public void before()
     {
-        runnerRepository = Mockito.mock(RunnerRepository.class);
         containerUtility = Mockito.mock(ContainerUtility.class);
         requestValidator = Mockito.mock(RequestValidator.class);
         resultRepository = Mockito.mock(ResultRepository.class);
         runnerService = Mockito.mock(RunnerService.class);
-        runnerController = new RunnerController(runnerRepository, containerUtility, runnerService, requestValidator);
+        runnerController = new RunnerController(containerUtility, runnerService, requestValidator);
     }
 
 
