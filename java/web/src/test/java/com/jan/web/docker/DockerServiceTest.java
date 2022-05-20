@@ -1,20 +1,17 @@
 package com.jan.web.docker;
 
-import org.assertj.core.api.Assertions;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
-import org.junit.jupiter.api.*;
-import org.junit.runner.RunWith;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.nio.file.FileSystems;
 import java.util.List;
@@ -24,7 +21,6 @@ import java.util.Optional;
 class DockerServiceTest
 {
     private static final long USER_ID = 999L;
-    //private static final long HOST_PORT = 15000L;
     private static final long CONTAINER_ID = 777L;
     private static final int CONTAINER_LOCALHOST_PORT = 9999;
     private static final String CONTAINER_NAME = "container-user-" + USER_ID;
