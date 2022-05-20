@@ -4,9 +4,11 @@ import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -32,6 +34,13 @@ public class AuthorizationTokenFilterTest
         jsonWebTokenUtility = Mockito.mock(JsonWebTokenUtility.class);
         userRepository = Mockito.mock(UserRepository.class);
         authorizationTokenFilter = new AuthorizationTokenFilter(jsonWebTokenUtility, userRepository);
+        SecurityContextHolder.getContext().setAuthentication(null);
+    }
+
+    @AfterEach
+    public void after()
+    {
+        SecurityContextHolder.getContext().setAuthentication(null);
     }
 
     @Test
@@ -117,5 +126,33 @@ public class AuthorizationTokenFilterTest
 
         Assertions.assertThatThrownBy(() -> authorizationTokenFilter.doFilterInternal(request, response, filterChain))
                 .hasMessage("No user found from supplied JWT token!");
+    }
+
+    @Test
+    public void whenJWTTokenIsSuccessfullyValidatedAndUserIsFound_thenSecurityContextAuthenticationIsSet() throws ServletException, IOException
+    {
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        Mockito.when(jsonWebTokenUtility.parseJwt(request)).thenReturn(RANDOM_JWT);
+        Mockito.when(jsonWebTokenUtility.validateJwtToken(RANDOM_JWT)).thenReturn(true);
+        Mockito.when(jsonWebTokenUtility.getUsernameFromJwtToken(RANDOM_JWT)).thenReturn(USERNAME);
+        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(Mockito.mock(User.class)));
+        FilterChain filterChain = Mockito.mock(FilterChain.class);
+
+        authorizationTokenFilter.doFilterInternal(request, response, filterChain);
+        Assertions.assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
+    }
+
+    @Test
+    public void whenJWTTokenIsNotSuccessfullyValidated_thenSecurityContextAuthenticationIsNotSet() throws ServletException, IOException
+    {
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        Mockito.when(jsonWebTokenUtility.parseJwt(request)).thenReturn(RANDOM_JWT);
+        Mockito.when(jsonWebTokenUtility.validateJwtToken(RANDOM_JWT)).thenReturn(false);
+        FilterChain filterChain = Mockito.mock(FilterChain.class);
+        Assertions.assertThatThrownBy(() -> authorizationTokenFilter.doFilterInternal(request, response, filterChain))
+                .hasMessage("Invalid JWT token supplied!");
+        Assertions.assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 }
