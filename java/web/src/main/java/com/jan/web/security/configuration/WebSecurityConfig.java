@@ -35,15 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        //TODO Jan: These headers are just for accessing H2 console
         http.authorizeRequests().antMatchers("/console/**").permitAll();
         http.csrf().ignoringAntMatchers("/console/**");
-        http.authorizeRequests().antMatchers("/api/runner/**").permitAll();
-        http.csrf().ignoringAntMatchers("/api/runner/**");
         http.headers().frameOptions().sameOrigin();
-
-        http.authorizeRequests().antMatchers("/api/**").permitAll();
-        http.csrf().ignoringAntMatchers("/api/**");
 
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
