@@ -47,7 +47,8 @@ class DockerServiceTest
                 dockerFilePath,
                 "python_server",
                 true,
-                CONTAINER_LOCALHOST_PORT);
+                CONTAINER_LOCALHOST_PORT,
+                false);
     }
 
     @Test
@@ -98,7 +99,8 @@ class DockerServiceTest
                 "Random path to docker file",
                 "Random name of Docker image",
                 true,
-                9999);
+                9999,
+                false);
 
         dockerServiceWithMockedDockerClient.buildDockerContainer(USER_ID);
 

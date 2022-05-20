@@ -3,7 +3,6 @@ package com.jan.web.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
 import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
@@ -16,10 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
 
 @Component
@@ -38,6 +35,9 @@ public class DockerService
 
     @Value("${jan.containerLocalhostPort}")
     private Integer containerLocalhostPort;
+
+    @Value("${jan.mapToRandomPort}")
+    private boolean shouldContainerBeMappedToRandomPort;
 
     private final int PYTHON_SERVER_PORT = 9999;
     private final DockerClient dockerClient;
@@ -59,7 +59,8 @@ public class DockerService
                          String dockerFilePath,
                          String dockerImageName,
                          boolean bindContainerToLocalhost,
-                         Integer containerLocalhostPort)
+                         Integer containerLocalhostPort,
+                         boolean shouldContainerBeMappedToRandomPort)
     {
         this.containerRepository = containerRepository;
         this.userRepository = userRepository;
@@ -102,6 +103,10 @@ public class DockerService
         containerEntity.setConnectionString("http://" + provideContainerName(userId) + ":" + PYTHON_SERVER_PORT);
         if(bindContainerToLocalhost)
         {
+            if(shouldContainerBeMappedToRandomPort)
+            {
+                containerLocalhostPort = generatePortNumber();
+            }
             Ports portBindings = createPortBindings(containerLocalhostPort);
             containerCmd.withHostConfig(new HostConfig().withPortBindings(portBindings));
             containerEntity.setConnectionString("http://localhost:" + containerLocalhostPort);
