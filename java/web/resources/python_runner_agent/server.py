@@ -146,7 +146,7 @@ def run_project():
     log_file = open('runners_info/' + str(runner['runnerId']) + '/log.txt', 'w')
 
     if runner['selectedModel'] == 'Support Vector Machines':
-        subprocess.Popen(['nohup', 'python3', 'models/svm.py', str(runner['runnerId'])],
+        subprocess.Popen(['nohup', 'python3', 'models/svm_old.py', str(runner['runnerId'])],
                          stdout=log_file,
                          stderr=log_file,
                          preexec_fn=os.setpgrp)
