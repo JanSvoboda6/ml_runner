@@ -6,7 +6,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,10 +30,10 @@ public class DatasetController
         return fileService.getAllFiles(containerUtility.getContainerIdFromToken(token));
     }
 
-    @PostMapping(value = "/createdirectory")
-    public ResponseEntity<?> createFolder(@RequestHeader(name="Authorization") String token, @RequestBody Key directoryKey) //TODO Jan: is Key needed?
+    @PostMapping(value = "/folders/create")
+    public ResponseEntity<?> createFolder(@RequestHeader(name="Authorization") String token, @RequestBody String key)
     {
-        fileService.createFolder(directoryKey.getKey(), containerUtility.getContainerIdFromToken(token));
+        fileService.createFolder(key, containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 

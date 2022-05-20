@@ -9,11 +9,11 @@ const getFiles = () =>
     return axios.get(API_URL, {headers: authorizationHeader()});
 }
 
-const createDirectory = (directory: FileInformation) =>
+const createFolder = (folder: FileInformation) =>
 {
     return axios.post(
-        API_URL + '/createdirectory',
-        directory,
+        API_URL + '/folders/create',
+        folder,
         {
             headers: 
             {
@@ -126,4 +126,4 @@ const download = (keys: string[]) => {
     );
 }
 
-export default { getFiles, createDirectory, uploadFiles, deleteFolders, deleteFiles, moveFile, moveFolder, download }
+export default { getFiles, createFolder, uploadFiles, deleteFolders, deleteFiles, moveFile, moveFolder, download }

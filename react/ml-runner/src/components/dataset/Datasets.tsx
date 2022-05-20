@@ -50,7 +50,7 @@ function Datasets(props)
     {
         const folder: FileInformation = {key: key};
         setFiles(folders => [...folders, folder]);
-        DatasetService.createDirectory(folder);
+        DatasetService.createFolder(folder);
     }
 
     const handleCreateFiles = (addedFiles: File[], prefix: string) =>
