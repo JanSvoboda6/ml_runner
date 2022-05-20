@@ -4,6 +4,8 @@ import com.jan.web.project.Project;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
+import com.jan.web.security.user.User;
+import com.jan.web.security.user.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +18,12 @@ public class RequestValidatorImplTest
     public static final long RANDOM_PROJECT_ID = 999L;
     public static final long CONTAINER_ENTITY_ID = 999L;
     private static final long RUNNER_ID = 999L;
+    private static final String USERNAME = "user@email.com";
     private RequestValidator validator;
     private ProjectRepository projectRepository;
     private ContainerRepository containerRepository;
     private RunnerRepository runnerRepository;
+    private UserRepository userRepository;
 
     @BeforeEach
     public void before()
@@ -27,7 +31,8 @@ public class RequestValidatorImplTest
         projectRepository = Mockito.mock(ProjectRepository.class);
         containerRepository = Mockito.mock(ContainerRepository.class);
         runnerRepository = Mockito.mock(RunnerRepository.class);
-        validator = new RequestValidatorImpl(projectRepository, containerRepository, runnerRepository);
+        userRepository = Mockito.mock(UserRepository.class);
+        validator = new RequestValidatorImpl(projectRepository, containerRepository, runnerRepository, userRepository);
     }
 
     @Test
@@ -76,5 +81,21 @@ public class RequestValidatorImplTest
         Mockito.when(runnerRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         Assertions.assertThatThrownBy(() -> validator.validateRunner(RUNNER_ID))
                 .hasMessage("The runner with id " + RUNNER_ID + " cannot be found!");
+    }
+
+    @Test
+    public void whenUserIsValid_thenUserIsReturned()
+    {
+        User user = new User();
+        Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+        Assertions.assertThat(validator.validateUser(USERNAME)).isEqualTo(user);
+    }
+
+    @Test
+    public void whenUserDoesNotExist_thenExceptionIsThrown()
+    {
+        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.empty());
+        Assertions.assertThatThrownBy(() -> validator.validateUser(USERNAME))
+                .hasMessage("The user with username " + USERNAME + " cannot be found!");
     }
 }

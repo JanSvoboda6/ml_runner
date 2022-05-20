@@ -1,6 +1,8 @@
 package com.jan.web.project;
 
-import com.jan.web.runner.*;
+import com.jan.web.runner.RequestValidator;
+import com.jan.web.runner.Runner;
+import com.jan.web.runner.RunnerRepository;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
@@ -22,19 +24,22 @@ public class ProjectController
     private final RunnerRepository runnerRepository;
     private final UserRepository userRepository;
     private final ClassificationLabelRepository labelRepository;
+    private final RequestValidator validator;
 
     @Autowired
     public ProjectController(ProjectRepository projectRepository,
                              JsonWebTokenUtility jsonWebTokenUtility,
                              RunnerRepository runnerRepository,
                              UserRepository userRepository,
-                             ClassificationLabelRepository labelRepository)
+                             ClassificationLabelRepository labelRepository,
+                             RequestValidator validator)
     {
         this.projectRepository = projectRepository;
         this.jsonWebTokenUtility = jsonWebTokenUtility;
         this.runnerRepository = runnerRepository;
         this.userRepository = userRepository;
         this.labelRepository = labelRepository;
+        this.validator = validator;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,47 +54,38 @@ public class ProjectController
         return Collections.emptyList();
     }
 
-    //TODO Jan: Add validation
     @GetMapping("/{id}")
-    public Project getProject(@PathVariable Long id) {
-        return projectRepository.findById(id).orElseThrow(RuntimeException::new);
+    public Project getProject(@RequestHeader(name="Authorization") String token, @PathVariable Long id)
+    {
+        return projectRepository.findByUserAndId(validator.validateUser(jsonWebTokenUtility.getUsernameFromJwtToken(token)), id).get();
     }
 
     @PostMapping("/saveproject")
     public ResponseEntity<?> createProject(@RequestHeader(name="Authorization") String token, @RequestBody ProjectRequest request)
     {
-        String username = jsonWebTokenUtility.getUsernameFromJwtToken(token);
-        Optional<User> user = userRepository.findByUsername(username);
-        if(user.isPresent())
-        {
-            List<ClassificationLabel> classificationLabels = labelRepository.saveAll(request.getClassificationLabels());
-            Project project = new Project(
-                    user.get(),
-                    request.getProjectName(),
-                    request.getSelectedModel(),
-                    classificationLabels
-            );
-            projectRepository.save(project);
-            return ResponseEntity.ok("Project " + project.getName() + " saved!");
-        }
-        return ResponseEntity.badRequest().body("Problem with creating project!");
+        User user = validator.validateUser(jsonWebTokenUtility.getUsernameFromJwtToken(token));
+        List<ClassificationLabel> classificationLabels = labelRepository.saveAll(request.getClassificationLabels());
+        Project project = new Project(
+                user,
+                request.getProjectName(),
+                request.getSelectedModel(),
+                classificationLabels
+        );
+        projectRepository.save(project);
+        return ResponseEntity.ok("Project " + project.getName() + " saved!");
     }
 
     @GetMapping(value = "/runners", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Runner> getRunnerList(@RequestHeader(name="Authorization") String token, @RequestParam(name="projectId") long id)
     {
-        String username = jsonWebTokenUtility.getUsernameFromJwtToken(token);
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent())
+        User user = validator.validateUser(jsonWebTokenUtility.getUsernameFromJwtToken(token));
+        Optional<Project> project = projectRepository.findById(id);
+        if(project.isPresent())
         {
-            Optional<Project> project = projectRepository.findById(id);
-            if(project.isPresent())
+            if (user == project.get().getUser())
             {
-                if (user.get() == project.get().getUser())
-                {
-                    return runnerRepository.findAllByProjectId(id);
-                }
+                return runnerRepository.findAllByProjectId(id);
             }
         }
         return Collections.emptyList();

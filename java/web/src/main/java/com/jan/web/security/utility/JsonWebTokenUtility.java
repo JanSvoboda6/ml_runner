@@ -4,11 +4,9 @@ import java.util.Date;
 
 import com.jan.web.security.ValidationException;
 import com.jan.web.security.user.User;
-import com.jan.web.security.user.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 import org.springframework.util.StringUtils;
@@ -22,18 +20,18 @@ public class JsonWebTokenUtility
     public static final String BEARER_ = "Bearer ";
 
     @Value("${jan.jwtSecret}")
-    private String jwtSecret;
+    private String JWT_SECRET;
 
     @Value("${jan.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    private int JWT_EXPIRATION_MS;
 
     public String generateJwtToken(User user)
     {
         return Jwts.builder()
                 .setSubject((user.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setExpiration(new Date((new Date()).getTime() + JWT_EXPIRATION_MS))
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 
@@ -43,14 +41,14 @@ public class JsonWebTokenUtility
         {
             token = token.substring(BEARER_.length());
         }
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken)
     {
         try
         {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
             return true;
         } catch (Exception e)
         {
