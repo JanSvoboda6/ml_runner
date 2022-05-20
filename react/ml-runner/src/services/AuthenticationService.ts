@@ -23,8 +23,7 @@ class AuthenticationService
 
   register(username: string, password: string)
   {
-    var message: string = "";
-    return axios.post(API_URL + "/register", { username, password, message })
+    return axios.post(API_URL + "/register", { username, password })
   }
 }
 

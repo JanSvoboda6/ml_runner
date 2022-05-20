@@ -46,7 +46,7 @@ class App extends Component<AppProps, User>
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
         </style>
-        < Router history={history} >
+        <Router history={history} >
           <div className="navigation-page" >
             <Switch>
               <PrivateRoute exact path={["/", "/home"]} component={Board} />

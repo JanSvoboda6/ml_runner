@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import Datasets from "./Datasets";
 
-function SelectableDataset(props)
+function SelectableDataset(props: { handleFolderSelection: (folderPath: string) => void })
 {
     const [folderPath, setFolderPath] = useState("");
 

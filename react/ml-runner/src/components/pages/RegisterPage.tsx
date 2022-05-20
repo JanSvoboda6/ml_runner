@@ -31,7 +31,7 @@ function Register()
         setIsLoading(true);
         setRegistrationSuccessful(false);
 
-        if (validateForm()) //TODO Jan: implement proper validation
+        if (validateForm())
         {
             RegisterService.register(username, password).then(
                 () =>
