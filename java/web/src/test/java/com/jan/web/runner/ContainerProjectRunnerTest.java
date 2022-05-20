@@ -4,7 +4,6 @@ import com.jan.web.docker.ContainerEntity;
 import com.jan.web.project.Project;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -40,12 +39,5 @@ public class ContainerProjectRunnerTest
 
         Mockito.verify(requestMaker, Mockito.times(1))
                 .makePostRequest(Mockito.eq(CONNECTION_STRING), Mockito.eq(RequestMethod.RUN_PROJECT), Mockito.any());
-    }
-
-    @Test
-    @Ignore
-    public void whenStopMethodIsCalled_thenContainerIsInformed()
-    {
-        //TODO: Jan - implement test case
     }
 }

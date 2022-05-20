@@ -62,13 +62,6 @@ public class ContainerProjectRunner implements ProjectRunner
         return request;
     }
 
-    @Override
-    public boolean stop(Runner runner)
-    {
-        //not implemented
-        return false;
-    }
-
     private JSONArray buildHyperParametersJson(List<HyperParameter> hyperParameters)
     {
         JSONArray json = new JSONArray();

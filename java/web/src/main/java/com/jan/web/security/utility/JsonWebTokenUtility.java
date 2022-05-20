@@ -1,17 +1,17 @@
 package com.jan.web.security.utility;
 
-import java.util.Date;
-
 import com.jan.web.security.ValidationException;
 import com.jan.web.security.user.User;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.*;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @Component
 public class JsonWebTokenUtility
