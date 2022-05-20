@@ -2,8 +2,6 @@ package com.jan.web.api;
 
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.jan.web.docker.ContainerEntity;
-import com.jan.web.docker.ContainerRepository;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.runner.Runner;
 import com.jan.web.runner.RunnerRepository;
@@ -138,10 +136,6 @@ public class ApiTest
 
         JSONObject json = new JSONObject();
         json.put("projectName", "Random Project Name");
-        json.put("firstLabel", "first");
-        json.put("secondLabel", "second");
-        json.put("firstLabelFolder", "first/");
-        json.put("secondLabelFolder", "second/");
         json.put("selectedModel", "Support Vector Machines");
         json.put("classificationLabels", classificationLabels);
         HttpEntity<String> request = new HttpEntity<>(json.toString(), headers);
@@ -166,13 +160,8 @@ public class ApiTest
 
         JSONObject projectRequestJson = new JSONObject();
         projectRequestJson.put("projectName", "Random Project Name");
-        projectRequestJson.put("firstLabel", "first");
-        projectRequestJson.put("secondLabel", "second");
-        projectRequestJson.put("firstLabelFolder", "first/");
-        projectRequestJson.put("secondLabelFolder", "second/");
         projectRequestJson.put("selectedModel", "Support Vector Machines");
         projectRequestJson.put("classificationLabels", classificationLabels);
-        HttpEntity<String> request = new HttpEntity<>(projectRequestJson.toString(), headers);
 
         HttpEntity<String> projectRequest = new HttpEntity<>(projectRequestJson.toString(), headers);
         restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, projectRequest, String.class);
@@ -204,13 +193,8 @@ public class ApiTest
 
         JSONObject projectRequestJson = new JSONObject();
         projectRequestJson.put("projectName", "Random Project Name");
-        projectRequestJson.put("firstLabel", "first");
-        projectRequestJson.put("secondLabel", "second");
-        projectRequestJson.put("firstLabelFolder", "first/");
-        projectRequestJson.put("secondLabelFolder", "second/");
         projectRequestJson.put("selectedModel", "Support Vector Machines");
         projectRequestJson.put("classificationLabels", classificationLabels);
-        HttpEntity<String> request = new HttpEntity<>(projectRequestJson.toString(), headers);
 
         HttpEntity<String> projectRequest = new HttpEntity<>(projectRequestJson.toString(), headers);
         restTemplate.exchange(BASE_URL + port + "/api/project/saveproject", HttpMethod.POST, projectRequest, String.class);
