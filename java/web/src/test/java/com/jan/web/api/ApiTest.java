@@ -5,7 +5,6 @@ import com.github.dockerjava.core.DockerClientBuilder;
 import com.jan.web.project.ProjectRepository;
 import com.jan.web.runner.Runner;
 import com.jan.web.runner.RunnerRepository;
-import com.jan.web.security.authentication.AuthenticationManager;
 import com.jan.web.security.role.Role;
 import com.jan.web.security.role.RoleRepository;
 import com.jan.web.security.role.RoleType;
@@ -98,26 +97,6 @@ public class ApiTest
         }
         projectRepository.deleteAll(projectRepository.findAllByUser(user));
         userRepository.delete(user);
-    }
-
-    @Test
-    public void publicContent()
-    {
-        Assertions.assertThat(restTemplate.getForObject(BASE_URL + port + "/api/test/all", String.class))
-                .contains("Public Content.");
-    }
-
-    @Test
-    public void userContent()
-    {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + jwtToken);
-        HttpEntity<String> request = new HttpEntity<>(headers);
-
-        Assertions.assertThat(restTemplate
-                        .exchange(BASE_URL + port + "/api/test/user", HttpMethod.GET, request, String.class)
-                        .getBody())
-                .contains("User Content.");
     }
 
     @Test
