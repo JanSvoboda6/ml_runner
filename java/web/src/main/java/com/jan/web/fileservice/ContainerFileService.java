@@ -4,7 +4,6 @@ import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -62,14 +60,14 @@ public class ContainerFileService implements FileService
                     {
                         result.append(line);
                     }
-                } catch (IOException e)
+                } catch (IOException exception)
                 {
-                    e.printStackTrace();
+                    throw new RuntimeException(exception);
                 }
             }
-        } catch (IOException e)
+        } catch (IOException exception)
         {
-            e.printStackTrace();
+            throw new RuntimeException(exception);
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -79,9 +77,9 @@ public class ContainerFileService implements FileService
             FileResponse response = mapper.readValue(result.toString(), FileResponse.class);
             response.directories.forEach(directoryName -> fileInformationList.add(new FileInformation(directoryName)));
             response.files.forEach(file -> fileInformationList.add(new FileInformation(file.key, file.size, (long)file.modified)));
-        } catch (IOException e)
+        } catch (IOException exception)
         {
-            e.printStackTrace();
+            throw new RuntimeException(exception);
         }
 
         return fileInformationList;
@@ -154,15 +152,15 @@ public class ContainerFileService implements FileService
     {
         try
         {
-            HttpEntity<String> entity = constructHttpEntity(keys);
+            HttpEntity<String> entity = constructHttpEntityForDeleteRequest(keys);
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
                     container.getConnectionString(),
                     RequestMethod.BATCH_DELETE_FOLDERS,
                     entity));
-        } catch (JSONException e)
+        } catch (JSONException exception)
         {
-            e.printStackTrace();
+            throw new RuntimeException(exception);
         }
     }
 
@@ -171,25 +169,16 @@ public class ContainerFileService implements FileService
     {
         try
         {
-            HttpEntity<String> entity = constructHttpEntity(keys);
+            HttpEntity<String> entity = constructHttpEntityForDeleteRequest(keys);
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
                     container.getConnectionString(),
                     RequestMethod.BATCH_DELETE_FILES,
                     entity));
-        } catch (JSONException e)
+        } catch (JSONException exception)
         {
-            e.printStackTrace();
+            throw new RuntimeException(exception);
         }
-    }
-
-    private HttpEntity<String> constructHttpEntity(List<String> keys) throws JSONException
-    {
-        JSONObject request = new JSONObject();
-        request.put("keys", keys);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(request.toString(), headers);
     }
 
     @Override
@@ -197,13 +186,7 @@ public class ContainerFileService implements FileService
     {
         try
         {
-            JSONObject request = new JSONObject();
-            request.put("key", oldKey);
-            request.put("newKey", newKey);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
-
+            HttpEntity<String> entity = constructHttpEntityForMoveRequest(oldKey, newKey);
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
                     container.getConnectionString(),
@@ -220,12 +203,7 @@ public class ContainerFileService implements FileService
     {
         try
         {
-            JSONObject request = new JSONObject();
-            request.put("key", oldKey);
-            request.put("newKey", newKey);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(request.toString(), headers);
+            HttpEntity<String> entity = constructHttpEntityForMoveRequest(oldKey, newKey);
 
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             containerEntity.ifPresent(container -> requestMaker.makePostRequest(
@@ -251,10 +229,28 @@ public class ContainerFileService implements FileService
 
             Optional<ContainerEntity> containerEntity = repository.findById(containerId);
             return requestMaker.downloadRequest(containerEntity.get().getConnectionString(), RequestMethod.DOWNLOAD, entity);
-        } catch (JSONException e)
+        } catch (JSONException exception)
         {
-            e.printStackTrace();
+            throw new RuntimeException(exception);
         }
-        return null;
+    }
+
+    private HttpEntity<String> constructHttpEntityForDeleteRequest(List<String> keys) throws JSONException
+    {
+        JSONObject request = new JSONObject();
+        request.put("keys", keys);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(request.toString(), headers);
+    }
+
+    private HttpEntity<String> constructHttpEntityForMoveRequest(String oldKey, String newKey) throws JSONException
+    {
+        JSONObject request = new JSONObject();
+        request.put("key", oldKey);
+        request.put("newKey", newKey);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(request.toString(), headers);
     }
 }
