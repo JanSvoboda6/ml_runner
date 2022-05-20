@@ -64,9 +64,9 @@ public class RunnerServiceImpl implements RunnerService
 
     //TODO Jan: callWithHyperparameters
     @Override
-    public void runProject(RunRequest request, Project project, ContainerEntity containerEntity)
+    public void runProject(List<HyperParameter> hyperParameters, Project project, ContainerEntity containerEntity)
     {
-        Runner runner = mapRequestToRunner(request, project);
+        Runner runner = createRunnerInstance(project, hyperParameters);
         if (isAnyRunnerRunning(containerEntity.getUser()))
         {
             runner.setStatus(RunnerStatus.SCHEDULED);
@@ -178,14 +178,11 @@ public class RunnerServiceImpl implements RunnerService
         return new HttpEntity<>(resultRequest.toString(), resultHeaders);
     }
 
-    private Runner mapRequestToRunner(RunRequest request, Project project)
+    private Runner createRunnerInstance(Project project, List<HyperParameter> hyperParameters)
     {
         Runner runner = new Runner();
         runner.setProject(project);
-        runner.setHyperParameters(hyperParameterRepository.saveAll(request.getHyperParameters()));
-        runner.setGammaParameter(request.getGammaParameter());
-        runner.setCParameter(request.getCParameter());
-        runner.setFinished(false);
+        runner.setHyperParameters(hyperParameterRepository.saveAll(hyperParameters));
         runner.setTimestamp(Instant.now().getEpochSecond());
         return runner;
     }

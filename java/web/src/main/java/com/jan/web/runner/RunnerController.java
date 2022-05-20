@@ -53,7 +53,7 @@ public class RunnerController
     @PostMapping("/run")
     public ResponseEntity<?> runProject(@RequestHeader(name = "Authorization") String token, @Valid @RequestBody RunRequest request)
     {
-        runnerService.runProject(request,
+        runnerService.runProject(request.getHyperParameters(),
                 requestValidator.validateProject(request.getProjectId()),
                 requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token)));
 

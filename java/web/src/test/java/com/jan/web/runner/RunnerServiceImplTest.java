@@ -29,7 +29,6 @@ public class RunnerServiceImplTest
     private RunnerRepository runnerRepository;
     private ContainerRepository containerRepository;
     private RunnerService runnerService;
-    private RequestValidator requestValidator;
     private RequestMaker requestMaker;
     private ProjectRunner projectRunner;
     private ObjectMapper objectMapper;
@@ -64,9 +63,7 @@ public class RunnerServiceImplTest
     @Test
     public void whenRequestForRunningProject_thenRunnerIsPersisted()
     {
-        RunRequest runRequest = new RunRequest(PROJECT_ID, 1.0, 1.0, List.of(new HyperParameter("gamma", "10")));
-
-        runnerService.runProject(runRequest, Mockito.mock(Project.class), Mockito.mock(ContainerEntity.class));
+        runnerService.runProject(List.of(new HyperParameter("gamma", "10")), Mockito.mock(Project.class), Mockito.mock(ContainerEntity.class));
         Mockito.verify(runnerRepository, Mockito.times(1)).save(Mockito.any());
     }
 

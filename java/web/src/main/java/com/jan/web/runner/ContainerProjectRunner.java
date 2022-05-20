@@ -57,8 +57,6 @@ public class ContainerProjectRunner implements ProjectRunner
         request.put("name", project.getName());
         request.put("selectedModel", project.getSelectedModel());
         request.put("runnerId", runner.getId());
-        request.put("gammaParameter", runner.getGammaParameter());
-        request.put("cParameter", runner.getCParameter());
         request.put("hyperParameters", buildHyperParametersJson(runner.getHyperParameters()));
         request.put("classificationLabels", buildClassificationLabelsJson(project.getClassificationLabels()));
         return request;

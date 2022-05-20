@@ -14,9 +14,6 @@ public class Runner
 
     @ManyToOne
     private Project project;
-    private double gammaParameter;
-    private double cParameter;
-    private boolean isFinished;
 
     @Enumerated(EnumType.STRING)
     private RunnerStatus status;
@@ -32,25 +29,6 @@ public class Runner
         return id;
     }
 
-    public double getGammaParameter()
-    {
-        return gammaParameter;
-    }
-
-    public void setGammaParameter(double gammaParameter)
-    {
-        this.gammaParameter = gammaParameter;
-    }
-
-    public double getCParameter()
-    {
-        return cParameter;
-    }
-
-    public void setCParameter(double cParameter)
-    {
-        this.cParameter = cParameter;
-    }
 
     public Project getProject()
     {
@@ -60,16 +38,6 @@ public class Runner
     public void setProject(Project project)
     {
         this.project = project;
-    }
-
-    public boolean isFinished()
-    {
-        return isFinished;
-    }
-
-    public void setFinished(boolean finished)
-    {
-        isFinished = finished;
     }
 
     public RunnerStatus getStatus()
