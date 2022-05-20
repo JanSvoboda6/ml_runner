@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -152,51 +151,40 @@ public class AuthenticationControllerTest
     @Test
     public void whenUserTriesToLogIn_thenNewJWTTokenIsGenerated()
     {
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
+        Mockito.when(authenticationManager.authenticate(USERNAME, PASSWORD)).thenReturn(user);
         LoginRequest request = Mockito.mock(LoginRequest.class);
-        UserDetailsImpl userDetails = Mockito.mock(UserDetailsImpl.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
-        user.setVerified(true);
+        Mockito.when(request.getUsername()).thenReturn(USERNAME);
+        Mockito.when(request.getPassword()).thenReturn(PASSWORD);
+        Mockito.when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
+
         authenticationController.authenticateUser(request);
 
-        Mockito.verify(jsonWebTokenUtility).generateJwtToken(authentication);
+        Mockito.verify(jsonWebTokenUtility).generateJwtToken(user);
     }
 
     @Test
-    public void whenUserTriesToLogIn_thenSecurityContextIsProperlySet()
+    public void whenUserTriesToLogIn_thenListOfRolesAreReturned() throws IOException
     {
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
+        Mockito.when(authenticationManager.authenticate(USERNAME, PASSWORD)).thenReturn(createArtificialUser());
         LoginRequest request = Mockito.mock(LoginRequest.class);
-        UserDetailsImpl userDetails = Mockito.mock(UserDetailsImpl.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
-        user.setVerified(true);
-
-        authenticationController.authenticateUser(request);
-        Assertions.assertThat(SecurityContextHolder.getContext().getAuthentication()).isEqualTo(authentication);
-    }
-
-    @Test
-    public void whenUserTriesToLogIn_thenSetOfGrantedAuthoritiesIsUsed() throws IOException
-    {
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
-        LoginRequest request = Mockito.mock(LoginRequest.class);
-        UserDetailsImpl userDetails = UserDetailsImpl.build(createArtificialUser());
-        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
-        user.setVerified(true);
+        Mockito.when(request.getUsername()).thenReturn(USERNAME);
+        Mockito.when(request.getPassword()).thenReturn(PASSWORD);
+        Mockito.when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
 
         ResponseEntity<?> response = authenticationController.authenticateUser(request);
         String body = new ObjectMapper().writeValueAsString(response.getBody());
-        Assertions.assertThat(body).contains(RoleType.ROLE_USER.name());;
+        Assertions.assertThat(body).contains(RoleType.ROLE_USER.name());
     }
 
     @Test
     public void whenNotRegisteredUserTriesToLogIn_thenAuthenticationFails()
     {
-        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenThrow(new BadCredentialsException("Bad Credentials Exception"));
+        Mockito.when(authenticationManager.authenticate(USERNAME, PASSWORD)).thenThrow(new ValidationException("Email or password is invalid!"));
         LoginRequest request = Mockito.mock(LoginRequest.class);
+        Mockito.when(request.getUsername()).thenReturn(USERNAME);
+        Mockito.when(request.getPassword()).thenReturn(PASSWORD);
+        Mockito.when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
+
         Assertions.assertThatThrownBy(() -> authenticationController.authenticateUser(request))
                 .isInstanceOf(ValidationException.class)
                 .hasMessage("Email or password is invalid!");
@@ -264,34 +252,31 @@ public class AuthenticationControllerTest
     public void whenUserAccountIsVerified_thenJwtTokenForUserIsGenerated()
     {
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
-        user.setVerified(true);
-        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
+        Mockito.when(authenticationManager.authenticate(USERNAME, PASSWORD)).thenReturn(user);
         LoginRequest request = Mockito.mock(LoginRequest.class);
-        UserDetailsImpl userDetails = Mockito.mock(UserDetailsImpl.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
+        Mockito.when(request.getUsername()).thenReturn(USERNAME);
+        Mockito.when(request.getPassword()).thenReturn(PASSWORD);
+        Mockito.when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
 
         authenticationController.authenticateUser(request);
 
-        Mockito.verify(jsonWebTokenUtility).generateJwtToken(authentication);
+        Mockito.verify(jsonWebTokenUtility).generateJwtToken(user);
     }
 
     @Test
     public void whenUserAccountIsNotVerified_thenNoJwtTokenIsGenerated()
     {
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authentication);
-        user.setVerified(false);
-        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
-
+        Mockito.when(authenticationManager.authenticate(USERNAME, PASSWORD)).thenThrow(new ValidationException("The user account is not verified!"));
         LoginRequest request = Mockito.mock(LoginRequest.class);
-        UserDetailsImpl userDetails = Mockito.mock(UserDetailsImpl.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(userDetails);
+        Mockito.when(request.getUsername()).thenReturn(USERNAME);
+        Mockito.when(request.getPassword()).thenReturn(PASSWORD);
+        Mockito.when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
+
         Assertions.assertThatThrownBy(() -> authenticationController.authenticateUser(request))
                 .isInstanceOf(ValidationException.class)
                 .hasMessage("The user account is not verified!");
 
-        Mockito.verify(jsonWebTokenUtility, Mockito.times(0)).generateJwtToken(authentication);
+        Mockito.verify(jsonWebTokenUtility, Mockito.times(0)).generateJwtToken(user);
     }
 
     private RegisterRequest createArtificialRegisterRequest()

@@ -24,13 +24,11 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter
 {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationTokenFilter.class);
     private final JsonWebTokenUtility jsonWebTokenUtility;
-    private final UserDetailsService userDetailsService;
 
     @Autowired
-    public AuthorizationTokenFilter(JsonWebTokenUtility jsonWebTokenUtility, UserDetailsService userDetailsService)
+    public AuthorizationTokenFilter(JsonWebTokenUtility jsonWebTokenUtility)
     {
         this.jsonWebTokenUtility = jsonWebTokenUtility;
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -48,11 +46,6 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter
                 logger.error(validationException.getMessage());
                 throw validationException;
             }
-            UserDetails userDetails = userDetailsService.loadUserByUsername(jsonWebTokenUtility.getUsernameFromJwtToken(jwt));
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }

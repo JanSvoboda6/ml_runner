@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -113,34 +112,14 @@ public class AuthenticationController
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest)
     {
-        Authentication authentication;
-        try
-        {
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        } catch (AuthenticationException exception)
-        {
-            if (exception instanceof DisabledException)
-            {
-                throw new ValidationException("The user account is not verified!");
-            }
-            throw new ValidationException("Email or password is invalid!");
-        }
+        User user = authenticationManager.authenticate(loginRequest.getUsername(), encoder.encode(loginRequest.getPassword()));
+        String jwtToken = jsonWebTokenUtility.generateJwtToken(user);
 
-        Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
-        if(!user.get().isVerified())
-        {
-            throw new ValidationException("The user account is not verified!");
-        }
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwtToken = jsonWebTokenUtility.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
+        List<String> roles = user.getRoles().stream()
+                .map(role -> role.getName().name())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getId(), userDetails.getUsername(), roles));
+        return ResponseEntity.ok(new JwtResponse(jwtToken, user.getId(), user.getUsername(), roles));
     }
 
     @GetMapping("/verification")

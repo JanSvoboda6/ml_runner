@@ -92,9 +92,7 @@ public class ApiTest
         roles.add(userRole);
         user.setRoles(roles);
         userRepository.save(user);
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(TEST_USER, PASSWORD));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        jwtToken = jsonWebTokenUtility.generateJwtToken(authentication);
+        jwtToken = jsonWebTokenUtility.generateJwtToken(user);
 
         DefaultDockerClientConfig.Builder config = DefaultDockerClientConfig.createDefaultConfigBuilder();
         DockerClientBuilder.getInstance(config.build()).build();

@@ -3,6 +3,7 @@ package com.jan.web.security.utility;
 import java.util.Date;
 
 import com.jan.web.security.ValidationException;
+import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +27,10 @@ public class JsonWebTokenUtility
     @Value("${jan.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(Authentication authentication)
+    public String generateJwtToken(User user)
     {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject((user.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
