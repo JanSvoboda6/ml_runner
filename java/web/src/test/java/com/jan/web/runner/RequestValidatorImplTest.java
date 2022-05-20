@@ -6,6 +6,7 @@ import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerRepository;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
+import com.jan.web.security.utility.JsonWebTokenUtility;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ public class RequestValidatorImplTest
     private ContainerRepository containerRepository;
     private RunnerRepository runnerRepository;
     private UserRepository userRepository;
+    private JsonWebTokenUtility tokenUtility;
+    private User user;
 
     @BeforeEach
     public void before()
@@ -32,22 +35,23 @@ public class RequestValidatorImplTest
         containerRepository = Mockito.mock(ContainerRepository.class);
         runnerRepository = Mockito.mock(RunnerRepository.class);
         userRepository = Mockito.mock(UserRepository.class);
-        validator = new RequestValidatorImpl(projectRepository, containerRepository, runnerRepository, userRepository);
+        user = Mockito.mock(User.class);
+        validator = new RequestValidatorImpl(projectRepository, containerRepository, runnerRepository, userRepository, tokenUtility);
     }
 
     @Test
     public void whenProjectIsValid_thenProjectIsReturned()
     {
-        Project project = new Project();
-        Mockito.when(projectRepository.findById(RANDOM_PROJECT_ID)).thenReturn(Optional.of(project));
-        Assertions.assertThat(validator.validateProject(RANDOM_PROJECT_ID)).isEqualTo(project);
+        Project project = Mockito.mock(Project.class);
+        Mockito.when(projectRepository.findByUserAndId(user, RANDOM_PROJECT_ID)).thenReturn(Optional.of(project));
+        Assertions.assertThat(validator.validateProject(RANDOM_PROJECT_ID, user)).isEqualTo(project);
     }
 
     @Test
     public void whenProjectDoesNotExist_thenExceptionIsThrown()
     {
         Mockito.when(projectRepository.findById(RANDOM_PROJECT_ID)).thenReturn(Optional.empty());
-        Assertions.assertThatThrownBy(() -> validator.validateProject(RANDOM_PROJECT_ID))
+        Assertions.assertThatThrownBy(() -> validator.validateProject(RANDOM_PROJECT_ID, user))
                 .hasMessage("The project with id " + RANDOM_PROJECT_ID + " cannot be found!");
     }
 
@@ -70,16 +74,20 @@ public class RequestValidatorImplTest
     @Test
     public void whenRunnerIsValid_thenRunnerIsReturned()
     {
-        Runner runner = new Runner();
+        Project project = Mockito.mock(Project.class);
+        Mockito.when(project.getId()).thenReturn(RANDOM_PROJECT_ID);
+        Runner runner = Mockito.mock(Runner.class);
+        Mockito.when(runner.getProject()).thenReturn(project);
+        Mockito.when(projectRepository.findByUserAndId(user, RANDOM_PROJECT_ID)).thenReturn(Optional.of(project));
         Mockito.when(runnerRepository.findById(RUNNER_ID)).thenReturn(Optional.of(runner));
-        Assertions.assertThat(validator.validateRunner(RUNNER_ID)).isEqualTo(runner);
+        Assertions.assertThat(validator.validateRunner(RUNNER_ID, user)).isEqualTo(runner);
     }
 
     @Test
     public void whenRunnerDoesNotExist_thenExceptionIsThrown()
     {
         Mockito.when(runnerRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
-        Assertions.assertThatThrownBy(() -> validator.validateRunner(RUNNER_ID))
+        Assertions.assertThatThrownBy(() -> validator.validateRunner(RUNNER_ID, user))
                 .hasMessage("The runner with id " + RUNNER_ID + " cannot be found!");
     }
 

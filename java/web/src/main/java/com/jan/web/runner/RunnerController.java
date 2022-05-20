@@ -7,6 +7,7 @@ import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
 import com.jan.web.result.Result;
 import com.jan.web.result.ResultRepository;
+import com.jan.web.security.user.User;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,8 +54,9 @@ public class RunnerController
     @PostMapping("/run")
     public ResponseEntity<?> runProject(@RequestHeader(name = "Authorization") String token, @Valid @RequestBody RunRequest request)
     {
+        User user = requestValidator.validateUserFromJwtToken(token);
         runnerService.runProject(request.getHyperParameters(),
-                requestValidator.validateProject(request.getProjectId()),
+                requestValidator.validateProject(request.getProjectId(), user),
                 requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token)));
 
         return ResponseEntity.ok().body("Project is running!");
@@ -64,9 +66,10 @@ public class RunnerController
     @GetMapping(value = "/result", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getResult(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId) throws JSONException, IOException
     {
+        User user = requestValidator.validateUserFromJwtToken(token);
         ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
-        requestValidator.validateProject(projectId);
-        requestValidator.validateRunner(runnerId);
+        requestValidator.validateProject(projectId, user);
+        requestValidator.validateRunner(runnerId, user);
 
         Optional<Result> result = runnerService.getResult(containerEntity.getId(), projectId, runnerId);
         if(result.isPresent())
@@ -79,8 +82,9 @@ public class RunnerController
     @GetMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getStatus(@RequestHeader(name="Authorization") String token, @RequestParam long runnerId) throws JSONException, IOException
     {
+        User user = requestValidator.validateUserFromJwtToken(token);
         ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
-        requestValidator.validateRunner(runnerId);
+        requestValidator.validateRunner(runnerId, user);
         JSONObject response = new JSONObject();
         RunnerStatus status = runnerService.getStatus(containerEntity.getId(), runnerId);
         response.put("status", status.toString());

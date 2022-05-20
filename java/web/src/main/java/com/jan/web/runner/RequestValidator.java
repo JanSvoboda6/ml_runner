@@ -6,8 +6,9 @@ import com.jan.web.security.user.User;
 
 public interface RequestValidator
 {
-    Project validateProject(long projectId);
+    Project validateProject(long projectId, User user);
+    Runner validateRunner(long runnerId, User user);
     ContainerEntity validateContainerEntity(long containerEntityId);
-    Runner validateRunner(long runnerId);
     User validateUser(String username);
+    User validateUserFromJwtToken(String token);
 }
