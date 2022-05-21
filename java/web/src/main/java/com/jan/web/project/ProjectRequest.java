@@ -16,7 +16,6 @@ public class ProjectRequest
     @NotBlank
     private String selectedModel;
 
-    @NotBlank
     private List<ClassificationLabel> classificationLabels;
 
     public String getProjectName()

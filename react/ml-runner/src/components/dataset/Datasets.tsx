@@ -165,6 +165,7 @@ function Datasets(props)
                         onDeleteFile={handleDeleteFiles}
                         onDownloadFile={handleDownloadFile}
                         onDownloadFolder={handleDownloadFolder}
+                        detailRenderer={() => null}
                     />
                 </div>
             </FadeIn>

@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
 
 const API_URL = BACKEND_URL + "/api/project";
-const POPUP_DIMENSIONS = {"width": "700px", "min-height": "700px"};
+const POPUP_DIMENSIONS = {"width": "700px", "minHeight": "700px"};
 
 function Runner(props: any)
 {
@@ -20,6 +20,7 @@ function Runner(props: any)
     const [accuracy, setAccuracy] = useState<number | undefined>(undefined);
     const [isLoaded, setLoaded] = useState(false);
     const [parameters, setParameters] = useState<HyperParameter[]>([]);
+    const [executedOn, setExecutedOn] = useState<number>(0);
     const FIVE_SECONDS = 5 * 1000;
 
     useEffect(() =>
@@ -28,7 +29,8 @@ function Runner(props: any)
             .then(
                 (res: AxiosResponse<any>) =>
                 {
-                    setParameters(res.data.hyperParameters)
+                    setParameters(res.data.hyperParameters);
+                    setExecutedOn(res.data.timestamp);
                     setLoaded(true);
                 }
             )
@@ -84,14 +86,16 @@ function Runner(props: any)
     return (
         <div className="runner-list-table">
             <p>#{props.runnerId}</p>
-            <Popup trigger={<button className={"parameters-button"}>Parameters</button>} position="right center" modal {...{ contentStyle: POPUP_DIMENSIONS }}>
-                Runner #{props.runnerId} - {props.selectedModel}
-                <div className={"parameters-list"}>{parameters && parameters.map((parameter, index) => {
-                   return <div className={"parameter-item"} key={index}>{parameter.name}: {parameter.value}</div>
-                })} </div>
-            </Popup>
+            <div>
+                <Popup trigger={<button className={"parameters-button"}>Parameters</button>} position="right center" modal {...{ contentStyle: POPUP_DIMENSIONS }}>
+                    Runner #{props.runnerId} - {props.selectedModel}
+                    <div className={"parameters-list"}>{parameters && parameters.map((parameter, index) => {
+                       return <div className={"parameter-item"} key={index}>{parameter.name}: {parameter.value}</div>
+                    })} </div>
+                </Popup>
+            </div>
 
-            <p>{moment().format("DD/MM/YYYY")}</p>
+            <p>{moment.unix(executedOn).format("yyyy/MM/DD HH:mm")}</p>
             <p className={status == 'FINISHED' ? "text-confirm" : ""}>{status}</p>
             {!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}
             {isInEndState &&

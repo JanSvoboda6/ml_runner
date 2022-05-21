@@ -6,6 +6,9 @@ import axios from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
 
 import {BACKEND_URL} from "../../helpers/url";
+import Popup from "reactjs-popup";
+import {color} from "chart.js/helpers";
+import ParameterInfoTooltip from "./ParameterInfoToolTip";
 
 function SupportVectorMachinesRunnerForm(props: any)
 {
@@ -59,15 +62,18 @@ function SupportVectorMachinesRunnerForm(props: any)
             <div className="runner-form-block">
                 <p>Gamma parameter</p>
                 <input type="input-text" className="input-text" data-testid="gamma" onChange={handleGammaParameterChange} placeholder="Gamma parameter" value={gammaParameter}/>
+                <ParameterInfoTooltip textContent={"Choose positive float value."} />
             </div>
 
             <div className="runner-form-block">
                 <p>C parameter</p>
                 <input type="text" className="input-text" data-testid="c" onChange={handleCParameterChange} placeholder="C parameter" value={cParameter} />
+                <ParameterInfoTooltip textContent={"Choose positive float value."} />
             </div>
             <div className="runner-form-block">
                 <p>Kernel parameter</p>
                 <input type="text" className="input-text" data-testid="kernel" onChange={handleKernelParameterChange} placeholder="Kernel parameter" value={kernelParameter}/>
+                <ParameterInfoTooltip textContent={"Choose one of the values: rbf, poly, linear."} />
             </div>
 
             <div className="runner-form-block">

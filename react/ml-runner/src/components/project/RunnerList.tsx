@@ -56,7 +56,7 @@ function RunnerList(props: any)
                     <div className="runner-list-table">
                         <p className="runner-list-table-header-text">Runner Id</p>
                         <p className="runner-list-table-header-text">Parameters</p>
-                        <p className="runner-list-table-header-text">Time</p>
+                        <p className="runner-list-table-header-text">Date</p>
                         <p className="runner-list-table-header-text">Status</p>
                         <p className="runner-list-table-header-text">Accuracy</p>
                     </div>

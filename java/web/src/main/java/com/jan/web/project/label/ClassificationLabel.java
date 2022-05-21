@@ -1,3 +1,4 @@
+
 package com.jan.web.project.label;
 
 import javax.persistence.*;

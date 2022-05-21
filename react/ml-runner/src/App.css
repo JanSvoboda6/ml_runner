@@ -267,13 +267,9 @@ width: 7rem;
   text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
   text-align: center;
   transition: all 0.2s;
-  display: block;
   opacity: 0.9;
-  margin-top: 5px;
   outline: none;
-  font-size: 16px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-size: 17px;
 }
 
 .parameters-button:hover{
@@ -313,7 +309,6 @@ width: 7rem;
 .runner-list-initial-message{
   margin: 20px 0px 20px 0px;
 }
-
 
 .runner-list-table{
   display: grid;
@@ -636,7 +631,6 @@ nav a:nth-child(5):hover~.upper-navbar-animation
 
 .project-label-field{
   color: var(--text-primary);
-  height: 2.2vh;
   padding-left: 10px;
   margin-left: 10%;
 }
@@ -1191,4 +1185,23 @@ input[type="file"]
 
 .hyper-parameter-select{
   max-width: 150px;
+}
+
+.parameter-info-button{
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  border-radius: 2em;
+  text-decoration: none;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 1s;
+  margin: auto;
+  font-size: 17px;
+  background-color: transparent;
+  color: white;
+  opacity: 0.9;
+  font-weight: bolder;
+}
+
+.parameter-info-text{
+  text-align: center;
 }

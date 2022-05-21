@@ -80,7 +80,7 @@ function Project()
             <FadeIn>
                 <div className="project-form">
                     <div className="project-form-block"> <h3>Create New Project</h3> </div>
-                    <div className="project-form-block"> <input className="project-name-field" type="text" onChange={handleNameChange} placeholder="Project Name" /> </div>
+                    <div className="project-form-block"> <input type="text" className="input-text" onChange={handleNameChange} placeholder="Project Name" /> </div>
                     <div>
                         {labels.map(label => {
                             return(
@@ -102,7 +102,6 @@ function Project()
                             <option value="Random Forest">Random Forest</option>
                         </select>
                     </div>
-                    {/* <div className="project-form-block"><button className="open-dataset-button" onClick={handleDatasetOpening}>Open</button></div> */}
                     <div className="project-form-block"><button className="save-button" onClick={handleProjectSaving}>Save</button></div>
             </div>
             </FadeIn>
