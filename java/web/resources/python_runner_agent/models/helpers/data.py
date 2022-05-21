@@ -15,8 +15,8 @@ def load_data(classification_labels):
             sample = np.load(file, allow_pickle=True)
             samples.append(sample)
             labels.append(label['labelName'])
-    return np.array(labels), np.array(samples)
+    return np.array(samples), np.array(labels)
 
 
-def split_data(labels, samples):
+def split_data(samples, labels):
     return train_test_split(samples, labels, test_size=TEST_DATA_RATIO, random_state=RANDOM_STATE)

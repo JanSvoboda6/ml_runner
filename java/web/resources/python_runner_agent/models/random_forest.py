@@ -14,8 +14,8 @@ def run(runner_id):
     classification_labels, classification_label_names = get_classification_labels_with_name(configuration)
 
     status_change(runner_id, Status.LOADING_DATA)
-    labels, samples = load_data(classification_labels)
-    testing_labels, testing_samples, training_labels, training_samples = split_data(labels, samples)
+    samples, labels = load_data(classification_labels)
+    training_samples, testing_samples, training_labels, testing_labels = split_data(samples, labels)
 
     status_change(runner_id, Status.TRAINING)
     classifier = RandomForestClassifier(verbose=0, criterion=criterion, n_estimators=n_estimators, max_depth=max_depth)
