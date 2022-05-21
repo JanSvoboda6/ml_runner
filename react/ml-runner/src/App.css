@@ -6,8 +6,8 @@
   --bg-primary: #221c1c;
   --bg-secondary: #100f0f;
   --bg-third: #070707;
-  --accent: rgb(15, 81, 224);
-  --alert-color: #d33636;
+  --accent-color: rgb(102, 142, 225);
+  --alert-color: #f16262;
   --confirm-color: rgb(82, 190, 136);
   --navbar-color: #221c1c;
   --border-color: #221c1c;
@@ -414,8 +414,13 @@ width: 7rem;
   cursor:pointer;
 }
 
-.text-confirm{
-  color: var(--confirm-color);
+.text-accent{
+  color: var(--accent-color);
+}
+
+.text-alert
+{
+  color: var(--alert-color)
 }
 
 .runner-form-run-button{
@@ -485,7 +490,7 @@ nav .upper-navbar-animation
   position: absolute;
   height: 7%;
   /*z-index: 0;*/
-  background: var(--accent);
+  background: var(--accent-color);
   bottom: 0;
   margin-bottom: 2px;
   transition: all 0.15s;
@@ -741,7 +746,7 @@ input[type="file"]
 }
 
 .landing-page-text-color{
-  color: var(--accent);
+  color: var(--accent-color);
 }
 
 .login-banner-text{
@@ -1025,7 +1030,7 @@ input[type="file"]
 .loading-runner-icon{
   margin: auto;
   margin-top: -17px;
-  width: 80px;
+  width: 75px;
 }
 
 .grey-horizontal{

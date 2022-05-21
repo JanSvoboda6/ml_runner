@@ -96,7 +96,7 @@ function Runner(props: any)
             </div>
 
             <p>{moment.unix(executedOn).format("yyyy/MM/DD HH:mm")}</p>
-            <p className={status === "FINISHED" ? "text-confirm" : ""}>{status}</p>
+            <p className={status === "FINISHED" ? "text-accent" : status === "FAILED" ? "text-alert" : ""}>{status}</p>
             {!isInEndState && <img className="loading-runner-icon" src={loadingAnimation} alt="loading_motion" />}
             {isInEndState &&
                 <div>

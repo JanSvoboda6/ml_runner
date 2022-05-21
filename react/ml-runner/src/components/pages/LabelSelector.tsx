@@ -29,7 +29,7 @@ function LabelSelector(props: any)
                     }}/>
                 )}
             </Popup>
-            {folderPath && <div className="text-confirm">Selected: {folderPath}</div>}
+            {folderPath && <div className="text-accent">Selected: {folderPath}</div>}
         </>
     )
 }

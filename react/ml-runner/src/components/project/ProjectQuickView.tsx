@@ -13,6 +13,7 @@ const ProjectQuickView = (props: any) =>
     let history = useHistory();
     const redirectToAnalysisPage = () =>
     {
+
         history.push('/analysis?projectId=' + props.id);
     }
 

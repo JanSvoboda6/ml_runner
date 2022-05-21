@@ -70,7 +70,7 @@ function Datasets(props)
 
     const handleDeleteFolders = (folderKeys: string[]) =>
     {
-        DatasetService.deleteFolders(folderKeys).then( () => {
+        DatasetService.deleteFolders(folderKeys.sort().reverse()).then( () => {
             setFiles(DatasetUtility.deleteSelectedFolders(files, folderKeys));
         });
     }

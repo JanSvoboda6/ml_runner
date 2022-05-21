@@ -2,20 +2,17 @@ import React, {useEffect, useState} from "react";
 import Heatmap from "../visualization/Heatmap";
 import LegendChart from "../visualization/Legend";
 import Navbar from "../navigation/Navbar";
-import XyChart from "./XyChart";
 import FadeIn from "react-fade-in";
 import {BACKEND_URL} from "../../helpers/url";
 import HeatmapDataProvider from "./HeatmapDataProvider";
-import RunnerService from "../../services/RunnerService";
 import axios, {AxiosResponse} from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {HyperParameter} from "../../types";
-import runner from "../project/Runner";
 import {useLocation} from "react-router";
 import queryString from "query-string";
-import SimpleGraph from "./SimpleGraph";
 import SimpleChart, {Data} from "./SimpleChart";
 import fromExponential from 'from-exponential';
+import HelperBox from "../navigation/HelperBox";
 
 const API_URL = BACKEND_URL + "/api/project";
 
@@ -60,6 +57,10 @@ function Analysis(props)
             .then(
                 (res: AxiosResponse<any>) =>
                 {
+                    if(res.data.length <= 2) {
+                        setErrorState(true);
+                        return;
+                    }
                     constructRunnersWithResult(res.data).then((runnersResult) => {
 
                         let hyperParametersName: string[] = [];
@@ -81,7 +82,6 @@ function Analysis(props)
                 (error) =>
                 {
                     setErrorState(true);
-                    setLoaded(true);
                 }
             )
     }, [])
@@ -198,15 +198,15 @@ function Analysis(props)
 
     if(isInErrorState)
     {
-        return <p>ERROR!</p>;
+        return (
+            <div>
+                <HelperBox warning={true} content={"Dear user, please run the project at least two times to see the analysis of the aggregated results."} onClose={() => null}/>
+                <p style={{textAlign: "center", marginTop: "100px"}}>No content to see here.</p>
+            </div>)
     }
 
     if(isLoaded)
     {
-        if(runners.length < 2)
-        {
-            return <p>Dear user, please run the project at least two times to see the analysis of the aggregated results.</p>;
-        }
         const tickValuesX = getHyperParameterValues(runners, firstHyperParameter);
         const tickValuesY = getHyperParameterValues(runners,  secondHyperParameter);
 
