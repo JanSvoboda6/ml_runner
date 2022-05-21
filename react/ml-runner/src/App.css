@@ -37,9 +37,12 @@ body {
 }
 
 body {
-  background: linear-gradient(rgba(7, 16, 16, 0.67), rgba(7, 16, 16, 0.67)), url("styles/background-dark.svg");
+  background-image: url("styles/background-dark.svg");
   image-rendering: -webkit-optimize-contrast;
-  background-size: cover;
+  background-size:cover;
+  background-repeat: initial;
+  -webkit-backface-visibility: hidden;
+  background-color: rgb(17, 16, 16);
 }
 
 footer{
@@ -55,11 +58,6 @@ p{
     margin-block-end: 5px;
 }
 
-/*hr{*/
-/*  border-color: var(--bg-accent);*/
-/*  background-color: var(--bg-accent);*/
-/*  height: 1px;*/
-/*}*/
 
 a{
   color: inherit;
@@ -777,7 +775,6 @@ input[type="file"]
   position: relative;
   right: 200px;
   width: 500px;
-  height: 280px;
   top: 25px;
   margin-right: auto;
   border-radius: 5px;
@@ -789,8 +786,6 @@ input[type="file"]
 }
 
 .login-item{
-  margin-left: auto;
-  margin-right: auto;
   text-align: center;
   margin: 1.1vh;
   padding: auto;
@@ -814,7 +809,6 @@ input[type="file"]
   margin-top: 5rem;
   margin-left: auto;
   margin-right: auto;
-  background-color: var(--bg-primary);
   border-radius: 5px;
   border-style: solid;
   border-width: 3px;
@@ -1130,6 +1124,7 @@ input[type="file"]
 .selected-value{
   margin-left: 230px;
   margin-bottom: 50px;
+  font-size: 16px;
 }
 /* #endregion STATISTICS */
 
@@ -1228,4 +1223,12 @@ input[type="file"]
 
 .parameter-info-text{
   text-align: center;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: white;
 }

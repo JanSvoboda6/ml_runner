@@ -76,9 +76,6 @@ function Register()
 
     return (
         <div>
-            {/* <div className="wrapper">
-                <a className="register-item logo-register"><img className='logo-dots-bigger' src={dots} alt="logo_dots" /></a>
-            </div> */}
             <FadeIn>
                 <div className="register-page">
                     <img className='logo' src={logo} alt="logo_but" />

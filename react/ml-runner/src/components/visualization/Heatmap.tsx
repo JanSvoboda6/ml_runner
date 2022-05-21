@@ -149,6 +149,7 @@ export default ({
                     fontSize: 15,
                     strokeWidth: 1,
                     stroke: '#fff',
+                    opacity: 0.9,
                     paintOrder: 'stroke',
                     textAnchor: 'middle',
                 }}
@@ -174,6 +175,7 @@ export default ({
                     fill: '#fff',
                     fontSize: 15,
                     stroke: '#fff',
+                    opacity: 0.9,
                     strokeWidth: 1,
                     textAnchor: 'middle',
                     y: -60
