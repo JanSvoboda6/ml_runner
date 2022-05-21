@@ -98,8 +98,8 @@ function Project()
                     <div className="project-form-block">
                         <div className="model-select-text">Choose algorithm: </div>
                         <select name="model-select" onChange={handleModelSelection}>
-                            <option value="Support Vector Machines">Support Vector Machines</option>
-                            <option value="Random Forest">Random Forest</option>
+                            <option className="model-select-option" value="Support Vector Machines">Support Vector Machines</option>
+                            <option className="model-select-option" value="Random Forest">Random Forest</option>
                         </select>
                     </div>
                     <div className="project-form-block"><button className="save-button" onClick={handleProjectSaving}>Save</button></div>

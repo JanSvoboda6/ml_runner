@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;300;400&display=swap');
 
 :root {
-  font-size: 19px;
+  font-size: 15px;
   --text-primary: #fcf4f4;
   --bg-primary: #221c1c;
   --bg-secondary: #100f0f;
@@ -83,9 +83,9 @@ ul {
   border-width: 2px;
   height: 3vh;
   border-style: solid;
-  font-size: 19px;
+  font-size: 15px;
   padding: 0rem 0.5rem 0rem 0.5rem;
-  width: 15rem;
+  width: 17rem;
   color: var(--text-primary);
   background-color: var(--form-input-color);
 }
@@ -93,7 +93,7 @@ ul {
 ::placeholder {
   color: var(--text-primary);
   opacity: 0.5;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 /* STYLES TO DEFINE */
@@ -109,7 +109,7 @@ ul {
   transition: all 0.2s;
   display: block;
   margin: 0 auto;
-  font-size: 17px;
+  font-size: 14px;
 }
 
 .standard-button:hover{
@@ -199,7 +199,7 @@ width: 7rem;
   text-align: center;
   transition: all 0.2s;
   margin: auto;
-  font-size: 17px;
+  font-size: 14px;
 }
 
 .submit-button:hover {
@@ -219,7 +219,7 @@ width: 7rem;
   transition: all 0.2s;
   display: block;
   margin: 0 auto;
-  font-size: 17px;
+  font-size: 14px;
 }
 
 .upper-navbar-logout-button:hover {
@@ -247,7 +247,7 @@ width: 7rem;
   text-align: center;
   transition: all 0.2s;
   display: block;
-  font-size: 18px;
+  font-size: 16px;
   image-rendering: -webkit-optimize-contrast;
   opacity: 0.9;
   margin-top: 5px;
@@ -269,7 +269,7 @@ width: 7rem;
   transition: all 0.2s;
   opacity: 0.9;
   outline: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .parameters-button:hover{
@@ -295,7 +295,7 @@ width: 7rem;
   font-family: Roboto Mono;
   font-style: normal;
   font-weight: 100;
-  font-size: 17px;
+  font-size: 15px;
   line-height: 50px;
   letter-spacing: 0.3em;
 }
@@ -333,7 +333,7 @@ width: 7rem;
   transition: all 0.2s;
   display: block;
   margin: 0 auto;
-  font-size: 17px;
+  font-size: 14px;
 }
 
 .save-button:hover {
@@ -353,7 +353,7 @@ width: 7rem;
   transition: all 0.2s;
   display: block;
   margin: 0 auto;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .project-create-new-button:hover {
@@ -377,7 +377,7 @@ width: 7rem;
   margin: 3px 70px;
   position: relative;
   left: 40px;
-  font-size: 16px;
+  font-size: 14px;
   width: 500px;
 }
 
@@ -399,7 +399,7 @@ width: 7rem;
   transition: all 0.2s;
   display: block;
   margin: 0;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .choose-data-folder-button:hover {
@@ -423,7 +423,7 @@ width: 7rem;
   transition: all 1s;
   display: block;
   margin: auto;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .runner-form-run-button:hover{
@@ -560,7 +560,7 @@ nav a:nth-child(5):hover~.upper-navbar-animation
   background-color: var(--bg-third);
   height: 37px;
   padding-top: 3px;
-  font-size: 17px;
+  font-size: 15px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -619,7 +619,7 @@ nav a:nth-child(5):hover~.upper-navbar-animation
   margin-top: 10px;
   background-color: var(--form-input-color);
   color: var(--text-primary);
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .project-name-field{
@@ -640,7 +640,7 @@ input[type="text"]
   color: var(--text-primary);
   border-color: var(--border-color);
   background-color: var(--form-input-color);
-  font-size: 1rem;
+  font-size: 15px;
 }
 
 input[type="password"]
@@ -648,7 +648,7 @@ input[type="password"]
   color: var(--text-primary);
   border-color: var(--border-color);
   background-color: var(--form-input-color);
-  font-size: 1rem;
+  font-size: 15px;
 }
 
 input[type="file"]
@@ -656,7 +656,7 @@ input[type="file"]
   color: var(--text-primary);
   border-color: var(--border-color);
   background-color: var(--form-input-color);
-  font-size: 1rem;
+  font-size: 15px;
 }
 
 .file-input {
@@ -688,7 +688,7 @@ input[type="file"]
   top: 30px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 500px 500px 500px;
+  grid-template-rows: 300px 300px 300px;
   grid-template-areas: 
   "h h h"
   "t c l"
@@ -696,17 +696,19 @@ input[type="file"]
 
 .landing-page-information-text-wrapper{
  grid-area: t;
+  width: 200px;
 }
 
 .landing-page-information-text{
   position: relative;
-  top: 20px;
-  left: 17%;
   width: 295px;
+  height: 200px;
+  top: 200px;
+  left: 250px;
   font-family: Roboto Mono;
   font-style: normal;
   font-weight: 300;
-  font-size: 36px;
+  font-size: 33px;
   line-height: 47px;
   color: rgba(255, 255, 255, 0.8);
 }
@@ -716,13 +718,12 @@ input[type="file"]
   position: relative;
   max-width: 1400px;
   height: 140px;
-  top: 25px;
   left: 50px;
 
   font-family: Roboto Mono;
   font-style: normal;
   font-weight: 100;
-  font-size: 96px;
+  font-size: 90px;
   line-height: 98px;
   letter-spacing: 0.585em;
 
@@ -735,7 +736,7 @@ input[type="file"]
 
 .login-banner-text{
   color: rgb(0, 0, 0);
-  font-size: 30px;
+  font-size: 28px;
   font-weight: bolder;
   text-align: left;
   padding: 0;
@@ -746,8 +747,8 @@ input[type="file"]
   position: relative;
   grid-area: c;
   opacity: 0.9;
-  top: 30px;
-  left: -15%;
+  top: 200px;
+  right: 30px;
   height: 150px;
   mix-blend-mode:lighten;
   image-rendering: -webkit-optimize-contrast;
@@ -759,10 +760,10 @@ input[type="file"]
 
 .login-form {
   position: relative;
-  top: -230px;
-  left: -140px;
-  width: 50vh;
-  margin-top: 5rem;
+  right: 200px;
+  width: 500px;
+  height: 280px;
+  top: 25px;
   margin-right: auto;
   border-radius: 5px;
   border-style: solid;
@@ -781,7 +782,7 @@ input[type="file"]
 }
 
 .login-link{
-  font-size: 15px;
+  font-size: 13px;
   text-align: right;
 }
 
@@ -813,7 +814,7 @@ input[type="file"]
 }
 
 .register-link{
-  font-size: 15px;
+  font-size: 13px;
   text-align: right;
 }
 
@@ -838,7 +839,7 @@ input[type="file"]
 
 .preparing-text, .loading-dots{
   opacity: 0.9;
-  font-size: 29px;
+  font-size: 27px;
   top: 800px;
 }
 
@@ -943,7 +944,7 @@ input[type="file"]
 }
 
 .total{
-  font-size: 20px;
+  font-size: 18px;
   margin: 10px;
   text-align: center;
 }
@@ -1024,7 +1025,7 @@ input[type="file"]
 
 /* #region STATISTICS */
 .average-number{
-  font-size: 30px;
+  font-size: 27px;
   animation: ease-in 2s;
 }
 
@@ -1148,7 +1149,7 @@ input[type="file"]
   margin-top: 20px;
   white-space: pre-wrap;
   opacity: 0.85;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .heatmap-wrapper {
@@ -1174,7 +1175,7 @@ input[type="file"]
   margin-top: 5px;
   background-color: var(--form-input-color);
   color: var(--text-primary);
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .hyper-parameter-selector {
@@ -1195,7 +1196,7 @@ input[type="file"]
   text-align: center;
   transition: all 1s;
   margin: auto;
-  font-size: 17px;
+  font-size: 15px;
   background-color: transparent;
   color: white;
   opacity: 0.9;
