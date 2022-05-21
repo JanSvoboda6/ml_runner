@@ -13,6 +13,7 @@ function Navbar(props: any)
         e.preventDefault();
 
         LogoutService.logout(dispatch);
+        window.location.reload();
     }
     return (
         <div className="wrapper">

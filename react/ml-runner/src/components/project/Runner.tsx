@@ -88,7 +88,7 @@ function Runner(props: any)
             <p>#{props.runnerId}</p>
             <div>
                 <Popup trigger={<button className={"parameters-button"}>Parameters</button>} position="right center" modal {...{ contentStyle: POPUP_DIMENSIONS }}>
-                    Runner #{props.runnerId} - {props.selectedModel}
+                    <div className={"p"}>Runner #{props.runnerId} - {props.selectedModel}</div>
                     <div className={"parameters-list"}>{parameters && parameters.map((parameter, index) => {
                        return <div className={"parameter-item"} key={index}>{parameter.name}: {parameter.value}</div>
                     })} </div>
@@ -96,12 +96,12 @@ function Runner(props: any)
             </div>
 
             <p>{moment.unix(executedOn).format("yyyy/MM/DD HH:mm")}</p>
-            <p className={status == 'FINISHED' ? "text-confirm" : ""}>{status}</p>
-            {!isInEndState && <img className='loading-runner-icon' src={loadingAnimation} alt="loading_motion" />}
+            <p className={status === "FINISHED" ? "text-confirm" : ""}>{status}</p>
+            {!isInEndState && <img className="loading-runner-icon" src={loadingAnimation} alt="loading_motion" />}
             {isInEndState &&
                 <div>
                     {accuracy !== undefined &&
-                        <div className='underlined-link'><Link to={{'pathname': '/runner/result', 'search': '?project=' + props.projectId +'&runner=' + props.runnerId,}}>
+                        <div className="underlined-link"><Link to={{"pathname": "/runner/result", "search": "?project=" + props.projectId +"&runner=" + props.runnerId,}}>
                             {(accuracy * 100).toFixed(2)}% </Link>
                         </div>}
                 </div>

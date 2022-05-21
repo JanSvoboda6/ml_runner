@@ -110,6 +110,7 @@ ul {
   display: block;
   margin: 0 auto;
   font-size: 14px;
+  opacity: 0.9;
 }
 
 .standard-button:hover{
@@ -286,6 +287,7 @@ width: 7rem;
 
 .parameter-item{
   margin-top: 10px;
+  opacity: 0.9;
 }
 
 .project-name{
@@ -295,9 +297,9 @@ width: 7rem;
   font-family: Roboto Mono;
   font-style: normal;
   font-weight: 100;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 50px;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.2em;
 }
 
 .project-control-panel-controls{
@@ -315,10 +317,11 @@ width: 7rem;
   grid-auto-flow: column;
   grid-auto-columns: 20%;
   padding: 0px 10px 0px 10px;
+  opacity: 0.9;
 }
 
 .runner-list-table-header-text{
-  opacity: 0.5;
+  opacity: 0.9;
 }
 
 .save-button{
@@ -334,6 +337,7 @@ width: 7rem;
   display: block;
   margin: 0 auto;
   font-size: 14px;
+  opacity: 0.9;
 }
 
 .save-button:hover {
@@ -354,6 +358,7 @@ width: 7rem;
   display: block;
   margin: 0 auto;
   font-size: 15px;
+  opacity: 0.9;
 }
 
 .project-create-new-button:hover {
@@ -379,6 +384,7 @@ width: 7rem;
   left: 40px;
   font-size: 14px;
   width: 500px;
+  opacity: 0.9;
 }
 
 .data-folder-button:hover {
@@ -399,7 +405,8 @@ width: 7rem;
   transition: all 0.2s;
   display: block;
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 .choose-data-folder-button:hover {
@@ -424,6 +431,7 @@ width: 7rem;
   display: block;
   margin: auto;
   font-size: 15px;
+  opacity: 0.9;
 }
 
 .runner-form-run-button:hover{
@@ -444,6 +452,7 @@ width: 7rem;
   transition: all 0.2s;
   margin-top: 0;
   margin-right:10px;
+  opacity: 0.9;
 }
 
 .helper-box-button:hover {
@@ -581,6 +590,7 @@ nav a:nth-child(5):hover~.upper-navbar-animation
 .helper-box-button-container
 {
   flex: 1;
+  opacity: 0.9;
 }
 /* #endregion HELPER_BOX */
 
@@ -892,7 +902,7 @@ input[type="file"]
   text-align: center;
   border-style: solid;
   border-color: var(--bg-secondary);
-  /*background-color: var(--bg-primary);*/
+  background-color: var(--bg-secondary);
   border-width: 0px 0px 2px 0px;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(5px);
@@ -941,6 +951,7 @@ input[type="file"]
   display: flex;
   align-items: center;
   flex-direction: column;
+  opacity: 0.9;
 }
 
 .total{
@@ -987,6 +998,7 @@ input[type="file"]
 .runner-form{
   display: flex;
   flex-direction: column;
+  opacity: 0.9;
 }
 
 .runner-form-block{
@@ -1008,7 +1020,6 @@ input[type="file"]
   padding-top: 5px;
   padding-bottom: 15px;
   border-color: #cfb5b550;
-  /*background-color: var(--bg-third);*/
 }
 
 .loading-runner-icon{
@@ -1053,6 +1064,7 @@ input[type="file"]
   text-decoration: underline;
   text-underline-offset: 7px;
   margin-top: 5px;
+  opacity: 0.9;
 }
 .heatmap-bin{
   color: var(--text-primary);
@@ -1069,6 +1081,8 @@ input[type="file"]
   background-color: var(--bg-secondary);
   width: 1200px;
   margin: auto;
+  border-style: solid;
+  border-color: var(--bg-primary);
 }
 
 .underlined-text{
@@ -1082,6 +1096,7 @@ input[type="file"]
   flex-direction: row;
   padding: 10px 20px 10px 20px;
   background-color: transparent;
+  opacity: 0.9;
 }
 
 .analysis-heatmap-legend{
@@ -1160,6 +1175,8 @@ input[type="file"]
   display: flex;
   justify-content: center;
   flex-direction: column;
+  border-style: solid;
+  border-color: var(--bg-primary);
 }
 
 .heatmap-structure-wrapper{
@@ -1182,6 +1199,7 @@ input[type="file"]
   margin: 20px;
   position: relative;
   top: -30px;
+  opacity: 0.9;
 }
 
 .hyper-parameter-select{
