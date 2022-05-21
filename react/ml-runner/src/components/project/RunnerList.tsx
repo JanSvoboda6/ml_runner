@@ -63,7 +63,7 @@ function RunnerList(props: any)
                     {runners.length == 0 ?
                         <div>
                             <hr className="grey-horizontal"/>
-                            <p className="runner-list-initial-message">No Runs have been yet created.</p>
+                            <p className="runner-list-initial-message">No runs have been yet executed.</p>
                         </div> :
                         <div>{
                             runners.map(runner => (
