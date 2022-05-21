@@ -4,6 +4,9 @@ import com.jan.web.runner.Runner;
 
 import javax.persistence.*;
 
+/**
+ * Entity class representing a result of {@link Runner}.
+ */
 @Entity
 public class Result
 {

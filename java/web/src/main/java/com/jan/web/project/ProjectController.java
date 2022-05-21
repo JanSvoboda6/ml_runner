@@ -17,6 +17,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controller providing API for creating/getting a project.
+ */
 @RestController
 @RequestMapping("/api/project")
 public class ProjectController

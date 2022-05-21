@@ -3,6 +3,9 @@ package com.jan.web.project.label;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Class representing a label with specific folder path.
+ */
 @Entity
 @Table(name = "classification_label")
 public class ClassificationLabel

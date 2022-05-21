@@ -5,6 +5,10 @@ import com.jan.web.security.user.User;
 
 import javax.persistence.*;
 
+/**
+ * Entity class representing an element of runner queue.
+ */
+
 @Entity
 public class RunnerQueueEntity
 {

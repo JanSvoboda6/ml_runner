@@ -4,6 +4,9 @@ import com.jan.web.runner.parameter.HyperParameter;
 
 import java.util.List;
 
+/**
+ * Request for execution of {@link Runner} used in {@link RunnerController}.
+ */
 public class RunRequest
 {
     private final long projectId;

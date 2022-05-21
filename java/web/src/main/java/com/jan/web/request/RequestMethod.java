@@ -1,5 +1,8 @@
 package com.jan.web.request;
 
+/**
+ * Enum mimicking the API of a container.
+ */
 public enum RequestMethod
 {
     EXECUTE_RUNNER("/runner/execute"),

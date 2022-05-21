@@ -2,6 +2,9 @@ package com.jan.web.runner.parameter;
 
 import javax.persistence.*;
 
+/**
+ * Entity class representing a hyperparameter.
+ */
 @Entity
 public class HyperParameter
 {
@@ -20,7 +23,6 @@ public class HyperParameter
 
     public HyperParameter()
     {
-
     }
 
     public Long getId()

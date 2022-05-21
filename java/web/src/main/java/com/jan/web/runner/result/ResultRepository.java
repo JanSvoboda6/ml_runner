@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository class for obtaining the {@link Result};
+ */
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Long>
 {

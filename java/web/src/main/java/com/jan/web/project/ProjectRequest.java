@@ -5,22 +5,13 @@ import com.jan.web.project.label.ClassificationLabel;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+/**
+ * Request class used in {@link ProjectController}.
+ */
 public class ProjectRequest
 {
     @NotBlank
     private String projectName;
-
-    @NotBlank
-    private String firstLabel;
-
-    @NotBlank
-    private String secondLabel;
-
-    @NotBlank
-    private String firstLabelFolder;
-
-    @NotBlank
-    private String secondLabelFolder;
 
     @NotBlank
     private String selectedModel;
@@ -28,55 +19,14 @@ public class ProjectRequest
     @NotBlank
     private List<ClassificationLabel> classificationLabels;
 
-
     public String getProjectName()
     {
         return projectName;
     }
 
-    public void setModelName(String projectName)
+    public void setProjectName(String projectName)
     {
         this.projectName = projectName;
-    }
-
-    public String getFirstLabel()
-    {
-        return firstLabel;
-    }
-
-    public void setFirstLabel(String firstLabel)
-    {
-        this.firstLabel = firstLabel;
-    }
-
-    public String getSecondLabel()
-    {
-        return secondLabel;
-    }
-
-    public void setSecondLabel(String secondLabel)
-    {
-        this.secondLabel = secondLabel;
-    }
-
-    public String getFirstLabelFolder()
-    {
-        return firstLabelFolder;
-    }
-
-    public void setFirstLabelFolder(String firstLabelFolder)
-    {
-        this.firstLabelFolder = firstLabelFolder;
-    }
-
-    public String getSecondLabelFolder()
-    {
-        return secondLabelFolder;
-    }
-
-    public void setSecondLabelFolder(String secondLabelFolder)
-    {
-        this.secondLabelFolder = secondLabelFolder;
     }
 
     public String getSelectedModel()
@@ -98,4 +48,5 @@ public class ProjectRequest
     {
         this.classificationLabels = classificationLabels;
     }
+
 }

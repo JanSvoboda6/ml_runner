@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Schedules a {@link Runner}. If no {@link Runner} is running at the moment then new {@Runner} could be started.
+ */
 @Service
 public class RunnerScheduler
 {

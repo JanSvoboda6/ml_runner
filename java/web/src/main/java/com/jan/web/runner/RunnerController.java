@@ -17,6 +17,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Controller providing methods for accessing the {@link Runner} or starting its execution.
+ */
 @RestController
 @RequestMapping("/api/project/runner")
 public class RunnerController

@@ -7,6 +7,9 @@ import com.jan.web.runner.status.RunnerStatus;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Entity class representing a run of a {@link Project}.
+ */
 @Entity
 public class Runner
 {

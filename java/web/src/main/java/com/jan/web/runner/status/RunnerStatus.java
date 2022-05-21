@@ -1,5 +1,10 @@
 package com.jan.web.runner.status;
 
+import com.jan.web.runner.Runner;
+
+/**
+ * Represent a status (state) of {@link Runner} execution.
+ */
 public enum RunnerStatus
 {
     INITIAL(false),

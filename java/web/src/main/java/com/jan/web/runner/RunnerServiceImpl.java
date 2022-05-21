@@ -34,6 +34,10 @@ import java.util.Optional;
 import static com.jan.web.runner.result.Result.RESULT_TEXT_MAXIMUM_LENGTH;
 
 
+/**
+ * Provides implementation of methods for execution of {@link Runner},
+ * monitoring execution status and obtaining a result.
+ */
 @Service
 public class RunnerServiceImpl implements RunnerService
 {

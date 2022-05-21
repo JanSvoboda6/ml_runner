@@ -1,8 +1,8 @@
 package com.jan.web.runner;
 
 import com.jan.web.docker.ContainerEntity;
-import com.jan.web.project.label.ClassificationLabel;
 import com.jan.web.project.Project;
+import com.jan.web.project.label.ClassificationLabel;
 import com.jan.web.request.RequestMaker;
 import com.jan.web.request.RequestMethod;
 import com.jan.web.runner.parameter.HyperParameter;
@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Makes a request for {@link Runner} execution in a container.
+ */
 @Service
 public class ContainerProjectRunner implements ProjectRunner
 {

@@ -3,13 +3,15 @@ package com.jan.web.request;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Component
+/**
+ * Class providing methods for making container request.
+ */
+@Service
 public class ContainerRequestMaker implements RequestMaker
 {
-    public static final String CONTAINER_BASE_URL = "http://172.17.0.2:";
     private final RestTemplate restTemplate;
 
     public ContainerRequestMaker(RestTemplate restTemplate)
@@ -28,7 +30,8 @@ public class ContainerRequestMaker implements RequestMaker
     }
 
     @Override
-    public ResponseEntity<byte[]> downloadRequest(String connectionString, RequestMethod requestMethod, HttpEntity<String> requestEntity){
+    public ResponseEntity<byte[]> downloadRequest(String connectionString, RequestMethod requestMethod, HttpEntity<String> requestEntity)
+    {
         return restTemplate.exchange(composeUrl(connectionString, requestMethod.getRequestUrl()), HttpMethod.POST, requestEntity, byte[].class);
     }
 
@@ -36,5 +39,4 @@ public class ContainerRequestMaker implements RequestMaker
     {
         return connectionString + requestUrl;
     }
-
 }

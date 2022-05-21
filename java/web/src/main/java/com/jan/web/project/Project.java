@@ -6,6 +6,9 @@ import com.jan.web.security.user.User;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Entity class representing a project.
+ */
 @Entity
 public class Project
 {
