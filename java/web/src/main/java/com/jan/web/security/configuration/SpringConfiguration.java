@@ -3,10 +3,11 @@ package com.jan.web.security.configuration;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Configuration class for creating beans of classes, so that Spring can instantiate the classes.
+ */
 @Configuration
 public class SpringConfiguration
 {

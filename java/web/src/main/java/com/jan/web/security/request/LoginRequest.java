@@ -2,6 +2,9 @@ package com.jan.web.security.request;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Represents a request for log in operation.
+ */
 public class LoginRequest
 {
     @NotBlank

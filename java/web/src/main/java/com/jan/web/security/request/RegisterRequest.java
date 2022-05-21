@@ -2,6 +2,9 @@ package com.jan.web.security.request;
 
 import javax.validation.constraints.*;
 
+/**
+ * Represents a request for register (sign up) operation.
+ */
 public class RegisterRequest
 {
     @Email(message = "Email is not in a valid format!")

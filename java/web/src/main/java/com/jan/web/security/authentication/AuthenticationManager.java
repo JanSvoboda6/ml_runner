@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Class used for an authentication of {@link User}.
+ * Already hashed password should be passed.
+ */
 @Service
 public class AuthenticationManager
 {

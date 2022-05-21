@@ -2,6 +2,9 @@ package com.jan.web.security.user;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * Helper class for creating a {@link User}.
+ */
 @Service
 public class UserCreator
 {

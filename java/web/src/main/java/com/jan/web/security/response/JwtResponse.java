@@ -2,6 +2,10 @@ package com.jan.web.security.response;
 
 import java.util.List;
 
+/**
+ * Represent a response with generated JWT token.
+ * It is utilized after the user is successfully logged in.
+ */
 public class JwtResponse
 {
     private String token;

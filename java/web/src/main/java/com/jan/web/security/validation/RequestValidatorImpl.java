@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Provides implementation of methods for validating the commonly used entities,
+ * such as {@link User}, {@link Project} and {@link Runner}.
+ */
 @Service
 public class RequestValidatorImpl implements RequestValidator
 {

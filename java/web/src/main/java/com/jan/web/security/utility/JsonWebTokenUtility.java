@@ -1,19 +1,22 @@
 package com.jan.web.security.utility;
 
-import com.jan.web.security.validation.ValidationException;
 import com.jan.web.security.user.User;
+import com.jan.web.security.validation.ValidationException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
-@Component
+/**
+ * Utility class for creation of JWT and its manipulation.
+ */
+@Service
 public class JsonWebTokenUtility
 {
     private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenUtility.class);
@@ -68,7 +71,6 @@ public class JsonWebTokenUtility
             }
             return headerAuth.substring(BEARER_.length());
         }
-
         return null;
     }
 }

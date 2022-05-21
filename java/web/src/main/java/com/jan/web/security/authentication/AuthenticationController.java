@@ -4,7 +4,6 @@ import com.jan.web.security.validation.ValidationException;
 import com.jan.web.security.request.LoginRequest;
 import com.jan.web.security.request.RegisterRequest;
 import com.jan.web.security.response.JwtResponse;
-import com.jan.web.security.response.MessageResponse;
 import com.jan.web.security.role.Role;
 import com.jan.web.security.role.RoleRepository;
 import com.jan.web.security.role.RoleType;
@@ -29,6 +28,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class providing methods for user account creation and verification.
+ * After the {@link User} account is verified, a {@link User} can log in.
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -101,7 +104,7 @@ public class AuthenticationController
             userRepository.save(user);
         }
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok("User registered successfully!");
     }
 
     @PostMapping("/login")

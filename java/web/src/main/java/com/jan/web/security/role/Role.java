@@ -1,9 +1,13 @@
 package com.jan.web.security.role;
 
-import org.springframework.security.core.GrantedAuthority;
+import com.jan.web.security.user.User;
 
 import javax.persistence.*;
 
+/**
+ * Represents a role of a {@link User}.
+ * Roles could be utilized for authorization.
+ */
 @Entity
 public class Role
 {

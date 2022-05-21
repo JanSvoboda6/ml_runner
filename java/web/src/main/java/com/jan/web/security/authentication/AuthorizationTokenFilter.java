@@ -19,6 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Class for validating the JWT if Authorization header is present.
+ * It sets context in {@link SecurityContextHolder} so that Spring Security
+ * doesn't block the request (if JWT is valid).
+ */
 public class AuthorizationTokenFilter extends OncePerRequestFilter
 {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationTokenFilter.class);
