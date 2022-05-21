@@ -3,12 +3,17 @@ package com.jan.web.docker;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import com.jan.web.security.utility.JsonWebTokenUtility;
+import com.jan.web.security.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Component
+/**
+ * Class utilized for getting a container ID from JWT token.
+ */
+@Service
 public class ContainerUtility
 {
     private final JsonWebTokenUtility jsonWebTokenUtility;
@@ -36,9 +41,9 @@ public class ContainerUtility
             }
             else
             {
-                throw new RuntimeException("No container found!");
+                throw new ValidationException("No container found!");
             }
         }
-        throw new RuntimeException("No user found!");
+        throw new ValidationException("No user found!");
     }
 }

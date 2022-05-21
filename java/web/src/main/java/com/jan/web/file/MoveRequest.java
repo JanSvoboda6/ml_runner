@@ -2,6 +2,9 @@ package com.jan.web.file;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Request for a file/folder moving (renaming).
+ */
 public class MoveRequest
 {
     @NotBlank

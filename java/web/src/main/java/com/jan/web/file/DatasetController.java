@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Controller class used as an API for dataset (file/folder) manipulation.
+ */
 @RestController
 @RequestMapping("/api/dataset")
 public class DatasetController

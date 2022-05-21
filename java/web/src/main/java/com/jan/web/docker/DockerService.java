@@ -3,27 +3,31 @@ package com.jan.web.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
 import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-@Component
+/**
+ * Service class for building a Docker container.
+ * Depending on settings it could map the container to localhost port (random one or chosen).
+ * In production configuration no port mapping is taking place, containers are distinguished by names.
+ */
+@Service
 public class DockerService
 {
-    Logger logger = LoggerFactory.getLogger(DockerService.class);
-
     @Value("${jan.bindContainerToLocalhost}")
     private boolean bindContainerToLocalhost;
 
@@ -69,6 +73,7 @@ public class DockerService
         this.dockerImageName = dockerImageName;
         this.bindContainerToLocalhost = bindContainerToLocalhost;
         this.containerLocalhostPort = containerLocalhostPort;
+        this.shouldContainerBeMappedToRandomPort = shouldContainerBeMappedToRandomPort;
     }
 
     public long buildDockerContainer(Long userId)

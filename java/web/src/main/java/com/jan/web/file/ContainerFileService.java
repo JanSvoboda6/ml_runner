@@ -18,7 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -30,7 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+/**
+ * Class communicating with a container and providing the dataset (file/folder) manipulation functionality.
+ */
+@Service
 public class ContainerFileService implements FileService
 {
     private final ContainerRepository repository;
@@ -76,7 +79,7 @@ public class ContainerFileService implements FileService
         try
         {
             FileResponse response = mapper.readValue(result.toString(), FileResponse.class);
-            response.directories.forEach(directoryName -> fileInformationList.add(new FileInformation(directoryName)));
+            response.folders.forEach(folderName -> fileInformationList.add(new FileInformation(folderName)));
             response.files.forEach(file -> fileInformationList.add(new FileInformation(file.key, file.size, (long)file.modified)));
         } catch (IOException exception)
         {

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller class used as an API for preparing the container.
+ */
 @RestController
 @RequestMapping("/api/docker")
 public class DockerController

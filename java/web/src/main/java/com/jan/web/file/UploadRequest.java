@@ -5,6 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+/**
+ * Request for uploading files with chosen names (keys).
+ */
 public class UploadRequest
 {
     @NotBlank

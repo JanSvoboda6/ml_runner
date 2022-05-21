@@ -6,6 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * Interface providing methods for file/folder manipulation.
+ */
 public interface FileService
 {
     List<FileInformation> getAllFiles(long containerId);

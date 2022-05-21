@@ -1,5 +1,8 @@
 package com.jan.web.file.information;
 
+/**
+ * Represents meta information of file.
+ */
 public class FileInformation
 {
     private final String key;

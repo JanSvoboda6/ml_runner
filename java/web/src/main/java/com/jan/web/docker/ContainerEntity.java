@@ -5,6 +5,9 @@ import com.jan.web.security.user.User;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Entity class representing a container.
+ */
 @Entity
 @Table(name = "container")
 public class ContainerEntity
