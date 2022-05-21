@@ -159,10 +159,11 @@ public class RunningFlowTest
         Runner runnerAfterFlowExecution = runnerRepository.findById(runner.getId()).get();
         Assertions.assertThat(runnerAfterFlowExecution.getChronologicalStatuses()).contains("INITIAL,PREPARING_DATA,TRAINING,PREDICTING,FINISHED");
         Assertions.assertThat(runnerAfterFlowExecution.getStatus()).isEqualTo(RunnerStatus.FINISHED);
+        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId()).get().getAccuracy()).isGreaterThan(0);
     }
 
     @Test
-    @Timeout(value = 200)
+    @Timeout(value = 60)
     public void whenRequestForRunningRandomForestWithValidParameters_thenRunnerRunsAndReturnsResult() throws IOException, JSONException, InterruptedException
     {
         Optional<ContainerEntity> containerOptional = containerRepository.findByUserId(userRepository.findByUsername(email).get().getId());
@@ -224,76 +225,11 @@ public class RunningFlowTest
             isEndState = runnerService.getStatus(containerId, runner.getId()).isEndState();
         }
 
-        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId())).isPresent();
-        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId()).get().getAccuracy()).isNotNull();
-    }
-
-    @Test
-    @Timeout(value = 60)
-    public void whenRequestForRunningRunnerWithValidParameters_thenRunnerRunsAndAllStatusesHaveBeenExecuted() throws IOException, JSONException, InterruptedException
-    {
-        Optional<ContainerEntity> containerOptional = containerRepository.findByUserId(userRepository.findByUsername(email).get().getId());
-        if(containerOptional.isEmpty())
-        {
-            Assertions.fail("Container record has not been found in the DB!");
-        }
-        long containerId = containerOptional.get().getId();
-
-        containerFileService.createFolder("test_folder/", containerId);
-        containerFileService.createFolder("test_folder/first_class/", containerId);
-        containerFileService.createFolder("test_folder/second_class/", containerId);
-        MultipartFile firstLabelFile1 = new MockMultipartFile("feature_vector_first_class_1.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_first_class_1.npy")));
-        MultipartFile firstLabelFile2 = new MockMultipartFile("feature_vector_first_class_2.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_first_class_2.npy")));
-        MultipartFile firstLabelFile3 = new MockMultipartFile("feature_vector_first_class_3.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_first_class_3.npy")));
-        MultipartFile secondLabelFile1 = new MockMultipartFile("feature_vector_second_class_1.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_1.npy")));
-        MultipartFile secondLabelFile2 = new MockMultipartFile("feature_vector_second_class_2.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_2.npy")));
-        MultipartFile secondLabelFile3 = new MockMultipartFile("feature_vector_second_class_3.npy", Files.readAllBytes(Path.of("src/test/java/com/jan/web/resources/feature_vector_second_class_3.npy")));
-
-        List<String> folderKeys = List.of("test_folder/first_class/feature_vector_first_class_1.npy",
-                "test_folder/first_class/feature_vector_first_class_2.npy",
-                "test_folder/first_class/feature_vector_first_class_3.npy",
-                "test_folder/second_class/feature_vector_second_class_1.npy",
-                "test_folder/second_class/feature_vector_second_class_2.npy",
-                "test_folder/second_class/feature_vector_second_class_3.npy");
-
-        containerFileService.uploadFiles(folderKeys, List.of(firstLabelFile1, firstLabelFile2, firstLabelFile3, secondLabelFile1, secondLabelFile2, secondLabelFile3), containerId);
-
-        List<ClassificationLabel> classificationLabels = List.of(
-                new ClassificationLabel("first_label", "test_folder/first_class/"),
-                new ClassificationLabel("second_label", "test_folder/second_class/")
-        );
-        classificationLabelRepository.saveAll(classificationLabels);
-
-        Project project = new Project(userRepository.findByUsername(email).get(),
-                "test_project",
-                "Support Vector Machines",
-                classificationLabels);
-
-        Long projectId = projectRepository.save(project).getId();
-
-        HyperParameter cParameter = new HyperParameter("c", "1");
-        HyperParameter gammaParameter = new HyperParameter("gamma", "10");
-        HyperParameter kernelParameter = new HyperParameter("kernel", "rbf");
-        List<HyperParameter> hyperParameters = List.of(cParameter, gammaParameter, kernelParameter);
-
-        Runner runner = new Runner();
-        runner.setProject(project);
-        runner.setHyperParameters(hyperParameterRepository.saveAll(hyperParameters));
-        runner.setStatus(RunnerStatus.INITIAL);
-        runnerRepository.save(runner);
-
-        containerProjectRunner.run(runner, containerOptional.get());
-
-        boolean isEndState = false;
-        while(!isEndState)
-        {
-            waiter.await(1, TimeUnit.SECONDS);
-            isEndState = runnerService.getStatus(containerId, runner.getId()).isEndState();
-        }
-
         Runner runnerAfterFlowExecution = runnerRepository.findById(runner.getId()).get();
+        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId())).isPresent();
         Assertions.assertThat(runnerAfterFlowExecution.getChronologicalStatuses()).contains("INITIAL,PREPARING_DATA,TRAINING,PREDICTING,FINISHED");
         Assertions.assertThat(runnerAfterFlowExecution.getStatus()).isEqualTo(RunnerStatus.FINISHED);
+        Assertions.assertThat(runnerService.getResult(containerId, projectId, runner.getId()).get().getAccuracy()).isGreaterThan(0);
     }
 
     private void buildDockerContainerAndWaitForTheServerToStart(long userId) throws InterruptedException
