@@ -95,7 +95,7 @@ def execute_runner():
     log_file = prepare_runner_configuration_files(runner)
 
     if runner['selectedModel'] == 'Support Vector Machines':
-        subprocess.Popen(['nohup', 'python3', 'models/svm_old.py', str(runner['runnerId'])],
+        subprocess.Popen(['nohup', 'python3', 'models/svm.py', str(runner['runnerId'])],
                          stdout=log_file,
                          stderr=log_file,
                          preexec_fn=os.setpgrp)
