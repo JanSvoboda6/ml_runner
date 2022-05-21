@@ -7,7 +7,10 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,49 +38,51 @@ public class DatasetController
     }
 
     @PostMapping(value = "/folders/create")
-    public ResponseEntity<?> createFolder(@RequestHeader(name="Authorization") String token, @RequestBody String key)
+    public ResponseEntity<?> createFolder(@RequestHeader(name="Authorization") String token, @NotBlank @RequestBody String key)
     {
         fileService.createFolder(key, containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFiles(@RequestHeader(name="Authorization") String token, @RequestBody UploadRequest request)
+    public ResponseEntity<?> uploadFiles(@RequestHeader(name="Authorization") String token,
+                                         @NotBlank @RequestPart("keys") FileNames fileNames,
+                                         @NotBlank @RequestPart("files") List<MultipartFile> files)
     {
-        fileService.uploadFiles(request.getKeys(), request.getFiles(), containerUtility.getContainerIdFromToken(token));
+        fileService.uploadFiles(fileNames.getKeys(), files, containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 
     @PostMapping(value = "/folders/delete")
-    public ResponseEntity<?> batchDeleteFolders(@RequestHeader(name="Authorization") String token, @RequestBody List<String> keys)
+    public ResponseEntity<?> batchDeleteFolders(@RequestHeader(name="Authorization") String token, @NotBlank @RequestBody List<String> keys)
     {
         fileService.deleteFolders(keys, containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 
     @PostMapping(value = "/files/delete")
-    public ResponseEntity<?> batchDeleteFiles(@RequestHeader(name="Authorization") String token, @RequestBody List<String> keys)
+    public ResponseEntity<?> batchDeleteFiles(@RequestHeader(name="Authorization") String token, @NotBlank @RequestBody List<String> keys)
     {
         fileService.deleteFiles(keys, containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 
     @PostMapping(value = "/files/move")
-    public ResponseEntity<?> moveFile(@RequestHeader(name="Authorization") String token, @RequestBody MoveRequest request)
+    public ResponseEntity<?> moveFile(@RequestHeader(name="Authorization") String token, @Valid @RequestBody MoveRequest request)
     {
         fileService.moveFile(request.getOldKey(), request.getNewKey(), containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 
     @PostMapping(value = "/folders/move")
-    public ResponseEntity<?> moveFolder(@RequestHeader(name="Authorization") String token, @RequestBody MoveRequest request)
+    public ResponseEntity<?> moveFolder(@RequestHeader(name="Authorization") String token, @Valid @RequestBody MoveRequest request)
     {
         fileService.moveFolder(request.getOldKey(), request.getNewKey(), containerUtility.getContainerIdFromToken(token));
         return ResponseEntity.ok("OK.");
     }
 
     @PostMapping(value = "/download", produces="application/zip")
-    public ResponseEntity<Resource> download(@RequestHeader(name="Authorization") String token, @RequestBody List<String> keys)
+    public ResponseEntity<Resource> download(@RequestHeader(name="Authorization") String token, @NotBlank @RequestBody List<String> keys)
     {
         var response = fileService.download(keys, containerUtility.getContainerIdFromToken(token));
         ByteArrayResource resource = new ByteArrayResource(Objects.requireNonNull(response.getBody()));

@@ -13,7 +13,7 @@ const createFolder = (folder: FileInformation) =>
 {
     return axios.post(
         API_URL + '/folders/create',
-        folder,
+        folder.key,
         {
             headers: 
             {

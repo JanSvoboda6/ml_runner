@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +67,7 @@ public class ProjectController
     }
 
     @PostMapping("/saveproject")
-    public ResponseEntity<?> createProject(@RequestHeader(name="Authorization") String token, @RequestBody ProjectRequest request)
+    public ResponseEntity<?> createProject(@RequestHeader(name="Authorization") String token, @Valid @RequestBody ProjectRequest request)
     {
         User user = validator.validateUser(jsonWebTokenUtility.getUsernameFromJwtToken(token));
         List<ClassificationLabel> classificationLabels = labelRepository.saveAll(request.getClassificationLabels());

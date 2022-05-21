@@ -56,7 +56,9 @@ public class RunnerController
     }
 
     @GetMapping(value = "/result", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getResult(@RequestHeader(name = "Authorization") String token, @RequestParam long projectId, @RequestParam long runnerId) throws JSONException, IOException
+    public ResponseEntity<?> getResult(@RequestHeader(name = "Authorization") String token,
+                                       @RequestParam long projectId,
+                                       @RequestParam long runnerId) throws JSONException, IOException
     {
         User user = requestValidator.validateUserFromJwtToken(token);
         ContainerEntity containerEntity = requestValidator.validateContainerEntity(containerUtility.getContainerIdFromToken(token));
