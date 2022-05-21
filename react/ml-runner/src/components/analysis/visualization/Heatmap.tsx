@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {scaleLinear} from '@visx/scale';
 import {AxisLeft, AxisTop} from '@visx/axis';
 import {HeatmapRect} from '@visx/heatmap';
-import {Bins} from "../analysis/Analysis"
+import {Bins} from "../Analysis"
 import Gradient from "javascript-color-gradient";
 
 

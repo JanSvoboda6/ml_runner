@@ -6,7 +6,7 @@ import RunnerList from "./RunnerList";
 import SupportVectorMachinesRunnerForm from "./SupportVectorMachinesRunnerForm";
 import RandomForestRunnerForm from "./RandomForestRunnerForm";
 
-const POPUP_DIMENSIONS = {"width": "1100px", "min-height": "750px"};
+const POPUP_DIMENSIONS = {"width": "900px", "min-height": "550px"};
 
 const ProjectQuickView = (props: any) =>
 {

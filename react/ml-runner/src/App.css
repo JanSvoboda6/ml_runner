@@ -255,7 +255,7 @@ width: 7rem;
 }
 
 .project-control-panel-button:hover{
-  color: var(--confirm-color);
+  text-decoration: underline 3px;
   cursor:pointer;
 }
 
@@ -414,6 +414,10 @@ width: 7rem;
 
 .text-accent{
   color: var(--accent-color);
+}
+
+.text-confirm{
+  color: var(--confirm-color);
 }
 
 .text-alert
@@ -1099,7 +1103,7 @@ input[type="file"]
 }
 
 .analysis-heatmap-legend{
-  top: 30px;
+  top: 140px;
   position: relative;
 }
 .analysis-graph{

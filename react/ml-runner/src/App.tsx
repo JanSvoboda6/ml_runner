@@ -1,19 +1,16 @@
-import React, { Component } from "react";
-import { Router, Switch, Route, Link } from "react-router-dom";
+import React, {Component} from "react";
+import {Route, Router, Switch} from "react-router-dom";
 import "./App.css";
 import Login from "./components/pages/LoginPage";
 import Register from "./components/pages/RegisterPage";
 import Board from "./components/pages/Board";
-//import { Logout as logout } from "./actions/Authentication";
-import { history } from "./helpers/History";
-import { User } from "./types";
+import {history} from "./helpers/History";
+import {User} from "./types";
 import Project from "./components/pages/Project";
-import Summary from "./components/visualization/Summary";
 import DatasetPage from "./components/pages/DatasetPage";
 import EnvironmentPreparation from "./components/pages/EnvironmentPreparation";
 import PrivateRoute from "./helpers/PrivateRoute";
 import Analysis from "./components/analysis/Analysis";
-import RunnerResult from "./components/project/RunnerResult";
 import RunnerResultPage from "./components/project/RunnerResultPage";
 
 interface AppProps

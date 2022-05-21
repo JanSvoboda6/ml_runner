@@ -27,6 +27,7 @@ function RunnerList(props: any)
                 (res: AxiosResponse<any>) =>
                 {
                     setLoaded(true);
+
                     const runners: Array<Runner> = [];
                     res.data.forEach(runner =>
                     {

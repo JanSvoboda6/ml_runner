@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
 
 const API_URL = BACKEND_URL + "/api/project";
-const POPUP_DIMENSIONS = {"width": "700px", "minHeight": "700px"};
+const POPUP_DIMENSIONS = {"width": "700px", "minHeight": "500px"};
 
 function Runner(props: any)
 {

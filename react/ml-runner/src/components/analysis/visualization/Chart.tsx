@@ -1,5 +1,5 @@
 import {
-    AnimatedAxis, // any of these can be non-animated equivalents
+    AnimatedAxis,
     AnimatedGrid,
     AnimatedLineSeries,
     XYChart,
@@ -19,26 +19,21 @@ const data1 = [
 ];
 
 const data2 = [
-    { x: '2020-01-01', y: 30 },
-    { x: '2020-01-02', y: 40 },
-    { x: '2020-01-03', y: 80 },
-    { x: '2020-01-04', y: 60 },
-    { x: '2020-01-05', y: 75 },
-    { x: '2020-01-06', y: 50 },
-    { x: '2020-01-07', y: 40 },
-    { x: '2020-01-08', y: 45 },
+    { x: '1', y: 77 },
+    { x: '2', y: 76 },
+    { x: '3', y: 79 },
+    { x: '4', y: 73 },
+    { x: '5', y: 75 },
+    { x: '6', y: 89 },
+    { x: '7', y: 87 },
+    { x: '8', y: 79 },
+    { x: '9', y: 83 },
+    { x: '10', y: 90 },
+    { x: '11', y: 91 },
+    { x: '13', y: 87 },
+    { x: '14', y: 86 },
 ];
 
-const data3 = [
-    { x: '2020-01-01', y: 60 },
-    { x: '2020-01-02', y: 90 },
-    { x: '2020-01-03', y: 95 },
-    { x: '2020-01-04', y: 90 },
-    { x: '2020-01-05', y: 55 },
-    { x: '2020-01-06', y: 65 },
-    { x: '2020-01-07', y: 75 },
-    { x: '2020-01-08', y: 80 },
-];
 
 export interface Data {
     x: number;
@@ -54,7 +49,7 @@ const accessors = {
     yAccessor: d => d.y,
 };
 
-function SimpleChart(props: Props)
+function Chart(props: Props)
 {
     return (
         <XYChart height={400} width={1200} xScale={{type: 'band'}} yScale={{type: 'radial'}}>
@@ -66,8 +61,9 @@ function SimpleChart(props: Props)
                     y: 35,
                     fill: '#fff',
                     fontSize: 15,
-                    strokeWidth: 0,
+                    strokeWidth: 1,
                     stroke: '#fff',
+                    opacity: 0.9,
                     paintOrder: 'stroke',
                     textAnchor: 'middle',
                 }}
@@ -84,10 +80,12 @@ function SimpleChart(props: Props)
                     y: 20,
                     fill: '#fff',
                     fontSize: 15,
-                    strokeWidth: 0,
+                    strokeWidth: 1,
                     stroke: '#fff',
+                    opacity: 0.9,
                     paintOrder: 'stroke',
                     textAnchor: 'middle',
+
                 }}
                 tickLabelProps={() => ({
                     fill: 'white',
@@ -96,29 +94,14 @@ function SimpleChart(props: Props)
                     x: -15
                 })}
             />
-            {/*<AnimatedLineSeries dataKey="Line 1" data={data1} {...accessors} />*/}
-            {/*<AnimatedLineSeries dataKey="Line 2" data={data2} {...accessors} />*/}
-            {/*<AnimatedLineSeries dataKey="Line 3" data={data3} {...accessors} />*/}
-            <AreaSeries
-                dataKey="Accuracy"
-                data={ props.data }
-                fillOpacity={ 0.6 }
-                fill="rgb(250,210,150)"
-                lineProps={{stroke: "rgb(250,210,150)"}}
-                {...accessors}
-            />
-            {/*<AreaSeries*/}
-            {/*    dataKey="Data 2"*/}
-            {/*    data={ data2 }*/}
-            {/*    {...accessors}*/}
-            {/*    fillOpacity={ 0.3}*/}
-            {/*/>*/}
-            {/*<AreaSeries*/}
-            {/*    dataKey="Data 3"*/}
-            {/*    data={ data3 }*/}
-            {/*    {...accessors}*/}
-            {/*    fillOpacity={ 0.3 }*/}
-            {/*/>*/}
+            <AnimatedLineSeries dataKey="Accuracy"
+                                {...accessors}
+                                data={ props.data }
+                                fillOpacity={ 0.6 }
+                                stroke={"rgb(250,210,150)"}
+                                strokeWidth={2}
+                                />
+
             <Tooltip
                 snapTooltipToDatumX
                 snapTooltipToDatumY
@@ -130,7 +113,7 @@ function SimpleChart(props: Props)
                             {tooltipData?.nearestDatum?.key}
                         </div>
                         <div>Id: {accessors.xAccessor(tooltipData?.nearestDatum?.datum)}</div>
-                        <div>Accuracy: {accessors.yAccessor(tooltipData?.nearestDatum?.datum)}</div>
+                        <div>Accuracy: {accessors.yAccessor(tooltipData?.nearestDatum?.datum)}%</div>
                     </div>
                 )}
             />
@@ -138,4 +121,4 @@ function SimpleChart(props: Props)
     );
 }
 
-export default SimpleChart;
+export default Chart;
