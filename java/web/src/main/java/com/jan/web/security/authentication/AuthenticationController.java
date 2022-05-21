@@ -77,14 +77,14 @@ public class AuthenticationController
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest signUpRequest)
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request)
     {
-        if (userRepository.existsByUsername(signUpRequest.getUsername()))
+        if (userRepository.existsByUsername(request.getUsername()))
         {
             throw new ValidationException("Email is already taken!");
         }
 
-        User user = userCreator.createUser(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
+        User user = userCreator.createUser(request.getUsername(), encoder.encode(request.getPassword()));
 
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
@@ -110,7 +110,7 @@ public class AuthenticationController
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest)
     {
-        User user = authenticationManager.authenticate(loginRequest.getUsername(), encoder.encode(loginRequest.getPassword()));
+        User user = authenticationManager.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         String jwtToken = jsonWebTokenUtility.generateJwtToken(user);
 
         List<String> roles = user.getRoles().stream()

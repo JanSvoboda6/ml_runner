@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest
 @TestPropertySource(properties = {"web.user.verification.active=false"})
 @AutoConfigureMockMvc
@@ -64,6 +63,25 @@ public class AuthenticationControllerValidationTest
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.toString()))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void whenLoginRequestAfterRegistrationWithValidCredentials_theuserIsAuthenticated() throws Exception
+    {
+        JSONObject registerRequestJson = new JSONObject();
+        registerRequestJson.put("username", EMAIL);
+        registerRequestJson.put("password", PASSWORD);
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(registerRequestJson.toString()));
+
+        JSONObject loginRequestJson = new JSONObject();
+        loginRequestJson.put("username", EMAIL);
+        loginRequestJson.put("password", PASSWORD);
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginRequestJson.toString()))
+                .andExpect(status().isOk());
     }
 
     @Test
