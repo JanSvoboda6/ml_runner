@@ -79,7 +79,7 @@ public class ContainerFileService implements FileService
         try
         {
             FileResponse response = mapper.readValue(result.toString(), FileResponse.class);
-            response.folders.forEach(folderName -> fileInformationList.add(new FileInformation(folderName)));
+            response.directories.forEach(folderName -> fileInformationList.add(new FileInformation(folderName)));
             response.files.forEach(file -> fileInformationList.add(new FileInformation(file.key, file.size, (long)file.modified)));
         } catch (IOException exception)
         {

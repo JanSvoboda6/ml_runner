@@ -34,7 +34,6 @@ public class Runner
         return id;
     }
 
-
     public Project getProject()
     {
         return project;
