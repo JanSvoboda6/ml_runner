@@ -1,6 +1,8 @@
 package com.jan.web.runner;
 
 import com.jan.web.project.Project;
+import com.jan.web.runner.parameter.HyperParameter;
+import com.jan.web.runner.status.RunnerStatus;
 
 import javax.persistence.*;
 import java.util.List;

@@ -4,7 +4,6 @@ import javax.validation.constraints.*;
 
 public class RegisterRequest
 {
-
     @Email(message = "Email is not in a valid format!")
     @Size(min = 5, max = 128, message = "Length of the email must be between 5 to 128 characters!")
     private String username;

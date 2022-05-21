@@ -1,5 +1,7 @@
 package com.jan.web.runner;
 
+import com.jan.web.runner.parameter.HyperParameter;
+
 import java.util.List;
 
 public class RunRequest

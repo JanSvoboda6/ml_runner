@@ -1,6 +1,6 @@
 package com.jan.web.security.authentication;
 
-import com.jan.web.security.ValidationException;
+import com.jan.web.security.validation.ValidationException;
 import com.jan.web.security.request.LoginRequest;
 import com.jan.web.security.request.RegisterRequest;
 import com.jan.web.security.response.JwtResponse;

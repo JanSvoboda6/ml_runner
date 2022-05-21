@@ -1,6 +1,8 @@
 package com.jan.web.project;
 
-import com.jan.web.runner.RequestValidator;
+import com.jan.web.project.label.ClassificationLabel;
+import com.jan.web.project.label.ClassificationLabelRepository;
+import com.jan.web.security.validation.RequestValidator;
 import com.jan.web.runner.Runner;
 import com.jan.web.runner.RunnerRepository;
 import com.jan.web.security.user.User;

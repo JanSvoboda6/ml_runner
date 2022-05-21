@@ -2,8 +2,9 @@ package com.jan.web.runner;
 
 import com.jan.web.docker.ContainerEntity;
 import com.jan.web.docker.ContainerUtility;
-import com.jan.web.result.Result;
-import com.jan.web.result.ResultRepository;
+import com.jan.web.security.validation.RequestValidator;
+import com.jan.web.runner.result.Result;
+import com.jan.web.runner.result.ResultRepository;
 import org.assertj.core.api.Assertions;
 import org.json.JSONException;
 import org.junit.Ignore;

@@ -1,5 +1,7 @@
 package com.jan.web.project;
 
+import com.jan.web.project.label.ClassificationLabel;
+
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 

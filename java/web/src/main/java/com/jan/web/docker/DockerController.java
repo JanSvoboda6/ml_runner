@@ -1,6 +1,6 @@
 package com.jan.web.docker;
 
-import com.jan.web.runner.RequestValidator;
+import com.jan.web.security.validation.RequestValidator;
 import com.jan.web.security.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

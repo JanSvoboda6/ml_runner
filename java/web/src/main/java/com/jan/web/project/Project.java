@@ -1,5 +1,6 @@
 package com.jan.web.project;
 
+import com.jan.web.project.label.ClassificationLabel;
 import com.jan.web.security.user.User;
 
 import javax.persistence.*;

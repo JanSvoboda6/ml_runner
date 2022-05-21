@@ -1,6 +1,6 @@
 package com.jan.web.security.authentication;
 
-import com.jan.web.security.ValidationException;
+import com.jan.web.security.validation.ValidationException;
 import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

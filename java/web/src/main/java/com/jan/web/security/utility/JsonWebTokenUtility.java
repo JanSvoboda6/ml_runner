@@ -1,6 +1,6 @@
 package com.jan.web.security.utility;
 
-import com.jan.web.security.ValidationException;
+import com.jan.web.security.validation.ValidationException;
 import com.jan.web.security.user.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
