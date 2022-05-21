@@ -89,34 +89,6 @@ def download():
                     headers={'Content-Disposition': 'attachment;filename=files.zip'})
 
 
-def list_files_in_directory(directory):
-    file_names = []
-    for path, subdirs, files in os.walk(directory):
-        for name in files:
-            file_names.append(os.path.join(path, name).replace(ROOT_DIRECTORY, '', 1))
-    return file_names
-
-
-def move(old_key, new_key):
-    os.rename(os.path.join(ROOT_DIRECTORY, old_key), os.path.join(ROOT_DIRECTORY, new_key))
-
-
-def walk_directory(root_directory):
-    directories_list = []
-    files_list = []
-    for top, directories, files in os.walk(root_directory):
-        shifted_root_directory = top.replace(root_directory, '', 1)
-        for directory in directories:
-            directories_list.append(os.path.join(shifted_root_directory, directory + '/'))
-        for file in files:
-            file_information = {'key': os.path.join(shifted_root_directory, file),
-                                'size': os.path.getsize(os.path.join(top, file)),
-                                'modified': math.floor(os.path.getmtime(os.path.join(top, file)))}
-            files_list.append(file_information)
-
-    return directories_list, files_list
-
-
 @app.route('/runner/execute', methods=['POST'])
 def execute_runner():
     runner = request.get_json()
@@ -159,6 +131,34 @@ def get_result():
         result_text = log_file.read()
 
     return jsonify({'resultText': result_text, 'accuracy': accuracy})
+
+
+def list_files_in_directory(directory):
+    file_names = []
+    for path, subdirs, files in os.walk(directory):
+        for name in files:
+            file_names.append(os.path.join(path, name).replace(ROOT_DIRECTORY, '', 1))
+    return file_names
+
+
+def move(old_key, new_key):
+    os.rename(os.path.join(ROOT_DIRECTORY, old_key), os.path.join(ROOT_DIRECTORY, new_key))
+
+
+def walk_directory(root_directory):
+    directories_list = []
+    files_list = []
+    for top, directories, files in os.walk(root_directory):
+        shifted_root_directory = top.replace(root_directory, '', 1)
+        for directory in directories:
+            directories_list.append(os.path.join(shifted_root_directory, directory + '/'))
+        for file in files:
+            file_information = {'key': os.path.join(shifted_root_directory, file),
+                                'size': os.path.getsize(os.path.join(top, file)),
+                                'modified': math.floor(os.path.getmtime(os.path.join(top, file)))}
+            files_list.append(file_information)
+
+    return directories_list, files_list
 
 
 def prepare_runner_configuration_files(runner):
