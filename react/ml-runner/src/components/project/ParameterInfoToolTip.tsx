@@ -9,6 +9,9 @@ interface ParameterInfoTooltipProps
     textContent: string
 }
 
+/**
+ * Component that could be viewed by hovering on the '?' question mark when submitting a runner.
+ */
 function ParameterInfoTooltip({textContent}:ParameterInfoTooltipProps) {
 return (
     <Popup

@@ -4,7 +4,7 @@ import LegendChart from "./visualization/Legend";
 import Navbar from "../navigation/Navbar";
 import FadeIn from "react-fade-in";
 import {BACKEND_URL} from "../../helpers/url";
-import HeatmapDataProvider from "./HeatmapDataProvider";
+import HeatmapDataProvider from "./visualization/HeatmapDataProvider";
 import axios, {AxiosResponse} from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {HyperParameter} from "../../types";
@@ -16,27 +16,31 @@ import HelperBox from "../navigation/HelperBox";
 
 const API_URL = BACKEND_URL + "/api/project";
 
-export type Bin = {
+export interface Bin {
     count: number
 }
 
-export type Bins = {
+export interface Bins {
     bins: Bin[]
 }
 
-type IndividualResult = {
+interface IndividualResult {
     xAxisValue: string,
     yAxisValue: string,
     result: number
 }
 
-type Runner = {
+interface Runner {
     id: number,
     accuracy: number,
     hyperParameters: HyperParameter[]
 }
 
-function Analysis(props)
+/**
+ * Analysis page consisting of information table, heatmap and chart.
+ * Needs more refactoring, it has too many responsibilities.
+ */
+function Analysis()
 {
     const location = useLocation();
     const parameters = queryString.parse(location.search);
@@ -44,9 +48,9 @@ function Analysis(props)
 
     const [runners, setRunners] = useState<Runner[]>([]);
     const [averageValidationResult, setAverageValidationResult] = useState(0);
-    const [bins, setBins] = useState<Bins[]>([]);
     const [isLoaded, setLoaded] = useState(false);
     const [isInErrorState, setErrorState] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [firstHyperParameter, setFirstHyperParameter] = useState("");
     const [secondHyperParameter, setSecondHyperParameter] = useState("");
     const [hyperParameterSelector, setHyperParameterSelector] = useState<string[]>([]);
@@ -61,8 +65,8 @@ function Analysis(props)
                         setErrorState(true);
                         return;
                     }
-                    constructRunnersWithResult(res.data).then((runnersResult) => {
-
+                    constructRunnersWithResult(res.data).then((runnersResult) =>
+                    {
                         let hyperParametersName: string[] = [];
                         runnersResult[0].hyperParameters.forEach(parameter => hyperParametersName.push(parameter.name));
                         setHyperParameterSelector(hyperParametersName);
@@ -79,9 +83,10 @@ function Analysis(props)
                         setLoaded(true);
                     });
                 },
-                (error) =>
+                (error: any) =>
                 {
                     setErrorState(true);
+                    setErrorMessage(error.response.data);
                 }
             )
     }, [])
@@ -105,41 +110,6 @@ function Analysis(props)
             }
         }
         return runnersResult;
-        // return [
-        //     {id: 1, accuracy: 0.685, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"0.1"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 2, accuracy: 0.889, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"1"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 3, accuracy: 0.6786, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"10"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 4, accuracy: 0.985, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"100"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 5, accuracy: 0.456, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"1000"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 6, accuracy: 0.548, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"0.1"},{name: "kernel", value:"linear"}]},
-        //     {id: 7, accuracy: 0.893, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
-        //     {id: 8, accuracy: 0.675, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"10"}, {name: "kernel", value:"poly"}]},
-        //     {id: 9, accuracy: 0.912, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"100"}, {name: "kernel", value:"poly"}]},
-        //     {id: 10, accuracy: 0.8768, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1000"}, {name: "kernel", value:"poly"}]},
-        //     {id: 11, accuracy: 0.866, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"0.1"}, {name: "kernel", value:"linear"}]},
-        //     {id: 12, accuracy: 0.756, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
-        //     {id: 13, accuracy: 0.556, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"10"}, {name: "kernel", value:"linear"}]},
-        //     {id: 14, accuracy: 0.895, hyperParameters: [{name: "gamma", value: "50"}, {name: "c", value:"100"}, {name: "kernel", value:"linear"}]},
-        //     {id: 15, accuracy: 0.999, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"1000"}, {name: "kernel", value:"linear"}]},
-        //     {id: 16, accuracy: 0.588, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"0.1"}, {name: "kernel", value:"linear"}]},
-        //     {id: 17, accuracy: 0.80015, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"1"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 18, accuracy: 0.56, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"10"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 19, accuracy: 0.698, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"100"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 20, accuracy: 0.53, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"1000"}, {name: "kernel", value:"rbf"}]},
-        //     {id: 21, accuracy: 0.4568, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"0.1"}, {name: "kernel", value:"linear"}]},
-        //     {id: 22, accuracy: 0.967, hyperParameters: [{name: "gamma", value: "50"}, {name: "c", value:"1"}, {name: "kernel", value:"poly"}]},
-        //     {id: 23, accuracy: 1, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"10"}, {name: "kernel", value:"poly"}]},
-        //     {id: 24, accuracy: 0.55, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"100"},{name: "kernel", value:"linear"}]},
-        //     {id: 25, accuracy: 0.69, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"1000"},{name: "kernel", value:"linear"}]},
-        //     {id: 25, accuracy: 0.867, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"5"},{name: "kernel", value:"linear"}]},
-        //     {id: 25, accuracy: 0.75, hyperParameters: [{name: "gamma", value: "50"}, {name: "c", value:"10"},{name: "kernel", value:"linear"}]},
-        //     {id: 25, accuracy: 0.85, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"5"},{name: "kernel", value:"linear"}]},
-        //     {id: 25, accuracy: 0.8989, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"10"},{name: "kernel", value:"linear"}]},
-        //     {id: 26, accuracy: 0.645, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"5"},{name: "kernel", value:"linear"}]},
-        //     {id: 27, accuracy: 0.755, hyperParameters: [{name: "gamma", value: "5"}, {name: "c", value:"50"},{name: "kernel", value:"linear"}]},
-        //     {id: 27, accuracy: 0.645, hyperParameters: [{name: "gamma", value: "5"}, {name: "c", value:"5"},{name: "kernel", value:"linear"}]},
-        //     {id: 27, accuracy: 0.7745, hyperParameters: [{name: "gamma", value: "5"}, {name: "c", value:"10"},{name: "kernel", value:"linear"}]},
-        // ];
     }
 
     function sortFloat(a,b) { return a - b; }
@@ -162,12 +132,9 @@ function Analysis(props)
         if (hasNumber.test(hyperParameterValues[0])) {
             let hyperParameterValuesNumber: number[] = [];
             hyperParameterValues.forEach(parameter => hyperParameterValuesNumber.push(Number((parameter))));
-            console.log(hyperParameterValues);
             hyperParameterValuesNumber.sort(sortFloat);
-            console.log(hyperParameterValuesNumber);
             hyperParameterValues = []
             hyperParameterValuesNumber.forEach(number => hyperParameterValues.push(fromExponential(number)))
-            console.log(hyperParameterValues);
             return hyperParameterValues;
         }
         return hyperParameterValues.sort();
@@ -217,9 +184,16 @@ function Analysis(props)
 
     if(isInErrorState)
     {
+        if(errorMessage !== "")
+        {
+            return (<HelperBox warning={true} content={errorMessage} onClose={() => null}/>);
+        }
         return (
             <div>
-                <HelperBox warning={true} content={"Dear user, please run the project at least two times to see the analysis of the aggregated results."} onClose={() => null}/>
+                <HelperBox warning={true}
+                           content={"Dear user, please run the project at least two times to see the analysis of the aggregated results."}
+                           onClose={() => null}
+                />
                 <p style={{textAlign: "center", marginTop: "100px"}}>No content to see here.</p>
             </div>)
     }
@@ -237,8 +211,7 @@ function Analysis(props)
 
         return (
             <div>
-                <Navbar start="start-at-projects"/>
-
+                <Navbar/>
                 <div className="summary-list">
                     <div className="summary-list-item">
                         <div className="total-list">
@@ -293,7 +266,10 @@ function Analysis(props)
             </div>
         )
     }
-    return <p>LOADING</p>;
+    else
+    {
+        return <></>;
+    }
 }
 
 export default Analysis;

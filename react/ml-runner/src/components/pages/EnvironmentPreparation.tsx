@@ -5,6 +5,9 @@ import DockerService from "../../services/DockerService";
 import cubeMerging from '../../styles/cube_merging.gif'
 import HelperBox from "../navigation/HelperBox";
 
+/**
+ * Component used for contacting API that prepares container for the user.
+ */
 function EnvironmentPreparation()
 {
     const [isPrepared, setPrepared] = useState(false);

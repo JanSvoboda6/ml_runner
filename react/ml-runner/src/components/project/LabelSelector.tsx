@@ -2,6 +2,9 @@ import Popup from "reactjs-popup";
 import SelectableDataset from "../dataset/SelectableDataset";
 import React, {useState} from "react";
 
+/**
+ * Used for selecting a label (class and folder) when creating a project.
+ */
 function LabelSelector(props: any)
 {
     const [labelName, setLabelName] = useState("");

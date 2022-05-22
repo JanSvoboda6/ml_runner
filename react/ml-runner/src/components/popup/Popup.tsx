@@ -1,5 +1,8 @@
 import React from "react";
 
+/**
+ * Popup component.
+ */
 const Popup = (props: { handleClose: React.MouseEventHandler<HTMLSpanElement>; content: string }) =>
 {
     return (

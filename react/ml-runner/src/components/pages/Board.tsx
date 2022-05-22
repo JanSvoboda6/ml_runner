@@ -10,7 +10,7 @@ function Board()
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
             </style>
-            <Navbar start="start-at-projects" />
+            <Navbar/>
             <div className="main-body">
                 <ProjectList />
             </div>

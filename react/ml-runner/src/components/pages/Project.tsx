@@ -1,17 +1,16 @@
-
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Navbar from "../navigation/Navbar";
 import ProjectService from "../project/ProjectService";
-import { Redirect } from "react-router";
+import {Redirect} from "react-router";
 import 'reactjs-popup/dist/index.css';
-import Popup from "reactjs-popup";
-import Datasets from "../dataset/Datasets";
 import "../../styles/Project.css";
-import SelectableDataset from "../dataset/SelectableDataset";
 import FadeIn from "react-fade-in";
-import LabelSelector from "./LabelSelector";
+import LabelSelector from "../project/LabelSelector";
 import {Label} from "../../types";
 
+/**
+ * Component used for creating a project.
+ */
 function Project()
 {
     const [projectName, setProjectName] = useState("");
@@ -19,9 +18,8 @@ function Project()
     const [isSuccessfullySaved, setSuccessfullySaved] = useState(false);
     const [labels, setLabels] = useState<Label[]>([{id: 0, name: "", folderPath: ""}, {id: 1, name: "", folderPath: ""}]);
 
-    const handleNameChange = (e: any) =>
+    const handleNameChange = (e: { target: { value: string; }; }) =>
     {
-        e.preventDefault();
         setProjectName(e.target.value);
     }
 
@@ -76,7 +74,7 @@ function Project()
 
     return (
         <div>
-            <Navbar start="start-at-new-project" />
+            <Navbar/>
             <FadeIn>
                 <div className="project-form">
                     <div className="project-form-block"> <h3>Create New Project</h3> </div>

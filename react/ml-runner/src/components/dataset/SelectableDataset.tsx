@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Datasets from "./Datasets";
 
+/**
+ * Used for selecting a folder (dataset) for specific class while creating a Project.
+ */
 function SelectableDataset(props: { handleFolderSelection: (folderPath: string) => void })
 {
     const [folderPath, setFolderPath] = useState("");

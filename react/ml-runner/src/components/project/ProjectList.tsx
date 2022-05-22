@@ -16,6 +16,9 @@ interface Project
   selectedModel: string
 }
 
+/**
+ * Component used for listing projects.
+ */
 function ProjectList()
 {
   const [isLoaded, setLoaded] = useState(false);

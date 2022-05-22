@@ -8,6 +8,9 @@ import HelperBox from "../navigation/HelperBox";
 import FadeIn from "react-fade-in";
 import Validator from 'validator';
 
+/**
+ * Landing page that provides login form.
+ */
 function Login()
 {
     const [username, setUsername] = useState("");
@@ -18,16 +21,16 @@ function Login()
 
     const search = window.location.search;
     const params = new URLSearchParams(search);
-    const showPopup = params.get('popup');
+    const showPopup = params.get("popup");
 
     const dispatch = useDispatch();
 
-    const onChangeUsername = (e: { target: { value: any; }; }) =>
+    const onChangeUsername = (e: { target: { value: string; }; }) =>
     {
         setUsername(e.target.value);
     }
 
-    const onChangePassword = (e: { target: { value: any; }; }) =>
+    const onChangePassword = (e: { target: { value: string; }; }) =>
     {
         setPassword(e.target.value);
     }
@@ -40,7 +43,7 @@ function Login()
 
         if (validateForm())
         {
-            var user = { username: username, password: password, accessToken: "" };
+            const user = {username: username, password: password, accessToken: ""};
 
             LoginService.login(dispatch, user)
                 .then(
@@ -93,7 +96,7 @@ function Login()
     return (
             <>
             <div className="wrapper">
-                {showPopup == 't' && <HelperBox content="Thank you for the registration. We have sent you an activation email." onClose={() => null}/>}
+                {showPopup === 't' && <HelperBox content="Thank you for the registration. We have sent you an activation email." onClose={() => null}/>}
             </div>
             <div className="landing-page-wrapper">
                 <div className="landing-page-content">

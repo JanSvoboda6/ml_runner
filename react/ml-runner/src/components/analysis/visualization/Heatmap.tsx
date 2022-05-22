@@ -5,8 +5,7 @@ import {HeatmapRect} from '@visx/heatmap';
 import {Bins} from "../Analysis"
 import Gradient from "javascript-color-gradient";
 
-
-export type HeatmapProps = {
+export interface HeatmapProps {
     bins: Bins[];
     tickValuesX: Array<string>;
     tickValuesY: Array<string>;
@@ -19,10 +18,16 @@ export type HeatmapProps = {
     events?: boolean;
 };
 
-const defaultMargin = { top: 50, left: 50, right: 50, bottom: 50 };
+const SIZE = 510;
+const GAP = 5;
+const OFFSET = 90;
 
+const defaultMargin = { top: 50, left: 50, right: 50, bottom: 50 };
 const gradientArray = new Gradient().setColorGradient("#122549", "#b4fbde").setMidpoint(51).getColors();
 
+/**
+ * Heatmap visualization component with clickable bins.
+ */
 export default ({
     bins,
     tickValuesX,
@@ -47,29 +52,41 @@ export default ({
         setValueOfSelectedBin(percentageValue.toFixed(2).toString() + "%");
     };
 
-    const size = 510;
-    const xMax = size - margin.bottom - margin.top;
-    const yMax = size - margin.bottom - margin.top;
-    const gap = 5;
-
-    const binWidth = xMax / bins.length;
-    const binHeight = yMax / bins[0].bins.length;
-
-    const xScale = scaleLinear < number > ({
-        domain: [0, bins.length],
+    const xScale = scaleLinear<number> ({
+        domain: [0, bins.length]
     });
 
-    const yScale = scaleLinear < number > ({
-        domain: [0,  bins[0].bins.length],
+    const yScale = scaleLinear<number> ({
+        domain: [0,  bins[0].bins.length]
     });
 
-    const xAxisScale = scaleLinear < number > ({
+    const xAxisScale = scaleLinear<number> ({
         domain: [0, bins.length - 1],
     });
 
-    const yAxisScale = scaleLinear < number > ({
+    const yAxisScale = scaleLinear<number> ({
         domain: [0, bins[0].bins.length - 1],
     });
+
+    const formatXAxis = (tickItem) => {
+        return tickValuesX[tickItem];
+    }
+    const formatYAxis = (tickItem) => {
+        return tickValuesY[tickItem];
+    }
+
+    const getColorBasedOnCountValue = (count: number | null | undefined) => {
+        if(count === undefined || count === null || count <= 0.5) {
+            return gradientArray[0];
+        }
+        return gradientArray[((count*100) - 50).toFixed()];
+    }
+
+    const xMax = SIZE - margin.bottom - margin.top;
+    const yMax = SIZE - margin.bottom - margin.top;
+
+    const binWidth = xMax / bins.length;
+    const binHeight = yMax / bins[0].bins.length;
 
     const xTicksIndexes = [...Array(bins.length)].map((_,i) => i);
     const yTicksIndexes = [...Array(bins[0].bins.length)].map((_,i) => i);
@@ -79,35 +96,17 @@ export default ({
     xAxisScale.range([0, xMax - binWidth]);
     yAxisScale.range([0, yMax - binHeight]);
 
-    const formatXAxis = (tickItem) => {
-        return tickValuesX[tickItem];
-    }
-
-    const offset = 90;
-
-    const formatYAxis = (tickItem) => {
-    return tickValuesY[tickItem];
-    }
-
-    const getColorBasedOnCountValue = (count: number | null | undefined) => {
-        if(count === undefined || count === null || count <= 0.5)
-        {
-            return gradientArray[0];
-        }
-        return gradientArray[((count*100) - 50).toFixed()];
-    }
-
-    return width < 10 ? null : (
+    return(
         <div className='heatmap-box'>
         <svg width={ width } height={ height }>
-            <g width={width/2} height={height/2} transform={'translate(' + width/4 + ',' + offset + ')'}>
+            <g width={width/2} height={height/2} transform={'translate(' + width/4 + ',' + OFFSET + ')'}>
                 <HeatmapRect
                     data={ bins }
                     xScale={ xScale }
                     yScale={ yScale }
                     binWidth={ binWidth }
                     binHeight={ binHeight }
-                    gap={ gap } >
+                    gap={ GAP } >
                     { heatmap =>
                         heatmap.map(heatmapBins =>
                             heatmapBins.map(bin => (
@@ -120,13 +119,11 @@ export default ({
                                     y={ bin.y }
                                     fill={getColorBasedOnCountValue(bin.count)}
                                     fillOpacity={ 0.8}
-                                    onClick={ () =>
-                                    {
-                                        if(bin.bin)
-                                        {                 
+                                    onClick={() => {
+                                        if(bin.bin) {
                                             onBinClick(bin);
                                         }
-                                    } }
+                                    }}
                                 />
                             )),
                         )
@@ -135,7 +132,7 @@ export default ({
             </g>
             <g transform={'translate(' + (width/4 + binWidth/2) +', -5)'} >
             <AxisTop
-                top={offset}
+                top={OFFSET}
                 scale={xAxisScale}
                 tickValues={xTicksIndexes}
                 tickFormat={formatXAxis}
@@ -162,7 +159,7 @@ export default ({
                 })}/>
             </g>
 
-            <g transform={'translate('+ (width/4) + ',' + (binHeight/2 + offset) + ')'}>
+            <g transform={'translate('+ (width/4) + ',' + (binHeight/2 + OFFSET) + ')'}>
             <AxisLeft
                 left={-10}
                 scale={yAxisScale}

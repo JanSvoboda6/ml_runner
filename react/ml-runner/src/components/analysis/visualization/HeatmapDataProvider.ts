@@ -1,5 +1,8 @@
-import {Bin, Bins} from "./Analysis";
+import {Bin, Bins} from "../Analysis";
 
+/**
+ * Provides constructed bin values for heatmap component.
+ */
 const constructBins = (values: number[][]) => {
     let bins = new Array<Bins>();
     for(let i = 0; i < values.length; i++)

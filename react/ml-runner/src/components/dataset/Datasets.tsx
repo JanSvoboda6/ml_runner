@@ -10,11 +10,13 @@ import loadingAnimation from "../../styles/loading_graphics.gif";
 import FadeIn from 'react-fade-in';
 import DatasetUtility from "./DatasetUtility";
 
-function Datasets(props)
+/**
+ * Component providing file browsing functionality.
+ */
+function Datasets(props: { onWarning?: (arg: string) => void; handleFolderSelection?: (arg: any) => void; })
 {
     const [isLoaded, setLoaded] = useState(false);
     const [files, setFiles] = useState<FileInformation[]>([]);
-    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() =>
     {
@@ -40,7 +42,10 @@ function Datasets(props)
                 },
                 (error) =>
                 {
-                    setErrorMessage(error.message);
+                    if(props.onWarning)
+                    {
+                        props.onWarning(error.data.response);
+                    }
                     setLoaded(true);
                 }
             )
@@ -59,7 +64,10 @@ function Datasets(props)
         {
             if (!addedFiles[i].name.includes("."))
             {
-                props.onWarning("Drag & Drop folder functionality is not yet supported. You can upload multiple files by dragging them on already created folder.");
+                if(props.onWarning)
+                {
+                    props.onWarning("Drag & Drop folder functionality is not yet supported. You can upload multiple files by dragging them on already created folder.");
+                }
                 return;
             }
         }

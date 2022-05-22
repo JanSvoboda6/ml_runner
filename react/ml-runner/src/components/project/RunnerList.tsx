@@ -14,11 +14,13 @@ interface Runner
     runnerId: number
 }
 
-function RunnerList(props: any)
+/**
+ * Represent a list of runners.
+ */
+function RunnerList(props)
 {
     const [isLoaded, setLoaded] = useState(false);
     const [runners, setRunners] = useState<Runner[]>([]);
-    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() =>
     {
@@ -35,11 +37,9 @@ function RunnerList(props: any)
                     });
                     setRunners(runners.reverse());
                 },
-                (error) =>
+                () =>
                 {
-                    console.log(error);
                     setLoaded(true);
-                    setErrorMessage(error.message);
                 }
             )
     }, [])
@@ -49,7 +49,6 @@ function RunnerList(props: any)
         return <div> Loading...</div>
     }
 
-    //TODO Jan: generate proper runner key
     return (
         <div>
             <ul className="runner-list-inside">

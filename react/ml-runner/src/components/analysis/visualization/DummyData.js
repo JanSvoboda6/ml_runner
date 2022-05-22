@@ -1,0 +1,56 @@
+/**
+ *  Provides dummy data for visualization components.
+ */
+
+const chartData = [
+    { x: '1', y: 77 },
+    { x: '2', y: 76 },
+    { x: '3', y: 79 },
+    { x: '4', y: 73 },
+    { x: '5', y: 75 },
+    { x: '6', y: 89 },
+    { x: '7', y: 87 },
+    { x: '8', y: 79 },
+    { x: '9', y: 83 },
+    { x: '10', y: 90 },
+    { x: '11', y: 91 },
+    { x: '13', y: 87 },
+    { x: '14', y: 86 },
+];
+
+
+const heatmapData = [
+    {id: 1, accuracy: 0.685, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"0.1"}, {name: "kernel", value:"rbf"}]},
+    {id: 2, accuracy: 0.889, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"1"}, {name: "kernel", value:"rbf"}]},
+    {id: 3, accuracy: 0.6786, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"10"}, {name: "kernel", value:"rbf"}]},
+    {id: 4, accuracy: 0.985, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"100"}, {name: "kernel", value:"rbf"}]},
+    {id: 5, accuracy: 0.456, hyperParameters: [{name: "gamma", value: "0.1"}, {name: "c", value:"1000"}, {name: "kernel", value:"rbf"}]},
+    {id: 6, accuracy: 0.548, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"0.1"},{name: "kernel", value:"linear"}]},
+    {id: 7, accuracy: 0.893, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
+    {id: 8, accuracy: 0.675, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"10"}, {name: "kernel", value:"poly"}]},
+    {id: 9, accuracy: 0.912, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"100"}, {name: "kernel", value:"poly"}]},
+    {id: 10, accuracy: 0.8768, hyperParameters: [{name: "gamma", value: "1"}, {name: "c", value:"1000"}, {name: "kernel", value:"poly"}]},
+    {id: 11, accuracy: 0.866, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"0.1"}, {name: "kernel", value:"linear"}]},
+    {id: 12, accuracy: 0.756, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"1"}, {name: "kernel", value:"linear"}]},
+    {id: 13, accuracy: 0.556, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"10"}, {name: "kernel", value:"linear"}]},
+    {id: 14, accuracy: 0.895, hyperParameters: [{name: "gamma", value: "50"}, {name: "c", value:"100"}, {name: "kernel", value:"linear"}]},
+    {id: 15, accuracy: 0.999, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"1000"}, {name: "kernel", value:"linear"}]},
+    {id: 16, accuracy: 0.588, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"0.1"}, {name: "kernel", value:"linear"}]},
+    {id: 17, accuracy: 0.80015, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"1"}, {name: "kernel", value:"rbf"}]},
+    {id: 18, accuracy: 0.56, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"10"}, {name: "kernel", value:"rbf"}]},
+    {id: 19, accuracy: 0.698, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"100"}, {name: "kernel", value:"rbf"}]},
+    {id: 20, accuracy: 0.53, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"1000"}, {name: "kernel", value:"rbf"}]},
+    {id: 21, accuracy: 0.4568, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"0.1"}, {name: "kernel", value:"linear"}]},
+    {id: 22, accuracy: 0.967, hyperParameters: [{name: "gamma", value: "50"}, {name: "c", value:"1"}, {name: "kernel", value:"poly"}]},
+    {id: 23, accuracy: 1, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"10"}, {name: "kernel", value:"poly"}]},
+    {id: 24, accuracy: 0.55, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"100"},{name: "kernel", value:"linear"}]},
+    {id: 25, accuracy: 0.69, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"1000"},{name: "kernel", value:"linear"}]},
+    {id: 25, accuracy: 0.867, hyperParameters: [{name: "gamma", value: "1000"}, {name: "c", value:"5"},{name: "kernel", value:"linear"}]},
+    {id: 25, accuracy: 0.75, hyperParameters: [{name: "gamma", value: "50"}, {name: "c", value:"10"},{name: "kernel", value:"linear"}]},
+    {id: 25, accuracy: 0.85, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"5"},{name: "kernel", value:"linear"}]},
+    {id: 25, accuracy: 0.8989, hyperParameters: [{name: "gamma", value: "100"}, {name: "c", value:"10"},{name: "kernel", value:"linear"}]},
+    {id: 26, accuracy: 0.645, hyperParameters: [{name: "gamma", value: "10"}, {name: "c", value:"5"},{name: "kernel", value:"linear"}]},
+    {id: 27, accuracy: 0.755, hyperParameters: [{name: "gamma", value: "5"}, {name: "c", value:"50"},{name: "kernel", value:"linear"}]},
+    {id: 27, accuracy: 0.645, hyperParameters: [{name: "gamma", value: "5"}, {name: "c", value:"5"},{name: "kernel", value:"linear"}]},
+    {id: 27, accuracy: 0.7745, hyperParameters: [{name: "gamma", value: "5"}, {name: "c", value:"10"},{name: "kernel", value:"linear"}]},
+];

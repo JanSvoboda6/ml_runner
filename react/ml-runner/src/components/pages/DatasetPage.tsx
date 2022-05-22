@@ -13,7 +13,7 @@ function DatasetPage()
         <>
              <div className="wrapper">
                 {warning && <HelperBox content={warning} warning={true} onClose={onWarningClose}/>}
-            <Navbar start="start-at-datasets"/>
+            <Navbar/>
              </div>
 
             <Datasets onWarning={warningMessage => setWarning(warningMessage)}/>

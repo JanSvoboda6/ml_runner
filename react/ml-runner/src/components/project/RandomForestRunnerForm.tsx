@@ -1,36 +1,34 @@
 import React, {useState} from "react";
-
 import {HyperParameter} from "../../types";
 import RunnerService from "../../services/RunnerService";
 import ParameterInfoTooltip from "./ParameterInfoToolTip";
 
+/**
+ * Used for submitting a Random Forest runner.
+ */
 function RandomForestRunnerForm(props: any)
 {
     const [criterionParameter, setCriterion] = useState("gini");
     const [numberOfEstimatorsParameter, setNumberOfEstimators] = useState(100);
     const [maximumDepthParameter, setMaximumDepth] = useState(100);
 
-    const handleCriterionChange = (e: any) =>
+    const handleCriterionChange = (e: { target: { value: string; }; }) =>
     {
-        e.preventDefault();
         setCriterion(e.target.value);
     }
 
-    const handleNumberOfEstimatorsChange = (e: any) =>
+    const handleNumberOfEstimatorsChange = (e: { target: { value: string; }; }) =>
     {
-        e.preventDefault();
-        setNumberOfEstimators(e.target.value);
+        setNumberOfEstimators(Number(e.target.value));
     }
 
-    const handleMaximumDepthChange = (e: any) =>
+    const handleMaximumDepthChange = (e: { target: { value: string; }; }) =>
     {
-        e.preventDefault();
-        setMaximumDepth(e.target.value);
+        setMaximumDepth(Number(e.target.value));
     }
 
-    const handleRunButton = (e: any) =>
+    const handleRunButton = () =>
     {
-        e.preventDefault();
         const criterion: HyperParameter = {
             name: 'criterion',
             value: criterionParameter.toString()
@@ -69,7 +67,7 @@ function RandomForestRunnerForm(props: any)
                 <ParameterInfoTooltip textContent={"Choose integer value."} />
             </div>
             <div className="runner-form-block">
-                <button className="runner-form-run-button" onClick={(e) => { handleRunButton(e); props.handleRunButton() }}>Save &amp; Run</button>
+                <button className="runner-form-run-button" onClick={(e) => { handleRunButton(); props.handleRunButton() }}>Save &amp; Run</button>
             </div>
         </div>
     )

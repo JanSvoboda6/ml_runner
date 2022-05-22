@@ -8,6 +8,10 @@ import RandomForestRunnerForm from "./RandomForestRunnerForm";
 
 const POPUP_DIMENSIONS = {"width": "900px", "min-height": "550px"};
 
+/**
+ * Component rendering a project with its runners.
+ * Provides a control panel for executin a runner and redirection to analysis page.
+ */
 const ProjectQuickView = (props: any) =>
 {
     let history = useHistory();

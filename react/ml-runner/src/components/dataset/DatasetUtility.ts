@@ -1,6 +1,11 @@
 import {FileInformation} from "../../types";
 import Moment from "moment";
 
+
+/**
+ * Provides main logic for file/folder manipulation in Datasets UI component.
+ * It feeds data to FileBrowser.
+ */
 const getUniqueAddedFiles = (existingFiles: FileInformation[], addedFiles: File[], prefix: string): FileInformation[] => {
     const newFiles: Array<FileInformation> = addedFiles.map((file) =>
     {

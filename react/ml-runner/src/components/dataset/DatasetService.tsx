@@ -4,6 +4,9 @@ import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
 const API_URL = BACKEND_URL + "/api/dataset";
 
+/**
+ * Provides methods for contacting API (file/folder manipulation functionality).
+ */
 const getFiles = () =>
 {
     return axios.get(API_URL, {headers: authorizationHeader()});

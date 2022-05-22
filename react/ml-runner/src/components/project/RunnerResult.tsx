@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
-import Navbar from "../navigation/Navbar";
 
 interface RunnerResultProps
 {

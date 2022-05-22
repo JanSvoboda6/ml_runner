@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 
-function HelperBox(props: any)
+interface HelperBoxProps {
+    warning?: boolean,
+    content: string,
+    onClose: Function
+}
+/**
+ * Box rendering at the top of the page providing information passed as content parameter.
+ */
+function HelperBox(props: HelperBoxProps)
 {
     const [isHidden, setHidden] = useState(false);
 

@@ -7,8 +7,11 @@ const thresholdScale = scaleThreshold<number, string>({
     range: ['#122549', 'rgb(26,44,78)', 'rgb(37,59,82)', 'rgb(66,101,113)', 'rgb(84,127,131)', '#b4fbde'],
 });
 
-const legendGlyphSize = 20;
+const LEGEND_ELEMENT_SIZE = 20;
 
+/**
+ * Legend component used paired with heatmap.
+ */
 export default function LegendChart({ events = false }: { events?: boolean })
 {
     return (
@@ -24,8 +27,8 @@ export default function LegendChart({ events = false }: { events?: boolean })
                                     if (events) alert(`clicked: ${JSON.stringify(label)}`);
                                 }}
                             >
-                                <svg width={legendGlyphSize} height={legendGlyphSize}>
-                                    <rect fill={label.value} width={legendGlyphSize} height={legendGlyphSize} />
+                                <svg width={LEGEND_ELEMENT_SIZE} height={LEGEND_ELEMENT_SIZE}>
+                                    <rect fill={label.value} width={LEGEND_ELEMENT_SIZE} height={LEGEND_ELEMENT_SIZE} />
                                 </svg>
                                 <LegendLabel align="left" margin="2px 0 0 10px">
                                     {label.text}
@@ -45,23 +48,23 @@ function Legend({ title, children }: { title: string; children: React.ReactNode 
             <div className="title">{title}</div>
             {children}
             <style>{`
-        .legend {
-          line-height: 0.9em;
-          color: #efefef;
-          font-size: 13px;
-          font-family: arial;
-          padding: 10px 10px;
-          float: left;
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          border-radius: 8px;
-          margin: 5px 5px;
-        }
-        .title {
-          font-size: 12px;
-          margin-bottom: 10px;
-          font-weight: 100;
-        }
-      `}</style>
+            .legend {
+              line-height: 0.9em;
+              color: #efefef;
+              font-size: 13px;
+              font-family: arial;
+              padding: 10px 10px;
+              float: left;
+              border: 1px solid rgba(255, 255, 255, 0.3);
+              border-radius: 8px;
+              margin: 5px 5px;
+            }
+            .title {
+              font-size: 12px;
+              margin-bottom: 10px;
+              font-weight: 100;
+            }
+      `    }</style>
         </div>
     );
 }

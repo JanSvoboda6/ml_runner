@@ -12,7 +12,19 @@ import Popup from "reactjs-popup";
 const API_URL = BACKEND_URL + "/api/project";
 const POPUP_DIMENSIONS = {"width": "700px", "minHeight": "500px"};
 
-function Runner(props: any)
+interface RunnerProps
+{
+    projectId: number,
+    runnerId: number,
+    selectedModel?: string,
+    projectName?: string
+}
+
+/**
+ * Represents a single run of a project.
+ * It is symbolized by one row in the main project board.
+ */
+function Runner(props: RunnerProps)
 {
     let intervalId: any;
     const [isInEndState, setEndState] = useState(false);

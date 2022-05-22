@@ -4,14 +4,15 @@ import { Link } from "react-router-dom";
 import LogoutService from "../../services/LogoutService";
 import logo from '../../styles/vut_simple_logo.png'
 
-function Navbar(props: any)
+/**
+ * Navigation bar component.
+ */
+function Navbar()
 {
     const dispatch = useDispatch();
 
-    const handleLogout = (e: { preventDefault: () => void; }) =>
+    const handleLogout = () =>
     {
-        e.preventDefault();
-
         LogoutService.logout(dispatch);
         window.location.reload();
     }
