@@ -3,14 +3,21 @@ import {HyperParameter} from "../../types";
 import RunnerService from "../../services/RunnerService";
 import ParameterInfoTooltip from "./ParameterInfoToolTip";
 
+interface RunnerForm
+{
+    projectId: number,
+    projectName: string,
+    handleRunButton: Function
+}
+
 /**
  * Used for submitting a Random Forest runner.
  */
-function RandomForestRunnerForm(props: any)
+function RandomForestRunnerForm(props: RunnerForm)
 {
     const [criterionParameter, setCriterion] = useState("gini");
-    const [numberOfEstimatorsParameter, setNumberOfEstimators] = useState(100);
-    const [maximumDepthParameter, setMaximumDepth] = useState(100);
+    const [numberOfEstimatorsParameter, setNumberOfEstimators] = useState("100");
+    const [maximumDepthParameter, setMaximumDepth] = useState("100");
 
     const handleCriterionChange = (e: { target: { value: string; }; }) =>
     {
@@ -19,29 +26,29 @@ function RandomForestRunnerForm(props: any)
 
     const handleNumberOfEstimatorsChange = (e: { target: { value: string; }; }) =>
     {
-        setNumberOfEstimators(Number(e.target.value));
+        setNumberOfEstimators(e.target.value);
     }
 
     const handleMaximumDepthChange = (e: { target: { value: string; }; }) =>
     {
-        setMaximumDepth(Number(e.target.value));
+        setMaximumDepth(e.target.value);
     }
 
     const handleRunButton = () =>
     {
         const criterion: HyperParameter = {
-            name: 'criterion',
-            value: criterionParameter.toString()
+            name: "criterion",
+            value: criterionParameter
         }
 
         const numberOfEstimators: HyperParameter = {
-            name: 'numberOfEstimators',
-            value: numberOfEstimatorsParameter.toString()
+            name: "numberOfEstimators",
+            value: numberOfEstimatorsParameter
         }
 
         const maximumDepth: HyperParameter = {
-            name: 'maximumDepth',
-            value: maximumDepthParameter.toString()
+            name: "maximumDepth",
+            value: maximumDepthParameter
         }
 
         RunnerService.run(props.projectId, [criterion, numberOfEstimators, maximumDepth]);

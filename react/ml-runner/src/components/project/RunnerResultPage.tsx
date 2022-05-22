@@ -4,6 +4,9 @@ import React from "react";
 import RunnerResult from "./RunnerResult";
 import Navbar from "../navigation/Navbar";
 
+/**
+ * Page for rendering a runner result (log file).
+ */
 function RunnerResultPage()
 {
     const location = useLocation();

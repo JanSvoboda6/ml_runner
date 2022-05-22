@@ -9,6 +9,9 @@ interface RunnerResultProps
     runnerId: number;
 }
 
+/**
+ * Component providing logs of the runner.
+ */
 function RunnerResult({projectId, runnerId}: RunnerResultProps)
 {
     const [resultText, setResultText] = useState("");

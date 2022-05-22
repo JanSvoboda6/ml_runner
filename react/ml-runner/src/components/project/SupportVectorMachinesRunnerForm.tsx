@@ -1,36 +1,36 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import RunnerService from "../../services/RunnerService";
 import {HyperParameter} from "../../types";
-import ProjectService from "./ProjectService";
-import axios from "axios";
-import authorizationHeader from "../../services/AuthorizationHeader";
-
-import {BACKEND_URL} from "../../helpers/url";
-import Popup from "reactjs-popup";
-import {color} from "chart.js/helpers";
 import ParameterInfoTooltip from "./ParameterInfoToolTip";
 
-function SupportVectorMachinesRunnerForm(props: any)
+interface RunnerForm
 {
-    const [gammaParameter, setGammaParameter] = useState(100);
-    const [cParameter, setCParameter] = useState(10);
+    projectId: number,
+    projectName: string,
+    handleRunButton: Function
+}
+
+/**
+ * Used for submitting a Support Vector Machines runner.
+ */
+function SupportVectorMachinesRunnerForm(props: RunnerForm)
+{
+    const [gammaParameter, setGammaParameter] = useState("100");
+    const [cParameter, setCParameter] = useState("10");
     const [kernelParameter, setKernelParameter] = useState("rbf");
 
-    const handleGammaParameterChange = (e: any) =>
+    const handleGammaParameterChange = (e: { target: { value: string; }; }) =>
     {
-        e.preventDefault();
         setGammaParameter(e.target.value);
     }
 
-    const handleCParameterChange = (e: any) =>
+    const handleCParameterChange = (e: { target: { value: string; }; }) =>
     {
-        e.preventDefault();
         setCParameter(e.target.value);
     }
 
-    const handleKernelParameterChange = (e: any) =>
+    const handleKernelParameterChange = (e: { target: { value: string; }; }) =>
     {
-        e.preventDefault();
         setKernelParameter(e.target.value);
     }
 
@@ -38,17 +38,17 @@ function SupportVectorMachinesRunnerForm(props: any)
     {
         e.preventDefault();
         const gamma: HyperParameter = {
-            name: 'gamma',
-            value: gammaParameter.toString()
+            name: "gamma",
+            value: gammaParameter
         }
 
         const c: HyperParameter = {
-            name: 'c',
-            value: cParameter.toString()
+            name: "c",
+            value: cParameter
         }
 
         const kernel: HyperParameter = {
-            name: 'kernel',
+            name: "kernel",
             value: kernelParameter
         }
 
