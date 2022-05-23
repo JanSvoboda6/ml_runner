@@ -26,7 +26,6 @@ services:
       unless-stopped  
     networks:
       - frontend
-      - runner_agents
       - backend
       - database
 
@@ -56,6 +55,4 @@ networks:
   frontend:
   backend:
   database:
-  runner_agents:
-    internal: true
  
