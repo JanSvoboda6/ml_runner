@@ -12,7 +12,7 @@ Demos and a production configuration (in Czech) can be found [here](https://driv
 
 ## Development configuration
 
-Prerequisite: Installed [Docker](https://docs.docker.com/get-docker/)
+Prerequisite: Installed [Docker](https://docs.docker.com/get-docker/), [npm](https://www.npmjs.com/), [Java >= 17](https://www.java.com/)
 1.  Open terminal
 2. `git clone https://github.com/JanSvoboda6/ml_runner.git`
 4. `cd ml_runner/react/ml_runner`
@@ -20,7 +20,7 @@ Prerequisite: Installed [Docker](https://docs.docker.com/get-docker/)
 6. `npm start`
 7.  Open another terminal window
 8. `cd ml_runner/java/web`
-9. `./gradlew run` <br />
+9. `./gradlew run -x test` <br />
 
 Notes: </br>
 Web application is running on port `3000`. </br>
