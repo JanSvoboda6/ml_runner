@@ -13,6 +13,9 @@ import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.keygen.BytesKeyGenerator;
+import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -28,6 +31,8 @@ import java.util.Set;
 @Service
 public class DockerService
 {
+    private static final StringKeyGenerator GENERATOR = KeyGenerators.string();
+
     @Value("${jan.bindContainerToLocalhost}")
     private boolean bindContainerToLocalhost;
 
@@ -137,7 +142,7 @@ public class DockerService
 
     private String provideContainerName(Long userId)
     {
-        return "container-user-" + userId.toString();
+        return "container-user-" + userId.toString() + "-" + GENERATOR.generateKey();
     }
 
     private boolean containerHasBeenAlreadyBuilt(Long userId)
