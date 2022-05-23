@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import RunnerService from "../../services/RunnerService";
-import {HyperParameter} from "../../types";
+import {HyperParameter} from "../../helpers/types";
 import ParameterInfoTooltip from "./ParameterInfoToolTip";
 
 interface RunnerForm

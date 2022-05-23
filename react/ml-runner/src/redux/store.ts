@@ -3,6 +3,9 @@ import userReducer from './UserSlice'
 
 import thunk from "redux-thunk";
 
+/**
+ * used for registering a reducers, that operate with state of the application when proper action is dispatched.
+ */
 export const store = configureStore({
     reducer: {
         user: userReducer
@@ -10,6 +13,4 @@ export const store = configureStore({
     middleware: [thunk]
 })
 
-//TODO Jan: How to use these states?
-export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

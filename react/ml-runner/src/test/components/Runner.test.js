@@ -101,14 +101,7 @@ describe("Running a project", () => {
 
         expect(setInterval).toHaveBeenCalledTimes(1);
     });
-
-    it.todo('When project is in running state then running time is shown');
 })
-
-describe('Stop handling', () =>
-{
-    it.todo('When stop button is clicked then RunnerService#stop method is called');
-});
 
 describe('Result and status handling', () =>
 {
@@ -182,6 +175,4 @@ describe('Result and status handling', () =>
 
         expect(screen.getByText(/finished/i)).toBeInTheDocument();
     });
-
-    it.todo('When there is a problem with running the project then error message is shown');
 });

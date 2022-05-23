@@ -1,4 +1,4 @@
-import {FileInformation} from "../../types";
+import {FileInformation} from "../../helpers/types";
 import Moment from "moment";
 
 

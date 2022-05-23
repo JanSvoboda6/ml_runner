@@ -5,7 +5,7 @@ import Login from "./components/pages/LoginPage";
 import Register from "./components/pages/RegisterPage";
 import Board from "./components/pages/Board";
 import {history} from "./helpers/History";
-import {User} from "./types";
+import {User} from "./helpers/types";
 import Project from "./components/pages/Project";
 import DatasetPage from "./components/pages/DatasetPage";
 import EnvironmentPreparation from "./components/pages/EnvironmentPreparation";
@@ -19,6 +19,9 @@ interface AppProps
   user: User
 }
 
+/**
+ * Main component.
+ */
 class App extends Component<AppProps, User>
 {
   constructor(props: AppProps)

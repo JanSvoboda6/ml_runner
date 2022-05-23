@@ -6,7 +6,7 @@ import 'reactjs-popup/dist/index.css';
 import "../../styles/Project.css";
 import FadeIn from "react-fade-in";
 import LabelSelector from "../project/LabelSelector";
-import {Label} from "../../types";
+import {Label} from "../../helpers/types";
 
 /**
  * Component used for creating a project.

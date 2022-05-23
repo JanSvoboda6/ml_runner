@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {HyperParameter} from "../../types";
+import {HyperParameter} from "../../helpers/types";
 import RunnerService from "../../services/RunnerService";
 import ParameterInfoTooltip from "./ParameterInfoToolTip";
 

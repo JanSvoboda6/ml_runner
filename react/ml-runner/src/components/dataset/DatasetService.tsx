@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FileInformation } from "../../types";
+import { FileInformation } from "../../helpers/types";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
 const API_URL = BACKEND_URL + "/api/dataset";

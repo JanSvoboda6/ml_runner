@@ -60,7 +60,7 @@ function RunnerList(props)
                         <p className="runner-list-table-header-text">Status</p>
                         <p className="runner-list-table-header-text">Accuracy</p>
                     </div>
-                    {runners.length == 0 ?
+                    {runners.length === 0 ?
                         <div>
                             <hr className="grey-horizontal"/>
                             <p className="runner-list-initial-message">No runs have been yet executed.</p>

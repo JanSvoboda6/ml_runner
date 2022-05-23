@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '../types';
+import { User } from '../helpers/types';
 
 const initialUser: User = {
     username: "",
@@ -12,6 +12,9 @@ const initialUserLoginState = {
     isLoggedIn: false
 }
 
+/**
+ * Used for state management of user (logged in/logged out). Could be accessed by other component by store.
+ */
 export const userSlice = createSlice({
     name: 'user',
     initialState: initialUserLoginState,

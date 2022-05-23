@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
-import authorizationHeader from "../../services/AuthorizationHeader";
-import {BACKEND_URL} from "../../helpers/url";
+import RunnerService from "../../services/RunnerService";
 
 interface RunnerResultProps
 {
@@ -18,7 +16,7 @@ function RunnerResult({projectId, runnerId}: RunnerResultProps)
 
     useEffect(() =>
     {
-        axios.get<any>(BACKEND_URL + '/api/project/runner/result?projectId=' + projectId + '&' + 'runnerId=' + runnerId, {headers: authorizationHeader()}).then(
+        RunnerService.getResult(projectId, runnerId).then(
             response => {
                 setResultText(response.data.resultText);
             }

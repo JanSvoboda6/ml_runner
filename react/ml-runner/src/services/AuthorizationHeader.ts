@@ -1,5 +1,8 @@
-import { AuthorizationHeader as AuthorizationHeaderInterface, User } from "../types";
+import { AuthorizationHeader as AuthorizationHeaderInterface, User } from "../helpers/types";
 
+/**
+ * Holds JWT token that is needed for authorization when communicating with API.
+ */
 export default function AuthorizationHeader()
 {
     const user: User = JSON.parse(localStorage.getItem('user') || '{}');

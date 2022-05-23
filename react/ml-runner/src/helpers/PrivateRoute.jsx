@@ -4,6 +4,10 @@ import {useDispatch} from "react-redux";
 import { Route, Redirect } from 'react-router-dom';
 import LogoutService from "../services/LogoutService";
 
+/**
+ * Used for redirecting to login page when user tries to access any page that require user to be logged in.
+ * It also checks the expiration of JWT. If the token is expired user is logged out.
+ */
 const PrivateRoute = ({component: Component, ...rest}) => {
     const [shouldLogout, setShouldLogout] = useState(false);
 

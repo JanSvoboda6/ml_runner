@@ -3,6 +3,9 @@ import Datasets from "../dataset/Datasets";
 import Navbar from "../navigation/Navbar";
 import HelperBox from "../navigation/HelperBox";
 
+/**
+ * Dataset page rendering a file browser.
+ */
 function DatasetPage()
 {
     const [warning, setWarning] = useState("");

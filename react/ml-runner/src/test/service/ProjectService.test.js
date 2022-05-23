@@ -5,14 +5,4 @@ describe('Saving Handling', () =>
 });
 
 
-describe('Update Handling', () =>
-{
-    it.todo('update');
-});
-
-describe('Delete Handling', () =>
-{
-    it.todo('delete');
-});
-
 

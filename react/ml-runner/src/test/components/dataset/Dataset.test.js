@@ -1,9 +1,9 @@
 import React from 'react';
 import {render, screen} from "@testing-library/react";
 import {act} from 'react-dom/test-utils';
-import DatasetService from "../../components/dataset/DatasetService";
-import Datasets from "../../components/dataset/Datasets";
-import DatasetUtility from "../../components/dataset/DatasetUtility";
+import DatasetService from "../../../components/dataset/DatasetService";
+import Datasets from "../../../components/dataset/Datasets";
+import DatasetUtility from "../../../components/dataset/DatasetUtility";
 
 describe('Dataset rendering', () => {
     test('When Dataset is rendered then files are shown', async () => {

@@ -3,6 +3,9 @@ import '../../App.css';
 import ProjectList from '../project/ProjectList';
 import Navbar from '../navigation/Navbar';
 
+/**
+ * Board page rendering a list of projects.
+ */
 function Board()
 {
     return (

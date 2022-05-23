@@ -1,8 +1,11 @@
 import axios, { AxiosResponse } from "axios";
-import { User } from "../types";
+import { User } from "../helpers/types";
 import {BACKEND_URL} from "../helpers/url";
 const API_URL = BACKEND_URL + "/api/auth";
 
+/**
+ * Used for logging in, logging out and registering a user. Information is stored in local storage.
+ */
 class AuthenticationService
 {
   async login(username: string, password: string) 

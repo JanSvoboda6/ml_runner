@@ -7,12 +7,13 @@ import {BACKEND_URL} from "../../helpers/url";
 import HeatmapDataProvider from "./visualization/HeatmapDataProvider";
 import axios, {AxiosResponse} from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
-import {HyperParameter} from "../../types";
+import {HyperParameter} from "../../helpers/types";
 import {useLocation} from "react-router";
 import queryString from "query-string";
 import Chart, {Data} from "./visualization/Chart";
 import fromExponential from 'from-exponential';
 import HelperBox from "../navigation/HelperBox";
+import RunnerService from "../../services/RunnerService";
 
 const API_URL = BACKEND_URL + "/api/project";
 
@@ -98,7 +99,7 @@ function Analysis()
         {
             if(runners[i].status === "FINISHED")
             {
-                await axios.get(API_URL + '/runner/result?projectId=' + projectId + '&' + 'runnerId=' + runners[i].id, {headers: authorizationHeader()})
+                await RunnerService.getResult(projectId, runners[i].id)
                     .then((res: AxiosResponse<any>) =>
                     {
                         runnersResult.push({

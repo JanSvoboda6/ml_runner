@@ -1,7 +1,7 @@
 import axios from "axios";
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
-import {Label} from "../../types";
+import {Label} from "../../helpers/types";
 const API_URL = BACKEND_URL + "/api/project/saveproject";
 
 /**

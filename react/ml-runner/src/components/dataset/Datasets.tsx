@@ -4,7 +4,7 @@ import Moment from 'moment';
 import '../../styles/Datasets.css';
 import 'font-awesome/css/font-awesome.min.css';
 import {AxiosResponse} from 'axios';
-import {FileInformation} from '../../types';
+import {FileInformation} from '../../helpers/types';
 import DatasetService from './DatasetService';
 import loadingAnimation from "../../styles/loading_graphics.gif";
 import FadeIn from 'react-fade-in';

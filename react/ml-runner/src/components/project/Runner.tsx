@@ -4,10 +4,11 @@ import RunnerService from "../../services/RunnerService";
 import loadingAnimation from '../../styles/cube_animation.gif';
 import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
-import {HyperParameter} from "../../types";
+import {HyperParameter} from "../../helpers/types";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
+import ProjectService from "./ProjectService";
 
 const API_URL = BACKEND_URL + "/api/project";
 const POPUP_DIMENSIONS = {"width": "700px", "minHeight": "500px"};
@@ -58,7 +59,7 @@ function Runner(props: RunnerProps)
     }, [])
 
     const showResults = () => {
-        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
+        RunnerService.getResult(props.projectId, props.runnerId)
             .then((res: AxiosResponse<any>) =>
             {
                 setAccuracy(res.data.accuracy);
@@ -80,7 +81,7 @@ function Runner(props: RunnerProps)
                     setEndState(res.data.isEndState)
                     if(res.data.isEndState)
                     {
-                        axios.get(API_URL + '/runner/result?projectId=' + props.projectId + '&' + 'runnerId=' + props.runnerId, {headers: authorizationHeader()})
+                        RunnerService.getResult(props.projectId, props.runnerId)
                             .then((res: AxiosResponse<any>) =>
                             {
                                 setAccuracy(res.data.accuracy)
