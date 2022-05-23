@@ -18,7 +18,7 @@ const ProjectQuickView = (props: any) =>
     const redirectToAnalysisPage = () =>
     {
 
-        history.push('/analysis?projectId=' + props.id);
+        history.push("/analysis?projectId=" + props.id);
     }
 
     const renderRunnerForm = (popupClosingAction: Function) =>

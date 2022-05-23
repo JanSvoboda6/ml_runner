@@ -6,7 +6,7 @@ import authorizationHeader from "../../services/AuthorizationHeader";
 import {BACKEND_URL} from "../../helpers/url";
 import {HyperParameter} from "../../helpers/types";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import Popup from "reactjs-popup";
 import ProjectService from "./ProjectService";
 
@@ -27,6 +27,7 @@ interface RunnerProps
  */
 function Runner(props: RunnerProps)
 {
+    const history = useHistory();
     let intervalId: any;
     const [isInEndState, setEndState] = useState(false);
     const [status, setStatus] = useState("INITIAL");
@@ -92,6 +93,12 @@ function Runner(props: RunnerProps)
                 }
             );
     }
+
+    const redirectToResultPage = () =>
+    {
+           history.push("/runner/result?project=" + props.projectId + "&runner=" + props.runnerId);
+    }
+
     if(!isLoaded)
     {
         return <div>"Loading"</div>;
@@ -114,8 +121,7 @@ function Runner(props: RunnerProps)
             {isInEndState &&
                 <div>
                     {accuracy !== undefined &&
-                        <div className="underlined-link"><Link to={{"pathname": "/runner/result", "search": "?project=" + props.projectId +"&runner=" + props.runnerId,}}>
-                            {(accuracy * 100).toFixed(2)}% </Link>
+                        <div className="underlined-link"><p className="clickable-text" onClick={redirectToResultPage}>{(accuracy * 100).toFixed(2)}% </p>
                         </div>}
                 </div>
             }
