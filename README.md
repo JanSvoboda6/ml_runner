@@ -2,12 +2,16 @@
 [![React tests](https://github.com/JanSvoboda6/ml_runner/actions/workflows/react.yml/badge.svg)](https://github.com/JanSvoboda6/ml_runner/actions/workflows/react.yml)
 [![Publish images to Docker Hub](https://github.com/JanSvoboda6/ml_runner/actions/workflows/docker.yml/badge.svg)](https://github.com/JanSvoboda6/ml_runner/actions/workflows/docker.yml)
 
-**This is a repository of Machine Learning Runner application.**
+## Repository information
+This is a repository of Machine Learning Runner application.
 
-**Demos and a production configuration (in Czech) can be found [here](https://drive.google.com/drive/folders/17BWR5fbwnzHdIt4Ofe438MTBGxZYUjsl).**
+Demos and a production configuration (in Czech) can be found [here](https://drive.google.com/drive/folders/17BWR5fbwnzHdIt4Ofe438MTBGxZYUjsl).
 
-Development configuration
-===
+<img src="https://github.com/JanSvoboda6/ml_runner/blob/main/graphics/landing_page.png" width="700"/>
+<img src="https://github.com/JanSvoboda6/ml_runner/blob/main/graphics/board.jpeg" width="700"/>
+
+## Development configuration
+
 Prerequisite: Installed [Docker](https://docs.docker.com/get-docker/)
 1.  Open terminal
 2. `git clone https://github.com/JanSvoboda6/ml_runner.git`
@@ -27,3 +31,6 @@ Before restart please remove all the containers that have been created in the pr
 
 There is a possibility to run a whole application inside containers. </br>
 It could be used in the future if more devs are working on the code.
+
+
+
