@@ -1,2 +1,1 @@
 docker-compose -f docker-compose-prod.yml -p web up
-docker-compose -f docker-compose-prod.yml up --build nginx
