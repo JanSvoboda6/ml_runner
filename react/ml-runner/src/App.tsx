@@ -58,7 +58,7 @@ class App extends Component<AppProps, User>
               <PrivateRoute exact path="/newproject" component={Project} />
               <PrivateRoute exact path="/preparing" component={EnvironmentPreparation} />
               <PrivateRoute exact path="/analysis" component={Analysis} />
-              <PrivateRoute exact path="/runner/result" component={RunnerResultPage} />
+              <PrivateRoute exact path="/result" component={RunnerResultPage} />
             </Switch>
           </div>
         </Router>

@@ -96,7 +96,7 @@ function Runner(props: RunnerProps)
 
     const redirectToResultPage = () =>
     {
-           history.push("/runner/result?project=" + props.projectId + "&runner=" + props.runnerId);
+           history.push("/result?project=" + props.projectId + "&runner=" + props.runnerId);
     }
 
     if(!isLoaded)
