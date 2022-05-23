@@ -41,15 +41,9 @@ class DockerServiceTest
         userRepository = Mockito.mock(UserRepository.class);
         String dockerFilePath = FileSystems.getDefault().getPath("resources/python_runner_agent/Dockerfile").normalize().toAbsolutePath().toString();
 
-        dockerService = new DockerService(containerRepository,
-                userRepository,
-                dockerClient,
-                dockerFilePath,
-                "python_server",
-                true,
-                CONTAINER_LOCALHOST_PORT,
-                false,
-                false);
+        dockerService = new DockerService(containerRepository, userRepository, dockerClient, dockerFilePath,
+                "python_server", true, CONTAINER_LOCALHOST_PORT,
+                false, false, false);
     }
 
     @Test
@@ -95,15 +89,10 @@ class DockerServiceTest
         Mockito.when(container.getId()).thenReturn(999L);
         Mockito.when(container.getContainerName()).thenReturn(CONTAINER_NAME);
         Mockito.when(containerRepository.findByUserId(USER_ID)).thenReturn(Optional.of(container));
-        DockerService dockerServiceWithMockedDockerClient = new DockerService(containerRepository,
-                userRepository,
-                dockerClient,
-                "Random path to docker file",
-                "Random name of Docker image",
-                true,
-                9999,
-                false,
-                false);
+        DockerService dockerServiceWithMockedDockerClient = new DockerService(containerRepository, userRepository,
+                dockerClient, "Random path to docker file", "Random name of Docker image",
+                true, 9999, false,
+                false, false);
 
         dockerServiceWithMockedDockerClient.buildDockerContainer(USER_ID);
 

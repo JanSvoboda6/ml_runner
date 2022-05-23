@@ -13,12 +13,12 @@ import com.jan.web.security.user.User;
 import com.jan.web.security.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.keygen.BytesKeyGenerator;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -51,6 +51,9 @@ public class DockerService
     @Value("${jan.useRandomSuffixInContainerName}")
     private boolean useRandomSuffix;
 
+    @Value("${jan.assignContainerToSeparateNetwork}")
+    private boolean assignContainerToSeparateNetwork;
+
     private final int PYTHON_SERVER_PORT = 9999;
     private final DockerClient dockerClient;
     private final ContainerRepository containerRepository;
@@ -73,7 +76,8 @@ public class DockerService
                          boolean bindContainerToLocalhost,
                          Integer containerLocalhostPort,
                          boolean shouldContainerBeMappedToRandomPort,
-                         boolean useRandomSuffix)
+                         boolean useRandomSuffix,
+                         boolean assignToSeparateNetwork)
     {
         this.containerRepository = containerRepository;
         this.userRepository = userRepository;
@@ -84,6 +88,7 @@ public class DockerService
         this.containerLocalhostPort = containerLocalhostPort;
         this.shouldContainerBeMappedToRandomPort = shouldContainerBeMappedToRandomPort;
         this.useRandomSuffix = useRandomSuffix;
+        this.assignContainerToSeparateNetwork = assignToSeparateNetwork;
     }
 
     public long buildDockerContainer(Long userId)
@@ -103,18 +108,11 @@ public class DockerService
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
-        List<Network> networks = dockerClient.listNetworksCmd().withNameFilter("web_runner_agents").exec();
-        if(networks.isEmpty())
-        {
-            dockerClient.createNetworkCmd().withName("web_runner_agents").withInternal(true).exec();
-        }
-
         String containerName = provideContainerName(userId);
         CreateContainerCmd containerCmd = dockerClient.createContainerCmd(dockerImageName)
                 .withName(containerName)
                 .withHostName(containerName)
-                .withExposedPorts(ExposedPort.tcp(PYTHON_SERVER_PORT))
-                .withHostConfig(new HostConfig().withNetworkMode("web_runner_agents"));
+                .withExposedPorts(ExposedPort.tcp(PYTHON_SERVER_PORT));
 
         containerEntity.setContainerName(containerName);
         containerEntity.setConnectionString("http://" + containerName + ":" + PYTHON_SERVER_PORT);
@@ -130,6 +128,12 @@ public class DockerService
         }
 
         String containerId = containerCmd.exec().getId();
+
+        if(assignContainerToSeparateNetwork)
+        {
+            doAssignToSeparateNetwork(userId, containerId);
+        }
+
         dockerClient.startContainerCmd(containerId).exec();
         return containerRepository.save(containerEntity).getId();
     }
@@ -172,5 +176,21 @@ public class DockerService
         Ports portBindings = new Ports();
         portBindings.bind(ExposedPort.tcp(PYTHON_SERVER_PORT), Ports.Binding.bindPort((int)hostPortNumber));
         return portBindings;
+    }
+
+    private void doAssignToSeparateNetwork(Long userId, String containerId)
+    {
+        String networkName = "web_runner_agent_" + userId;
+        List<Network> networks = dockerClient.listNetworksCmd().withNameFilter(networkName).exec();
+        if(networks.isEmpty())
+        {
+            dockerClient.createNetworkCmd().withName(networkName).withInternal(true).exec();
+        }
+
+        String networkId = dockerClient.listNetworksCmd().withNameFilter(networkName).exec().get(0).getId();
+        dockerClient.connectToNetworkCmd().withContainerId(containerId).withNetworkId(networkId).exec();
+        String idOfBackendContainer = dockerClient.listContainersCmd()
+                .withNameFilter(Collections.singleton("backend")).exec().get(0).getId();
+        dockerClient.connectToNetworkCmd().withContainerId(idOfBackendContainer).withNetworkId(networkId).exec();
     }
 }
