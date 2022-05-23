@@ -71,7 +71,6 @@ function Datasets(props: { onWarning?: (arg: string) => void; handleFolderSelect
                 return;
             }
         }
-        console.log("here");
         const uniqueAddedFiles: FileInformation[] = DatasetUtility.getUniqueAddedFiles(files, addedFiles, prefix);
         DatasetService.uploadFiles(uniqueAddedFiles).then(() => setFiles(existingFiles => [...existingFiles, ...uniqueAddedFiles]));
     }

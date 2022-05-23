@@ -32,7 +32,6 @@ function Project()
 
        const indexOfLabel = labels.findIndex(label => label.id === id);
        labels[indexOfLabel] = label;
-       console.log(labels);
        setLabels(labels);
     }
 
@@ -53,7 +52,6 @@ function Project()
 
     const removeLastLabel = () => {
         let purgedLabels = labels.filter(label => label.id !== labels.length - 1);
-        console.log(purgedLabels);
         setLabels(purgedLabels);
     }
 
