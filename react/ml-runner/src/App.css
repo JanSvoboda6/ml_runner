@@ -88,6 +88,10 @@ ul {
   background-color: var(--form-input-color);
 }
 
+.input-text:disabled{
+  opacity: 0.6;
+}
+
 ::placeholder {
   color: var(--text-primary);
   opacity: 0.5;
@@ -204,6 +208,12 @@ width: 7rem;
 .submit-button:hover {
   border-color: rgb(255, 255, 255);
   cursor:pointer;
+}
+
+.submit-button:disabled{
+  opacity: 0.3;
+  cursor: default;
+  border: 0.16em solid transparent;
 }
 
 .upper-navbar-logout-button{
