@@ -48,6 +48,9 @@ public class DockerService
     @Value("${jan.mapToRandomPort}")
     private boolean shouldContainerBeMappedToRandomPort;
 
+    @Value("${jan.useRandomSuffixInContainerName}")
+    private boolean useRandomSuffix;
+
     private final int PYTHON_SERVER_PORT = 9999;
     private final DockerClient dockerClient;
     private final ContainerRepository containerRepository;
@@ -69,7 +72,8 @@ public class DockerService
                          String dockerImageName,
                          boolean bindContainerToLocalhost,
                          Integer containerLocalhostPort,
-                         boolean shouldContainerBeMappedToRandomPort)
+                         boolean shouldContainerBeMappedToRandomPort,
+                         boolean useRandomSuffix)
     {
         this.containerRepository = containerRepository;
         this.userRepository = userRepository;
@@ -79,6 +83,7 @@ public class DockerService
         this.bindContainerToLocalhost = bindContainerToLocalhost;
         this.containerLocalhostPort = containerLocalhostPort;
         this.shouldContainerBeMappedToRandomPort = shouldContainerBeMappedToRandomPort;
+        this.useRandomSuffix = useRandomSuffix;
     }
 
     public long buildDockerContainer(Long userId)
@@ -142,7 +147,12 @@ public class DockerService
 
     private String provideContainerName(Long userId)
     {
-        return "container-user-" + userId.toString() + "-" + GENERATOR.generateKey();
+        String containerName = "container-user-" + userId.toString();
+        if(useRandomSuffix)
+        {
+            containerName += "-" + GENERATOR.generateKey();
+        }
+        return containerName;
     }
 
     private boolean containerHasBeenAlreadyBuilt(Long userId)

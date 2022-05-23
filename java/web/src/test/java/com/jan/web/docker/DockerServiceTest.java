@@ -48,6 +48,7 @@ class DockerServiceTest
                 "python_server",
                 true,
                 CONTAINER_LOCALHOST_PORT,
+                false,
                 false);
     }
 
@@ -100,6 +101,7 @@ class DockerServiceTest
                 "Random name of Docker image",
                 true,
                 9999,
+                false,
                 false);
 
         dockerServiceWithMockedDockerClient.buildDockerContainer(USER_ID);
