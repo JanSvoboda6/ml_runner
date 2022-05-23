@@ -109,13 +109,15 @@ public class DockerService
             dockerClient.createNetworkCmd().withName("web_runner_agents").withInternal(true).exec();
         }
 
+        String containerName = provideContainerName(userId);
         CreateContainerCmd containerCmd = dockerClient.createContainerCmd(dockerImageName)
-                .withName(provideContainerName(userId))
-                .withHostName(provideContainerName(userId))
+                .withName(containerName)
+                .withHostName(containerName)
                 .withExposedPorts(ExposedPort.tcp(PYTHON_SERVER_PORT))
                 .withHostConfig(new HostConfig().withNetworkMode("web_runner_agents"));
 
-        containerEntity.setConnectionString("http://" + provideContainerName(userId) + ":" + PYTHON_SERVER_PORT);
+        containerEntity.setContainerName(containerName);
+        containerEntity.setConnectionString("http://" + containerName + ":" + PYTHON_SERVER_PORT);
         if(bindContainerToLocalhost)
         {
             if(shouldContainerBeMappedToRandomPort)
@@ -162,7 +164,7 @@ public class DockerService
 
     private void startContainerForTheUser(Long userId)
     {
-        dockerClient.startContainerCmd(provideContainerName(userId));
+        dockerClient.startContainerCmd(containerRepository.findByUserId(userId).get().getContainerName());
     }
 
     private Ports createPortBindings(long hostPortNumber)

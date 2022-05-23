@@ -21,6 +21,9 @@ public class ContainerEntity
     private User user;
 
     @NotBlank
+    private String containerName;
+
+    @NotBlank
     private String connectionString;
 
     public ContainerEntity()
@@ -56,5 +59,15 @@ public class ContainerEntity
     public void setConnectionString(String connectionString)
     {
         this.connectionString = connectionString;
+    }
+
+    public String getContainerName()
+    {
+        return containerName;
+    }
+
+    public void setContainerName(String containerName)
+    {
+        this.containerName = containerName;
     }
 }

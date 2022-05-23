@@ -93,6 +93,7 @@ class DockerServiceTest
         Mockito.when(containerRepository.existsByUserId(USER_ID)).thenReturn(true);
         ContainerEntity container = Mockito.mock(ContainerEntity.class);
         Mockito.when(container.getId()).thenReturn(999L);
+        Mockito.when(container.getContainerName()).thenReturn(CONTAINER_NAME);
         Mockito.when(containerRepository.findByUserId(USER_ID)).thenReturn(Optional.of(container));
         DockerService dockerServiceWithMockedDockerClient = new DockerService(containerRepository,
                 userRepository,
